@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>商品修改</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="javascript">
+        function
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：商品修改
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <input name="id" type="hidden" class="input5"  value="<%=wares.id%>" />
+            <td  class="regTd_l">商品名称：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5" value="<%=wares.name%>" /></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">商品别名：</td>
+            <td class="regTd_r"><input name="input" type="text" class="input5"  value="<%=wares.longname%>"/></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">商标：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5"  value="<%=wares.brand%>"/></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">规格：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5"  value="<%=wares.standard%>"/></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">序列号：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5"  value="<%=wares.serialNumber%>"/></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">备注：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5" value="<%=wares.remarks%>"/></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">最低库存：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5"  value="<%=wares.lowData%>"/></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">启用状态：</td>
+            <td class="regTd_r">
+                <input name="status" type="radio"  <%if(wares.status == 1){%>  checked="checked"  value="1"<%}%>/>
+                启用
+                &nbsp;
+                <input name="status" type="radio" <%if(wares.status == 0){%>  checked="checked"  value="0"<%}%> /> 未启用
+            </td>
+        </tr>
+    </table>
+    <div class="reg_but">
+        <div class="rb_l"><a href="/jinquan/wares_update" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/wares_list" class="close"></a></div>
+    </div>
+</div>
+</body>
+</html>
