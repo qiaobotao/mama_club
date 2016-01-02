@@ -18,6 +18,7 @@ router.all('/menu', welcomeAction.Menu);
 router.all('/welcome',welcomeAction.Welcome);
 // 门店管理
 router.all('/shop_list',shopAction.list);
+router.all('/shop_pre_add',shopAction.preAdd);
 router.all('/shop_add',shopAction.add);
 
 // 商品管理
@@ -33,6 +34,7 @@ router.all('/storeroom_pre_edit', storeroomAction.preEdit);
 router.all('/storeroom_update', storeroomAction.update);
 router.all('/storeroom_pre_add', storeroomAction.preAdd);
 router.all('/storeroom_set', storeroomAction.setStatus);
+router.all('/storeroom_del', storeroomAction.del);
 
 // 分类管理
 router.all('/classify_list',classifyAction.list);
