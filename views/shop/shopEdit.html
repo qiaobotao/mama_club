@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加门店</title>
+    <title>修改门店</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -48,38 +48,39 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/shop_add">
-    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td class="regTd_l">序列号：</td>
-            <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-        </tr>
-        <tr>
-            <td  class="regTd_l">门店名称：</td>
-            <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-        </tr>
-        <tr>
-            <td class="regTd_l">负责人：</td>
-            <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-        </tr>
-        <tr>
-            <td class="regTd_l">电话：</td>
-            <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-        </tr>
-        <tr>
-            <td class="regTd_l">详细地址：</td>
-            <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-        </tr>
-        <tr>
-            <td class="regTd_l">备注：</td>
-            <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" /></td>
-        </tr>
+    <form method="post" id="myform" action="/jinquan/shop_update">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <input name="id" type="hidden" class="input5"  value="<%=shop.id%>" />
+                <td class="regTd_l">序列号：</td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=shop.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">门店名称：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=shop.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">负责人：</td>
+                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" value="<%=shop.principal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">电话：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=shop.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">详细地址：</td>
+                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" value="<%=shop.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">备注：</td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" value="<%=shop.remark%>"/></td>
+            </tr>
 
-    </table>
-        </form>
+        </table>
+    </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+        <div class="rb_l"><a href="/jinquan/shop_list" class="close"></a></div>
     </div>
 
 

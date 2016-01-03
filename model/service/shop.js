@@ -90,10 +90,10 @@ module.exports.fetchAllStorerooms = function(cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateShop = function(id, name, address, principal, status, cb) {
+module.exports.updateShop = function(id, serialNumber,  name, address, principal, tel, remark, cb) {
 
-    var sql = 'UPDATE shop SET name = ?, address = ?, principal = ?, status = ? WHERE id = ?';
-    var par = [name, address, principal, status, id];
+    var sql = 'UPDATE shop SET serialNumber = ?, name = ?, tel = ?, address = ?, principal = ?, remark = ? WHERE id = ?';
+    var par = [serialNumber, name, tel, address, principal, remark, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

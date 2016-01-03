@@ -20,6 +20,10 @@ router.all('/welcome',welcomeAction.Welcome);
 router.all('/shop_list',shopAction.list);
 router.all('/shop_pre_add',shopAction.preAdd);
 router.all('/shop_add',shopAction.add);
+router.all('/shop_del', shopAction.del);
+router.all('/shop_set',shopAction.setStatus);
+router.all('/shop_pre_edit',shopAction.preEdit);
+router.all('/shop_update',shopAction.update);
 
 // 商品管理
 router.all('/wares_list', waresAction.list);
