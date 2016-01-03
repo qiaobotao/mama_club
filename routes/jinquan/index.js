@@ -41,6 +41,8 @@ router.all('/storeroom_set', storeroomAction.setStatus);
 router.all('/storeroom_del', storeroomAction.del);
 
 // 分类管理
-router.all('/classify_list',classifyAction.list);
+router.all('/main_classify_list', classifyAction.list);
+router.all('/main_classify_del', classifyAction.del);
+router.all('/main_classify_pre_add',classifyAction.preAdd);
 
 module.exports = router;

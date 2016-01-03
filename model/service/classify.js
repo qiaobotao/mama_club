@@ -25,6 +25,25 @@ module.exports.getAllMainClassify = function (cb) {
 }
 
 /**
+ * 删除主分类
+ * @param id
+ * @param cb
+ */
+module.exports.delMainClassify = function (id, cb) {
+
+    var sql = 'DELETE FROM systemMainClassify WHERE id = ?';
+
+    db.query(sql, [id], function (cbData, err, rows, fields) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    })
+}
+
+/**
  * 根据父类id获取子类信息
  * @param id
  * @param cb

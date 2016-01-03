@@ -120,6 +120,11 @@ module.exports.preEdit = function(req, res) {
     })
 }
 
+/**
+ * 修改保存
+ * @param req
+ * @param res
+ */
 module.exports.update = function(req, res) {
 
     var id = req.body.id ? req.body.id : '';

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>主分类添加</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function submitForm(){
+            var name = document.getElementById("name").value;
+            if (!name || name.length == 0) {
+                alert('分类名称不能为空');
+                return;
+            }
+            document.getElementById("myform").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：添加主分类
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/classify_add">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td  class="regTd_l">分类名称：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">备注：</td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  /></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">排序编号：</td>
+                <td class="regTd_r"><input id="orderNumber" name="orderNumber" type="text" class="input5"  /></td>
+            </tr>
+        </table>
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/main_classify_list" class="close"></a></div>
+    </div>
+</div>
+</body>
+</html>

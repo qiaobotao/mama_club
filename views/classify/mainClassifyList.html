@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>分类管理</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：分类管理
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td><input name="" type="text" class="input5" /></td>
+                    <td><a href="#" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="but_0"><a href="/jinquan/main_classify_pre_add" class="bsty0"></a></div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>分类编号</th>
+                <th>分类名称</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+            <% for (var i=0;i<mainClassify.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=mainClassify[i].id%></td>
+                <td><%=mainClassify[i].name%></td>
+                <td><%=mainClassify[i].remark%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classify_pre_add?id=<%=mainClassify[i].id%>">添加分类</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/main_classify_pre_edit">修改</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/main_classify_del?id=<%=mainClassify[i].id%>">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>
