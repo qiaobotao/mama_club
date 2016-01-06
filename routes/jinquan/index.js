@@ -12,6 +12,7 @@ var storeroomAction = require('./storeroomAction');
 var waresAction = require('./waresAction');
 var classifyAction = require('./classifyAction');
 var classroomAction = require('./classroomAction');//教室管理
+var courseAction = require('./courseAction');//课程管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -32,7 +33,7 @@ router.all('/shop_update',shopAction.update);
 router.all('/classroom_list',classroomAction.list);
 // 排课情况
 // 课程查询
-//router.all('/shop_list',shopAction.list);
+router.all('/course_list',courseAction.list);
 
 /*********************员工管理****************************/
 // 员工列表
