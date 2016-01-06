@@ -89,7 +89,7 @@ a.close:hover{margin:0; padding:0px; width:64px; height:27px; display:block; bac
 a.determine:link,a.determine:visited{margin:0; padding:0px; width:64px; height:27px; display:block; background:url(../images/determine.jpg) no-repeat;}
 a.determine:hover{margin:0; padding:0px; width:64px; height:27px; display:block; background:url(../images/determine_hover.jpg) no-repeat;}
 .welcome{ margin:0 auto; padding:0px; width:100%; height:400px; background:url(../images/welcome.jpg) no-repeat center center;}
-.sousuo{margin:0 auto; padding:0px; width:400px; height:27px; float:left;}
+.sousuo{margin:0 auto; padding:0px; height:27px; float:left;}
 .table4{ width:100%; text-align:center;}
 .table4 tr td{ height:27px; line-height:27px;}
 a.chaxun:link,a.chaxun:visited{margin:0; padding:0px; width:64px; height:27px; display:block; background:url(../images/chaxun.jpg) no-repeat;}
