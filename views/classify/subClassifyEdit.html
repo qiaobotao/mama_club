@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>主分类添加</title>
+    <title>子分类修改</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -15,6 +15,7 @@
                 alert('分类名称不能为空');
                 return;
             }
+
             document.getElementById("myform").submit();
         }
     </script>
@@ -23,30 +24,28 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：添加主分类
+        当前位置：子分类修改
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/main_classify_add">
+    <form method="post" id="myform" action="/jinquan/sub_classify_update">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td  class="regTd_l">分类名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <input name="id" type="hidden" class="input5"  value="<%=classify.id%>" />
+                <input name="pid" type="hidden" class="input5"  value="<%=classify.parentId%>" />
+                <td  class="regTd_l">名称：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=classify.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">备注：</td>
-                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  /></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">排序编号：</td>
-                <td class="regTd_r"><input id="orderNumber" name="orderNumber" type="text" class="input5"  /></td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=classify.remark%>"/></td>
             </tr>
         </table>
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href="/jinquan/main_classify_list" class="close"></a></div>
+        <div class="rb_l"><a href="javascript:history.back()" class="close"></a></div>
     </div>
 </div>
 </body>

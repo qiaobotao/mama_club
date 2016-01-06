@@ -59,7 +59,7 @@ module.exports.del = function(req, res) {
 }
 
 /**
- *
+ * 跳转
  * @param req
  * @param res
  */
@@ -70,20 +70,119 @@ module.exports.preAdd = function (req, res) {
 }
 
 /**
+ * 添加
+ * @param req
+ * @param res
+ */
+module.exports.add = function (req, res) {
+
+    var name = req.body.name ? req.body.name : '';
+    var remark = req.body.remark ? req.body.remark : '';
+    var orderNumber = req.body.orderNumber ? req.body.orderNumber : '';
+
+    service.addMainClassify(name,remark,orderNumber,function(err, results) {
+        if(!err) {
+            res.redirect('/jinquan/main_classify_list');
+        } else {
+            console.log(err.message);
+            res.render('error');
+        }
+    })
+}
+
+/**
+ * 修改主分类
+ * @param req
+ * @param res
+ */
+module.exports.preEdit = function(req, res) {
+
+    var id = req.query.id ? req.query.id : '';
+
+    service.getMainClassifyById(id, function (err, results) {
+
+        if(!err) {
+            var mainClassify = results.length == 0 ? null : results[0];
+            res.render('classify/mainClassifyEdit',{mainClassify : mainClassify});
+        } else {
+            console.log(err.message);
+            res.render('error');
+        }
+    })
+}
+
+/**
+ * 修改主分类
+ * @param req
+ * @param res
+ */
+module.exports.update = function (req, res) {
+
+    var id = req.body.id ? req.body.id : '';
+    var name = req.body.name ? req.body.name : '';
+    var remark = req.body.remark ? req.body.remark : '';
+    var orderCode = req.body.orderNumber ? req.body.orderNumber : '';
+
+    service.mainClassifyUpdate(id,name,remark,orderCode,function (err, results) {
+
+        if (!err) {
+            res.redirect('/jinquan/main_classify_list');
+        } else {
+            console.log(err.message);
+            res.render('error',{message : err});
+        }
+    });
+
+}
+
+/**
+ * 子分类列表
+ * @param req
+ * @param res
+ */
+module.exports.subList = function (req, res) {
+
+    var pid = req.query.id ? req.query.id : '';
+
+    service.getAllSubcollection(pid, function (err, results) {
+        if (!err) {
+            res.render('classify/subClassifyList', {subClassify : results, pid : pid});
+        } else {
+            console.log(err.message);
+            res.render('error',{message : err});
+        }
+    })
+
+}
+
+/**
+ * 跳转添加页面
+ * @param req
+ * @param res
+ */
+module.exports.preSubAddClassify = function (req, res) {
+
+    var pid = req.query.pid ? req.query.pid : 0;
+
+    res.render('classify/subClassifyAdd', {pid : pid});
+
+}
+
+/**
  * 添加子分类
  * @param req
  * @param res
  */
-module.exports.addSubcollection = function (req, res) {
+module.exports.addSubClassify = function (req, res) {
 
-    var parentId = req.body.parentId ? req.body.parentId : 0;
+    var pid = req.body.pid ? req.body.pid : 0;
     var name = req.body.name ? req.body.name :'';
     var remark = req.body.remark ? req.body.remark : '';
 
 
-    service.addSubcollection(parentId,name,remark, function (err, results) {
+    service.addSubcollection(pid,name,remark, function (err, results) {
         if(!err) {
-            res.redirect('/jinquan/classify_list');
+            res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
             console.log(err.message);
             res.render('error');
@@ -96,13 +195,58 @@ module.exports.addSubcollection = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.delSubcollection = function (req, res) {
+module.exports.delSubClassify = function (req, res) {
 
     var id = req.query.id ? req.query.id : 0;
+    var pid = req.query.pid ? req.query.pid : 0;
 
     service.delSubcollection(id,function(err, results) {
         if(!err) {
-            res.redirect('/jinquan/classify_list');
+            res.redirect('/jinquan/sub_classify_list?id='+pid);
+        } else {
+            console.log(err.message);
+            res.render('error');
+        }
+    });
+}
+
+/**
+ * 修改子分类
+ * @param req
+ * @param res
+ */
+module.exports.preSubEdit = function (req, res) {
+
+    var id = req.query.id ? req.query.id : 0;
+
+    service.getSingleSubClassifyById(id, function (err, results) {
+
+        if(!err) {
+            var subClassify = results.length == 0 ? null : results[0];
+            res.render('classify/subClassifyEdit', {classify : subClassify});
+        } else {
+            console.log(err.message);
+            res.render('error',{message : err});
+        }
+
+    });
+}
+
+/**
+ * 修改
+ * @param req
+ * @param res
+ */
+module.exports.subUpdate = function (req, res) {
+
+    var id = req.body.id ? req.body.id : 0;
+    var pid = req.body.pid ? req.body.pid : 0;
+    var name = req.body.name ? req.body.name : '';
+    var remark = req.body.remark ? req.body.remark : '';
+
+    service.subUpdate(id,name,remark,function(err, results) {
+        if(!err) {
+            res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
             console.log(err.message);
             res.render('error');

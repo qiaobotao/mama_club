@@ -44,5 +44,14 @@ router.all('/storeroom_del', storeroomAction.del);
 router.all('/main_classify_list', classifyAction.list);
 router.all('/main_classify_del', classifyAction.del);
 router.all('/main_classify_pre_add',classifyAction.preAdd);
+router.all('/main_classify_add',classifyAction.add);
+router.all('/main_classify_pre_edit',classifyAction.preEdit);
+router.all('/main_classify_update', classifyAction.update);
+router.all('/sub_classify_list', classifyAction.subList);
+router.all('/sub_classify_del', classifyAction.delSubClassify);
+router.all('/sub_classify_pre_add', classifyAction.preSubAddClassify);
+router.all('/sub_classify_add',classifyAction.addSubClassify);
+router.all('/sub_classify_pre_edit',classifyAction.preSubEdit);
+router.all('/sub_classify_update',classifyAction.subUpdate);
 
 module.exports = router;
