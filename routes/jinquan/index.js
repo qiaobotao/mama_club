@@ -31,9 +31,11 @@ router.all('/shop_update',shopAction.update);
 /*********************教室及课程管理****************************/
 // 教室管理
 router.all('/classroom_list',classroomAction.list);
+router.all('/classroom_add',classroomAction.add);
 // 排课情况
 // 课程查询
 router.all('/course_list',courseAction.list);
+router.all('/course_add',courseAction.add);
 
 /*********************员工管理****************************/
 // 员工列表
