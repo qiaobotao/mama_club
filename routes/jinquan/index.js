@@ -13,6 +13,7 @@ var waresAction = require('./waresAction');
 var classifyAction = require('./classifyAction');
 var classroomAction = require('./classroomAction');//教室管理
 var courseAction = require('./courseAction');//课程管理
+var staffAction = require('./staffAction');//员工管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -39,6 +40,8 @@ router.all('/course_add',courseAction.add);
 
 /*********************员工管理****************************/
 // 员工列表
+router.all('/staff_list',staffAction.list);
+router.all('/staff_add',staffAction.add);
 // 员工培训
 // 打卡记录
 // 考勤列别
