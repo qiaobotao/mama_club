@@ -14,6 +14,7 @@ var classifyAction = require('./classifyAction');
 var classroomAction = require('./classroomAction');//教室管理
 var courseAction = require('./courseAction');//课程管理
 var staffAction = require('./staffAction');//员工管理
+var staffTrainAction = require('./staffTrainAction');//员工培训
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -43,6 +44,9 @@ router.all('/course_add',courseAction.add);
 router.all('/staff_list',staffAction.list);
 router.all('/staff_add',staffAction.add);
 // 员工培训
+router.all('/staff_train_list',staffTrainAction.list);
+router.all('/staff_train_edit',staffTrainAction.edit);
+
 // 打卡记录
 // 考勤列别
 // 考勤变更
