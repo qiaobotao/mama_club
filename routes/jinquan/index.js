@@ -15,6 +15,7 @@ var classroomAction = require('./classroomAction');//教室管理
 var courseAction = require('./courseAction');//课程管理
 var staffAction = require('./staffAction');//员工管理
 var staffTrainAction = require('./staffTrainAction');//员工培训
+var attendanceTypeAction = require('./attendanceTypeAction');//考勤类型
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -46,9 +47,10 @@ router.all('/staff_add',staffAction.add);
 // 员工培训
 router.all('/staff_train_list',staffTrainAction.list);
 router.all('/staff_train_edit',staffTrainAction.edit);
-
 // 打卡记录
-// 考勤列别
+// 考勤类别
+router.all('/attendance_type_list',attendanceTypeAction.list);
+router.all('/attendance_type_edit',attendanceTypeAction.edit);
 // 考勤变更
 // 查询考勤
 // 绩效查询
