@@ -15,8 +15,6 @@ module.exports = {
         resetmenu: false
     },
 
-
-
     // 微信公众号信息
     wechat: {
         appId: '',
@@ -33,7 +31,7 @@ module.exports = {
 
     // 数据库连接池配置
     dbConfig: {
-        host     : '*',
+        host     : '123.57.24.162',
         database : 'mama_club',
         user     : 'root',
         password : 'q1w2e3',

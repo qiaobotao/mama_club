@@ -6,6 +6,21 @@
 <link href="../css/global.css" rel="stylesheet" type="text/css" />
 <link href="../css/login.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../js/pptBox.js"></script>
+    <script type="text/javascript">
+        function submitForm(){
+            var account = document.getElementById("account").value;
+            if (!account || account.length == 0) {
+                alert('账号不能为空');
+                return;
+            }
+            var password = document.getElementById("password").value;
+            if (!password || password.length == 0) {
+                alert('密码不能为空');
+                return;
+            }
+            document.getElementById("myform").submit();
+        }
+    </script>
 </head>
 <body>
 <frameset rows="81,*,32" cols="*" framespacing="0" frameborder="no" border="0">
@@ -40,27 +55,22 @@
             </script>
 
         </div>
+        <form method="post" id="myform" action="/jinquan">
         <div class="dl_wai">
             <div class="dl">
                 <div class="dl_0">
-                    <div class="dl0_l">账 号：</div><div class="dl0_r"><input class="input1" /></div>
+                    <div class="dl0_l">账 号：</div><div class="dl0_r"><input id="account" name="account" class="input1" /></div>
                 </div>
                 <div class="dl_0">
-                    <div class="dl0_l">密 码：</div><div class="dl0_r"><input class="input1" /></div>
-                </div>
-                <div class="dl_0">
-                    <div class="dl0_l">验证码：</div><div class="dl0_r"><input class="input2" /></div>
-                </div>
-                <div class="dl_0">
-                    <div class="dl0_l"></div>
-                    <div class="dl0_r"><p class="l_img"><img src="../images/tu.jpg" /></p><p class="intro">看不清？<a href="#">换一张</a></p></div>
+                    <div class="dl0_l">密 码：</div><div class="dl0_r"><input id="password" name="password" class="input1" /></div>
                 </div>
                 <div class="dl_bt">
-                    <input type="submit" class="button1" onclick="javascript:window.location.href='/jinquan'" value="" />
+                    <input class="button1" onclick="submitForm()" value="" />
                 </div>
             </div>
 
         </div>
+        </form>
     </div>
     <div id="l_bottom">北京金禾天成科技有限公司 版权所有@2012</div>
 </frameset>

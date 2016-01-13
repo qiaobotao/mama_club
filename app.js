@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -9,9 +8,9 @@ var routes = require('./routes/index');
 var generateQRCode = require('./routes/generateQRCode');
 var wechat = require('./routes/wechat');
 var wechatId = require('./routes/getOpenId');
+var session = require('express-session');
 
-var jinqua = require('./routes/jinquan');
-
+var jinquan = require('./routes/jinquan');
 var app = express();
 
 // view engine setup
@@ -25,11 +24,40 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+    secret: '12345',
+    name: 'mama_club',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+    cookie: {maxAge: 300*1000 },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+    resave: false,
+    saveUninitialized: true,
+    rolling : true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next){
+    var path = req.url;
+
+    if (path != '/') {
+       if (path == '/jinquan') {
+           next();
+       } else {
+           if (req.session.user) {
+                next();
+           } else {
+               res.render('login');
+           }
+       }
+    } else {
+        next();
+    }
+});
+
 
 // 业务相关
 app.use('/', routes);
-app.use('/jinquan',jinqua);
+app.use('/jinquan',jinquan);
+
+
 
 // 微信相关
 app.use('/wechat',wechat);
