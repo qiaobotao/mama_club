@@ -8,6 +8,14 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript">
+        function search () {
+            var shopname = document.getElementById('shopname').value;
+            var principal = document.getElementById('principal').value;
+            var number = document.getElementById('number').value;
+            window.location.href = '/jinquan/shop_list?shopname='+shopname+'&principal='+principal+'&number='+number;
+        }
+    </script>
 </head>
 
 <body>
@@ -22,10 +30,10 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>门店名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;负责人：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;门店编号：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>门店名称：<input id="shopname" name="shopname" type="text" class="input5" value="<%=data.name%>"/></td>
+                    <td> &nbsp;负责人：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>"/></td>
+                    <td> &nbsp;门店编号：<input id="number" name="number" type="text" class="input5" value="<%=data.number%>"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -40,21 +48,21 @@
                 <th>电话</th>
                 <th>操作</th>
             </tr>
-            <% for (var i=0;i<shop.length;i++) {%>
+            <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><%=shop[i].name%></td>
-                <td><%=shop[i].principal%></td>
-                <td><%=shop[i].tel%></td>
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].principal%></td>
+                <td><%=data.data[i].tel%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <% if (shop[i].status == 1) {%>
-                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_set?status=0&id=<%=shop[i].id%>">停用</a>]</div></td>
+                            <% if (data.data[i].status == 1) {%>
+                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_set?status=0&id=<%=data.data[i].id%>">停用</a>]</div></td>
                             <% } else {%>
-                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_set?status=1&id=<%=shop[i].id%>">启用</a>]</div></td>
+                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_set?status=1&id=<%=data.data[i].id%>">启用</a>]</div></td>
                             <%}%>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_pre_edit?id=<%=shop[i].id%>">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_del?id=<%=shop[i].id%>">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_pre_edit?id=<%=data.data[i].id%>">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_del?id=<%=data.data[i].id%>">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>
@@ -63,8 +71,17 @@
         </table>
 
         <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+            <% for (var i=1;i<=data.totalPages;i++) {%>
+            <span class="disabled">&lt; </span><span class="current">1</span>
+            <a href="#?page=2">2</a>
+            <a href="#?page=3">3</a>
+            <a href="#?page=4">4</a>
+            <a href="#?page=5">5</a>
+            <a href="#?page=6">6</a>
+            <a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
+            &gt; </a>
+            <%}%>
+        </div>
     </div>
 </div>
 

@@ -15,8 +15,6 @@ module.exports = {
         resetmenu: false
     },
 
-
-
     // 微信公众号信息
     wechat: {
         appId: '',

@@ -12,9 +12,18 @@ var service = require('../../model/service/shop');
  */
 module.exports.list = function (req, res) {
 
-    service.fetchAllStorerooms(function (err, results) {
+    var currentPage = req.query.page ? req.query.page : '1';
+    var shopname = req.query.shopname ? req.query.shopname : '';
+    var principal = req.query.principal ? req.query.principal : '';
+    var number = req.query.number ? req.query.number : '';
+
+    service.fetchAllShop(shopname,principal,number,currentPage, function (err, results) {
         if (!err) {
-            res.render('shop/shopList', {shop : results});
+            results.currentPage = currentPage;
+            results.name = shopname;
+            results.principal = principal;
+            results.number = number;
+            res.render('shop/shopList', {data : results});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -144,3 +153,4 @@ module.exports.update = function(req, res) {
         }
     })
 }
+

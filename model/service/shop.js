@@ -5,7 +5,7 @@
 
 
 var db = require('../../common/db');
-
+var async = require('async');
 /**
  * 增加门店
  * @param serialNumber
@@ -68,18 +68,46 @@ module.exports.fetchShops = function(pages, count, cb) {
  * 获取所有门店
  * @param cb
  */
-module.exports.fetchAllStorerooms = function(cb) {
+module.exports.fetchAllShop = function(name,principal,number,currentPage,cb) {
 
-    var sql = 'SELECT * FROM shop ORDER BY dateline DESC';
-    db.query(sql, [], function(cbData, err, rows, fields){
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
+    var parm = "WHERE name LIKE '%"+name+"%' AND principal LIKE '%"+principal+"%' AND serialNumber LIKE '%"+number+"%' ";
+
+    var sql_count = 'SELECT count(*) as count FROM shop '+parm+'  ORDER BY dateline DESC';
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT * FROM shop '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
         }
+    },function(err, results) {
 
+        if (!err) {
+             cb (null, results);
+        } else {
+             cb(err);
+        }
     });
-
 }
 
 /**
