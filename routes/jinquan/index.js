@@ -16,6 +16,8 @@ var courseAction = require('./courseAction');//课程管理
 var staffAction = require('./staffAction');//员工管理
 var staffTrainAction = require('./staffTrainAction');//员工培训
 var attendanceTypeAction = require('./attendanceTypeAction');//考勤类型
+var memberCardTypeAction = require('./memberCardTypeAction');//会员卡类型
+var activityManageAction = require('./activityManageAction');//活动管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -58,8 +60,12 @@ router.all('/attendance_type_edit',attendanceTypeAction.edit);
 
 /*********************会员管理****************************/
 // 会员卡类型
+router.all('/member_card_type_list',memberCardTypeAction.list);
+router.all('/member_card_type_edit',memberCardTypeAction.edit);
 // 会员卡管理
 // 活动管理
+router.all('/activity_manage_list',activityManageAction.list);
+router.all('/activity_manage_edit',activityManageAction.edit);
 // 会员列表
 // 预约服务
 // 课程报名
