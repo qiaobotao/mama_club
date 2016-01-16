@@ -1,10 +1,186 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>编辑考勤类别</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function submitForm(){
+            var name = document.getElementById("name").value;
+            if (!name || name.length == 0) {
+                alert('门店名称不能为空');
+                return;
+            }
+            var serialNumber = document.getElementById("serialNumber").value;
+            if (!serialNumber || serialNumber.length == 0) {
+                alert('序列号不能为空');
+                return;
+            }
+            var tel = document.getElementById("tel").value;
+            if (!tel || tel.length == 0) {
+                alert('电话不能为空');
+                return;
+            }
+            var address = document.getElementById("address").value;
+            if(!address || address.length == 0) {
+                alert('门店地址不能为空');
+                return;
+            }
+            var principal = document.getElementById("principal").value;
+            if (!principal || principal.length == 0) {
+                alert('负责人不能为空');
+                return;
+            }
+            document.getElementById("myform").submit();
+        }
+    </script>
 </head>
+
 <body>
-activityManageedit
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：编辑会员卡类型
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/shop_add">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">活动名称：</td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">活动类型：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">可用卡片类型：</td>
+                <td class="regTd_r">
+                    <input name="Fruit" type="checkbox" value="会员卡" />充值卡&nbsp;
+                    <input name="Fruit" type="checkbox" value="会员卡" />服务次卡&nbsp;
+                    <input name="Fruit" type="checkbox" value="会员卡" />折扣卡&nbsp;
+                    <span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">有效时间：</td>
+                <td class="regTd_r">
+                    <input id="tel" name="tel" type="text" class="input5" style="width: 80px;" />&nbsp;&nbsp;~
+                    <input id="tel" name="tel" type="text" class="input5" style="width: 80px;"  />&nbsp;&nbsp;
+                    <span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">说明：</td>
+                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">状态：</td>
+                <td class="regTd_r">
+                    <select name="">
+                        <option value="0">启用</option>
+                        <option value="1">停用</option>
+                    </select> &nbsp;&nbsp;
+                    <span style="color:#FF0000;">*</span></td>
+            </tr>
+        </table>
+
+        <!--活动类目信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">活动类目</span>
+        <br>
+        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>+</td>
+                <td>优惠类型</td>
+                <td>优惠力度</td>
+                <td>总数量</td>
+                <td>已使用数量</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+            </tr>
+        </table>
+        <!--活动类目信息 end-->
+
+        <!--可用商品信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">可用商品</span>
+        <br>
+        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>+</td>
+                <td>商品名称</td>
+                <td>商品编号</td>
+                <td>单价</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+            </tr>
+        </table>
+        <!--可用商品信息 end-->
+        <!--可用课程信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">可用课程</span>
+        <br>
+        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>+</td>
+                <td>课程名称</td>
+                <td>课程时间</td>
+                <td>讲师</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+            </tr>
+        </table>
+        <!--可用课程信息 end-->
+        <!--可用会员信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">可用会员</span>
+        <br>
+        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>+</td>
+                <td>会员名</td>
+                <td>电话</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+            </tr>
+        </table>
+        <!--可用会员信息 end-->
+        <!--可用服务信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">可用服务</span>
+        <br>
+        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>+</td>
+                <td>服务名</td>
+                <td>服务编号</td>
+                <td>服务说明</td>
+            </tr>
+            <tr>
+                <td>-</td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+            </tr>
+        </table>
+        <!--可用服务信息 end-->
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+    </div>
+
+
+</div>
 </body>
 </html>
