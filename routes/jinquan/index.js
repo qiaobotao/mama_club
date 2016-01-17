@@ -21,6 +21,7 @@ var activityManageAction = require('./activityManageAction');//活动管理
 var memberAction = require('./memberAction');//会员管理
 var classMeetAction = require('./classMeetAction');//预约课程管理
 var serviceMeetAction = require('./serviceMeetAction');//预约服务管理
+var nursServiceAction = require('./nursServiceAction');//护理服务管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -79,6 +80,8 @@ router.all('/service_meet_add',serviceMeetAction.add);
 router.all('/class_meet_list',classMeetAction.list);
 router.all('/class_meet_add',classMeetAction.add);
 // 护理服务
+router.all('/nurs_service_list',nursServiceAction.list);
+router.all('/nurs_service_add',nursServiceAction.add);
 // 收费信息
 // 回访信息
 // 投诉信息
