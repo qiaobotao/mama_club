@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加会员</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function submitForm(){
+            var name = document.getElementById("name").value;
+            if (!name || name.length == 0) {
+                alert('门店名称不能为空');
+                return;
+            }
+            var serialNumber = document.getElementById("serialNumber").value;
+            if (!serialNumber || serialNumber.length == 0) {
+                alert('序列号不能为空');
+                return;
+            }
+            var tel = document.getElementById("tel").value;
+            if (!tel || tel.length == 0) {
+                alert('电话不能为空');
+                return;
+            }
+            var address = document.getElementById("address").value;
+            if(!address || address.length == 0) {
+                alert('门店地址不能为空');
+                return;
+            }
+            var principal = document.getElementById("principal").value;
+            if (!principal || principal.length == 0) {
+                alert('负责人不能为空');
+                return;
+            }
+            document.getElementById("myform").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：添加会员
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/shop_add">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td colspan="4" align="left">基本信息：</td>
+            </tr>
+            <tr>
+                <td class="regTd_l">会员卡信息：</td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">姓名：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">电话（可增加）：</td>
+                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">联系人：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">居住地址：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">工作状态：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">妈妈学历：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">爸爸学历：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <!-- 孕产信息 -->
+            <tr>
+                <td colspan="4" align="left">孕产信息：</td>
+            </tr>
+            <tr>
+                <td class="regTd_l">分娩方式：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">分娩时孕周：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">分娩医院：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">参与育儿：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">二胎经验：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">二胎经验备注：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">妻子儿时母乳多久：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">丈夫儿时母乳多久：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">母乳喂养理由：</td>
+                <td class="regTd_r" colspan="3"><input id="tel" name="tel" type="text" class="input5" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+
+            <!-- 宝宝信息 -->
+            <tr>
+                <td colspan="4" align="left">宝宝信息：</td>
+            </tr>
+            <tr>
+                <td class="regTd_l">宝宝姓名：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">宝宝性别：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">出生身高：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">出生体重：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">出生日期：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">如何知道金泉：</td>
+                <td class="regTd_r">
+                    <input id="tel" name="tel" type="checkbox" />朋友介绍
+                    <input id="tel" name="tel" type="checkbox" />微博
+                    <input id="tel" name="tel" type="checkbox" />微信
+                    <input id="tel" name="tel" type="checkbox" />论坛/社区
+                    <input id="tel" name="tel" type="checkbox" />Q群
+                    <span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">住院添加：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">住院原因：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" style="widows:70%;"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加医院) </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">辅助工具：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加工具）</td>
+                <td class="regTd_l">使用工具原因：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" style="widows:70%;"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加原因) </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">特殊说明：</td>
+                <td class="regTd_r" colspan="3"><input id="tel" name="tel" type="text" class="input5" style="width: 70%"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加说明）</td>
+            </tr>
+        </table>
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>
