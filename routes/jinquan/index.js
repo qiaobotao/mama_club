@@ -18,6 +18,9 @@ var staffTrainAction = require('./staffTrainAction');//员工培训
 var attendanceTypeAction = require('./attendanceTypeAction');//考勤类型
 var memberCardTypeAction = require('./memberCardTypeAction');//会员卡类型
 var activityManageAction = require('./activityManageAction');//活动管理
+var memberAction = require('./memberAction');//会员管理
+var classMeetAction = require('./classMeetAction');//预约课程管理
+var serviceMeetAction = require('./serviceMeetAction');//预约服务管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -67,8 +70,14 @@ router.all('/member_card_type_edit',memberCardTypeAction.edit);
 router.all('/activity_manage_list',activityManageAction.list);
 router.all('/activity_manage_edit',activityManageAction.edit);
 // 会员列表
+router.all('/member_list',memberAction.list);
+router.all('/member_add',memberAction.add);
 // 预约服务
+router.all('/service_meet_list',serviceMeetAction.list);
+router.all('/service_meet_add',serviceMeetAction.add);
 // 课程报名
+router.all('/class_meet_list',classMeetAction.list);
+router.all('/class_meet_add',classMeetAction.add);
 // 护理服务
 // 收费信息
 // 回访信息
