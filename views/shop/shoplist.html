@@ -15,6 +15,26 @@
             var number = document.getElementById('number').value;
             window.location.href = '/jinquan/shop_list?shopname='+shopname+'&principal='+principal+'&number='+number;
         }
+        function pageturning (selectPage) {
+            var shopname = document.getElementById('shopname').value;
+            var principal = document.getElementById('principal').value;
+            var number = document.getElementById('number').value;
+            window.location.href = '/jinquan/shop_list?page='+selectPage+'&shopname='+shopname+'&principal='+principal+'&number='+number;
+        }
+       function setStatus (status, id) {
+           var shopname = document.getElementById('shopname').value;
+           var principal = document.getElementById('principal').value;
+           var number = document.getElementById('number').value;
+           var page = document.getElementById('page').value;
+           window.location.href = '/jinquan/shop_set?page='+page+'&shopname='+shopname+'&principal='+principal+'&number='+number+'&status='+status+'&id='+id;
+       }
+       function preEdit (id) {
+           window.location.href = '/jinquan/shop_pre_edit?id='+id;
+       }
+       function del (id) {
+           window.location.href = '/jinquan/shop_del?id='+id;
+       }
+
     </script>
 </head>
 
@@ -30,6 +50,8 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
+                    <!-- 保存当前页，直接传入js，不能读到-->
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
                     <td>门店名称：<input id="shopname" name="shopname" type="text" class="input5" value="<%=data.name%>"/></td>
                     <td> &nbsp;负责人：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>"/></td>
                     <td> &nbsp;门店编号：<input id="number" name="number" type="text" class="input5" value="<%=data.number%>"/></td>
@@ -57,12 +79,12 @@
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
                             <% if (data.data[i].status == 1) {%>
-                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_set?status=0&id=<%=data.data[i].id%>">停用</a>]</div></td>
+                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus(0,<%=data.data[i].id%>)">停用</a>]</div></td>
                             <% } else {%>
-                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_set?status=1&id=<%=data.data[i].id%>">启用</a>]</div></td>
+                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus(1,<%=data.data[i].id%>)">启用</a>]</div></td>
                             <%}%>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_pre_edit?id=<%=data.data[i].id%>">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/shop_del?id=<%=data.data[i].id%>">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>
@@ -70,71 +92,8 @@
             <%}%>
         </table>
 
-        <div class="black2">
+        <%- include ../pagination.html -%>
 
-            <% if(i == 1){//如果当前显示第一页时不可点击上一页
-                %><span class="disabled">&lt; </span><%
-            }else{
-                %><a href="#?page=2">&lt;</a><%
-            } %>
-
-            <%
-                var sumPage = 20;//总页数
-                var selectIndex = 2;//当前显示页码
-                var showPage = sumPage > 2 ? 2:sumPage;
-                //前边两页一定显示
-                for (var i=1;i<=showPage;i++) {
-                    if(i == selectIndex){//当前显示页码样式
-                        %><span class="current"><%=i %></span><%
-                    }else{
-                        %><a href="#?page=200"><%=i %></a><%
-                    }
-                }
-            %>...<%
-
-            if(selectIndex > 4){
-
-                var pageStart = Math.floor(selectIndex/4);
-                // var showPage = sumPage > 2 ? 2:sumPage;
-                for (var i=(pageStart*4);i<= (pageStart*4) + 4;i++) {
-                    if(i == selectIndex){//当前显示页码样式
-                    %><span class="current"><%=i %></span><%
-                    }else{
-                    %><a href="#?page=200"><%=i %></a><%
-                    }
-                }
-
-            }else{
-            showPage = selectIndex + 4 > sumPage ? sumPage : selectIndex + 4;
-                for (var i=3;i<=showPage ;i++) {
-                    if(i == selectIndex){//当前显示页码样式
-                        %><span class="current"><%=i %></span><%
-                    }else{
-                        %><a href="#?page=200"><%=i %></a><%
-                    }
-                }
-
-            }
-
-            if(sumPage > i +2){
-                %>...<%
-                for (var i=sumPage-1;i<=sumPage;i++) {
-                if(i == selectIndex){//当前显示页码样式
-                %><span class="current"><%=i %></span><%
-                }else{
-                %><a href="#?page=200"><%=i %></a><%
-                }
-                }
-            }
-
-            %>
-
-            <% if(i == data.totalPages){//显示最后页时不可点击下一页
-            %><span class="disabled">&gt; </span><%
-            }else{
-            %><a href="#?page=2">&gt;</a><%
-            } %>
-        </div>
     </div>
 </div>
 

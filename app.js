@@ -26,8 +26,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
     secret: '12345',
-    name: 'mama_club',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
-    cookie: {maxAge: 300*1000 },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+    name: 'mama_club',
+    cookie: {maxAge: 10*1000 },
     resave: false,
     saveUninitialized: true,
     rolling : true

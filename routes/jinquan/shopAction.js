@@ -96,11 +96,16 @@ module.exports.setStatus = function(req, res) {
 
     var id = req.query.id ? req.query.id : '';
     var status = req.query.status ? req.query.status : '';
+    var selectPage = req.query.page ? req.query.page : '1';
+    var shopname = req.query.shopname ? req.query.shopname : '';
+    var principal = req.query.principal ? req.query.principal : '';
+    var number = req.query.number ? req.query.number : '';
+
 
     service.setStatus(id, status, function (err, results) {
 
         if (!err) {
-            res.redirect('/jinquan/shop_list');
+            res.redirect('/jinquan/shop_list?page='+selectPage+'&shopname='+shopname+'&principal='+principal+'&number='+number);
         } else {
             console.log(err.message);
             res.render('error', {message : err});

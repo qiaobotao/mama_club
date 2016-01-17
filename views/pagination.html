@@ -1,0 +1,65 @@
+<div class="black2">
+
+    <% if(i == 1){//如果当前显示第一页时不可点击上一页
+    %><span class="disabled">&lt; </span><%
+    }else{
+    %><a href="javascript:pageturning(<%=data.currentPage%> - 1)">&lt;</a><%
+    } %>
+
+    <%
+    var sumPage = data.totalPages;//总页数
+    var selectIndex = data.currentPage;//当前显示页码
+    var showPage = sumPage > 2 ? 2:sumPage;
+    //前边两页一定显示
+    for (var i=1;i<=showPage;i++) {
+    if(i == selectIndex){//当前显示页码样式
+    %><span class="current"><%=i %></span><%
+    }else{
+    %><a href="javascript:pageturning(<%=i%>)"><%=i %></a><%
+    }
+    }
+    %>...<%
+
+    if(selectIndex > 4){
+
+    var pageStart = Math.floor(selectIndex/4);
+    // var showPage = sumPage > 2 ? 2:sumPage;
+    for (var i=(pageStart*4);i<= (pageStart*4) + 4;i++) {
+    if(i == selectIndex){//当前显示页码样式
+    %><span class="current"><%=i %></span><%
+    }else{
+    %><a href="javascript:pageturning(<%=i%>)"><%=i %></a><%
+    }
+    }
+
+    }else{
+    showPage = selectIndex + 4 > sumPage ? sumPage : selectIndex + 4;
+    for (var i=3;i<=showPage ;i++) {
+    if(i == selectIndex){//当前显示页码样式
+    %><span class="current"><%=i %></span><%
+    }else{
+    %><a href="javascript:pageturning(<%=i%>)"><%=i %></a><%
+    }
+    }
+
+    }
+
+    if(sumPage > i +2){
+    %>...<%
+    for (var i=sumPage-1;i<=sumPage;i++) {
+    if(i == selectIndex){//当前显示页码样式
+    %><span class="current"><%=i %></span><%
+    }else{
+    %><a href="javascript:pageturning(<%=i%>)"><%=i %></a><%
+    }
+    }
+    }
+
+    %>
+
+    <% if(i == data.totalPages){//显示最后页时不可点击下一页
+    %><span class="disabled">&gt; </span><%
+    }else{
+    %><a href="javascript:pageturning(<%=data.currentPage%> + 1)">&gt;</a><%
+    } %>
+</div>
