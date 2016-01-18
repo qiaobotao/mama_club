@@ -22,6 +22,9 @@ var memberAction = require('./memberAction');//会员管理
 var classMeetAction = require('./classMeetAction');//预约课程管理
 var serviceMeetAction = require('./serviceMeetAction');//预约服务管理
 var nursServiceAction = require('./nursServiceAction');//护理服务管理
+var returnVisitAction = require('./returnVisitAction');//回访信息管理
+var complainAction = require('./complainAction');//投诉信息管理
+var serviceAction = require('./serviceAction');//服务信息管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -84,11 +87,17 @@ router.all('/nurs_service_list',nursServiceAction.list);
 router.all('/nurs_service_add',nursServiceAction.add);
 // 收费信息
 // 回访信息
+router.all('/return_visit_list',returnVisitAction.list);
+router.all('/return_visit_add',returnVisitAction.add);
 // 投诉信息
+router.all('/complain_list',complainAction.list);
+router.all('/complain_add',complainAction.add);
 
 
 /*********************进销存管理***************************/
 // 服务管理
+router.all('/service_list', serviceAction.list);
+router.all('/service_add', serviceAction.add);
 // 商品管理
 router.all('/wares_list', waresAction.list);
 router.all('/wares_detail', waresAction.detail);
