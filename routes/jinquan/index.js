@@ -26,6 +26,9 @@ var returnVisitAction = require('./returnVisitAction');//回访信息管理
 var complainAction = require('./complainAction');//投诉信息管理
 var serviceAction = require('./serviceAction');//服务信息管理
 var distributorAction = require('./distributorAction');//经销商管理
+var storeroomInAction = require('./storeroomInAction');//入库管理
+var storeroomOutAction = require('./storeroomOutAction');//出库管理
+var storeroomMoveAction = require('./storeroomMoveAction');//移库管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -118,8 +121,14 @@ router.all('/storeroom_del', storeroomAction.del);
 router.all('/distributor_list',distributorAction.list);
 router.all('/distributor_add', distributorAction.add);
 // 入库管理
+router.all('/storeroom_in_list',storeroomInAction.list);
+router.all('/storeroom_in_add', storeroomInAction.add);
 // 出库管理
+router.all('/storeroom_out_list',storeroomOutAction.list);
+router.all('/storeroom_out_add', storeroomOutAction.add);
 // 移库管理
+router.all('/storeroom_move_list',storeroomMoveAction.list);
+router.all('/storeroom_move_add', storeroomMoveAction.add);
 // 盘点库存
 
 /*********************权限管理******************************/
