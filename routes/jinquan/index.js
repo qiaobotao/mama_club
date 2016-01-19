@@ -25,6 +25,7 @@ var nursServiceAction = require('./nursServiceAction');//护理服务管理
 var returnVisitAction = require('./returnVisitAction');//回访信息管理
 var complainAction = require('./complainAction');//投诉信息管理
 var serviceAction = require('./serviceAction');//服务信息管理
+var distributorAction = require('./distributorAction');//经销商管理
 
 /* GET home page. */
 router.all('/',welcomeAction.index);
@@ -114,6 +115,8 @@ router.all('/storeroom_set', storeroomAction.setStatus);
 router.all('/storeroom_del', storeroomAction.del);
 
 // 经销商管理
+router.all('/distributor_list',distributorAction.list);
+router.all('/distributor_add', distributorAction.add);
 // 入库管理
 // 出库管理
 // 移库管理
