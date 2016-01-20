@@ -135,3 +135,12 @@ module.exports.setStatus = function(req, res) {
     });
 
 }
+
+/*
+ * 查看库房明细
+ * @param req
+ * @param res
+ */
+module.exports.detailed = function(req, res) {
+    res.render('distributor/distributorDetailed');
+}

@@ -130,6 +130,7 @@ router.all('/storeroom_out_add', storeroomOutAction.add);
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_add', storeroomMoveAction.add);
 // 盘点库存
+router.all('/storeroom_detailed', storeroomAction.detailed);
 
 /*********************权限管理******************************/
 // 分类管理
