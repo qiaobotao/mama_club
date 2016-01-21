@@ -30,6 +30,13 @@ var storeroomInAction = require('./storeroomInAction');//入库管理
 var storeroomOutAction = require('./storeroomOutAction');//出库管理
 var storeroomMoveAction = require('./storeroomMoveAction');//移库管理
 
+var sysResourcesAction = require('./sysResourcesAction');//资源管理
+var sysMenuAction = require('./sysMenuAction');//菜单管理
+var sysRoleAction = require('./sysRoleAction');//角色管理
+var sysUserAction = require('./sysUserAction');//系统用户管理
+
+
+
 /* GET home page. */
 router.all('/',welcomeAction.index);
 router.all('/menu', welcomeAction.Menu);
@@ -148,10 +155,19 @@ router.all('/sub_classify_pre_edit',classifyAction.preSubEdit);
 router.all('/sub_classify_update',classifyAction.subUpdate);
 
 // 资源按钮管理
+router.all('/sys_resources_list',sysResourcesAction.list);
+router.all('/sys_resources_add', sysResourcesAction.add);
 // 菜单管理
+router.all('/sys_menu_list',sysMenuAction.list);
+router.all('/sys_menu_add', sysMenuAction.add);
 // 角色管理
+router.all('/sys_role_list',sysRoleAction.list);
+router.all('/sys_role_add', sysRoleAction.add);
 // 系统用户管理
+router.all('/sys_user_list',sysUserAction.list);
+router.all('/sys_user_add', sysUserAction.add);
 // 个人设置
+router.all('/sys_user_set',sysUserAction.set);
 
 
 module.exports = router;
