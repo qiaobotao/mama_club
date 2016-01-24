@@ -39,6 +39,26 @@
                 <th>分类</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].principal%></td>
+                <td><%=data.data[i].tel%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <% if (data.data[i].status == 1) {%>
+                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus(0,<%=data.data[i].id%>)">停用</a>]</div></td>
+                            <% } else {%>
+                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus(1,<%=data.data[i].id%>)">启用</a>]</div></td>
+                            <%}%>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
         <div class="black2">

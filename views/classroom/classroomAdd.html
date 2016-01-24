@@ -49,7 +49,7 @@
 </div>
 <div class="center_con">
     <form method="post" id="myform" action="/jinquan/shop_add">
-        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        < width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">教室名称：</td>
                 <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -68,6 +68,33 @@
             </tr>
             <tr>
                 <td class="regTd_l">教室物资：</td>
+                <td>
+                    <td width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <th>物资编码</th>
+                            <th>名称</th>
+                            <th>物资全名</th>
+                            <th>操作</th>
+                        </tr>
+                        <>
+                            <% for (var i=0;i<datas.data.length;i++) {%>
+                            <td>
+                                <%=datas.data[i].id%>
+
+                            </td>
+                            <td>
+                             <%=datas.data[i].name%>
+
+                            </td>
+                            <td>
+                                <%=datas.data[i].longname%>
+
+                            </td>
+                           <td> <input name ='materialId' type="checkbox" value='<%=datas.data[i].id%>'/> </td>
+                            <%}%>
+                         </tr>
+                    </table>
+                </td>
             </tr>
 
         </table>
