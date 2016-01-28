@@ -18,7 +18,7 @@ var async = require('async');
  */
 module.exports.insertClassRoom = function(serialNumber,name,classCode,classType,remark,materialId, cb) {
 
-    var sql = 'INSERT INTO shop (serialNumber,name,classCode,classType,remark,materialId,dateline,status) VALUES (?,?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO classroom (serialNumber,name,classCode,classType,remark,materialId,dateline,status) VALUES (?,?,?,?,?,?,?,?)';
     db.query(sql, [serialNumber,name,classCode,classType,remark,materialId, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -139,9 +139,9 @@ module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classTy
  * @param id
  * @param cb
  */
-module.exports.fetchSingleShop =function (id, cb) {
+module.exports.fetchSingleClassRoom =function (id, cb) {
 
-    var sql = 'SELECT * FROM shop WHERE id = ?';
+    var sql = 'SELECT * FROM classRoom WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -159,7 +159,7 @@ module.exports.fetchSingleShop =function (id, cb) {
  */
 module.exports.setStatus = function (id, status, cb) {
 
-    var sql = 'UPDATE shop  SET status = ? WHERE id = ?';
+    var sql = 'UPDATE classRoom  SET status = ? WHERE id = ?';
     db.query(sql, [status,id], function(cbData, err, rows, filelds) {
 
         if (!err) {

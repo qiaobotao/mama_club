@@ -8,6 +8,32 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript">
+        function search () {
+            var name = document.getElementById('name').value;
+            var classCode = document.getElementById('classCode').value;
+            window.location.href = '/jinquan/classRoom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
+        }
+        function pageturning (selectPage) {
+            var name = document.getElementById('name').value;
+            var classCode = document.getElementById('classCode').value;
+            window.location.href = '/jinquan/classRoom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
+        }
+        function setStatus (status, id) {
+            var name = document.getElementById('name').value;
+            var classCode = document.getElementById('classCode').value;
+            var classType = document.getElementById('classType').value;
+            var page = document.getElementById('page').value;
+            window.location.href = '/jinquan/classroom_set?page='+page+'&name='+name+'&classCode='+classCode+'&classType='+classType+'&status='+status+'&id='+id;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/classroom_to_edit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/classRoom_del?id='+id;
+        }
+
+    </script>
 </head>
 
 <body>
@@ -42,8 +68,8 @@
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].name%></td>
-                <td><%=data.data[i].principal%></td>
-                <td><%=data.data[i].tel%></td>
+                <td><%=data.data[i].classCode%></td>
+                <td><%=data.data[i].classType%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
