@@ -35,7 +35,7 @@ module.exports.insertClassRoom = function(serialNumber,name,classCode,classType,
  */
 module.exports.delClassRoom= function (id, cb) {
 
-    var sql = 'DELETE FROM classRoom WHERE id = ?';
+    var sql = 'DELETE FROM classroom WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -119,10 +119,10 @@ module.exports.fetchAllCLassRoom = function(className,classCode,classType,curren
  * @param principal
  * @param cb
  */
-module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classType,remark,status,materialId, cb) {
+module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classType,remark,materialId, cb) {
 
-    var sql = 'update   classroom  set  serialNumber =?, NAME =?, classCode =?, classType =?, remark =?, STATUS =?, materialId =?, dateline =?  where id =? ';
-    var par = [serialNumber,name,classCode,classType,remark,status,materialId, new Date().getTime(), id];
+    var sql = 'update   classroom  set  serialNumber =?, NAME =?, classCode =?, classType =?, remark =?,  materialId =?, dateline =?  where id =? ';
+    var par = [serialNumber,name,classCode,classType,remark,materialId, new Date().getTime(), id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
@@ -141,7 +141,7 @@ module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classTy
  */
 module.exports.fetchSingleClassRoom =function (id, cb) {
 
-    var sql = 'SELECT * FROM classRoom WHERE id = ?';
+    var sql = 'SELECT * FROM classroom WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -159,7 +159,7 @@ module.exports.fetchSingleClassRoom =function (id, cb) {
  */
 module.exports.setStatus = function (id, status, cb) {
 
-    var sql = 'UPDATE classRoom  SET status = ? WHERE id = ?';
+    var sql = 'UPDATE classroom  SET status = ? WHERE id = ?';
     db.query(sql, [status,id], function(cbData, err, rows, filelds) {
 
         if (!err) {

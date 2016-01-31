@@ -54,6 +54,52 @@ module.exports.goAdd = function (req, res) {
     });
 };
 /**
+ * 修改
+ * @param req
+ * @param res
+ */
+module.exports.preEdit = function(req, res) {
+
+    var id = req.query.id ? req.query.id : '';
+
+    service.fetchSingleClassRoom(id, function(err, results) {
+        if (!err) {
+            var classroom = results.length == 0 ? null : results[0];
+            var materialId=classroom.materialId;
+            res.render('classroom/classroomEdit', {classroom : classroom});
+
+
+        } else {
+            console.log(err.message);
+            res.render('error', {message : err});
+        }
+    })
+}
+/**
+ * 添加
+ * @param req
+ * @param res
+ */
+module.exports.doEdit = function (req, res) {
+
+    var id = req.body.id ? req.body.id : '';
+    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var name = req.body.name ? req.body.name : '';
+    var classCode = req.body.classCode ? req.body.classCode : '';
+    var classType = req.body.classType ? req.body.classType : '';
+    var remark = req.body.remark ? req.body.remark : '';
+    var materialId = req.body.materialId ? req.body.materialId : '';
+
+    service.updateClassRoom(id,serialNumber,name,classCode,classType,remark,materialId,function(err, results) {
+        if(!err) {
+            res.redirect('/jinquan/classroom_list');
+        } else {
+            console.log(err.message);
+            res.render('error');
+        }
+    })
+};
+/**
  * 添加
  * @param req
  * @param res

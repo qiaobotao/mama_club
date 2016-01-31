@@ -9,28 +9,26 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
-        function search () {
-            var name = document.getElementById('name').value;
-            var classCode = document.getElementById('classCode').value;
-            window.location.href = '/jinquan/classRoom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
+        function search (selectPage) {
+            var name = document.getElementById('classroomName').value;
+            var classCode = document.getElementById('classroomCode').value;
+            window.location.href = '/jinquan/classroom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
         }
         function pageturning (selectPage) {
-            var name = document.getElementById('name').value;
-            var classCode = document.getElementById('classCode').value;
-            window.location.href = '/jinquan/classRoom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
+            var name = document.getElementById('classroomName').value;
+            var classCode = document.getElementById('classroomCode').value;
+            window.location.href = '/jinquan/classroom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
         }
         function setStatus (status, id) {
-            var name = document.getElementById('name').value;
-            var classCode = document.getElementById('classCode').value;
-            var classType = document.getElementById('classType').value;
             var page = document.getElementById('page').value;
-            window.location.href = '/jinquan/classroom_set?page='+page+'&name='+name+'&classCode='+classCode+'&classType='+classType+'&status='+status+'&id='+id;
+            alert(status+'______'+id);
+            window.location.href = '/jinquan/classroom_set?page='+page +'&status='+status+'&id='+id;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/classroom_to_edit?id='+id;
         }
         function del (id) {
-            window.location.href = '/jinquan/classRoom_del?id='+id;
+            window.location.href = '/jinquan/classroom_del?id='+id;
         }
 
     </script>
@@ -48,14 +46,14 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>教室名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;教室编号：<input name="" type="text" class="input5" /></td>
+                    <td> <input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>教室名称：<input name="classroomName"  id="classroomName" type="text" class="input5" /></td>
+                    <td> &nbsp;教室编号：<input name="classroomCode"  id="classroomCode" type="text" class="input5" /></td>
                     <td><a href="#" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/classroom_add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/classroom_to_add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -69,7 +67,17 @@
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].name%></td>
                 <td><%=data.data[i].classCode%></td>
-                <td><%=data.data[i].classType%></td>
+                <td>
+
+                    <% if(data.data[i].classType==1){%>
+                    5人
+                    <%}if(data.data[i].classType==2){%>
+                    5~10人
+                    <%}if(data.data[i].classType==3){%>
+                    10~20人
+                    <%}%>
+
+                </td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
@@ -87,9 +95,7 @@
             <%}%>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

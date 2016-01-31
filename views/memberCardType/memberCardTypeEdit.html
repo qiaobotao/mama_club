@@ -10,29 +10,34 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
-            var name = document.getElementById("name").value;
-            if (!name || name.length == 0) {
-                alert('门店名称不能为空');
+            var memberCardType = document.getElementById("memberCardType").value;
+            if (!memberCardType || memberCardType.length == 0) {
+                alert('卡种不能为空');
                 return;
             }
-            var serialNumber = document.getElementById("serialNumber").value;
-            if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
+            var memberCardAmount = document.getElementById("memberCardAmount").value;
+            if (!memberCardAmount || memberCardAmount.length == 0) {
+                alert('卡面金额不能为空');
                 return;
             }
-            var tel = document.getElementById("tel").value;
-            if (!tel || tel.length == 0) {
-                alert('电话不能为空');
+            var consumerLimit = document.getElementById("consumerLimit").value;
+            if (!consumerLimit || consumerLimit.length == 0) {
+                alert('实际消费额度不能为空');
                 return;
             }
-            var address = document.getElementById("address").value;
-            if(!address || address.length == 0) {
-                alert('门店地址不能为空');
+            var zeroDiscounts = document.getElementById("zeroDiscounts").value;
+            if(!zeroDiscounts || zeroDiscounts.length == 0) {
+                alert('余额为0后折扣不能为空');
                 return;
             }
-            var principal = document.getElementById("principal").value;
-            if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
+            var isManyPeopleUsed = document.getElementById("isManyPeopleUsed").value;
+            if (!isManyPeopleUsed || isManyPeopleUsed.length == 0) {
+                alert('是否可以多人使用不能为空');
+                return;
+            }
+            var status = document.getElementById("status").value;
+            if (!status || status.length == 0) {
+                alert('状态不能为空');
                 return;
             }
             document.getElementById("myform").submit();
@@ -48,32 +53,32 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/shop_add">
+    <form method="post" id="myform" action="/jinquan/member_card_type_add">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">卡种：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">卡面金额：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">实际消费额度：</td>
-                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">余额为0后折扣：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">是否可以多人使用：</td>
-                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">状态：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="status" name="status" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
         <!--参与员工 end-->
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+        <div class="rb_l"><a href=/jinquan/membercardtype_edit" class="close"></a></div>
     </div>
 
 
