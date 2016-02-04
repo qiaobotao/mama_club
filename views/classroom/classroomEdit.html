@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加教室</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function submitForm(){
+            var name = document.getElementById("name").value;
+            if (!name || name.length == 0) {
+                alert('门店名称不能为空');
+                return;
+            }
+            var serialNumber = document.getElementById("serialNumber").value;
+            if (!serialNumber || serialNumber.length == 0) {
+                alert('序列号不能为空');
+                return;
+            }
+            var classCode = document.getElementById("classCode").value;
+            if (!classCode || classCode.length == 0) {
+                alert('教室编码不能为空');
+                return;
+            }
+            var remark = document.getElementById("remark").value;
+            if(!remark || remark.length == 0) {
+                alert('说明不能为空');
+                return;
+            }
+
+            document.getElementById("myform").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：添加教室
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/classroom_do_edit">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">序列号：<input id="id" name="id" type="hidden" readonly="true" class="input5" value="<%=classroom.id%>"/></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" readonly="true" class="input5" value="<%=classroom.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">* </span></td>
+            </tr>
+
+            <tr>
+                <td  class="regTd_l">教室名称：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=classroom.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">教室编码：</td>
+                <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5"  value="<%=classroom.classCode%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">教室分类：</td>
+                <td class="regTd_r">
+                    <select  id="classType" name="classType"   >
+                        <option  value="1" selected="<%=classroom.classType==1%>"><5人</option>
+                        <option  value="2" selected="<%=classroom.classType==2%>">5~10人</option>
+                        <option  value="3" selected="<%=classroom.classType==3%>">10~20人</option>
+                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                      </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">说明：</td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=classroom.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">教室物资： <input id="materialId" name="materialId" type="text" class="input5"  value="<%=classroom.materialId%>" /></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <th>商品名称</th>
+                            <th>商品商标</th>
+                            <th>商品规格</th>
+                            <th>最低库存</th>
+                            <th>操作</th>
+                        </tr>
+
+                        <tr>
+                         </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href=/jinquan/classroom_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>
