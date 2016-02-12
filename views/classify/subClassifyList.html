@@ -9,7 +9,20 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
 </head>
+<script type="text/javascript">
+    function search () {
+        var keywords = document.getElementById('keywords').value;
+        var pid = document.getElementById('id').value;
+        window.location.href = '/jinquan/sub_classify_list?keywords='+keywords+'&id='+pid;
+    }
 
+    function pageturning (selectPage) {
+        var keywords = document.getElementById('keywords').value;
+        var pid = document.getElementById('id').value;
+        window.location.href = '/jinquan/sub_classify_list?page='+selectPage+'&keywords='+keywords+'&id='+pid;
+    }
+
+</script>
 <body>
 <div class="r_top">
     <div class="weizhi">
@@ -22,13 +35,14 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td><input id="id" name="id" type="hidden" class="input5" value="<%=data.pid%>"/></td>
+                    <td><input id="keywords" name="keywords" type="text" class="input5" value="<%=data.keywords%>"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/sub_classify_pre_add?pid=<%=pid%>" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/sub_classify_pre_add?pid=<%=data.pid%>" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -37,22 +51,22 @@
                 <th>备注</th>
                 <th>操作</th>
             </tr>
-            <% for (var i=0;i<subClassify.length;i++) {%>
+            <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><%=subClassify[i].name%></td>
-                <td><%=subClassify[i].remark%></td>
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].remark%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/sub_classify_pre_edit?id=<%=subClassify[i].id%>">修改</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/sub_classify_del?id=<%=subClassify[i].id%>&pid=<%=subClassify[i].parentId%>">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/sub_classify_pre_edit?id=<%=data.data[i].id%>">修改</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/sub_classify_del?id=<%=data.data[i].id%>&pid=<%=data.data[i].parentId%>">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <%}%>
         </table>
-
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

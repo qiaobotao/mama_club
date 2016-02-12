@@ -14,9 +14,14 @@ var service = require('../../model/service/classify');
  */
 module.exports.list = function (req, res) {
 
-    service.getAllMainClassify(function(err, results) {
+    var keywords = req.query.keywords ? req.query.keywords : '';
+    var currentPage = req.query.page ? req.query.page : '1';
+
+    service.getAllMainClassify(keywords,currentPage, function(err, results) {
         if (!err) {
-            res.render('classify/mainClassifyList',{mainClassify : results});
+            results.currentPage = currentPage;
+            results.keywords = keywords;
+            res.render('classify/mainClassifyList',{data : results});
         } else {
             console.log(err.message);
             res.render('error', {message : err});
@@ -144,14 +149,20 @@ module.exports.subList = function (req, res) {
 
     var pid = req.query.id ? req.query.id : '';
 
-    service.getAllSubcollection(pid, function (err, results) {
+    var keywords = req.query.keywords ? req.query.keywords : '';
+    var currentPage = req.query.page ? req.query.page : '1';
+
+    service.getAllSubcollection(pid, keywords, currentPage, function (err, results) {
         if (!err) {
-            res.render('classify/subClassifyList', {subClassify : results, pid : pid});
+            results.currentPage = currentPage;
+            results.keywords = keywords;
+            results.pid = pid;
+            res.render('classify/subClassifyList', {data : results});
         } else {
             console.log(err.message);
             res.render('error',{message : err});
         }
-    })
+    });
 
 }
 

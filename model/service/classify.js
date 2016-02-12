@@ -4,24 +4,52 @@
  */
 
 var db = require('../../common/db');
+var async = require('async');
 
 /**
  * 获取所有父级分类
  * @param cb
  */
-module.exports.getAllMainClassify = function (cb) {
+module.exports.getAllMainClassify = function (keywords,currentPage, cb) {
 
-    var sql = "SELECT * FROM systemMainClassify ORDER BY orderCode asc";
+    var parm = "WHERE name LIKE '%"+keywords+"%'";
+    var sql_count = 'SELECT count(*) as count FROM systemMainClassify ' + parm + ' ORDER BY orderCode DESC';;
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT * FROM systemMainClassify '+parm+' ORDER BY orderCode DESC LIMIT ?,?';
 
-    db.query(sql,[],function(cbData, err, rows, fields){
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
-
     });
+
 }
 
 /**
@@ -146,17 +174,49 @@ module.exports.delSubcollection = function (id, cb) {
  * @param id
  * @param cb
  */
-module.exports.getAllSubcollection = function (id, cb) {
+module.exports.getAllSubcollection = function (id, keywords, currentPage, cb) {
 
-    var sql = 'SELECT * FROM systemClassify WHERE parentId = ?';
 
-    db.query(sql, [id], function(cbData, err, rows, fields) {
+
+    var parm = "WHERE name LIKE '%"+keywords+"%' and parentId = ?";
+
+    var sql_count = 'SELECT count(*) as count FROM systemClassify ' + parm + ' ORDER BY orderCode DESC';;
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT * FROM systemClassify '+parm+' ORDER BY orderCode DESC LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [id], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [id,start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+
 }
 
 
