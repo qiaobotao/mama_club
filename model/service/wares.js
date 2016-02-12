@@ -56,10 +56,10 @@ module.exports.fetchWares = function(pages, count, cb) {
 module.exports.fetchAllWares = function(cb) {
 
     var sql = 'SELECT * FROM wares ORDER BY dateline DESC';
-    db.query(sql, [], function(cbData, err, rows, fields){
-        if (!err) {
-            cb(null, rows);
-        } else {
+            db.query(sql, [], function(cbData, err, rows, fields){
+                if (!err) {
+                    cb(null, rows);
+                } else {
             cb(err);
         }
 

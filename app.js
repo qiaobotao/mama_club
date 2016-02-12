@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
+
 var generateQRCode = require('./routes/generateQRCode');
 var wechat = require('./routes/wechat');
 var wechatId = require('./routes/getOpenId');
@@ -27,7 +28,7 @@ app.use(cookieParser());
 app.use(session({
     secret: '12345',
     name: 'mama_club',
-    cookie: {maxAge: 10*1000 },
+    cookie: {maxAge: 60000*1000 },
     resave: false,
     saveUninitialized: true,
     rolling : true

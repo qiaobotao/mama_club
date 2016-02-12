@@ -44,36 +44,37 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/classroom_do_add">
+    <form method="post" id="myform" action="/jinquan/classroom_do_edit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="regTd_l">序列号：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">序列号：<input id="id" name="id" type="hidden" readonly="true" class="input5" value="<%=classroom.id%>"/></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" readonly="true" class="input5" value="<%=classroom.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">* </span></td>
             </tr>
 
             <tr>
                 <td  class="regTd_l">教室名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=classroom.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td  class="regTd_l">教室编码：</td>
-                <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5"  value="<%=classroom.classCode%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">教室分类：</td>
                 <td class="regTd_r">
-                    <select  id="classType" name="classType">
-                        <option  value="1"><5人</option>
-                        <option  value="2">5~10人</option>
-                        <option  value="3">10~20人</option>
-                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    <select  id="classType" name="classType"   >
+                        <option  value="1" selected="<%=classroom.classType==1%>"><5人</option>
+                        <option  value="2" selected="<%=classroom.classType==2%>">5~10人</option>
+                        <option  value="3" selected="<%=classroom.classType==3%>">10~20人</option>
+                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                      </td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>
-                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=classroom.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">教室物资：</td>
+                <td class="regTd_l">教室物资： <input id="materialId" name="materialId" type="text" class="input5"  value="<%=classroom.materialId%>" /></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
@@ -83,14 +84,8 @@
                             <th>最低库存</th>
                             <th>操作</th>
                         </tr>
+
                         <tr>
-                            <% for (var i=0;i<datas.length;i++) {%>
-                            <td><%=datas[i].name%></td>
-                            <td><%=datas[i].brand%></td>
-                            <td><%=datas[i].standard%></td>
-                            <td><%=datas[i].lowData%></td>
-                           <td> <input name ='materialId' type="checkbox" value='<%=datas[i].id%>'/> </td>
-                            <%}%>
                          </tr>
                     </table>
                 </td>

@@ -54,7 +54,13 @@ router.all('/shop_update',shopAction.update);
 /*********************教室及课程管理****************************/
 // 教室管理
 router.all('/classroom_list',classroomAction.list);
-router.all('/classroom_add',classroomAction.add);
+router.all('/classroom_to_add',classroomAction.goAdd);
+router.all('/classroom_do_add',classroomAction.doAdd);
+router.all('/classroom_set', classroomAction.setStatus);
+router.all('/classroom_to_edit', classroomAction.preEdit);
+router.all('/classroom_do_edit', classroomAction.doEdit);
+router.all('/classroom_del', classroomAction.del);
+
 // 排课情况
 // 课程查询
 router.all('/course_list',courseAction.list);
@@ -80,6 +86,8 @@ router.all('/attendance_type_edit',attendanceTypeAction.edit);
 // 会员卡类型
 router.all('/member_card_type_list',memberCardTypeAction.list);
 router.all('/member_card_type_edit',memberCardTypeAction.edit);
+router.all('/member_card_type_add',memberCardTypeAction.add);
+
 // 会员卡管理
 // 活动管理
 router.all('/activity_manage_list',activityManageAction.list);
