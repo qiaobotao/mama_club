@@ -148,3 +148,8 @@ DIV.black2 SPAN.current {
 DIV.black2 SPAN.disabled {
     BORDER-RIGHT: #eee 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #eee 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; MARGIN: 2px; BORDER-LEFT: #eee 1px solid; COLOR: #ddd; PADDING-TOP: 2px; BORDER-BOTTOM: #eee 1px solid
 }
+
+
+
+.error{ margin:0 auto; padding:0px; width:400px; padding-top:50px; height:200px;}
+.errorSty1{ font-size:16px; text-align:left; color:#eb8636; font-weight:bold;}
