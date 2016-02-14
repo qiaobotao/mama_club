@@ -6,7 +6,7 @@
 
 var db = require('../../common/db');
 var async = require('async');
-var mainServiceClassifyId = 17;
+var mainServiceClassifyId = require('../../config').mainClassifyId.serivce;
 
 /**
  * 分页获取所有服务

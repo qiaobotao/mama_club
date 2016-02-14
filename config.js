@@ -47,6 +47,12 @@ module.exports = {
         password : '',
         port     : 3306,
         connectionLimit : 50
+    },
+
+    // 主分类id
+    mainClassifyId : {
+        serivce : 17,
+        wares : 14
     }
 
 };
