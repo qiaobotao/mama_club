@@ -40,37 +40,38 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/service_add">
+    <form method="post" id="myform" action="/jinquan/service_update">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <input id="sid" name="sid" type="hidden"  value="<%=data.id%>" />
             <tr>
                 <td class="regTd_l">服务名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">服务内容：</td>
-                <td class="regTd_r"><textarea id="content" name="content" rows="8" cols="19"></textarea>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><textarea id="content" name="content" rows="8" cols="19"><%=data.content%></textarea>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">服务分类：</td>
                 <td class="regTd_r"><select id="cid" name="cid">
-                    <%for(var i=0;i<data.length;i++){%>
-                    <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
+                    <%for(var i=0;i<classifys.length;i++){%>
+                    <option value ="<%=classifys[i].id%>" <%if(data.cid == classifys[i].id){%>selected<%}%> ><%=classifys[i].name%></option>
                     <%}%>
                 </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">服务金额：</td>
-                <td class="regTd_r"><input id="price" name="price" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="price" name="price" type="text" class="input5" value="<%=data.price%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">备注：</td>
-                <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19"></textarea></td>
+                <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19"><%=data.remark%></textarea></td>
             </tr>
         </table>
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href=/jinquan/service_list" class="close"></a></div>
+        <div class="rb_l"><a href="/jinquan/service_list" class="close"></a></div>
     </div>
 
 

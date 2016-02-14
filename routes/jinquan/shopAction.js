@@ -10,7 +10,7 @@ var service = require('../../model/service/shop');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res, next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var shopname = req.query.shopname ? req.query.shopname : '';
@@ -25,8 +25,7 @@ module.exports.list = function (req, res) {
             results.number = number;
             res.render('shop/shopList', {data : results});
         } else {
-            console.log(err.message);
-            res.render('error', {error : err});
+            next();
         }
     });
 }
@@ -47,7 +46,7 @@ module.exports.preAdd = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.add = function(req, res) {
+module.exports.add = function(req, res, next) {
 
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
     var name = req.body.name ? req.body.name : '';
@@ -60,8 +59,7 @@ module.exports.add = function(req, res) {
        if (!err) {
            res.redirect('/jinquan/shop_list');
        } else {
-           console.log(err.message);
-           res.render('error', {error : err});
+           next();
        }
    });
 
@@ -72,7 +70,7 @@ module.exports.add = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.del = function (req, res) {
+module.exports.del = function (req, res, next) {
 
     var id = req.query.id ? req.query.id :'';
 
@@ -80,8 +78,7 @@ module.exports.del = function (req, res) {
         if (!err) {
             res.redirect('/jinquan/shop_list');
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
     });
 
@@ -92,7 +89,7 @@ module.exports.del = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.setStatus = function(req, res) {
+module.exports.setStatus = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
     var status = req.query.status ? req.query.status : '';
@@ -107,8 +104,7 @@ module.exports.setStatus = function(req, res) {
         if (!err) {
             res.redirect('/jinquan/shop_list?page='+selectPage+'&shopname='+shopname+'&principal='+principal+'&number='+number);
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
 
     })
@@ -119,7 +115,7 @@ module.exports.setStatus = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.preEdit = function(req, res) {
+module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
 
@@ -128,8 +124,7 @@ module.exports.preEdit = function(req, res) {
             var shop = results.length == 0 ? null : results[0];
             res.render('shop/shopEdit', {shop : shop});
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
     })
 }
@@ -139,7 +134,7 @@ module.exports.preEdit = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.update = function(req, res) {
+module.exports.update = function(req, res,next) {
 
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
@@ -153,8 +148,7 @@ module.exports.update = function(req, res) {
         if (!err) {
             res.redirect('/jinquan/shop_list');
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
     })
 }

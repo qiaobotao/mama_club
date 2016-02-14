@@ -117,6 +117,11 @@ router.all('/complain_add',complainAction.add);
 // 服务管理
 router.all('/service_list', serviceAction.list);
 router.all('/service_add', serviceAction.add);
+router.all('/service_pre_add', serviceAction.preAdd);
+router.all('/service_browse', serviceAction.browse);
+router.all('/service_pre_edit', serviceAction.preEdit);
+router.all('/service_update', serviceAction.update);
+router.all('/service_del', serviceAction.del);
 // 商品管理
 router.all('/wares_list', waresAction.list);
 router.all('/wares_detail', waresAction.detail);

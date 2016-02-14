@@ -12,7 +12,7 @@ var service = require('../../model/service/classify');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var keywords = req.query.keywords ? req.query.keywords : '';
     var currentPage = req.query.page ? req.query.page : '1';
@@ -23,8 +23,7 @@ module.exports.list = function (req, res) {
             results.keywords = keywords;
             res.render('classify/mainClassifyList',{data : results});
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
     });
 
@@ -35,7 +34,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.del = function(req, res) {
+module.exports.del = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : 0;
 
@@ -50,14 +49,12 @@ module.exports.del = function(req, res) {
                    if(!err) {
                        res.redirect('/jinquan/main_classify_list');
                    } else {
-                       console.log(err.message);
-                       res.render('error',{message : err});
+                       next();
                    }
                })
            }
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+           next();
         }
     })
 
@@ -79,7 +76,7 @@ module.exports.preAdd = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res, next) {
 
     var name = req.body.name ? req.body.name : '';
     var remark = req.body.remark ? req.body.remark : '';
@@ -89,8 +86,7 @@ module.exports.add = function (req, res) {
         if(!err) {
             res.redirect('/jinquan/main_classify_list');
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     })
 }
@@ -100,7 +96,7 @@ module.exports.add = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.preEdit = function(req, res) {
+module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
 
@@ -110,8 +106,7 @@ module.exports.preEdit = function(req, res) {
             var mainClassify = results.length == 0 ? null : results[0];
             res.render('classify/mainClassifyEdit',{mainClassify : mainClassify});
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     })
 }
@@ -121,7 +116,7 @@ module.exports.preEdit = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.update = function (req, res) {
+module.exports.update = function (req, res,next) {
 
     var id = req.body.id ? req.body.id : '';
     var name = req.body.name ? req.body.name : '';
@@ -133,8 +128,7 @@ module.exports.update = function (req, res) {
         if (!err) {
             res.redirect('/jinquan/main_classify_list');
         } else {
-            console.log(err.message);
-            res.render('error',{message : err});
+            next();
         }
     });
 
@@ -145,7 +139,7 @@ module.exports.update = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.subList = function (req, res) {
+module.exports.subList = function (req, res,next) {
 
     var pid = req.query.id ? req.query.id : '';
 
@@ -159,8 +153,7 @@ module.exports.subList = function (req, res) {
             results.pid = pid;
             res.render('classify/subClassifyList', {data : results});
         } else {
-            console.log(err.message);
-            res.render('error',{message : err});
+            next();
         }
     });
 
@@ -184,7 +177,7 @@ module.exports.preSubAddClassify = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.addSubClassify = function (req, res) {
+module.exports.addSubClassify = function (req, res, next) {
 
     var pid = req.body.pid ? req.body.pid : 0;
     var name = req.body.name ? req.body.name :'';
@@ -195,8 +188,7 @@ module.exports.addSubClassify = function (req, res) {
         if(!err) {
             res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     });
 }
@@ -206,7 +198,7 @@ module.exports.addSubClassify = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.delSubClassify = function (req, res) {
+module.exports.delSubClassify = function (req, res, next) {
 
     var id = req.query.id ? req.query.id : 0;
     var pid = req.query.pid ? req.query.pid : 0;
@@ -215,8 +207,7 @@ module.exports.delSubClassify = function (req, res) {
         if(!err) {
             res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     });
 }
@@ -226,7 +217,7 @@ module.exports.delSubClassify = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.preSubEdit = function (req, res) {
+module.exports.preSubEdit = function (req, res, next) {
 
     var id = req.query.id ? req.query.id : 0;
 
@@ -236,8 +227,7 @@ module.exports.preSubEdit = function (req, res) {
             var subClassify = results.length == 0 ? null : results[0];
             res.render('classify/subClassifyEdit', {classify : subClassify});
         } else {
-            console.log(err.message);
-            res.render('error',{message : err});
+            next();
         }
 
     });
@@ -248,7 +238,7 @@ module.exports.preSubEdit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.subUpdate = function (req, res) {
+module.exports.subUpdate = function (req, res, next) {
 
     var id = req.body.id ? req.body.id : 0;
     var pid = req.body.pid ? req.body.pid : 0;
@@ -259,8 +249,7 @@ module.exports.subUpdate = function (req, res) {
         if(!err) {
             res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     });
 }
