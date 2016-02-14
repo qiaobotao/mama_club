@@ -70,6 +70,8 @@ router.all('/course_add',courseAction.add);
 // 员工列表
 router.all('/staff_list',staffAction.list);
 router.all('/staff_add',staffAction.add);
+router.all('/staff_save',staffAction.save);
+router.all('/staff_del',staffAction.del);
 // 员工培训
 router.all('/staff_train_list',staffTrainAction.list);
 router.all('/staff_train_edit',staffTrainAction.edit);

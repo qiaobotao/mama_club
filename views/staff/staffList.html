@@ -8,6 +8,20 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript">
+        function search() {
+            var name = document.getElementById('name').value;
+            var serialNumber = document.getElementById('serialNumber').value;
+            var tel = document.getElementById('tel').value;
+            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/shop_pre_edit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/staff_del?id='+id;
+        }
+    </script>
 </head>
 
 <body>
@@ -22,10 +36,11 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>员工名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;员工编号：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;电话：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
+                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
+                    <td> &nbsp;员工编号：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>"/></td>
+                    <td> &nbsp;电话：<input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -42,11 +57,26 @@
                 <th>邮箱</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].serialNumber%></td>
+                <td><%=data.data[i].tel%></td>
+                <td><%=data.data[i].belongShop%></td>
+                <td><%=data.data[i].email%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 
