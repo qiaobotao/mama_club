@@ -28,6 +28,10 @@
             <td class="regTd_r"><input name="input" type="text" class="input5" readOnly="true" value="<%=wares.longname%>"/></td>
         </tr>
         <tr>
+            <td class="regTd_l">商品类别：</td>
+            <td class="regTd_r"><input name="input" type="text" class="input5" readOnly="true" value="<%=wares.cname%>"/></td>
+        </tr>
+        <tr>
             <td class="regTd_l">商标：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.brand%>"/></td>
         </tr>
@@ -41,20 +45,16 @@
         </tr>
         <tr>
             <td class="regTd_l">备注：</td>
-            <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.remarks%>"/></td>
+            <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19" disabled="true "><%=wares.remarks%></textarea></td>
         </tr>
         <tr>
             <td class="regTd_l">最低库存：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.lowData%>"/></td>
         </tr>
-        <tr>
-            <td class="regTd_l">启用状态：</td>
-            <td class="regTd_r"><%if(wares.status==1){%>正常<%}else{%>停用<%}%></td>
-        </tr>
+
     </table>
     <div class="reg_but">
-        <div class="rb_l"><a href="#" class="reset"></a></div>
-        <div class="rb_l"><a href="#" class="close"></a></div>
+        <div class="rb_l"><a href="/jinquan/wares_list" class="close"></a></div>
     </div>
 </div>
 </body>

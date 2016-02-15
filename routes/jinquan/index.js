@@ -130,6 +130,9 @@ router.all('/wares_list', waresAction.list);
 router.all('/wares_detail', waresAction.detail);
 router.all('/wares_pre_edit', waresAction.preEdit);
 router.all('/wares_update', waresAction.waresUpdate);
+router.all('/wares_pre_add', waresAction.preAdd);
+router.all('/wares_add', waresAction.add);
+router.all('/wares_del', waresAction.del);
 
 // 库房管理
 router.all('/storeroom_list',storeroomAction.list);
