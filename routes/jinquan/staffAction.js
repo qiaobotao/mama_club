@@ -33,7 +33,8 @@ module.exports.list = function (req, res) {
  * @param res
  */
 module.exports.add = function (req, res) {
-    res.render('staff/staffAdd');
+    var staff =[];
+    res.render('staff/staffAdd', {staff : staff});
 }
 /**
  * 保存员工
@@ -41,6 +42,7 @@ module.exports.add = function (req, res) {
  * @param res
  */
 module.exports.save = function (req, res) {
+    var id = req.body.id ? req.body.id : '';
     var name = req.body.name ? req.body.name : '';
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -58,14 +60,42 @@ module.exports.save = function (req, res) {
     var clockCode = req.body.clockCode ? req.body.clockCode : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
 
+    if(id!=''){//修改
+        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,function(err, results) {
+            if(!err) {
+                res.redirect('/jinquan/staff_list');
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
+    }else{//添加
+        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,function(err, results) {
+            if(!err) {
+                res.redirect('/jinquan/staff_list');
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
+    }
 
+}
+/**
+ * 修改
+ * @param req
+ * @param res
+ */
+module.exports.preEdit = function(req, res, next) {
 
-    service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,function(err, results) {
-        if(!err) {
-            res.redirect('/jinquan/staff_list');
+    var id = req.query.id ? req.query.id : '';
+
+    service.fetchSingleStaff(id, function(err, results) {
+        if (!err) {
+            var staff = results.length == 0 ? null : results[0];
+            res.render('staff/staffAdd', {staff : staff});
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     })
 }

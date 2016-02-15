@@ -22,22 +22,22 @@
                 return;
             }
             /*
-            var tel = document.getElementById("tel").value;
-            if (!tel || tel.length == 0) {
-                alert('电话不能为空');
-                return;
-            }
-            var address = document.getElementById("address").value;
-            if(!address || address.length == 0) {
-                alert('门店地址不能为空');
-                return;
-            }
-            var principal = document.getElementById("principal").value;
-            if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
-                return;
-            }
-            */
+             var tel = document.getElementById("tel").value;
+             if (!tel || tel.length == 0) {
+             alert('电话不能为空');
+             return;
+             }
+             var address = document.getElementById("address").value;
+             if(!address || address.length == 0) {
+             alert('门店地址不能为空');
+             return;
+             }
+             var principal = document.getElementById("principal").value;
+             if (!principal || principal.length == 0) {
+             alert('负责人不能为空');
+             return;
+             }
+             */
             document.getElementById("myform").submit();
         }
     </script>
@@ -46,7 +46,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：添加员工
+        当前位置：员工
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -55,51 +55,54 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="name" name="name" type="text" class="input5" value="<%=staff.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input id="id" name="id" type="hidden" value="<%=staff.id%>"/>
+                </td>
                 <td  class="regTd_l">编码：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=staff.serialNumber%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=staff.tel%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">身份证：</td>
-                <td class="regTd_r"><input id="idCard" name="idCard" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="idCard" name="idCard" type="text" class="input5" value="<%=staff.idCard%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出生日期：</td>
-                <td class="regTd_r"><input id="birthDate" name="birthDate" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="birthDate" name="birthDate" type="text" class="input5" value="<%=staff.birthDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">最高学历：</td>
-                <td class="regTd_r"><input id="highestEducation" name="highestEducation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="highestEducation" name="highestEducation" type="text" class="input5" value="<%=staff.highestEducation%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">毕业院校：</td>
-                <td class="regTd_r"><input id="graduationSchool" name="graduationSchool" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="graduationSchool" name="graduationSchool" type="text" class="input5" value="<%=staff.graduationSchool%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">配偶名称：</td>
-                <td class="regTd_r"><input id="spouseName" name="spouseName" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="spouseName" name="spouseName" type="text" class="input5" value="<%=staff.spouseName%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">联系电话：</td>
-                <td class="regTd_r"><input id="spouseTel" name="spouseTel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="spouseTel" name="spouseTel" type="text" class="input5" value="<%=staff.spouseTel%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">邮箱地址：</td>
-                <td class="regTd_r"><input id="email" name="email" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="email" name="email" type="text" class="input5" value="<%=staff.email%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">入职时间：</td>
-                <td class="regTd_r"><input id="startJobTime" name="startJobTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="startJobTime" name="startJobTime" type="text" class="input5" value="<%=staff.startJobTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否在职：</td>
-                <td class="regTd_r"><input id="isJob" name="isJob" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="isJob" name="isJob" type="text" class="input5" value="<%=staff.isJob%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">离职时间：</td>
-                <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" value="<%=staff.endJobTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">所属门店：</td>
-                <td class="regTd_r"><input id="belongShop" name="belongShop" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="belongShop" name="belongShop" type="text" class="input5" value="<%=staff.belongShop%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">打卡机编号：</td>
-                <td class="regTd_r"><input id="clockCode" name="clockCode" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="clockCode" name="clockCode" type="text" class="input5" value="<%=staff.clockCode%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">备注：</td>
-                <td class="regTd_r"><input id="remarks" name="remarks" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="remarks" name="remarks" type="text" class="input5" value="<%=staff.remarks%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
         <!--子女信息 start-->
@@ -110,13 +113,15 @@
                 <td>+</td>
                 <td>子女姓名</td>
                 <td>出生日期</td>
+                <td>性别</td>
                 <td>排行</td>
             </tr>
             <tr>
                 <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="childrenName" name="childrenName" type="text" class="input5" /></td>
+                <td><input id="childrenBirth" name="childrenBirth" type="text" class="input5" /></td>
+                <td><input id="childrenSex" name="childrenSex" type="text" class="input5" /></td>
+                <td><input id="childrenRank" name="childrenRank" type="text" class="input5" /></td>
             </tr>
         </table>
         <!--子女信息 end-->
@@ -132,9 +137,9 @@
             </tr>
             <tr>
                 <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="contractStartDate" name="contractStartDate" type="text" class="input5" /></td>
+                <td><input id="contractEndDate" name="contractEndDate" type="text" class="input5" /></td>
+                <td><input id="contractRemarks" name="contractRemarks" type="text" class="input5" /></td>
             </tr>
         </table>
         <!--合同信息 end-->
@@ -149,8 +154,8 @@
             </tr>
             <tr>
                 <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="vocationalQualifications" name="vocationalQualifications" type="text" class="input5" /></td>
+                <td><input id="qualificationsImage" name="qualificationsImage" type="text" class="input5" /></td>
             </tr>
         </table>
         <!--职业资质信息 end-->
