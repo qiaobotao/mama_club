@@ -80,6 +80,8 @@ router.all('/staff_train_edit',staffTrainAction.edit);
 // 考勤类别
 router.all('/attendance_type_list',attendanceTypeAction.list);
 router.all('/attendance_type_edit',attendanceTypeAction.edit);
+router.all('/attendance_type_save',attendanceTypeAction.save);
+router.all('/attendance_type_del',attendanceTypeAction.del);
 // 考勤变更
 // 查询考勤
 // 绩效查询

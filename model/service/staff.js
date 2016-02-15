@@ -17,9 +17,9 @@ var async = require('async');
  */
 module.exports.insertStaff = function(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, cb) {
 
-    var sql = 'INSERT INTO staff (serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks)' +
-        ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO staff (serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,dateline,status)' +
+        ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

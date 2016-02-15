@@ -8,12 +8,26 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript">
+        function search() {
+            var categoryName = document.getElementById('categoryName').value;
+//            var serialNumber = document.getElementById('serialNumber').value;
+//            var tel = document.getElementById('tel').value;
+            window.location.href = '/jinquan/attendance_type_list?categoryName='+categoryName;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/attendance_type_edit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/attendance_type_del?id='+id;
+        }
+    </script>
 </head>
 
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：会员卡类型列表
+        当前位置：考勤类别列表
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -22,10 +36,10 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>类别名称：<input name="" type="text" class="input5" /></td>
+                    <td>类别名称：<input name="categoryName" id="categoryName" type="text" class="input5" value="<%=data.categoryName%>" /></td>
                     <td> &nbsp;开始时间：<input name="" type="text" class="input5" /></td>
                     <td> &nbsp;截止时间：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -41,11 +55,28 @@
                 <th>工作小时数</th>
                 <th>操作</th>
             </tr>
+
+
+
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].categoryName%></td>
+                <td><%=data.data[i].startDate%></td>
+                <td><%=data.data[i].endDate%></td>
+                <td><%=data.data[i].jobTime%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 
