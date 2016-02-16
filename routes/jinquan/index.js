@@ -139,8 +139,8 @@ router.all('/storeroom_add', storeroomAction.add);
 router.all('/storeroom_pre_edit', storeroomAction.preEdit);
 router.all('/storeroom_update', storeroomAction.update);
 router.all('/storeroom_pre_add', storeroomAction.preAdd);
-router.all('/storeroom_set', storeroomAction.setStatus);
 router.all('/storeroom_del', storeroomAction.del);
+router.all('/storeroom_detail', storeroomAction.detail);
 
 // 经销商管理
 router.all('/distributor_list',distributorAction.list);
@@ -154,8 +154,7 @@ router.all('/storeroom_out_add', storeroomOutAction.add);
 // 移库管理
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_add', storeroomMoveAction.add);
-// 盘点库存
-router.all('/storeroom_detailed', storeroomAction.detailed);
+
 
 /*********************权限管理******************************/
 // 分类管理

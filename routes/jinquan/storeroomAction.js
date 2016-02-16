@@ -10,15 +10,31 @@ var service = require('../../model/service/storeroom');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
-    service.fetchAllStorerooms(function(err, results){
+    var name = req.query.name ? req.query.name : '';    // 库房名称
+    var classifyId = req.query.id ? req.query.id : '';  // 保存分类
+    var currentPage = req.query.page ? req.query.page : '1';
+
+    service.list(name,classifyId,currentPage, function(err, results) {
+
         if (!err) {
-            res.render('storeroom/storeroomList', {storerooms : results});
+            results.currentPage = currentPage;
+            results.name = name;
+            results.classifyId = classifyId;
+            service.getStoreroomClassify(function(err,classify) {
+
+                if (!err) {
+                    results.classify = classify;
+                    res.render('storeroom/storeroomList', {data : results});
+                } else {
+                    next();
+                }
+            });
         } else {
-            console.log(err.message);
-            res.render('error', {error : err});
+            next();
         }
+
     });
 }
 
@@ -27,18 +43,27 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.preEdit = function (req, res) {
+module.exports.preEdit = function (req, res, next) {
 
-    var id = req.query.id ? req.query.id : 0;
-    service.fetchSingleStoreroom(id, function(err, results) {
+    var id = req.query.id ? req.query.id : '';
+
+    service.getStoreroomClassify(function(err, classify) {
+
         if (!err) {
-            var storeroom = results.length == 0 ? null : results[0];
-            res.render('storeroom/storeroomEdit', {storeroom : storeroom});
+            service.fetchSingleStoreroom(id, function(err, results) {
+
+                if (!err && results.length != 0) {
+                    var service = results[0];
+                    res.render('storeroom/storeroomEdit', {data : service , classifys : classify});
+
+                } else {
+                    next();
+                }
+            })
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
-    });
+    })
 }
 
 /**
@@ -46,19 +71,22 @@ module.exports.preEdit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res, next) {
 
+    var serial = req.body.serial ? req.body.serial : '';
     var name = req.body.name ? req.body.name : '';
-    var address = req.body.address ? req.body.address : '';
     var principal = req.body.principal ? req.body.principal : '';
-    var status = req.body.roomstatus ? req.body.roomstatus : 1;
+    var cid = req.body.cid ? req.body.cid : '';
+    var tel = req.body.tel ? req.body.tel : '';
+    var address = req.body.address ? req.body.address : '';
+    var remarks = req.body.remarks ? req.body.remarks : '';
 
-    service.insertStoreroom(name, address, principal, status, function(err, results) {
+
+    service.insertStoreroom(name, address, principal, tel, serial, cid, remarks, function(err, results) {
         if(!err) {
             res.redirect('/jinquan/storeroom_list');
         } else {
-            console.log(err.message);
-            res.render('error');
+           next();
         }
     });
 }
@@ -68,9 +96,16 @@ module.exports.add = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.preAdd = function(req, res) {
+module.exports.preAdd = function(req, res, next) {
 
-    res.render('storeroom/storeroomAdd');
+    service.getStoreroomClassify(function(err, results) {
+
+        if (!err) {
+            res.render('storeroom/storeroomAdd', {data : results});
+        } else {
+            next();
+        }
+    })
 
 }
 
@@ -80,13 +115,16 @@ module.exports.preAdd = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.del = function(req, res) {
+module.exports.del = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : 0;
     service.delStoreroom(id, function(err, results){
 
-
-
+        if (!err) {
+            res.redirect('/jinquan/storeroom_list');
+        } else {
+            next();
+        }
     });
 }
 
@@ -95,21 +133,23 @@ module.exports.del = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.update = function(req, res) {
+module.exports.update = function(req, res, next) {
 
-    var id = req.body.id ? req.body.id : 0;
+    var id = req.body.sid ? req.body.sid : 0;
+    var serial = req.body.serial ? req.body.serial : '';
     var name = req.body.name ? req.body.name : '';
-    var address = req.body.address ? req.body.address : '';
     var principal = req.body.principal ? req.body.principal : '';
-    var status = req.body.roomstatus ? req.body.roomstatus : 1;
+    var cid = req.body.cid ? req.body.cid : '';
+    var tel = req.body.tel ? req.body.tel : '';
+    var address = req.body.address ? req.body.address : '';
+    var remarks = req.body.remarks ? req.body.remarks : '';
 
-    service.updateStoreroom(id,name,address,principal,status,function(err, results){
+    service.updateStoreroom(id,name,address,principal, serial, cid, tel, remarks, function(err, results){
 
         if(!err) {
             res.redirect('/jinquan/storeroom_list');
         } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     });
 
@@ -141,6 +181,15 @@ module.exports.setStatus = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.detailed = function(req, res) {
-    res.render('distributor/distributorDetailed');
+module.exports.detail = function(req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';
+
+    service.fetchSingleStoreroom(id,function(err, results) {
+        if (!err && results.length != 0) {
+            res.render('storeroom/storeroomDetail', {data : results[0]});
+        } else {
+            next();
+        }
+    })
 }
