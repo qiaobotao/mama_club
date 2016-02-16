@@ -70,6 +70,7 @@ router.all('/course_add',courseAction.add);
 // 员工列表
 router.all('/staff_list',staffAction.list);
 router.all('/staff_add',staffAction.add);
+router.all('/staff_preEdit',staffAction.preEdit);
 router.all('/staff_save',staffAction.save);
 router.all('/staff_del',staffAction.del);
 // 员工培训
@@ -79,6 +80,8 @@ router.all('/staff_train_edit',staffTrainAction.edit);
 // 考勤类别
 router.all('/attendance_type_list',attendanceTypeAction.list);
 router.all('/attendance_type_edit',attendanceTypeAction.edit);
+router.all('/attendance_type_save',attendanceTypeAction.save);
+router.all('/attendance_type_del',attendanceTypeAction.del);
 // 考勤变更
 // 查询考勤
 // 绩效查询

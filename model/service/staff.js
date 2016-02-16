@@ -17,9 +17,9 @@ var async = require('async');
  */
 module.exports.insertStaff = function(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, cb) {
 
-    var sql = 'INSERT INTO staff (serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks)' +
-        ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO staff (serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,dateline,status)' +
+        ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -119,10 +119,12 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateStaff = function(id, serialNumber,  name, address, principal, tel, remark, cb) {
+module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, cb) {
 
-    var sql = 'UPDATE staff SET serialNumber = ?, name = ?, tel = ?, address = ?, principal = ?, remark = ? WHERE id = ?';
-    var par = [serialNumber, name, tel, address, principal, remark, id];
+    var sql = 'UPDATE staff SET serialNumber = ?, name = ?, tel = ?, idCard = ?, birthDate = ?, highestEducation = ? , graduationSchool = ? , spouseName = ? ' +
+        ', spouseTel = ? , email = ? , startJobTime = ? , endJobTime = ? , isJob = ? , belongShop = ? , clockCode = ?, remarks = ? WHERE id = ?';
+
+    var par = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
