@@ -22,7 +22,7 @@ var async = require('async');
 module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
 
     var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status) VALUES (?,?,?,?,?,?)';
-    db.query(sql, [memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status], function(cbData, err, rows, fields) {
+    db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -30,56 +30,25 @@ module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,c
         }
     });
 };
-
 /**
- * 删除教室
- * @param id
+ * 添加教室
+ * @param serialNumber
+ * @param name
+ * @param classCode
+ * @param classType
+ * @param remark
+ * @param materialid
  * @param cb
  */
-module.exports.delClassRoom= function (id, cb) {
+module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
 
-    var sql = 'DELETE FROM classroom WHERE id = ?';
-    db.query(sql, [id], function(cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}
+    var parm = "where memberCardType like '%" + memberCardType + "%' and memberCardAmount like '%" + memberCardAmount
+        + "%' and zeroDiscounts like '%" + zeroDiscounts + "%'";
 
-/**
- * 查询菜单
- * @param pages
- * @param count
- * @param cb
- */
-module.exports.fetchClassRoom = function(pages, count, cb) {
-
-    var start = pages * count;
-    var end = start + count;
-    var sql = 'SELECT * FROM classroom ORDER BY dateline DESC LIMIT ?, ?';
-    db.query(sql, [start, end], function (cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}
-
-/**
- * 获取所有门店
- * @param cb
- */
-module.exports.fetchAllCLassRoom = function(className,classCode,classType,currentPage,cb) {
-
-    var parm = "WHERE name LIKE '%"+className+"%' AND classCode LIKE '%"+classCode+"%' AND classType LIKE '%"+classType+"%' ";
-
-    var sql_count = 'SELECT count(*) as count FROM classroom '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM memberCardType '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM classroom '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT * FROM memberCardType '+parm+'   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -113,6 +82,44 @@ module.exports.fetchAllCLassRoom = function(className,classCode,classType,curren
         }
     });
 }
+/**
+ * 删除教室
+ * @param id
+ * @param cb
+ */
+module.exports.delMembercardtype= function (id, cb) {
+
+    var sql = 'DELETE FROM memberCardType WHERE id = ?';
+    db.query(sql, [id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 查询菜单
+ * @param pages
+ * @param count
+ * @param cb
+ */
+module.exports.fetchMembercardtype = function(pages, count, cb) {
+
+    var start = pages * count;
+    var end = start + count;
+    var sql = 'SELECT * FROM memberCardType ORDER BY id DESC LIMIT ?, ?';
+    db.query(sql, [start, end], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+
 
 /**
  * 修改教室
@@ -122,10 +129,10 @@ module.exports.fetchAllCLassRoom = function(className,classCode,classType,curren
  * @param principal
  * @param cb
  */
-module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classType,remark,status,materialId, cb) {
+module.exports.updateMemberCardType = function(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
 
-    var sql = 'update   classroom  set  serialNumber =?, NAME =?, classCode =?, classType =?, remark =?, STATUS =?, materialId =?, dateline =?  where id =? ';
-    var par = [serialNumber,name,classCode,classType,remark,status,materialId, new Date().getTime(), id];
+    var sql = 'UPDATE  memberCardType SET memberCardType  = ?, memberCardAmount = ?,consumerLimit =?,zeroDiscounts = ?, isManyPeopleUsed =?,status =? WHERE id = ?;';
+    var par = [memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
@@ -142,9 +149,9 @@ module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classTy
  * @param id
  * @param cb
  */
-module.exports.fetchSingleClassRoom =function (id, cb) {
+module.exports.fetchSingleMembercardtype =function (id, cb) {
 
-    var sql = 'SELECT * FROM classroom WHERE id = ?';
+    var sql = 'SELECT * FROM memberCardType WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -162,7 +169,7 @@ module.exports.fetchSingleClassRoom =function (id, cb) {
  */
 module.exports.setStatus = function (id, status, cb) {
 
-    var sql = 'UPDATE classroom  SET status = ? WHERE id = ?';
+    var sql = 'UPDATE memberCardType  SET status = ? WHERE id = ?';
     db.query(sql, [status,id], function(cbData, err, rows, filelds) {
 
         if (!err) {
