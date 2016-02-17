@@ -3,14 +3,14 @@
  */
 /**
  * Created by qiaojoe on 16-1-2.
- * ½ÌÊÒ¹ÜÀí
+ * æ•™å®¤ç®¡ç†
  */
 
 
 var db = require('../../common/db');
 var async = require('async');
 /**
- * Ìí¼Ó½ÌÊÒ
+ * æ·»åŠ æ•™å®¤
  * @param serialNumber
  * @param name
  * @param classCode
@@ -32,7 +32,7 @@ module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,c
 };
 
 /**
- * É¾³ı½ÌÊÒ
+ * åˆ é™¤æ•™å®¤
  * @param id
  * @param cb
  */
@@ -49,7 +49,7 @@ module.exports.delClassRoom= function (id, cb) {
 }
 
 /**
- * ²éÑ¯²Ëµ¥
+ * æŸ¥è¯¢èœå•
  * @param pages
  * @param count
  * @param cb
@@ -69,7 +69,7 @@ module.exports.fetchClassRoom = function(pages, count, cb) {
 }
 
 /**
- * »ñÈ¡ËùÓĞÃÅµê
+ * è·å–æ‰€æœ‰é—¨åº—
  * @param cb
  */
 module.exports.fetchAllCLassRoom = function(className,classCode,classType,currentPage,cb) {
@@ -115,7 +115,7 @@ module.exports.fetchAllCLassRoom = function(className,classCode,classType,curren
 }
 
 /**
- * ĞŞ¸Ä½ÌÊÒ
+ * ä¿®æ”¹æ•™å®¤
  * @param id
  * @param name
  * @param address
@@ -138,7 +138,7 @@ module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classTy
 }
 
 /**
- * »ñÈ¡ÃÅµêÏêÇé
+ * è·å–é—¨åº—è¯¦æƒ…
  * @param id
  * @param cb
  */
@@ -156,7 +156,7 @@ module.exports.fetchSingleClassRoom =function (id, cb) {
 }
 
 /**
- * ÉèÖÃ×´Ì¬
+ * è®¾ç½®çŠ¶æ€
  * @param id
  * @param status
  */

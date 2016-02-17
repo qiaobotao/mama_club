@@ -35,6 +35,7 @@ var sysMenuAction = require('./sysMenuAction');//菜单管理
 var sysRoleAction = require('./sysRoleAction');//角色管理
 var sysUserAction = require('./sysUserAction');//系统用户管理
 
+var memberCardAction = require('./memberCardAction');//会员卡管理
 
 
 /* GET home page. */
@@ -90,10 +91,17 @@ router.all('/attendance_type_del',attendanceTypeAction.del);
 /*********************会员管理****************************/
 // 会员卡类型
 router.all('/member_card_type_list',memberCardTypeAction.list);
-router.all('/member_card_type_edit',memberCardTypeAction.edit);
-router.all('/member_card_type_add',memberCardTypeAction.add);
+router.all('/to_member_card_type_edit',memberCardTypeAction.goEdit);
+router.all('/to_member_card_type_Add',memberCardTypeAction.goAdd);
+router.all('/member_card_type_del',memberCardTypeAction.del);
+router.all('/member_card_type_addOrEdit',memberCardTypeAction.addOrEdit);
 
 // 会员卡管理
+router.all('/member_card_list',memberCardAction.list);
+router.all('/to_member_card_edit',memberCardAction.goEdit);
+router.all('/to_member_card_Add',memberCardAction.goAdd);
+router.all('/member_card_del',memberCardAction.del);
+router.all('/member_card_addOrEdit',memberCardAction.addOrEdit);
 // 活动管理
 router.all('/activity_manage_list',activityManageAction.list);
 router.all('/activity_manage_edit',activityManageAction.edit);

@@ -8,6 +8,31 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+
+    <script type="text/javascript">
+        function search () {
+            var memberCardType = document.getElementById('memberCardType').value;
+            var memberCardAmount = document.getElementById('memberCardAmount').value;
+            var zeroDiscounts = document.getElementById('zeroDiscounts').value;
+            window.location.href = '/jinquan/member_card_type_list?memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
+        }
+        function pageturning (selectPage) {
+            var memberCardType = document.getElementById('memberCardType').value;
+            var memberCardAmount = document.getElementById('memberCardAmount').value;
+            var zeroDiscounts = document.getElementById('zeroDiscounts').value;
+            window.location.href = '/jinquan/member_card_type_list?page='+selectPage+'memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
+         }
+        function show (id) {
+            window.location.href = '/jinquan/member_card_type_show?op=1&id='+id;
+        }
+        function update (id) {
+            window.location.href = '/jinquan/to_member_card_type_edit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/member_card_type_del?id='+id;
+        }
+
+    </script>
 </head>
 
 <body>
@@ -22,15 +47,16 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>卡种：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;卡面额度：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;为0后折扣：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
-                </tr>
+                <td>卡种：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                    <input ID="memberCardType" name="memberCardType" type="text" class="input5" VALUE="<%=data.memberCardType%>"/></td>
+                <td> &nbsp;卡面额度：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
+                <td> &nbsp;为0后折扣：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                <td><a href="javascript:search()" class="chaxun"></a></td>
+            </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/member_card_type_edit" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/to_member_card_type_Add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -41,11 +67,29 @@
                 <th>为0后折扣</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].memberCardType%></td>
+                <td><%=data.data[i].memberCardAmount%></td>
+                <td><%=data.data[i].consumerLimit%></td>
+                <td><%=data.data[i].zeroDiscounts%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
+                            <td><div align="center">[<a href="javascript:update(<%=data.data[i].id%>)">修改</a>]</div></td>
+                            <td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
         <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+            <%- include ../pagination.html -%>
+        </div>
     </div>
 </div>
 
