@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>编辑考勤类别</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function submitForm(){
+            var memberCardType = document.getElementById("memberCardType").value;
+            if (!memberCardType || memberCardType.length == 0) {
+                alert('卡种不能为空');
+                return;
+            }
+            var memberCardAmount = document.getElementById("memberCardAmount").value;
+            if (!memberCardAmount || memberCardAmount.length == 0) {
+                alert('卡面金额不能为空');
+                return;
+            }
+            var consumerLimit = document.getElementById("consumerLimit").value;
+            if (!consumerLimit || consumerLimit.length == 0) {
+                alert('实际消费额度不能为空');
+                return;
+            }
+            var zeroDiscounts = document.getElementById("zeroDiscounts").value;
+            if(!zeroDiscounts || zeroDiscounts.length == 0) {
+                alert('余额为0后折扣不能为空');
+                return;
+            }
+            var isManyPeopleUsed = document.getElementById("isManyPeopleUsed").value;
+            if (!isManyPeopleUsed || isManyPeopleUsed.length == 0) {
+                alert('是否可以多人使用不能为空');
+                return;
+            }
+            var status = document.getElementById("status").value;
+            if (!status || status.length == 0) {
+                alert('状态不能为空');
+                return;
+            }
+            document.getElementById("myform").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：编辑会员卡类型
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/member_card_type_addOrEdit">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">卡种：</td>
+                <td class="regTd_r">
+                    <input id="id" name="id" type="hidden"   class="input5" value="<%=memberCardType.id%>"/>
+                    <input id="memberCardType" name="memberCardType" type="text" class="input5"  value="<%=memberCardType.memberCardType%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">卡面金额：</td>
+                <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5" value="<%=memberCardType.memberCardAmount%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">实际消费额度：</td>
+                <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5"  value="<%=memberCardType.consumerLimit%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">余额为0后折扣：</td>
+                <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5" value="<%=memberCardType.zeroDiscounts%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">是否可以多人使用：</td>
+                <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" class="input5" value="<%=memberCardType.isManyPeopleUsed%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">状态：</td>
+                <td class="regTd_r"><input id="status" name="status" type="text" class="input5" value="<%=memberCardType.status%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+        </table>
+        <!--参与员工 end-->
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/member_card_type_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>
