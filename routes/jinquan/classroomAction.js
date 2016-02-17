@@ -10,15 +10,15 @@ var service = require('../../model/service/classroom');
 var waresService = require('../../model/service/wares');
 module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
-    var className = req.query.className ? req.query.className : '';
-    var classCode = req.query.classCode ? req.query.classCode : '';
+    var classRoomName = req.query.classRoomName ? req.query.classRoomName : '';
+    var classRoomCode = req.query.classRoomCode ? req.query.classRoomCode : '';
     var classType = req.query.number ? req.query.number : '';
 
-    service.fetchAllCLassRoom(className,classCode,classType,currentPage, function (err, results) {
+    service.fetchAllCLassRoom(classRoomName,classRoomCode,classType,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
-            results.className = className;
-            results.classCode = classCode;
+            results.classRoomName = classRoomName;
+            results.classRoomCode = classRoomCode;
             results.classType = classType;
             res.render('classroom/classroomList', {data : results});
         } else {

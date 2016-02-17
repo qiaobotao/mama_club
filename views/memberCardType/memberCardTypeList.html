@@ -11,12 +11,14 @@
 
     <script type="text/javascript">
         function search () {
+            var selectPage = document.getElementById('page').value;
             var memberCardType = document.getElementById('memberCardType').value;
             var memberCardAmount = document.getElementById('memberCardAmount').value;
             var zeroDiscounts = document.getElementById('zeroDiscounts').value;
-            window.location.href = '/jinquan/member_card_type_list?memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
+            window.location.href = '/jinquan/member_card_type_list?memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts+'&page='+selectPage;
         }
         function pageturning (selectPage) {
+            var selectPage = document.getElementById('page').value;
             var memberCardType = document.getElementById('memberCardType').value;
             var memberCardAmount = document.getElementById('memberCardAmount').value;
             var zeroDiscounts = document.getElementById('zeroDiscounts').value;
