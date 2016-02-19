@@ -156,6 +156,11 @@ router.all('/storeroom_detail', storeroomAction.detail);
 // 经销商管理
 router.all('/distributor_list',distributorAction.list);
 router.all('/distributor_add', distributorAction.add);
+router.all('/distributor_pre_add', distributorAction.preadd);
+router.all('/distributor_browse', distributorAction.detail);
+router.all('/distributor_del', distributorAction.del);
+router.all('/distributor_pre_edit', distributorAction.preEdit);
+router.all('/distributor_update', distributorAction.update);
 // 入库管理
 router.all('/storeroom_in_list',storeroomInAction.list);
 router.all('/storeroom_in_add', storeroomInAction.add);
