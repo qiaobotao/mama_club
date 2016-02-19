@@ -53,7 +53,8 @@ module.exports = {
     mainClassifyId : {
         serivce : 17,
         wares : 14,
-        storeroom : 9
+        storeroom : 9,
+        distributor : 8
     }
 
 };
