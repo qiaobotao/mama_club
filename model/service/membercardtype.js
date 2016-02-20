@@ -181,3 +181,20 @@ module.exports.setStatus = function (id, status, cb) {
     });
 }
 
+/**
+ * 根据状态获取类型
+ * @param id
+ * @param cb
+ */
+module.exports.fetchMembercardtypeByStatus =function (status, cb) {
+
+    var sql = 'SELECT * FROM memberCardType WHERE status = ?';
+    db.query(sql, [status],  function(cbData, err, rows, fields) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}

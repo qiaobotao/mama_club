@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>编辑考勤类别</title>
+    <title>新增会员卡</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -52,27 +52,81 @@
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
-<div class="center_con">
-    <form method="post" id="myform" action="/jinquan/member_card_type_addOrEdit">
+<div  class="center_con">
+    <form method="post" id="myform" action="/jinquan/member_card_addOrEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="regTd_l">卡种：</td>
-                <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td  class="regTd_l">卡面金额：</td>
-                <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">卡号：</td>
+                <td class="regTd_r"><input id="memberCardNumber" name="memberCardNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
-            <tr>
-                <td class="regTd_l">实际消费额度：</td>
-                <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">余额为0后折扣：</td>
-                <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">是否可以多人使用：</td>
-                <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">状态：</td>
-                <td class="regTd_r"><input id="status" name="status" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
+            <div id="type1">
+                <tr>
+                    <td class="regTd_l">卡种：</td>
+                    <td class="regTd_r">
+                        <select name="memberCardTypeId" id="memberCardTypeId" onchange="" >
+                            <% for (var i=0;i<data.length;i++) {%>
+                                <option value="<%=data[i].id%>"><%=data[i].memberCardType%></option>
+                            <%}%>
+                        </select>
+                        <input id="memberCardType" name="memberCardType" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td  class="regTd_l">可充值金额：</td>
+                    <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">将赠送金额：</td>
+                    <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">实际金额：</td>
+                    <td class="regTd_r"><input id="actualAmount" name="actualAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">余额为0后折扣：</td>
+                    <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">是否可以多人使用：</td>
+                    <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">当前金额：</td>
+                    <td class="regTd_r"><input id="currentAmount" name="currentAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+            </div>
+            <div id="type2">
+                <tr>
+                    <td class="regTd_l">可使用次数：</td>
+                    <td class="regTd_r"><input id="canUseTimes" name="canUseTimes" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">已使用次数：</td>
+                    <td class="regTd_r"><input id="usedTimes" name="usedTimes" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">首次应缴费金额：</td>
+                    <td class="regTd_r"><input id="firstPaymentAmount" name="firstPaymentAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l"> 有效时间：</td>
+                    <td class="regTd_r"><input id="effectiveTime" name="effectiveTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+            </div>
+            <div id="type3">
+                <tr>
+                    <td class="regTd_l"> 折扣力度：</td>
+                    <td class="regTd_r"><input id="discountIntensity" name="discountIntensity" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l">首次应缴费金额：</td>
+                    <td class="regTd_r"><input id="firstPaymentAmount3" name="firstPaymentAmount3" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+                <tr>
+                    <td class="regTd_l"> 有效时间：</td>
+                    <td class="regTd_r"><input id="effectiveTime3" name="effectiveTime3" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </tr>
+            </div>
         </table>
         <!--参与员工 end-->
     </form>
@@ -82,6 +136,6 @@
     </div>
 
 
-</div>
+    </div>
 </body>
 </html>

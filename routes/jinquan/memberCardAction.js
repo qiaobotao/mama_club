@@ -1,5 +1,6 @@
 
 var service = require('../../model/service/membercard');
+var service1 = require('../../model/service/membercardType');
 /**
  * Created by kuanchang on 16/1/13.
  */
@@ -34,7 +35,16 @@ module.exports.list = function (req, res) {
  */
 module.exports.goAdd = function(req, res) {
 
-    res.render('memberCard/memberCardAdd' );
+    var status ="0";
+    service1.fetchMembercardtypeByStatus(status, function (err, results) {
+        if (!err) {
+            res.render('memberCard/memberCardAdd' , {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+
 
 };
 
