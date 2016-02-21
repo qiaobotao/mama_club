@@ -2,22 +2,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-    <script type="application/javascript" src="../../js/layer/layer.js"></script>
-    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <script type="text/javascript">
+        var iframIndex ;
         function getWares(){
             //iframe层
-            var index = parent.layer.open({
+            iframIndex = parent.layer.open({
                 type: 2,
                 title: '选择商品',
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: './jinquan/wares_modular' //iframe的url
+                content: './jinquan/wares_modular', //iframe的url
+                success: function(layero, index){
+//                    var body = layer.getChildFrame('body', index);
+//                    var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    console.log("加载成功") //得到iframe页的body内容
+//                    body.find('input').val('Hi，我是从父页来的')
+                },
+                close: function(d){
+                    console.log('d'+d)
+                }
             });
 
+        }
+        function closeIfram(){
+            alert('close');
+            layer.alert(iframIndex);
+            layer.close(iframIndex);
+        }
+        function showTip(tipIndex){
+            //小tips
+//            layer.tips('Hi，我是tips', '#tipId');
+            layer.tips('请输入用户名。', '#tipId_'+tipIndex, {
+                tips: [tipIndex, '#3595CC'],
+                time: 2000
+            });
         }
 
     </script>
@@ -51,6 +73,7 @@
                 <button onclick="layer.msg('Hello layer');">获取课程</button>
                 <button onclick="layer.msg('Hello layer');">获取服务单</button>
                 <button onclick="layer.msg('Hello layer');">获取经销商</button>
+                <input type="text" id="iframValueId" name="iframValueId" value="aaaa"/>
             </td>
             <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
         </tr>
@@ -58,6 +81,16 @@
             <td>时间控件：</td>
             <td>
                 <input onclick="laydate()"/>
+            </td>
+            <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
+        </tr>
+        <tr>
+            <td>tips：</td>
+            <td>
+                <button id="tipId_1" onclick="showTip(1)">提示信息(⬆️)</button>
+                <button id="tipId_2" onclick="showTip(2)">提示信息(️️->)</button>
+                <button id="tipId_3" onclick="showTip(3)">提示信息(⬇️️)</button>
+                <button id="tipId_4" onclick="showTip(4)">提示信息(<-)</button>
             </td>
             <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
         </tr>

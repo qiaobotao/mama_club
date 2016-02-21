@@ -5,6 +5,8 @@
     <title>商品管理</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -24,7 +26,19 @@
     }
     //选择该商品
     function select(id){
-        parent.layer.alert("选择的商品是"+id);
+//        parent.$('.iframValueId').value = '我被改变了';
+//        console.log("000000"+parent.$('.iframValueId').value);
+//        alert(document.getElementById("name").value);
+//        alert($('.name').value);
+        console.log("aaabbbcc-2-"+this.parent.document.getElementById("iframValueId").value);
+//        console.log("aaabbbcc--"+this.parent.$('.iframValueId').value);
+        /*
+        parent.layer.msg("选择的商品是"+id);
+        window.parent.document.getElementById("iframValueId").value='2323';
+        */
+        var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+        parent.layer.close(index); //执行关闭
+
     }
 </script>
 
