@@ -5,66 +5,56 @@
     <title>新增会员卡</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
         function submitForm(){
-            var memberCardType = document.getElementById("memberCardType").value;
-            if (!memberCardType || memberCardType.length == 0) {
-                alert('卡种不能为空');
-                return;
+            var type = document.getElementById("type").value;
+            if(type==1)
+            {
+
             }
-            var memberCardAmount = document.getElementById("memberCardAmount").value;
-            if (!memberCardAmount || memberCardAmount.length == 0) {
-                alert('卡面金额不能为空');
-                return;
+            if(type==2)
+            {
+
             }
-            var consumerLimit = document.getElementById("consumerLimit").value;
-            if (!consumerLimit || consumerLimit.length == 0) {
-                alert('实际消费额度不能为空');
-                return;
-            }
-            var zeroDiscounts = document.getElementById("zeroDiscounts").value;
-            if(!zeroDiscounts || zeroDiscounts.length == 0) {
-                alert('余额为0后折扣不能为空');
-                return;
-            }
-            var isManyPeopleUsed = document.getElementById("isManyPeopleUsed").value;
-            if (!isManyPeopleUsed || isManyPeopleUsed.length == 0) {
-                alert('是否可以多人使用不能为空');
-                return;
-            }
-            var status = document.getElementById("status").value;
-            if (!status || status.length == 0) {
-                alert('状态不能为空');
-                return;
+            if(type==3)
+            {
+
             }
             document.getElementById("myform").submit();
         }
         function changCartType(cartType  )
         {
-            alert(cartType );
+            $.ajax({
+                data: {"memberCardTypeId":cartType},
+                url: '/jinquan/getMemberCartTypeById',
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                cache: false,
+                timeout: 5000,
+                success: function(data){
+                    if(data) {
+                        var datas = JSON.parse(data);
+                        document.getElementById("memberCardAmount").value=datas.memberCardAmount;
+                        document.getElementById("consumerLimit").value=datas.consumerLimit-datas.memberCardAmount;
+                        document.getElementById("actualAmount").value=datas.consumerLimit;
+                        document.getElementById("zeroDiscounts").value=datas.zeroDiscounts;
+                        document.getElementById("isManyPeopleUsed").value=datas.isManyPeopleUsed;
+
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("222222");
+                }
+            });
+
 
         }
-        $(document).ready(function() {
-            $.ajax({
-                url: 'http://127.0.0.1:8000/',
-                dataType: "jsonp",////////
-                data: '{"data": "TEST"}',
-                type: 'POST',
-                jsonpCallback: 'callback', // this is not relevant to the POST anymore
-                success: function (data) {
-                    var ret = jQuery.parseJSON(data);
-                    $('#lblResponse').html(ret.msg);
-                    console.log('Success: ')
-                },
-                error: function (xhr, status, error) {
-                    console.log('Error: ' + error.message);
-                    $('#lblResponse').html('Error connecting to the server.');
-                },
-            });
-        });
         function changType(type)
         {
 
@@ -83,6 +73,7 @@
 
             }
             document.getElementById("type").value=type;
+
 
         }
     </script>
@@ -111,7 +102,7 @@
                         <tr>
                             <td class="regTd_l">卡号：</td>
                             <td class="regTd_r">
-                                <input id="type" name="type" type="hidden"/>
+                                <input id="type" name="type" type="hidden" value="1"/>
                                 <input id="memberCardNumber" name="memberCardNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                         </tr>
                         <tr>
@@ -120,7 +111,7 @@
                                     <tr>
                                         <td class="regTd_l">卡种：</td>
                                         <td class="regTd_r">
-                                            <select name="memberCardTypeId" id="memberCardTypeId" onchange="changCartType(this.options.selectedIndex)">
+                                            <select name="memberCardTypeId" id="memberCardTypeId" onchange="changCartType(this.options[this.options.selectedIndex].value)">
                                                 <% for (var i=0;i<data.length;i++) {%>
                                                 <option value="<%=data[i].id%>"><%=data[i].memberCardType%></option>
                                                 <%}%>
@@ -128,27 +119,27 @@
                                     </tr>
                                     <tr>
                                         <td  class="regTd_l">可充值金额：</td>
-                                        <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5" value="<%=data[0].memberCardAmount%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5"  readonly="true" value="<%=data[0].memberCardAmount%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">将赠送金额：</td>
-                                        <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" value="<%=data[0].consumerLimit-data[0].memberCardAmount%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" readonly="true" value="<%=data[0].consumerLimit-data[0].memberCardAmount%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">实际金额：</td>
-                                        <td class="regTd_r"><input id="actualAmount" name="actualAmount" type="text" class="input5" value="<%=data[0].memberCardAmount%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="actualAmount" name="actualAmount" type="text" class="input5" readonly="true" value="<%=data[0].consumerLimit%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">余额为0后折扣：</td>
-                                        <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5"  value="<%=data[0].zeroDiscounts%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5"  readonly="true" value="<%=data[0].zeroDiscounts%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">是否可以多人使用：</td>
-                                        <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" class="input5" value="<%=data[0].isManyPeopleUsed%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" readonly="true" class="input5" value="<%=data[0].isManyPeopleUsed%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">当前金额：</td>
-                                        <td class="regTd_r"><input id="currentAmount" name="currentAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="currentAmount" name="currentAmount" readonly="true"  class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                 </table>
                                 <table  id="type2" name="type2" width="100%" class="reg_table" style="display: none" border="0" cellspacing="0" cellpadding="0">

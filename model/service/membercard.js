@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertMemberCard = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
+module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, cb) {
 
-    var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status) VALUES (?,?,?,?,?,?)';
-    db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCard (serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -89,7 +89,7 @@ module.exports.fetchAllMemberCard = function(memberCardType, memberCardAmount, z
  */
 module.exports.delMembercard= function (id, cb) {
 
-    var sql = 'DELETE FROM membercardtype WHERE id = ?';
+    var sql = 'DELETE FROM memberCard WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -109,7 +109,7 @@ module.exports.fetchMembercard = function(pages, count, cb) {
 
     var start = pages * count;
     var end = start + count;
-    var sql = 'SELECT * FROM membercardtype ORDER BY id DESC LIMIT ?, ?';
+    var sql = 'SELECT * FROM memberCard  ORDER BY id DESC LIMIT ?, ?';
     db.query(sql, [start, end], function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -122,17 +122,14 @@ module.exports.fetchMembercard = function(pages, count, cb) {
 
 
 /**
- * 修改教室
- * @param id
- * @param name
- * @param address
- * @param principal
+ * 修改会员卡
+
  * @param cb
  */
-module.exports.updateMemberCard = function(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
+module.exports.updateMemberCard = function(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, cb) {
 
-    var sql = 'UPDATE  membercardtype SET memberCardType  = ?, memberCardAmount = ?,consumerLimit =?,zeroDiscounts = ?, isManyPeopleUsed =?,status =? WHERE id = ?;';
-    var par = [memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, id];
+    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,createDate  = ?,   dateline  = ?,   memberId  = ?,  type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? WHERE  id  = ?;';
+    var par = [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
@@ -145,13 +142,13 @@ module.exports.updateMemberCard = function(id,memberCardType,memberCardAmount,co
 }
 
 /**
- * 获取门店详情
+ * 获取会员卡详情
  * @param id
  * @param cb
  */
 module.exports.fetchSingleMembercard =function (id, cb) {
 
-    var sql = 'SELECT * FROM membercardtype WHERE id = ?';
+    var sql = 'SELECT * FROM membercard  WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
