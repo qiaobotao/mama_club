@@ -102,6 +102,7 @@ router.all('/to_member_card_type_edit',memberCardTypeAction.goEdit);
 router.all('/to_member_card_type_Add',memberCardTypeAction.goAdd);
 router.all('/member_card_type_del',memberCardTypeAction.del);
 router.all('/member_card_type_addOrEdit',memberCardTypeAction.addOrEdit);
+router.all('/getMemberCartTypeById',memberCardTypeAction.getMemberCartTypeById);
 
 // 会员卡管理
 router.all('/member_card_list',memberCardAction.list);

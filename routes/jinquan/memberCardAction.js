@@ -2,7 +2,7 @@
 var service = require('../../model/service/membercard');
 var service1 = require('../../model/service/membercardType');
 /**
- * Created by kuanchang on 16/1/13.
+ * Created by wangjuan on 16/1/13.
  */
 /**
  * 获取会员卡类型列表
@@ -11,7 +11,7 @@ var service1 = require('../../model/service/membercardType');
  */
 module.exports.list = function (req, res) {
 
-    var memberCardType = req.query.memberCardType ? req.query.memberCardType : '';
+    var memberCardType = req.query.memberCardType ? req.query.memberCardType : '1';
     var memberCardAmount = req.query.memberCardAmount ? req.query.memberCardAmount : '';
     var zeroDiscounts = req.query.zeroDiscounts ? req.query.zeroDiscounts : '';
     var page = 1;
@@ -24,12 +24,12 @@ module.exports.list = function (req, res) {
             res.render('memberCard/memberCardList', {data : results});
         } else {
             console.log(err.message);
-            res.render('error', {error : err});
+            next();
         }
     });
 };
 /**
- * 修改
+ * 跳转新增页面
  * @param req
  * @param res
  */
@@ -41,15 +41,13 @@ module.exports.goAdd = function(req, res) {
             res.render('memberCard/memberCardAdd' , {data : results});
         } else {
             console.log(err.message);
-            res.render('error', {error : err});
+            next();
         }
     });
-
-
 };
 
 /**
- * 修改
+ * 跳转修改页面
  * @param req
  * @param res
  */
@@ -59,14 +57,12 @@ module.exports.goEdit = function(req, res) {
 
     service.fetchSingleMembercard(id, function(err, results) {
         if (!err) {
-            var memberCardType = results.length == 0 ? null : results[0];
-
-            res.render('memberCard/memberCardEdit', {memberCardType : memberCardType});
-
+            var memberCard  = results.length == 0 ? null : results[0];
+            res.render('memberCard/memberCardEdit', {memberCard : memberCard});
 
         } else {
             console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
     })
 };
@@ -78,68 +74,56 @@ module.exports.goEdit = function(req, res) {
  */
 module.exports.addOrEdit = function (req, res) {
     var id = req.body.id ? req.body.id : '';
-    var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
-    var memberCardAmount = req.body.memberCardAmount ? req.body.memberCardAmount : '';
-    var consumerLimit = req.body.consumerLimit ? req.body.consumerLimit : '';
-    var zeroDiscounts = req.body.zeroDiscounts ? req.body.zeroDiscounts : '';
-    var isManyPeopleUsed = req.body.isManyPeopleUsed ? req.body.isManyPeopleUsed : '';
-    var status = req.body.status ? req.body.status : '';
+    var serialNumber = req.body.memberCardNumber ? req.body.memberCardNumber : '';
+    var memberId= req.body.memberId ? req.body.memberId : '';
+    var type= req.body.type ? req.body.type : '';
+    var parameter1= '';
+    var parameter2= '';
+    var parameter3= '';
+    var parameter4= '';
+    var parameter5= '';
+    if(type=='1')
+    {
+        //会员卡类型
+          parameter1= req.body.memberCardTypeId ? req.body.memberCardTypeId : '';
+        //当前金额/首次应缴费金额/首次应缴费金额
+          parameter2= req.body.currentAmount ? req.body.currentAmount : '';
+    }
+    if(type=='2')
+    {
+        var parameter3= req.body.canUseTimes ? req.body.canUseTimes : '';
+        //已使用次数
+        var  parameter4= req.body.usedTimes ? req.body.usedTimes : '';
+        //有效时间/有效时间
+        var  parameter5= req.body.effectiveTime ? req.body.effectiveTime : '';
+    }
+    if(type=='3')
+    {
+        parameter2=req.body.firstPaymentAmount3?req.body.firstPaymentAmount3:'';
+        //可使用次数/折扣力度
+        var parameter3= req.body.discountIntensity ? req.body.discountIntensity : '';
+        //有效时间/有效时间
+        var  parameter5= req.body.effectiveTime3 ? req.body.effectiveTime3 : '';
+    }
     if(id=='')
     {
-        service.insertMemberCard(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
+        var createDate= new Date().getTime();
+        var dateline= new Date().getTime();
+        service.insertMemberCard( serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, function (err, results) {
             if (!err) {
-                /*results.memberCardType = memberCardType;
-                 results.memberCardAmount = memberCardAmount;
-                 results.consumerLimit = consumerLimit;
-                 results.zeroDiscounts = zeroDiscounts;
-                 results.isManyPeopleUsed = isManyPeopleUsed;
-                 results.status = status;
-                 res.render('memberCardType/memberCardTypeList', {data : results});*/
-                var memberCardType = '';
-                var memberCardAmount = '';
-                var zeroDiscounts = '';
-                var page = 1;
-
-                service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
-                    if (!err) {
-                        results.memberCardType = memberCardType;
-                        results.memberCardAmount = memberCardAmount;
-                        results.zeroDiscounts = zeroDiscounts;
-                        res.render('memberCard/memberCardList', {data : results});
-                    } else {
-                        console.log(err.message);
-                        res.render('error', {error : err});
-                    }
-                });
+                res.redirect('/jinquan/member_card_list');
             } else {
-                console.log(err.message);
-                res.render('error', {error : err});
+                next();
             }
         });
     }
     else
     {
-        service.updateMemberCard(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
+        service.updateMemberCard(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, function (err, results) {
             if (!err) {
-                var memberCardType = '';
-                var memberCardAmount = '';
-                var zeroDiscounts = '';
-                var page = 1;
-
-                service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
-                    if (!err) {
-                        results.memberCardType = memberCardType;
-                        results.memberCardAmount = memberCardAmount;
-                        results.zeroDiscounts = zeroDiscounts;
-                        res.render('memberCard/memberCardList', {data : results});
-                    } else {
-                        console.log(err.message);
-                        res.render('error', {error : err});
-                    }
-                });
+                res.redirect('/jinquan/member_card_list');
             } else {
-                console.log(err.message);
-                res.render('error', {error : err});
+                next();
             }
         });
     }
@@ -148,8 +132,8 @@ module.exports.addOrEdit = function (req, res) {
 
 
 /**
- * 增加员工
- * @param req
+ * 删除会员卡
+ * * @param req
  * @param res
  */
 module.exports.del = function (req, res) {
@@ -157,26 +141,9 @@ module.exports.del = function (req, res) {
     if(id!=''){
         service.delMembercardtype(id, function (err, results) {
             if (!err) {
-
-                var memberCardType = '';
-                var memberCardAmount = '';
-                var zeroDiscounts = '';
-                var page = 1;
-
-                service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
-                    if (!err) {
-                        results.memberCardType = memberCardType;
-                        results.memberCardAmount = memberCardAmount;
-                        results.zeroDiscounts = zeroDiscounts;
-                        res.render('memberCard/memberCardList', {data : results});
-                    } else {
-                        console.log(err.message);
-                        res.render('error', {error : err});
-                    }
-                });
+                res.redirect('/jinquan/member_card_list');
             } else {
-                console.log(err.message);
-                res.render('error', {error: err});
+                next();
             }
         });
     }
