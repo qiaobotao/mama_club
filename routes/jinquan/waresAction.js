@@ -36,6 +36,37 @@ module.exports.list = function (req, res, next) {
         }
     });
 }
+/**
+ * 选择商品list页
+ * @param req
+ * @param res
+ */
+module.exports.modular = function (req, res, next) {
+
+    var name = req.query.name ? req.query.name : '';    // 商品名称
+    var classifyId = req.query.id ? req.query.id : '';  // 商品分类
+    var currentPage = req.query.page ? req.query.page : '1';
+
+    service.list(name,classifyId,currentPage,function(err, results){
+        if (!err) {
+            results.currentPage = currentPage;
+            results.name = name;
+            results.classifyId = classifyId;
+            service.getWaresClassify(function(err,classify) {
+                if (!err) {
+                    results.classify = classify;
+                    res.render('wares/waresModular', {data : results});
+                } else {
+                    console.log(err);
+                    next();
+                }
+            });
+        } else {
+            console.log(err);
+            next();
+        }
+    });
+}
 
 module.exports.preAdd = function (req, res, next) {
 

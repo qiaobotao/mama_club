@@ -37,6 +37,8 @@ var sysRoleAction = require('./sysRoleAction');//角色管理
 var sysUserAction = require('./sysUserAction');//系统用户管理
 
 var memberCardAction = require('./memberCardAction');//会员卡管理
+//demo演示
+var demoAction = require('./demoAction');//demo管理
 
 
 /* GET home page. */
@@ -148,6 +150,7 @@ router.all('/service_update', serviceAction.update);
 router.all('/service_del', serviceAction.del);
 // 商品管理
 router.all('/wares_list', waresAction.list);
+router.all('/wares_modular', waresAction.modular);
 router.all('/wares_detail', waresAction.detail);
 router.all('/wares_pre_edit', waresAction.preEdit);
 router.all('/wares_update', waresAction.waresUpdate);
@@ -212,6 +215,9 @@ router.all('/sys_user_list',sysUserAction.list);
 router.all('/sys_user_add', sysUserAction.add);
 // 个人设置
 router.all('/sys_user_set',sysUserAction.set);
+
+//demo演示
+router.all('/layui_demo',demoAction.layui);
 
 
 module.exports = router;

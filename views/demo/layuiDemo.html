@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="text/javascript">
+        function getWares(){
+            //iframe层
+            var index = parent.layer.open({
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: './jinquan/wares_modular' //iframe的url
+            });
+
+        }
+
+    </script>
+</head>
+<body>
+    <table width="90%" border="0">
+        <tr>
+            <td>提示信息：</td>
+            <td><button onclick="parent.layer.msg('保存成功');">点击我</button> </td>
+            <td>保存、修改、删除成功等情况显示对应提示消息</td>
+        </tr>
+        <tr>
+            <td>提示框：</td>
+            <td>
+                <button onclick="parent.layer.alert('确认',{icon: 1});">确认</button>
+                <button onclick="parent.layer.alert('错误',{icon: 2});">错误</button>
+                <button onclick="parent.layer.alert('疑问',{icon: 3});">疑问</button>
+                <button onclick="parent.layer.alert('锁',{icon: 4});">锁</button>
+                <button onclick="parent.layer.alert('不开心',{icon: 5});">不开心</button>
+                <button onclick="parent.layer.alert('开心',{icon: 6});">开心</button>
+                <button onclick="parent.layer.alert('警告',{icon: 7});">警告</button>
+            </td>
+            <td>表单提交时，数据格式不对等情况进行提示</td>
+        </tr>
+        <tr>
+            <td>弹出页面：</td>
+            <td>
+                <button onclick="getWares();">获取商品</button>
+                <button onclick="layer.msg('Hello layer');">获取会员</button>
+                <button onclick="layer.msg('Hello layer');">获取员工</button>
+                <button onclick="layer.msg('Hello layer');">获取课程</button>
+                <button onclick="layer.msg('Hello layer');">获取服务单</button>
+                <button onclick="layer.msg('Hello layer');">获取经销商</button>
+            </td>
+            <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
+        </tr>
+        <tr>
+            <td>时间控件：</td>
+            <td>
+                <input onclick="laydate()"/>
+            </td>
+            <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
+        </tr>
+    </table >
+</body>
+</html>
