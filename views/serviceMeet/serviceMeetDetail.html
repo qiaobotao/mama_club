@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加预约服务</title>
+    <title>预约服务</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -54,46 +54,56 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：添加预约服务
+        当前位置：预约服务
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/service_meet_add">
+    <form method="post" id="myform" action="/jinquan/service_meet_doEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="id" type="hidden" name="id" value="<%=service_meet.id%>"/><input id="name" name="name" type="text" readonly="true" class="input5" value="<%=service_meet.name%>"/>  </td>
                 <td  class="regTd_l">电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" readonly="true" class="input5"  value="<%=service_meet.tel%>" />  </td>
             </tr>
             <tr>
                 <td class="regTd_l">年龄：</td>
-                <td class="regTd_r"><input id="age" name="age" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="age" name="age" type="text" readonly="true"  class="input5"  value="<%=service_meet.age%>" />  </td>
                 <td class="regTd_l">技师：</td>
-                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="principal" name="principal" type="text" readonly="true"  class="input5"  value="<%=service_meet.principal%>" />  </td>
             </tr>
             <tr>
                 <td class="regTd_l">预约时间：</td>
-                <td class="regTd_r"><input id="meetTime" name="meetTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="meetTime" name="meetTime" type="text" readonly="true" class="input5"  value="<%=service_meet.meetTime%>" />  </td>
                 <td class="regTd_l">问题描述：</td>
-                <td class="regTd_r"><input id="problemDescription" name="problemDescription" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="problemDescription" name="problemDescription" readonly="true" type="text" class="input5"  value="<%=service_meet.problemDescription%>" />  </td>
             </tr>
             <tr>
                 <td class="regTd_l">服务位置：</td>
                 <td class="regTd_r">
+
                     <select id="serviceType" name="serviceType" >
-                        <option value="0">请选择</option>
-                        <option value="1">到店</option>
-                        <option value="2">上门</option>
+                        <option value="0"
+                        <%
+                        if(service_meet.serviceType == '0'){
+                        %>
+                        selected
+                        <%
+                        }
+                        %>
+                        >请选择</option>
+                        <option value="1" <%if(service_meet.serviceType == '1'){%>selected<%}%>>到店</option>
+                        <option value="2" <%if(service_meet.serviceType == '2'){%>selected<%}%>>上门</option>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </td>
                 <td class="regTd_l">门店/上门：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="address" name="address" type="text" readonly="true"  class="input5"  value="<%=service_meet.address%>" />  </td>
             </tr>
             <tr>
                 <td class="regTd_l">报价：</td>
-                <td class="regTd_r"><input id="price" name="price" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="price" name="price" type="text" readonly="true" class="input5"  value="<%=service_meet.price%>" />  </td>
             </tr>
             <!-- 预约情况 -->
             <tr>
@@ -145,7 +155,6 @@
         </table>
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
         <div class="rb_l"><a href="/jinquan/service_meet_list" class="close"></a></div>
     </div>
 

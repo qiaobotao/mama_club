@@ -9,10 +9,12 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
-        function search (selectPage) {
-            var name = document.getElementById('classroomName').value;
-            var classCode = document.getElementById('classroomCode').value;
-            window.location.href = '/jinquan/classroom_list?page='+selectPage+'&name='+name+'&classCode='+classCode ;
+        function search () {
+
+            var selectPage = document.getElementById('page').value;
+            var classRoomName = document.getElementById('classRoomName').value;
+            var classRoomCode = document.getElementById('classRoomCode').value;
+            window.location.href = '/jinquan/classroom_list?page='+selectPage+'&classRoomName='+classRoomName+'&classRoomCode='+classRoomCode ;
         }
         function pageturning (selectPage) {
             var name = document.getElementById('classroomName').value;
@@ -46,9 +48,9 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td> <input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>教室名称：<input name="classroomName"  id="classroomName" type="text" class="input5" /></td>
-                    <td> &nbsp;教室编号：<input name="classroomCode"  id="classroomCode" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td> <input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>教室名称：<input name="classRoomName"  id="classRoomName" type="text" class="input5" value="<%=data.classRoomName%>" /></td>
+                    <td> &nbsp;教室编号：<input name="classRoomCode"  id="classRoomCode" type="text" class="input5" value="<%=data.classRoomCode%>" /></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 

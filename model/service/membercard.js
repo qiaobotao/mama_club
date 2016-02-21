@@ -19,7 +19,7 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
+module.exports.insertMemberCard = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
 
     var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status) VALUES (?,?,?,?,?,?)';
     db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status], function(cbData, err, rows, fields) {
@@ -40,7 +40,7 @@ module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,c
  * @param materialid
  * @param cb
  */
-module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
+module.exports.fetchAllMemberCard = function(memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
 
     var parm = "where memberCardType like '%" + memberCardType + "%' and memberCardAmount like '%" + memberCardAmount
         + "%' and zeroDiscounts like '%" + zeroDiscounts + "%'";
@@ -87,9 +87,9 @@ module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmoun
  * @param id
  * @param cb
  */
-module.exports.delMembercardtype= function (id, cb) {
+module.exports.delMembercard= function (id, cb) {
 
-    var sql = 'DELETE FROM memberCardType WHERE id = ?';
+    var sql = 'DELETE FROM membercardtype WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -105,11 +105,11 @@ module.exports.delMembercardtype= function (id, cb) {
  * @param count
  * @param cb
  */
-module.exports.fetchMembercardtype = function(pages, count, cb) {
+module.exports.fetchMembercard = function(pages, count, cb) {
 
     var start = pages * count;
     var end = start + count;
-    var sql = 'SELECT * FROM memberCardType ORDER BY id DESC LIMIT ?, ?';
+    var sql = 'SELECT * FROM membercardtype ORDER BY id DESC LIMIT ?, ?';
     db.query(sql, [start, end], function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -129,9 +129,9 @@ module.exports.fetchMembercardtype = function(pages, count, cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateMemberCardType = function(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
+module.exports.updateMemberCard = function(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
 
-    var sql = 'UPDATE  memberCardType SET memberCardType  = ?, memberCardAmount = ?,consumerLimit =?,zeroDiscounts = ?, isManyPeopleUsed =?,status =? WHERE id = ?;';
+    var sql = 'UPDATE  membercardtype SET memberCardType  = ?, memberCardAmount = ?,consumerLimit =?,zeroDiscounts = ?, isManyPeopleUsed =?,status =? WHERE id = ?;';
     var par = [memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
@@ -149,9 +149,9 @@ module.exports.updateMemberCardType = function(id,memberCardType,memberCardAmoun
  * @param id
  * @param cb
  */
-module.exports.fetchSingleMembercardtype =function (id, cb) {
+module.exports.fetchSingleMembercard =function (id, cb) {
 
-    var sql = 'SELECT * FROM memberCardType WHERE id = ?';
+    var sql = 'SELECT * FROM membercardtype WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -169,7 +169,7 @@ module.exports.fetchSingleMembercardtype =function (id, cb) {
  */
 module.exports.setStatus = function (id, status, cb) {
 
-    var sql = 'UPDATE memberCardType  SET status = ? WHERE id = ?';
+    var sql = 'UPDATE membercardtype  SET status = ? WHERE id = ?';
     db.query(sql, [status,id], function(cbData, err, rows, filelds) {
 
         if (!err) {
@@ -181,20 +181,3 @@ module.exports.setStatus = function (id, status, cb) {
     });
 }
 
-/**
- * 根据状态获取类型
- * @param id
- * @param cb
- */
-module.exports.fetchMembercardtypeByStatus =function (status, cb) {
-
-    var sql = 'SELECT * FROM memberCardType WHERE status = ?';
-    db.query(sql, [status],  function(cbData, err, rows, fields) {
-
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}

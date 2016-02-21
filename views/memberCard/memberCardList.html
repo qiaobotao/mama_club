@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>会员卡类型</title>
+    <title>会员卡</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -11,27 +11,25 @@
 
     <script type="text/javascript">
         function search () {
-            var selectPage = document.getElementById('page').value;
             var memberCardType = document.getElementById('memberCardType').value;
             var memberCardAmount = document.getElementById('memberCardAmount').value;
             var zeroDiscounts = document.getElementById('zeroDiscounts').value;
-            window.location.href = '/jinquan/member_card_type_list?memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts+'&page='+selectPage;
+            window.location.href = '/jinquan/member_card_list?memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
         }
         function pageturning (selectPage) {
-            var selectPage = document.getElementById('page').value;
             var memberCardType = document.getElementById('memberCardType').value;
             var memberCardAmount = document.getElementById('memberCardAmount').value;
             var zeroDiscounts = document.getElementById('zeroDiscounts').value;
-            window.location.href = '/jinquan/member_card_type_list?page='+selectPage+'memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
+            window.location.href = '/jinquan/member_card_list?page='+selectPage+'memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
          }
         function show (id) {
-            window.location.href = '/jinquan/member_card_type_show?op=1&id='+id;
+            window.location.href = '/jinquan/member_card_show?op=1&id='+id;
         }
         function update (id) {
-            window.location.href = '/jinquan/to_member_card_type_edit?id='+id;
+            window.location.href = '/jinquan/to_member_type_edit?id='+id;
         }
         function del (id) {
-            window.location.href = '/jinquan/member_card_type_del?id='+id;
+            window.location.href = '/jinquan/member_card_del?id='+id;
         }
 
     </script>
@@ -40,7 +38,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：会员卡类型列表
+        当前位置：会员卡列表
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -49,24 +47,35 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                <td>卡种：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
-                    <input ID="memberCardType" name="memberCardType" type="text" class="input5" VALUE="<%=data.memberCardType%>"/></td>
-                <td> &nbsp;卡面额度：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
-                <td> &nbsp;为0后折扣：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
-                <td><a href="javascript:search()" class="chaxun"></a></td>
+                <td>会员卡类型：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                    <SELECT ID="memberCardType" name="memberCardType"  class="input5" VALUE="<%=data.memberCardType%>" >
+                        <option VALUE="1">充值卡</option>
+                        <option VALUE="2">服务次数卡</option>
+                        <option VALUE="3">打折卡</option>
+                    </SELECT>
+                </td>
+                <td> &nbsp;会员卡号：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
+                <td> &nbsp;有效时间：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                    <td> &nbsp;剩余金额：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
             </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/to_member_card_type_Add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/to_member_card_Add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
+                <th>卡号</th>
                 <th>卡种</th>
-                <th>卡面额度</th>
+                <th>卡面金额</th>
                 <th>实际消费额度</th>
+                <th>当前金额</th>
                 <th>为0后折扣</th>
+                <th>是否多人使用</th>
+                <th>开卡时间</th>
+                <th>最近消费时间</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>

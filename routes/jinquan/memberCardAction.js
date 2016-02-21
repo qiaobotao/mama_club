@@ -1,5 +1,6 @@
 
-var service = require('../../model/service/membercardtype');
+var service = require('../../model/service/membercard');
+var service1 = require('../../model/service/membercardType');
 /**
  * Created by kuanchang on 16/1/13.
  */
@@ -15,12 +16,12 @@ module.exports.list = function (req, res) {
     var zeroDiscounts = req.query.zeroDiscounts ? req.query.zeroDiscounts : '';
     var page = 1;
 
-    service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
+    service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
         if (!err) {
             results.memberCardType = memberCardType;
             results.memberCardAmount = memberCardAmount;
             results.zeroDiscounts = zeroDiscounts;
-            res.render('memberCardType/memberCardTypeList', {data : results});
+            res.render('memberCard/memberCardList', {data : results});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -34,7 +35,16 @@ module.exports.list = function (req, res) {
  */
 module.exports.goAdd = function(req, res) {
 
-    res.render('memberCardType/memberCardTypeAdd' );
+    var status ="0";
+    service1.fetchMembercardtypeByStatus(status, function (err, results) {
+        if (!err) {
+            res.render('memberCard/memberCardAdd' , {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+
 
 };
 
@@ -47,11 +57,11 @@ module.exports.goEdit = function(req, res) {
 
     var id = req.query.id ? req.query.id : '';
 
-    service.fetchSingleMembercardtype(id, function(err, results) {
+    service.fetchSingleMembercard(id, function(err, results) {
         if (!err) {
             var memberCardType = results.length == 0 ? null : results[0];
 
-            res.render('memberCardType/memberCardTypeEdit', {memberCardType : memberCardType});
+            res.render('memberCard/memberCardEdit', {memberCardType : memberCardType});
 
 
         } else {
@@ -76,7 +86,7 @@ module.exports.addOrEdit = function (req, res) {
     var status = req.body.status ? req.body.status : '';
     if(id=='')
     {
-        service.insertMemberCardType(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
+        service.insertMemberCard(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
             if (!err) {
                 /*results.memberCardType = memberCardType;
                  results.memberCardAmount = memberCardAmount;
@@ -90,12 +100,12 @@ module.exports.addOrEdit = function (req, res) {
                 var zeroDiscounts = '';
                 var page = 1;
 
-                service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
+                service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
                     if (!err) {
                         results.memberCardType = memberCardType;
                         results.memberCardAmount = memberCardAmount;
                         results.zeroDiscounts = zeroDiscounts;
-                        res.render('memberCardType/memberCardTypeList', {data : results});
+                        res.render('memberCard/memberCardList', {data : results});
                     } else {
                         console.log(err.message);
                         res.render('error', {error : err});
@@ -109,19 +119,19 @@ module.exports.addOrEdit = function (req, res) {
     }
     else
     {
-        service.updateMemberCardType(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
+        service.updateMemberCard(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
             if (!err) {
                 var memberCardType = '';
                 var memberCardAmount = '';
                 var zeroDiscounts = '';
                 var page = 1;
 
-                service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
+                service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
                     if (!err) {
                         results.memberCardType = memberCardType;
                         results.memberCardAmount = memberCardAmount;
                         results.zeroDiscounts = zeroDiscounts;
-                        res.render('memberCardType/memberCardTypeList', {data : results});
+                        res.render('memberCard/memberCardList', {data : results});
                     } else {
                         console.log(err.message);
                         res.render('error', {error : err});
@@ -153,12 +163,12 @@ module.exports.del = function (req, res) {
                 var zeroDiscounts = '';
                 var page = 1;
 
-                service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
+                service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
                     if (!err) {
                         results.memberCardType = memberCardType;
                         results.memberCardAmount = memberCardAmount;
                         results.zeroDiscounts = zeroDiscounts;
-                        res.render('memberCardType/memberCardTypeList', {data : results});
+                        res.render('memberCard/memberCardList', {data : results});
                     } else {
                         console.log(err.message);
                         res.render('error', {error : err});

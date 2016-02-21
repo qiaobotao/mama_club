@@ -10,6 +10,20 @@
     </style>
 </head>
 
+<script type="text/javascript">
+    function search () {
+        var name = document.getElementById('name').value;
+        var cid = document.getElementById('id').value;
+        window.location.href = '/jinquan/storeroom_list?name='+name+'&id='+cid;
+    }
+
+    function pageturning (selectPage) {
+        var name = document.getElementById('name').value;
+        var cid = document.getElementById('id').value;
+        window.location.href = '/jinquan/storeroom_list?page='+selectPage+'&name='+name+'&id='+cid;
+    }
+</script>
+
 <body>
 <div class="r_top">
     <div class="weizhi">
@@ -22,10 +36,14 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>库房名称: <input name="" type="text" class="input5" /></td>
-                    <td>&nbsp; 编号: <input name="" type="text" class="input5" /></td>
-                    <td>&nbsp; 保存类别: <input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>库房名称: <input id="name" name="name" type="text" class="input5" value="<%=data.name%>" /></td>
+                    <td>&nbsp; 保存类别: <select id="id" name="id">
+                        <option value =""></option>
+                        <%for(var i=0;i<data.classify.length;i++){%>
+                        <option value ="<%=data.classify[i].id%>" <%if(data.classifyId == data.classify[i].id){%>selected<%}%> ><%=data.classify[i].name%></option>
+                        <%}%>
+                    </select></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -35,35 +53,29 @@
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>仓库名称</th>
-                <th>仓库地址</th>
+                <th>库房名称</th>
+                <th>库存类别</th>
                 <th>负责人</th>
                 <th>操作</th>
             </tr>
-            <% for (var i=0;i<storerooms.length;i++) {%>
+            <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><%=storerooms[i].name%></td>
-                <td><%=storerooms[i].address%></td>
-                <td><%=storerooms[i].principal%></td>
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].cname%></td>
+                <td><%=data.data[i].principal%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <% if (storerooms[i].status == 1) {%>
-                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_set?status=0&id=<%=storerooms[i].id%>">停用</a>]</div></td>
-                            <% } else {%>
-                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_set?status=1&id=<%=storerooms[i].id%>">启用</a>]</div></td>
-                            <%}%>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_pre_edit?id=<%=storerooms[i].id%>">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_del">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_detail?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_pre_edit?id=<%=data.data[i].id%>">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_del?id=<%=data.data[i].id%>">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <%}%>
         </table>
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
 
     </div>
 </div>

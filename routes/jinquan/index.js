@@ -36,6 +36,7 @@ var sysMenuAction = require('./sysMenuAction');//菜单管理
 var sysRoleAction = require('./sysRoleAction');//角色管理
 var sysUserAction = require('./sysUserAction');//系统用户管理
 
+var memberCardAction = require('./memberCardAction');//会员卡管理
 
 
 /* GET home page. */
@@ -95,10 +96,17 @@ router.all('/attendance_change_del',attendanceChangeAction.del);
 /*********************会员管理****************************/
 // 会员卡类型
 router.all('/member_card_type_list',memberCardTypeAction.list);
-router.all('/member_card_type_edit',memberCardTypeAction.edit);
-router.all('/member_card_type_add',memberCardTypeAction.add);
+router.all('/to_member_card_type_edit',memberCardTypeAction.goEdit);
+router.all('/to_member_card_type_Add',memberCardTypeAction.goAdd);
+router.all('/member_card_type_del',memberCardTypeAction.del);
+router.all('/member_card_type_addOrEdit',memberCardTypeAction.addOrEdit);
 
 // 会员卡管理
+router.all('/member_card_list',memberCardAction.list);
+router.all('/to_member_card_edit',memberCardAction.goEdit);
+router.all('/to_member_card_Add',memberCardAction.goAdd);
+router.all('/member_card_del',memberCardAction.del);
+router.all('/member_card_addOrEdit',memberCardAction.addOrEdit);
 // 活动管理
 router.all('/activity_manage_list',activityManageAction.list);
 router.all('/activity_manage_edit',activityManageAction.edit);
@@ -108,6 +116,12 @@ router.all('/member_add',memberAction.add);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
 router.all('/service_meet_add',serviceMeetAction.add);
+router.all('/service_meet_goadd',serviceMeetAction.goAdd);
+router.all('/service_meet_show',serviceMeetAction.show);
+router.all('/service_meet_preEdit',serviceMeetAction.preEdit);
+router.all('/service_meet_doEdit',serviceMeetAction.doEdit);
+router.all('/service_meet_del',serviceMeetAction.del);
+
 // 课程报名
 router.all('/class_meet_list',classMeetAction.list);
 router.all('/class_meet_add',classMeetAction.add);
@@ -147,12 +161,17 @@ router.all('/storeroom_add', storeroomAction.add);
 router.all('/storeroom_pre_edit', storeroomAction.preEdit);
 router.all('/storeroom_update', storeroomAction.update);
 router.all('/storeroom_pre_add', storeroomAction.preAdd);
-router.all('/storeroom_set', storeroomAction.setStatus);
 router.all('/storeroom_del', storeroomAction.del);
+router.all('/storeroom_detail', storeroomAction.detail);
 
 // 经销商管理
 router.all('/distributor_list',distributorAction.list);
 router.all('/distributor_add', distributorAction.add);
+router.all('/distributor_pre_add', distributorAction.preadd);
+router.all('/distributor_browse', distributorAction.detail);
+router.all('/distributor_del', distributorAction.del);
+router.all('/distributor_pre_edit', distributorAction.preEdit);
+router.all('/distributor_update', distributorAction.update);
 // 入库管理
 router.all('/storeroom_in_list',storeroomInAction.list);
 router.all('/storeroom_in_add', storeroomInAction.add);
@@ -162,8 +181,7 @@ router.all('/storeroom_out_add', storeroomOutAction.add);
 // 移库管理
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_add', storeroomMoveAction.add);
-// 盘点库存
-router.all('/storeroom_detailed', storeroomAction.detailed);
+
 
 /*********************权限管理******************************/
 // 分类管理

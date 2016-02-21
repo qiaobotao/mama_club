@@ -10,6 +10,11 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
+            var serial = document.getElementById("serial").value;
+            if (!serial || serial.length == 0) {
+                alert('编号不能为空');
+                return;
+            }
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
                 alert('库房名称不能为空');
@@ -40,27 +45,38 @@
 <div class="center_con">
     <form method="post" id="myform" action="/jinquan/storeroom_update">
     <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <input id="sid" name="sid" type="hidden"  value="<%=data.id%>" />
         <tr>
-            <input name="id" type="hidden" class="input5"  value="<%=storeroom.id%>" />
-            <td  class="regTd_l">库房名称：</td>
-            <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=storeroom.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            <td class="regTd_l">库房编号：</td>
+            <td class="regTd_r"><input id="serial" name="serial" type="text" class="input5" value="<%=data.serial%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
         </tr>
         <tr>
-            <td class="regTd_l">库房地址：</td>
-            <td class="regTd_r"><input id="address" name="address" type="text" class="input5"  value="<%=storeroom.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            <td class="regTd_l">库房名称：</td>
+            <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=data.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
         </tr>
         <tr>
             <td class="regTd_l">负责人：</td>
-            <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5"  value="<%=storeroom.principal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
         </tr>
         <tr>
-            <td class="regTd_l">启用状态：</td>
-            <td class="regTd_r">
-                <input id="roomstatus" name="roomstatus" type="radio"  <%if(storeroom.status == 1){%>  checked="checked"  value="1"<%}%>/>
-                启用
-                &nbsp;
-                <input id="roomstatus" name="roomstatus" type="radio" <%if(storeroom.status == 0){%>  checked="checked"  value="0"<%}%> /> 未启用
-            </td>
+            <td class="regTd_l">存储类别：</td>
+            <td class="regTd_r"><select id="cid" name="cid">
+                <%for(var i=0;i<classifys.length;i++){%>
+                <option value ="<%=classifys[i].id%>" <%if(data.cid == classifys[i].id){%>selected<%}%> ><%=classifys[i].name%></option>
+                <%}%>
+            </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">联系电话：</td>
+            <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">库房地址：</td>
+            <td class="regTd_r"><input id="address" name="address" type="text" class="input5" value="<%=data.address%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">备注：</td>
+            <td class="regTd_r"><textarea id="remarks" name="remarks" rows="8" cols="19" ><%=data.remarks%></textarea></td>
         </tr>
     </table>
     </form>

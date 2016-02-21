@@ -52,7 +52,9 @@ module.exports = {
     // 主分类id
     mainClassifyId : {
         serivce : 17,
-        wares : 14
+        wares : 14,
+        storeroom : 9,
+        distributor : 8
     }
 
 };

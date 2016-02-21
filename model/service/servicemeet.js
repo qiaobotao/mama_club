@@ -19,10 +19,21 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
+module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
 
-    var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status) VALUES (?,?,?,?,?,?)';
-    db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO service_meet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price) VALUES (?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
+
+    var sql = 'UPDATE   service_meet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ?   WHERE  id  =  ?  ';
+    db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -40,15 +51,17 @@ module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,c
  * @param materialid
  * @param cb
  */
-module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
+module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPage,cb) {
 
-    var parm = "where memberCardType like '%" + memberCardType + "%' and memberCardAmount like '%" + memberCardAmount
-        + "%' and zeroDiscounts like '%" + zeroDiscounts + "%'";
+    var myDate = new Date();
+    var parm = "where tel like '%" + tel + "%' and name like '%" + name
+        + "%' and meetTime like '%" + meetTime + "%' and status like '%" + status + "%'";
 
-    var sql_count = 'SELECT count(*) as count FROM memberCardType '+parm;
+
+    var sql_count = 'SELECT count(*) as count FROM service_meet '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM memberCardType '+parm+'   LIMIT ?,?';
+    var sql_data = 'SELECT * FROM service_meet '+parm+'   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -87,9 +100,9 @@ module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmoun
  * @param id
  * @param cb
  */
-module.exports.delMembercardtype= function (id, cb) {
+module.exports.delServiceMeet= function (id, cb) {
 
-    var sql = 'DELETE FROM memberCardType WHERE id = ?';
+    var sql = 'DELETE FROM service_meet WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -99,6 +112,18 @@ module.exports.delMembercardtype= function (id, cb) {
     });
 }
 
+module.exports.fetchSingleServiceMeet =function (id, cb) {
+
+    var sql = 'SELECT * FROM service_meet WHERE id = ?';
+    db.query(sql, [id],  function(cbData, err, rows, fields) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
 /**
  * 查询菜单
  * @param pages
@@ -181,20 +206,3 @@ module.exports.setStatus = function (id, status, cb) {
     });
 }
 
-/**
- * 根据状态获取类型
- * @param id
- * @param cb
- */
-module.exports.fetchMembercardtypeByStatus =function (status, cb) {
-
-    var sql = 'SELECT * FROM memberCardType WHERE status = ?';
-    db.query(sql, [status],  function(cbData, err, rows, fields) {
-
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}
