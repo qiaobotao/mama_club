@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>考勤类别</title>
+    <title>考勤变更</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -13,13 +13,13 @@
             var categoryName = document.getElementById('categoryName').value;
 //            var serialNumber = document.getElementById('serialNumber').value;
 //            var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/attendance_type_list?categoryName='+categoryName;
+            window.location.href = '/jinquan/attendance_change_list?categoryName='+categoryName;
         }
         function preEdit (id) {
-            window.location.href = '/jinquan/attendance_type_edit?id='+id;
+            window.location.href = '/jinquan/attendance_change_edit?id='+id;
         }
         function del (id) {
-            window.location.href = '/jinquan/attendance_type_del?id='+id;
+            window.location.href = '/jinquan/attendance_change_del?id='+id;
         }
     </script>
 </head>
@@ -27,7 +27,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：考勤类别列表
+        当前位置：考勤变更列表
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -36,33 +36,35 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>类别名称：<input name="categoryName" id="categoryName" type="text" class="input5" value="<%=data.categoryName%>" /></td>
-                    <td> &nbsp;开始时间：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;截止时间：<input name="" type="text" class="input5" /></td>
+                    <td>员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="<%=data.staffName%>" /></td>
+                    <td> &nbsp;变更类型：<input name="attendanceType" id="attendanceType" type="text" class="input5" value="<%=data.attendanceType%>"/></td>
+                    <td> &nbsp;请假开始日期：<input name="leaveStartDate" id="leaveStartDate" type="text" class="input5" value="<%=data.leaveStartDate%>"/></td>
+                    <td> &nbsp;请假截止日期：<input name="leaveEndDate" id="leaveEndDate" type="text" class="input5" value="<%=data.leaveEndDate%>" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/attendance_type_edit" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/attendance_change_edit" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>类别名称</th>
+                <th>员工</th>
+                <th>变更类型</th>
                 <th>开始时间</th>
                 <th>截止时间</th>
-                <th>工作小时数</th>
                 <th>操作</th>
             </tr>
 
 
 
+            <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><%=data.data[i].categoryName%></td>
-                <td><%=data.data[i].startDate%></td>
-                <td><%=data.data[i].endDate%></td>
-                <td><%=data.data[i].jobTime%></td>
+                <td><%=data.data[i].staffId%></td>
+                <td><%=data.data[i].attendanceType%></td>
+                <td><%=data.data[i].leaveStartDate%></td>
+                <td><%=data.data[i].leaveEndDate%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
@@ -72,6 +74,7 @@
                     </table>
                 </td>
             </tr>
+            <%}%>
         </table>
 
         <%- include ../pagination.html -%>

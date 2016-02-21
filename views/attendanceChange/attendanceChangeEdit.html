@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>编辑考勤变更</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        //提交表单
+        function submitForm(){
+            /*
+             var name = document.getElementById("name").value;
+             if (!name || name.length == 0) {
+             alert('门店名称不能为空');
+             return;
+             }
+             var serialNumber = document.getElementById("serialNumber").value;
+             if (!serialNumber || serialNumber.length == 0) {
+             alert('序列号不能为空');
+             return;
+             }
+             var tel = document.getElementById("tel").value;
+             if (!tel || tel.length == 0) {
+             alert('电话不能为空');
+             return;
+             }
+             var address = document.getElementById("address").value;
+             if(!address || address.length == 0) {
+             alert('门店地址不能为空');
+             return;
+             }
+             var principal = document.getElementById("principal").value;
+             if (!principal || principal.length == 0) {
+             alert('负责人不能为空');
+             return;
+             }
+             */
+            document.getElementById("myform").submit();
+        }
+        //变更请假、加班时页面处理
+        function onchangeRadio(){
+            var attendanceType = document.getElementsByName("attendanceType");
+            for(var i=0;i<attendanceType.length;i++){
+                if(attendanceType[i].checked) {
+                    attendanceType = attendanceType[i].value;
+                    break;
+                }
+            }
+            if(attendanceType == 1){//加班
+                //调整下拉框内容
+                var attendanceTypeDetailed = document.getElementById("attendanceTypeDetailed");
+                attendanceTypeDetailed.innerHTML = "";
+                var opp = new Option("文职","jb_wz");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("技师","jb_js");
+                attendanceTypeDetailed.add(opp);
+                //调整下拉框描述
+                document.getElementById("changeCategory").innerHTML = "加班类型";
+            }else{//请假
+                //调整下拉框内容
+                var attendanceTypeDetailed = document.getElementById("attendanceTypeDetailed");
+                attendanceTypeDetailed.innerHTML = "";
+                var opp = new Option("上门","qj_sm");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("出差","qj_cc");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("公干","qj_gg");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("上门","qj_sm");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("事假","qj_sj");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("病假","qj_bj");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("年假","qj_nj");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("调休","qj_tx");
+                attendanceTypeDetailed.add(opp);
+                var opp = new Option("产假","qj_cj");
+                attendanceTypeDetailed.add(opp);
+                //调整下拉框描述
+                document.getElementById("changeCategory").innerHTML = "请假类型";
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置:编辑考勤变更
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/attendance_type_save">
+        <table width="100%" class="reg_table" border="1" cellspacing="0" cellpadding="0">
+            <tr>
+                <td  colspan="4">
+                    <center>
+                        <input type="radio" checked="checked" name="attendanceType" value="1" onchange="onchangeRadio()"/>&nbsp;加班 &nbsp;
+                        <input type="radio" name="attendanceType" value="2" onchange="onchangeRadio()"/>&nbsp;请假
+                    <input id="id" name="id" type="hidden" value="<%=attendanceType.id%>"/>
+                    </center>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">员工名称：</td>
+                <td class="regTd_r"><input id="staffId" name="staffId" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l"><span id="changeCategory">加班类型</span>：</td>
+                <td class="regTd_r">
+                    <select name="attendanceTypeDetailed" id="attendanceTypeDetailed">
+                        <option value="技师">文职</option>
+                        <option value="文职">技师</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">加班时间：</td>
+                <td class="regTd_r"><input id="leaveStartDate" name="leaveStartDate" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">考勤时间：</td>
+                <td class="regTd_r"><input id="tempTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">开始时间：</td>
+                <td class="regTd_r"><input id="startDate" name="startDate" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">截止时间：</td>
+                <td class="regTd_r"><input id="endDate" name="endDate" type="text" class="input5" value="<%=attendanceType.endDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">工作内容：</td>
+                <td class="regTd_r" colspan="3">
+                    <textarea name="leaveReason" id="leaveReason" rows="8" cols="100"></textarea>
+                </td>
+            </tr>
+        </table>
+        <!--参与员工 end-->
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>

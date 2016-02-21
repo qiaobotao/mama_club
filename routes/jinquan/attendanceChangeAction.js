@@ -1,9 +1,9 @@
 /**
- * Created by kuanchang on 16/1/13.
- * 考勤类型管理
+ * Created by kuanchang on 16/2/15.
+ * 考勤变更管理
  */
 
-var service = require('../../model/service/attendanceType');
+var service = require('../../model/service/attendanceChange');
 /**
  * 获取考勤类型列表
  * @param req
@@ -11,17 +11,22 @@ var service = require('../../model/service/attendanceType');
  */
 module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
-    var categoryName = req.query.categoryName ? req.query.categoryName : '';
+    var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
+    var attendanceType = req.query.attendanceType ? req.query.attendanceType : '';//变更类型
+    var leaveStartDate = req.query.leaveStartDate ? req.query.leaveStartDate : '';//请假开始日期
+    var leaveEndDate = req.query.leaveEndDate ? req.query.leaveEndDate : '';//请假截止日期
 
-    service.fetchAllAttendanceType(categoryName,currentPage, function (err, results) {
+    service.fetchAllAttendanceChange(staffName,attendanceType,leaveStartDate,leaveEndDate,currentPage, function (err, results) {
         if (!err) {
-            results.currentPage = currentPage;
-            results.categoryName = categoryName;
-            res.render('attendanceType/attendanceTypeList', {data : results});
+            results.staffName = staffName;
+            results.attendanceType = attendanceType;
+            results.leaveStartDate = leaveStartDate;
+            results.leaveEndDate = leaveEndDate;
+            res.render('attendanceChange/attendanceChangeList', {data : results});
         } else {
             console.log(err.message);
             res.render('error');
-           // next();
+            // next();
         }
     });
 }
@@ -34,12 +39,12 @@ module.exports.edit = function (req, res) {
     var id = req.query.id ? req.query.id : '';
     if(id == ''){
         var attendanceType = [];
-        res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType});
+        res.render('attendanceChange/attendanceChangeEdit', {attendanceType : attendanceType});
     }else{
-        service.fetchSingleAttendanceType(id, function(err, results) {
+        service.fetchSingleAttendanceChange(id, function(err, results) {
             if (!err) {
                 var attendanceType = results.length == 0 ? null : results[0];
-                res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType});
+                res.render('attendanceChange/attendanceChangeEdit', {attendanceType : attendanceType});
             } else {
                 next();
             }
@@ -59,7 +64,7 @@ module.exports.save = function (req, res) {
     var endDate = req.body.endDate ? req.body.endDate : '';
 
     if(id!=''){//修改
-        service.updateAttendanceType(id,categoryName,jobTime,startDate,endDate,function(err, results) {
+        service.updateAttendanceChange(id,categoryName,jobTime,startDate,endDate,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/attendance_type_list');
             } else {
@@ -68,7 +73,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertAttendanceType(categoryName,jobTime,startDate,endDate,function(err, results) {
+        service.insertAttendanceChange(categoryName,jobTime,startDate,endDate,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/attendance_type_list');
             } else {
@@ -89,7 +94,7 @@ module.exports.del = function (req, res, next) {
 
     var id = req.query.id ? req.query.id :'';
 
-    service.delAttendanceType(id,function(err, results){
+    service.delAttendanceChange(id,function(err, results){
         if (!err) {
             res.redirect('/jinquan/attendance_type_list');
         } else {
