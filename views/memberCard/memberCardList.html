@@ -5,6 +5,7 @@
     <title>会员卡</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -26,7 +27,7 @@
             window.location.href = '/jinquan/member_card_show?op=1&id='+id;
         }
         function update (id) {
-            window.location.href = '/jinquan/to_member_type_edit?id='+id;
+            window.location.href = '/jinquan/to_member_card_edit?id='+id;
         }
         function del (id) {
             window.location.href = '/jinquan/member_card_del?id='+id;
@@ -45,20 +46,31 @@
 <div class="center_con">
     <div class="butSet">
         <div class="sousuo">
-            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+            <table  width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                <td>会员卡类型：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
-                    <SELECT ID="memberCardType" name="memberCardType"  class="input5" VALUE="<%=data.memberCardType%>" >
-                        <option VALUE="1">充值卡</option>
-                        <option VALUE="2">服务次数卡</option>
-                        <option VALUE="3">打折卡</option>
-                    </SELECT>
-                </td>
-                <td > &nbsp;会员卡号：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
-                <td id="parameter5"> &nbsp;有效时间：<input ID="effectiveTime" name="effectiveTime" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
-                    <td id="parameter5"> &nbsp;剩余金额：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
-                    <td><a href="javascript:search()" class="chaxun"></a></td>
-            </tr>
+                    <td>会员卡类型：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        <SELECT ID="memberCardType" name="memberCardType"  class="input5" VALUE="<%=data.memberCardType%>" >
+                            <option VALUE="1">充值卡</option>
+                            <option VALUE="2">服务次数卡</option>
+                            <option VALUE="3">打折卡</option>
+                        </SELECT>
+                    </td>
+                    <td > &nbsp;会员卡号：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
+                    <td> <a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+                <tr id="type1">
+                    <td  > &nbsp;有效时间：<input ID="effectiveTime" name="effectiveTime" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
+                    <td  > &nbsp;剩余金额：<input ID="parameter2" name="parameter2" type="text" VALUE="<%=data.parameter2%>" class="input5" /></td>
+                </tr>
+                <tr id="type2">
+                    <td  > &nbsp;有效时间：<input ID="parameter5" name="parameter5" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
+                    <td  > &nbsp;剩余服务次数：<input ID="parameter4" name="parameter4" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                    <td  > &nbsp;总服务次数：<input ID="parameter3" name="parameter3" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                </tr>
+                <tr id="type3">
+                    <td  > &nbsp;有效时间：<input ID="parameter5" name="parameter5" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
+                    <td  > &nbsp;折扣力度：<input ID="parameter3" name="parameter4" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                </tr>
             </table>
 
         </div>

@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, cb) {
+module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8, parameter9,cb) {
 
-    var sql = 'INSERT INTO memberCard (serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5) VALUES (?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCard (serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8 ,parameter9) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter5,parameter6 , parameter7 , parameter8,parameter9], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -126,10 +126,10 @@ module.exports.fetchMembercard = function(pages, count, cb) {
 
  * @param cb
  */
-module.exports.updateMemberCard = function(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, cb) {
+module.exports.updateMemberCard = function(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8,parameter9,cb) {
 
-    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,createDate  = ?,   dateline  = ?,   memberId  = ?,  type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? WHERE  id  = ?;';
-    var par = [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, id];
+    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,createDate  = ?,   dateline  = ?,   memberId  = ?,  type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?;';
+    var par = [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

@@ -78,38 +78,47 @@ module.exports.addOrEdit = function (req, res) {
     var memberId= req.body.memberId ? req.body.memberId : '';
     var type= req.body.type ? req.body.type : '';
     var parameter1= '';
-    var parameter2= '';
-    var parameter3= '';
-    var parameter4= '';
-    var parameter5= '';
+    var parameter2=  '';
+    var parameter3=   '';
+    var parameter4=   '';
+    var parameter5=   '';
+    var parameter6=   '';
+    var parameter7=  '';
+    var parameter8=   '';
+    var parameter9=   '';
     if(type=='1')
     {
         //会员卡类型
-          parameter1= req.body.memberCardTypeId ? req.body.memberCardTypeId : '';
+          parameter1=  req.body.parameter1 ? req.body.parameter1 : '';
         //当前金额/首次应缴费金额/首次应缴费金额
-          parameter2= req.body.currentAmount ? req.body.currentAmount : '';
+          parameter2= req.body.parameter2 ? req.body.parameter2 : '';
     }
     if(type=='2')
     {
-        var parameter3= req.body.canUseTimes ? req.body.canUseTimes : '';
-        //已使用次数
-        var  parameter4= req.body.usedTimes ? req.body.usedTimes : '';
-        //有效时间/有效时间
-        var  parameter5= req.body.effectiveTime ? req.body.effectiveTime : '';
+       //可使用次数
+        var parameter3= req.body.parameter3 ? req.body.parameter3 : '';
+         //已使用次数
+        var  parameter4=req.body.parameter4 ? req.body.parameter4 : '';
+
+        //首次应缴费金额
+        var  parameter5= req.body.parameter5 ? req.body.parameter5 : '';
+        //有效时间
+        var parameter6= req.body.parameter6 ? req.body.parameter6 : '';
     }
     if(type=='3')
     {
-        parameter2=req.body.firstPaymentAmount3?req.body.firstPaymentAmount3:'';
-        //可使用次数/折扣力度
-        var parameter3= req.body.discountIntensity ? req.body.discountIntensity : '';
-        //有效时间/有效时间
-        var  parameter5= req.body.effectiveTime3 ? req.body.effectiveTime3 : '';
+        //折扣力度
+          parameter7= req.body.parameter7 ? req.body.parameter7 : '';
+        //首次应缴费金额
+          parameter8= req.body.parameter8 ? req.body.parameter8 : '';
+        //有效时间
+          parameter9= req.body.parameter9 ? req.body.parameter9 : '';
     }
     if(id=='')
     {
         var createDate= new Date().getTime();
         var dateline= new Date().getTime();
-        service.insertMemberCard( serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, function (err, results) {
+        service.insertMemberCard( serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
             } else {
@@ -119,7 +128,7 @@ module.exports.addOrEdit = function (req, res) {
     }
     else
     {
-        service.updateMemberCard(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, function (err, results) {
+        service.updateMemberCard(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
             } else {

@@ -30,19 +30,21 @@
 //        console.log("000000"+parent.$('.iframValueId').value);
 //        alert(document.getElementById("name").value);
 //        alert($('.name').value);
-        console.log("aaabbbcc-2-"+this.parent.document.getElementById("iframValueId").value);
-//        console.log("aaabbbcc--"+this.parent.$('.iframValueId').value);
+
+         console.log(window.parent.document.getElementById("iframValueId").value);
         /*
         parent.layer.msg("选择的商品是"+id);
         window.parent.document.getElementById("iframValueId").value='2323';
         */
-        var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+        window.parent.document.getElementById("iframValueId").value=id;
+       var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 
     }
 </script>
 
 <body>
+<div id="test"></div>
 <div class="center_con">
     <div class="butSet">
         <div class="sousuo">
