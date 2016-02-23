@@ -31,14 +31,14 @@
 //        alert(document.getElementById("name").value);
 //        alert($('.name').value);
 
-         console.log(window.parent.document.getElementById("iframValueId").value);
-        /*
+         /*
         parent.layer.msg("选择的商品是"+id);
         window.parent.document.getElementById("iframValueId").value='2323';
         */
-        window.parent.document.getElementById("iframValueId").value=id;
+        //alert( window.parent.frames['rightFrame'].document.getElementById("iframValueId").value)
+       window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('iframValueId').value=id;
        var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
-        parent.layer.close(index); //执行关闭
+       parent.layer.close(index); //执行关闭
 
     }
 </script>
