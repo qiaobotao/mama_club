@@ -26,17 +26,34 @@
     }
     //选择该商品
     function select(id){
+//        parent.$('iframValueId').val('111');
+//        console.log(parent.$('.iframValueId'));
+//        console.log(parent.$('.iframValueId').val());
+//        var inputs = parent.$(":input").length();
+        console.log(typeof parent.$(":text").val());
+
+        for(var i = 0; i<parent.$(":text").length() ; i ++){
+            console.log(parent.$(":text")[i]);
+        }
+
 //        parent.$('.iframValueId').value = '我被改变了';
 //        console.log("000000"+parent.$('.iframValueId').value);
 //        alert(document.getElementById("name").value);
 //        alert($('.name').value);
-
-         console.log(window.parent.document.getElementById("iframValueId").value);
+//        var a = window.$('#iframValueId');
+//        console.log(a);
+//
+//        for(i in parent.frames){
+//            console.log(i+"==="+parent.frames.i);
+//        }
+//         console.log(typeof  window.parent);
+//         console.log(window.parent['iframValueId']);
+//         console.log(window.parent.document.getElementById("iframValueId").value);
         /*
         parent.layer.msg("选择的商品是"+id);
         window.parent.document.getElementById("iframValueId").value='2323';
         */
-        window.parent.document.getElementById("iframValueId").value=id;
+//        window.parent.document.getElementById("iframValueId").value=id;
        var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 
