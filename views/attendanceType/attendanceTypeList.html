@@ -56,7 +56,8 @@
                 <th>操作</th>
             </tr>
 
-            <% for (var i=0;i<data.data.length;i++) {%>
+
+
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].categoryName%></td>
                 <td><%=data.data[i].startDate%></td>
@@ -71,7 +72,6 @@
                     </table>
                 </td>
             </tr>
-            <%}%>
         </table>
 
         <%- include ../pagination.html -%>
