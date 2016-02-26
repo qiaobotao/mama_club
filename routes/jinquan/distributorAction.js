@@ -15,6 +15,9 @@ module.exports.list = function (req, res, next) {
     var classifyId = req.query.id ? req.query.id : '';  // 经销商分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.list(name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
@@ -25,7 +28,7 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('distributor/distributorList', {data : results});
+                    res.render('distributor/distributorList', {data : results, replytype : replytype});
                 } else {
                     next();
                 }
@@ -66,7 +69,7 @@ module.exports.add = function (req, res, next) {
 
     service.add(name, address, remarks,cid, principal, tel,function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/distributor_list');
+            res.redirect('/jinquan/distributor_list?replytype=add');
         } else {
             next();
         }
@@ -95,7 +98,7 @@ module.exports.del = function (req, res, next) {
     service.del(id,function(err, results){
 
         if (!err) {
-            res.redirect('/jinquan/distributor_list');
+            res.redirect('/jinquan/distributor_list?replytype=del');
         } else {
             next();
         }
@@ -140,7 +143,7 @@ module.exports.update = function (req, res, next) {
 
     service.update(id,name,cid,principal,tel,address,remark,function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/distributor_list');
+            res.redirect('/jinquan/distributor_list?replytype=update');
 
         } else {
             next();

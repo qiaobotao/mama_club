@@ -51,7 +51,7 @@ router.all('/shop_list',shopAction.list);
 router.all('/shop_pre_add',shopAction.preAdd);
 router.all('/shop_add',shopAction.add);
 router.all('/shop_del', shopAction.del);
-router.all('/shop_set',shopAction.setStatus);
+router.all('/shop_browse',shopAction.browse);
 router.all('/shop_pre_edit',shopAction.preEdit);
 router.all('/shop_update',shopAction.update);
 
@@ -158,6 +158,7 @@ router.all('/wares_update', waresAction.waresUpdate);
 router.all('/wares_pre_add', waresAction.preAdd);
 router.all('/wares_add', waresAction.add);
 router.all('/wares_del', waresAction.del);
+router.all('/wares_select', waresAction.select);
 
 // 库房管理
 router.all('/storeroom_list',storeroomAction.list);
@@ -178,6 +179,7 @@ router.all('/distributor_pre_edit', distributorAction.preEdit);
 router.all('/distributor_update', distributorAction.update);
 // 入库管理
 router.all('/storeroom_in_list',storeroomInAction.list);
+router.all('/storeroom_in_pre_add', storeroomInAction.preAdd);
 router.all('/storeroom_in_add', storeroomInAction.add);
 // 出库管理
 router.all('/storeroom_out_list',storeroomOutAction.list);

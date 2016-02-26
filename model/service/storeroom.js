@@ -166,3 +166,20 @@ module.exports.setStatus = function (id, status, cb) {
 
     });
 }
+/**
+ *获取所有的仓库
+ * @param cb
+ */
+module.exports.getAllStorerooms = function (cb) {
+
+    var sql = 'SELECT id,name FROM storeroom ORDER BY dateline asc';
+
+    db.query(sql,[],function(cbData, err, rows, filelds) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}

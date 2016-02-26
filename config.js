@@ -54,7 +54,9 @@ module.exports = {
         serivce : 17,
         wares : 14,
         storeroom : 9,
-        distributor : 8
+        distributor : 8,
+        inType : 4,
+        buyType : 9
     }
 
 };

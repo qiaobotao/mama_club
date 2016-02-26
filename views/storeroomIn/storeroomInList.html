@@ -5,10 +5,29 @@
     <title>入库管理</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
 </head>
+
+<script type="text/javascript">
+    function search () {
+        var buyer = document.getElementById('buyer').value;
+        var buyType = document.getElementById('buyType').value;
+        var buyDate = document.getElementById('buyDate').value;
+        window.location.href = '/jinquan/storeroom_in_list?buyer='+buyer+'&buyType='+buyType+'&buyDate='+buyDate;
+    }
+
+    function pageturning (selectPage) {
+        var buyer = document.getElementById('buyer').value;
+        var buyType = document.getElementById('buyType').value;
+        var buyDate = document.getElementById('buyDate').value;
+        window.location.href = '/jinquan/service_list?page='+selectPage+'&buyer='+buyer+'&buyType='+buyType+'&buyDate='+buyDate;
+    }
+</script>
 
 <body>
 <div class="r_top">
@@ -22,30 +41,32 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>采购方式：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;采购人：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;采购时间：<input name="" type="text" class="input5" /> </td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>采购人：<input id="buyer" name="buyer" type="text" class="input5" value="<%=data.buyer%>"/></td>
+                    <td> &nbsp;采购方式：<select id="buyType" name="buyType">
+                        <option value =""></option>
+                        <%for(var i=0;i<data.buyTypeClassify.length;i++){%>
+                        <option value ="<%=data.buyTypeClassify[i].id%>" <%if(data.buyType == data.buyTypeClassify[i].id){%>selected<%}%> ><%=data.buyTypeClassify[i].name%></option>
+                        <%}%>
+                    </select></td>
+                    <td> &nbsp;采购时间：<input id="buyDate" name="buyDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.buyDate%>"/> </td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/storeroom_in_add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/storeroom_in_pre_add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>采购方式</th>
-                <th>采购人</th>
                 <th>采购时间</th>
+                <th>采购人</th>
+                <th>采购方式</th>
                 <th>入库库房</th>
                 <th>操作</th>
             </tr>
         </table>
-
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

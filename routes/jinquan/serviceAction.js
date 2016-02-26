@@ -15,6 +15,9 @@ module.exports.list = function (req, res, next) {
     var classifyId = req.query.id ? req.query.id : '';  // 服务分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.list(name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
@@ -25,7 +28,7 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('service/serviceList', {data : results});
+                    res.render('service/serviceList', {data : results, replytype : replytype});
                 } else {
                     next();
                 }
@@ -70,7 +73,7 @@ module.exports.add = function (req, res, next) {
 
     service.add(name,content,cid,price,remark,function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/service_list');
+            res.redirect('/jinquan/service_list?replytype=add');
         } else {
             next();
         }
@@ -132,7 +135,7 @@ module.exports.update = function(req, res, next) {
 
     service.update(id,name,content,cid,price,remark,function(err, results) {
         if (!err) {
-             res.redirect('/jinquan/service_list');
+             res.redirect('/jinquan/service_list?replytype=update');
 
         } else {
             next();
@@ -147,7 +150,7 @@ module.exports.del = function(req, res, next) {
     service.del(id,function(err, results){
 
         if (!err) {
-            res.redirect('/jinquan/service_list');
+            res.redirect('/jinquan/service_list?replytype=del');
         } else {
             next();
         }

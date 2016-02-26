@@ -11,6 +11,16 @@
 </head>
 
 <script type="text/javascript">
+
+    var replytype = '<%=replytype%>';
+    if (replytype == 'add') {
+        parent.layer.msg('增加成功');
+    } else if (replytype == 'del') {
+        parent.layer.msg('删除成功');
+    } else if (replytype == 'update') {
+        parent.layer.msg('修改成功');
+    }
+
     function search () {
         var name = document.getElementById('name').value;
         var cid = document.getElementById('id').value;

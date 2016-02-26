@@ -16,6 +16,9 @@ module.exports.list = function (req, res,next) {
     var classifyId = req.query.id ? req.query.id : '';  // 保存分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.list(name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
@@ -26,7 +29,7 @@ module.exports.list = function (req, res,next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('storeroom/storeroomList', {data : results});
+                    res.render('storeroom/storeroomList', {data : results, replytype : replytype });
                 } else {
                     next();
                 }
@@ -84,7 +87,7 @@ module.exports.add = function (req, res, next) {
 
     service.insertStoreroom(name, address, principal, tel, serial, cid, remarks, function(err, results) {
         if(!err) {
-            res.redirect('/jinquan/storeroom_list');
+            res.redirect('/jinquan/storeroom_list?replytype=add');
         } else {
            next();
         }
@@ -121,7 +124,7 @@ module.exports.del = function(req, res, next) {
     service.delStoreroom(id, function(err, results){
 
         if (!err) {
-            res.redirect('/jinquan/storeroom_list');
+            res.redirect('/jinquan/storeroom_list?replytype=del');
         } else {
             next();
         }
@@ -147,7 +150,7 @@ module.exports.update = function(req, res, next) {
     service.updateStoreroom(id,name,address,principal, serial, cid, tel, remarks, function(err, results){
 
         if(!err) {
-            res.redirect('/jinquan/storeroom_list');
+            res.redirect('/jinquan/storeroom_list?replytype=update');
         } else {
             next();
         }

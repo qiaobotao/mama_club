@@ -16,6 +16,9 @@ module.exports.list = function (req, res, next) {
     var classifyId = req.query.id ? req.query.id : '';  // 商品分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.list(name,classifyId,currentPage,function(err, results){
         if (!err) {
             results.currentPage = currentPage;
@@ -24,7 +27,7 @@ module.exports.list = function (req, res, next) {
             service.getWaresClassify(function(err,classify) {
                 if (!err) {
                     results.classify = classify;
-                    res.render('wares/waresList', {data : results});
+                    res.render('wares/waresList', {data : results, replytype :replytype});
                 } else {
                     console.log(err);
                     next();
@@ -93,7 +96,7 @@ module.exports.add = function (req, res, next) {
 
     service.insertWares(name,longname,brand,standard,serial,remarks,lowdata,cid,function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/wares_list');
+            res.redirect('/jinquan/wares_list?replytype=add');
         } else {
             next();
         }
@@ -166,7 +169,7 @@ module.exports.waresUpdate = function (req, res, next) {
     service.updateWares(id,name,longname,brand,standard,serial,remarks,lowdata,cid, function(err, results) {
 
         if (!err) {
-            res.redirect('/jinquan/wares_list');
+            res.redirect('/jinquan/wares_list?replytype=update');
         } else {
             next();
         }
@@ -180,11 +183,39 @@ module.exports.del = function (req, res, next) {
 
     service.delWares(id, function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/wares_list');
+            res.redirect('/jinquan/wares_list?replytype=del');
         } else {
             next();
         }
     })
+
+}
+
+module.exports.select = function (req, res, next) {
+
+    var name = req.query.name ? req.query.name : '';    // 商品名称
+    var classifyId = req.query.id ? req.query.id : '';  // 商品分类
+    var currentPage = req.query.page ? req.query.page : '1';
+
+    service.list(name,classifyId,currentPage,function(err, results){
+        if (!err) {
+            results.currentPage = currentPage;
+            results.name = name;
+            results.classifyId = classifyId;
+            service.getWaresClassify(function(err,classify) {
+                if (!err) {
+                    results.classify = classify;
+                    res.render('wares/waresSelect', {data : results});
+                } else {
+                    console.log(err);
+                    next();
+                }
+            });
+        } else {
+            console.log(err);
+            next();
+        }
+    });
 
 }
 

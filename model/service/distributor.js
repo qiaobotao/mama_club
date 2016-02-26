@@ -6,7 +6,13 @@ var db = require('../../common/db');
 var async = require('async');
 var mainDistributorClassifyId = require('../../config').mainClassifyId.distributor;
 
-
+/**
+ * 分页获取经销商列表
+ * @param name
+ * @param cid
+ * @param currentPage
+ * @param cb
+ */
 module.exports.list = function (name,cid,currentPage,cb) {
 
     var parm = "WHERE s.name LIKE '%"+name+"%' ";
@@ -54,7 +60,10 @@ module.exports.list = function (name,cid,currentPage,cb) {
 
 }
 
-
+/**
+ * 获取经销商分类
+ * @param cb
+ */
 module.exports.getDistributorClassify = function (cb) {
 
     var sql = 'SELECT id,name FROM systemClassify WHERE parentId = ?';
@@ -68,6 +77,16 @@ module.exports.getDistributorClassify = function (cb) {
 
 }
 
+/**
+ * 添加经销商
+ * @param name
+ * @param address
+ * @param remarks
+ * @param classify
+ * @param principal
+ * @param tel
+ * @param cb
+ */
 module.exports.add = function (name, address, remarks,classify, principal, tel ,cb) {
 
     var add_sql = 'INSERT INTO distributor (name, address, remarks, classify, principal, tel, status, dateline) VALUES (?,?,?,?,?,?,?,?)';
@@ -83,6 +102,11 @@ module.exports.add = function (name, address, remarks,classify, principal, tel ,
 
 }
 
+/**
+ * 获取经销商详情
+ * @param id
+ * @param cb
+ */
 module.exports.getSingleDistributor = function (id, cb) {
 
     var get_sql = 'SELECT s.*, c.name AS cname, c.id AS cid FROM distributor s, systemClassify c WHERE s.id = ? AND s.classify = c.id';
@@ -97,7 +121,11 @@ module.exports.getSingleDistributor = function (id, cb) {
 
 }
 
-
+/**
+ * 删除经销商
+ * @param id
+ * @param cb
+ */
 module.exports.del = function (id, cb) {
 
     var del_sql = 'DELETE FROM distributor WHERE id = ?';
@@ -112,12 +140,39 @@ module.exports.del = function (id, cb) {
     });
 }
 
+/**
+ * 更新经销商
+ * @param id
+ * @param name
+ * @param cid
+ * @param principal
+ * @param tel
+ * @param address
+ * @param remark
+ * @param cb
+ */
 module.exports.update = function (id,name,cid,principal,tel,address,remark,cb) {
 
     var update_sql = 'UPDATE distributor SET name = ?, classify = ?, principal = ?, tel = ?, address = ?, remarks = ? WHERE id = ?';
 
     db.query(update_sql, [name,cid,principal,tel,address,remark,id], function(cbData, err, rows, fields) {
 
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 获取所有经销商
+ * @param cb
+ */
+module.exports.getAllDistributors = function (cb) {
+
+    var sql = "SELECT id,name FROM distributor ORDER BY dateline asc";
+    db.query(sql, [], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
