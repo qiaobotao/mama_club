@@ -17,13 +17,16 @@ module.exports.list = function (req, res, next) {
     var principal = req.query.principal ? req.query.principal : '';
     var number = req.query.number ? req.query.number : '';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.fetchAllShop(shopname,principal,number,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = shopname;
             results.principal = principal;
             results.number = number;
-            res.render('shop/shopList', {data : results});
+            res.render('shop/shopList', {data : results, replytype : replytype});
         } else {
             next();
         }
@@ -57,7 +60,7 @@ module.exports.add = function(req, res, next) {
 
    service.insertShop(serialNumber,name,principal,tel,address,remark,function(err, results) {
        if (!err) {
-           res.redirect('/jinquan/shop_list');
+           res.redirect('/jinquan/shop_list?replytype=add');
        } else {
            next();
        }
@@ -76,7 +79,7 @@ module.exports.del = function (req, res, next) {
 
     service.delShop(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/shop_list');
+            res.redirect('/jinquan/shop_list?replytype=del');
         } else {
             next();
         }
@@ -146,9 +149,22 @@ module.exports.update = function(req, res,next) {
 
     service.updateShop(id, serialNumber,  name, address, principal, tel, remark, function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/shop_list');
+            res.redirect('/jinquan/shop_list?replytype=update');
         } else {
             next();
+        }
+    })
+}
+
+module.exports.browse = function (req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';
+    service.fetchSingleShop(id, function (err, results) {
+        if (!err && results.length != 0) {
+             var data = results[0];
+            res.render('shop/shopBrowse', {data : data});
+        } else {
+             next();
         }
     })
 }

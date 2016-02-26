@@ -8,31 +8,32 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <script type="text/javascript">
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('门店名称不能为空');
+                parent.layer.alert('门店名称不能为空',{icon: 2});
                 return;
             }
             var serialNumber = document.getElementById("serialNumber").value;
             if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
+                parent.layer.alert('序列号不能为空',{icon: 2});
                 return;
             }
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
-                alert('电话不能为空');
+                parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }
             var address = document.getElementById("address").value;
             if(!address || address.length == 0) {
-                alert('门店地址不能为空');
+                parent.layer.alert('门店地址不能为空',{icon: 2});
                 return;
             }
             var principal = document.getElementById("principal").value;
             if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
+                parent.layer.alert('负责人不能为空',{icon: 2});
                 return;
             }
             document.getElementById("myform").submit();
@@ -72,14 +73,14 @@
         </tr>
         <tr>
             <td class="regTd_l">备注：</td>
-            <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" /></td>
+            <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19" ></textarea></td>
         </tr>
 
     </table>
         </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+        <div class="rb_l"><a href="/jinquan/shop_list" class="close"></a></div>
     </div>
 
 
