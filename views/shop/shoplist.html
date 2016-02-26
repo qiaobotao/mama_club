@@ -8,7 +8,17 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <script type="text/javascript">
+
+        var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
         function search () {
             var shopname = document.getElementById('shopname').value;
             var principal = document.getElementById('principal').value;
@@ -32,7 +42,11 @@
            window.location.href = '/jinquan/shop_pre_edit?id='+id;
        }
        function del (id) {
+
            window.location.href = '/jinquan/shop_del?id='+id;
+       }
+       function browse (id) {
+           window.location.href = '/jinquan/shop_browse?id='+id;
        }
 
     </script>
@@ -78,11 +92,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <% if (data.data[i].status == 1) {%>
-                            <td><div align="center"><img src="../../images/stop.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus(0,<%=data.data[i].id%>)">停用</a>]</div></td>
-                            <% } else {%>
-                            <td><div align="center"><img src="images/start.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus(1,<%=data.data[i].id%>)">启用</a>]</div></td>
-                            <%}%>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
                             <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
                         </tr>
