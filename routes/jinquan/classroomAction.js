@@ -8,7 +8,7 @@
  */
 var service = require('../../model/service/classroom');
 var waresService = require('../../model/service/wares');
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var classRoomName = req.query.classRoomName ? req.query.classRoomName : '';
     var classRoomCode = req.query.classRoomCode ? req.query.classRoomCode : '';
@@ -34,7 +34,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var className = req.query.className ? req.query.className : '';
     var classCode = req.query.classCode ? req.query.classCode : '';
@@ -58,7 +58,7 @@ module.exports.goAdd = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.preEdit = function(req, res) {
+module.exports.preEdit = function(req, res,next) {
 
     var id = req.query.id ? req.query.id : '';
 
@@ -80,7 +80,7 @@ module.exports.preEdit = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.doEdit = function (req, res) {
+module.exports.doEdit = function (req, res,next) {
 
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
@@ -104,7 +104,7 @@ module.exports.doEdit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.doAdd = function (req, res) {
+module.exports.doAdd = function (req, res,next) {
 
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
     var name = req.body.name ? req.body.name : '';
@@ -129,7 +129,7 @@ module.exports.doAdd = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.del = function(req, res) {
+module.exports.del = function(req, res,next) {
 
     var id = req.query.id ? req.query.id : 0;
     service.delClassRoom(id, function(err, results){
@@ -143,7 +143,7 @@ module.exports.del = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.setStatus = function(req, res) {
+module.exports.setStatus = function(req, res,next) {
 
     var status = req.query.status ? req.query.status : 0;
     var id = req.query.id ?  req.query.id : 0;

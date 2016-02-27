@@ -9,7 +9,7 @@ var service1 = require('../../model/service/membercardtype');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var parameter1= '';
     var parameter2=  '';
@@ -20,7 +20,7 @@ module.exports.list = function (req, res) {
     var parameter7=  '';
     var parameter8=   '';
     var parameter9=   '';
-    var type=  req.query.type ? req.query.type : '';
+    var type=  req.query.type ? req.query.type : '1';
     var serialNumber=  req.query.memberCardAmount ? req.query.memberCardAmount : '';
     var currentPage = req.query.page ? req.query.page : '1';
     if(type=='1')
@@ -51,9 +51,8 @@ module.exports.list = function (req, res) {
         //有效时间
         parameter9= req.query.parameter9 ? req.query.parameter9 : '';
     }
-    var page = 1;
 
-    service.fetchAllMemberCard(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,page, function (err, results) {
+    service.fetchAllMemberCard(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.type = type;
@@ -78,11 +77,14 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function(req, res) {
+module.exports.goAdd = function(req, res,next) {
 
-    var status ="0";
+    var status=  req.query.status ? req.query.status : '0';
+    var type=  req.query.type ? req.query.type : '1';
+
     service1.fetchMembercardtypeByStatus(status, function (err, results) {
         if (!err) {
+            results.type = type;
             res.render('memberCard/memberCardAdd' , {data : results});
         } else {
             console.log(err.message);
@@ -96,15 +98,12 @@ module.exports.goAdd = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.goEdit = function(req, res) {
-
+module.exports.goEdit = function(req, res,next) {
     var id = req.query.id ? req.query.id : '';
-
-    service.fetchSingleMembercard(id, function(err, results) {
+    var type = req.query.type ? req.query.type : '';
+    service.fetchSingleMembercard(id,type,function(err, results) {
         if (!err) {
-            var memberCard  = results.length == 0 ? null : results[0];
-            res.render('memberCard/memberCardEdit', {memberCard : memberCard});
-
+            res.render('memberCard/memberCardEdit', {data :results});
         } else {
             console.log(err.message);
             next();
@@ -117,7 +116,7 @@ module.exports.goEdit = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.addOrEdit = function (req, res) {
+module.exports.addOrEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.memberCardNumber ? req.body.memberCardNumber : '';
     var type= req.body.type ? req.body.type : '';
@@ -189,15 +188,33 @@ module.exports.addOrEdit = function (req, res) {
  * * @param req
  * @param res
  */
-module.exports.del = function (req, res) {
+module.exports.del = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
-    if(id!=''){
-        service.delMembercardtype(id, function (err, results) {
+    var type = req.query.type ? req.query.type : '';
+        service.delMembercard(id, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
             } else {
                 next();
             }
         });
-    }
 }
+/**
+ * 查看页面
+ * @param req
+ * @param res
+ */
+module.exports.show = function(req, res,next) {
+
+    var id = req.query.id ? req.query.id : '';
+    var type = req.query.type ? req.query.type : '';
+
+    service.fetchSingleMembercard(id,type, function(err, results) {
+        if (!err) {
+            var memberCard  = results.length == 0 ? null : results[0];
+            res.render('memberCard/memberCardDetail', {memberCard : memberCard});
+        } else {
+            next();
+        }
+    })
+};

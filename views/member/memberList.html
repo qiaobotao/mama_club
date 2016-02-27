@@ -64,11 +64,11 @@
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>卡号</th>
-                <th>名称</th>
-                <th>电话</th>
-                <th>会员卡类型</th>
-                <th>操作</th>
+                <th width="15%">卡号</th>
+                <th width="30%">名称</th>
+                <th width="30%">电话</th>
+                <th width="10%">会员卡类型</th>
+                <th width="20%">操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
@@ -79,9 +79,9 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
-                            <td><div align="center">[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</div></td>
-                            <td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>
