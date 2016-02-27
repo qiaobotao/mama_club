@@ -21,7 +21,7 @@ var async = require('async');
  */
 module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
 
-    var sql = 'INSERT INTO service_meet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price) VALUES (?,?,?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO serviceMeet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price) VALUES (?,?,?,?,?,?,?,?,?)';
     db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -32,7 +32,7 @@ module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,prob
 };
 module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
 
-    var sql = 'UPDATE   service_meet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ?   WHERE  id  =  ?  ';
+    var sql = 'UPDATE   serviceMeet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ?   WHERE  id  =  ?  ';
     db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -58,10 +58,10 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
         + "%' and meetTime like '%" + meetTime + "%' and status like '%" + status + "%'";
 
 
-    var sql_count = 'SELECT count(*) as count FROM service_meet '+parm;
+    var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM service_meet '+parm+'   LIMIT ?,?';
+    var sql_data = 'SELECT * FROM serviceMeet '+parm+'   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -102,7 +102,7 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
  */
 module.exports.delServiceMeet= function (id, cb) {
 
-    var sql = 'DELETE FROM service_meet WHERE id = ?';
+    var sql = 'DELETE FROM serviceMeet WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -114,7 +114,7 @@ module.exports.delServiceMeet= function (id, cb) {
 
 module.exports.fetchSingleServiceMeet =function (id, cb) {
 
-    var sql = 'SELECT * FROM service_meet WHERE id = ?';
+    var sql = 'SELECT * FROM serviceMeet WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -124,85 +124,3 @@ module.exports.fetchSingleServiceMeet =function (id, cb) {
         }
     });
 }
-/**
- * 查询菜单
- * @param pages
- * @param count
- * @param cb
- */
-module.exports.fetchMembercardtype = function(pages, count, cb) {
-
-    var start = pages * count;
-    var end = start + count;
-    var sql = 'SELECT * FROM memberCardType ORDER BY id DESC LIMIT ?, ?';
-    db.query(sql, [start, end], function (cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}
-
-
-
-/**
- * 修改教室
- * @param id
- * @param name
- * @param address
- * @param principal
- * @param cb
- */
-module.exports.updateMemberCardType = function(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
-
-    var sql = 'UPDATE  memberCardType SET memberCardType  = ?, memberCardAmount = ?,consumerLimit =?,zeroDiscounts = ?, isManyPeopleUsed =?,status =? WHERE id = ?;';
-    var par = [memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, id];
-
-    db.query(sql, par, function (cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-
-}
-
-/**
- * 获取门店详情
- * @param id
- * @param cb
- */
-module.exports.fetchSingleMembercardtype =function (id, cb) {
-
-    var sql = 'SELECT * FROM memberCardType WHERE id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
-
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}
-
-/**
- * 设置状态
- * @param id
- * @param status
- */
-module.exports.setStatus = function (id, status, cb) {
-
-    var sql = 'UPDATE memberCardType  SET status = ? WHERE id = ?';
-    db.query(sql, [status,id], function(cbData, err, rows, filelds) {
-
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-
-    });
-}
-

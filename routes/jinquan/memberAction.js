@@ -6,8 +6,27 @@
  * @param req
  * @param res
  */
+
+var service = require('../../model/service/member');
+
 module.exports.list = function (req, res) {
-    res.render('member/memberList');
+    //res.render('member/memberList');
+    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var memberName = req.query.memberName ? req.query.memberName : '';
+    var tel = req.query.tel ? req.query.tel : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+
+    service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
+        if (!err) {
+            results.serialNumber = serialNumber;
+            results.memberName = memberName;
+            results.tel = tel;
+            res.render('member/memberList', {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
 }
 
 /**
@@ -15,6 +34,131 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.add = function (req, res) {
+module.exports.goAdd = function (req, res) {
     res.render('member/memberAdd');
+}
+
+module.exports.add = function (req, res) {
+    var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
+    var memberName = req.body.memberName ? req.body.memberName : '';
+    var tel = req.body.tel ? req.body.tel : '';
+    var contact = req.body.contact ? req.body.contact : '';
+    var address = req.body.address ? req.body.address : '';
+    var workStatus = req.body.workStatus ? req.body.workStatus : '';
+    var motherEducation = req.body.motherEducation ? req.body.motherEducation : '';
+    var fatherEducation = req.body.fatherEducation ? req.body.fatherEducation : '';
+    var deliveryMode = req.body.deliveryMode ? req.body.deliveryMode : '';
+    var deliveryWeeks = req.body.deliveryWeeks ? req.body.deliveryWeeks : '';
+    var deliveryHospital = req.body.deliveryHospital ? req.body.deliveryHospital : '';
+    var parentTraining = req.body.parentTraining ? req.body.parentTraining : '';
+    var secondChildExperience = req.body.secondChildExperience ? req.body.secondChildExperience : '';
+    var secondChildExperienceRemark = req.body.secondChildExperienceRemark ? req.body.secondChildExperienceRemark : '';
+    var wifeBreastfeedTime = req.body.wifeBreastfeedTime ? req.body.wifeBreastfeedTime : '';
+    var husbandBreastfeedTime = req.body.husbandBreastfeedTime ? req.body.husbandBreastfeedTime : '';
+    var breastfeedReason = req.body.breastfeedReason ? req.body.breastfeedReason : '';
+    var childName = req.body.childName ? req.body.childName : '';
+    var childSex = req.body.childSex ? req.body.childSex : '';
+    var childHeight = req.body.childHeight ? req.body.childHeight : '';
+    var childWeight = req.body.childWeight ? req.body.childWeight : '';
+    var childBirthday = req.body.childBirthday ? req.body.childBirthday : '';
+    var understandJinQuanChannel = req.body.understandJinQuanChannel ? req.body.understandJinQuanChannel : '';
+    var hospitalization = req.body.hospitalization ? req.body.hospitalization : '';
+    var hospitalizationReason = req.body.hospitalizationReason ? req.body.hospitalizationReason : '';
+    var assistantTool = req.body.assistantTool ? req.body.assistantTool : '';
+    var useToolReason = req.body.useToolReason ? req.body.useToolReason : '';
+    var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
+
+    service.insertMember(memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
+        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
+        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
+        if (!err) {
+            res.redirect('/jinquan/member_list');
+        } else {
+            next();
+        }
+    });
+
+}
+
+
+module.exports.doEdit = function (req, res) {
+    var id = req.body.id ? req.body.id : '';
+    var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
+    var memberName = req.body.memberName ? req.body.memberName : '';
+    var tel = req.body.tel ? req.body.tel : '';
+    var contact = req.body.contact ? req.body.contact : '';
+    var address = req.body.address ? req.body.address : '';
+    var workStatus = req.body.workStatus ? req.body.workStatus : '';
+    var motherEducation = req.body.motherEducation ? req.body.motherEducation : '';
+    var fatherEducation = req.body.fatherEducation ? req.body.fatherEducation : '';
+    var deliveryMode = req.body.deliveryMode ? req.body.deliveryMode : '';
+    var deliveryWeeks = req.body.deliveryWeeks ? req.body.deliveryWeeks : '';
+    var deliveryHospital = req.body.deliveryHospital ? req.body.deliveryHospital : '';
+    var parentTraining = req.body.parentTraining ? req.body.parentTraining : '';
+    var secondChildExperience = req.body.secondChildExperience ? req.body.secondChildExperience : '';
+    var secondChildExperienceRemark = req.body.secondChildExperienceRemark ? req.body.secondChildExperienceRemark : '';
+    var wifeBreastfeedTime = req.body.wifeBreastfeedTime ? req.body.wifeBreastfeedTime : '';
+    var husbandBreastfeedTime = req.body.husbandBreastfeedTime ? req.body.husbandBreastfeedTime : '';
+    var breastfeedReason = req.body.breastfeedReason ? req.body.breastfeedReason : '';
+    var childName = req.body.childName ? req.body.childName : '';
+    var childSex = req.body.childSex ? req.body.childSex : '';
+    var childHeight = req.body.childHeight ? req.body.childHeight : '';
+    var childWeight = req.body.childWeight ? req.body.childWeight : '';
+    var childBirthday = req.body.childBirthday ? req.body.childBirthday : '';
+    var understandJinQuanChannel = req.body.understandJinQuanChannel ? req.body.understandJinQuanChannel : '';
+    var hospitalization = req.body.hospitalization ? req.body.hospitalization : '';
+    var hospitalizationReason = req.body.hospitalizationReason ? req.body.hospitalizationReason : '';
+    var assistantTool = req.body.assistantTool ? req.body.assistantTool : '';
+    var useToolReason = req.body.useToolReason ? req.body.useToolReason : '';
+    var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
+
+    service.updateMember(id,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
+        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
+        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
+            if (!err) {
+                res.redirect('/jinquan/member_list');
+            } else {
+                next();
+            }
+        });
+}
+
+module.exports.show = function(req, res, next) {
+    var id = req.query.id ? req.query.id : '';
+    service.fetchSingleMember(id, function(err, results) {
+        if (!err) {
+            var member = results.length == 0 ? null : results[0];
+            res.render('member/memberDetail', {member : member});
+        } else {
+            next();
+        }
+    })
+}
+module.exports.preEdit = function(req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';
+
+    service.fetchSingleMember(id, function(err, results) {
+        if (!err) {
+            var member = results.length == 0 ? null : results[0];
+            res.render('member/memberEdit', {member : member});
+        } else {
+            next();
+        }
+    })
+}
+module.exports.del = function (req, res, next) {
+
+    var id = req.query.id ? req.query.id :'';
+
+    service.delMember(id,function(err, results){
+        if (!err) {
+            res.redirect('/jinquan/member_list');
+        } else {
+            next();
+        }
+    });
+
 }

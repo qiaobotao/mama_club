@@ -12,17 +12,29 @@
 
     <script type="text/javascript">
         function search () {
-            var memberCardType = document.getElementById('memberCardType').value;
-            var memberCardAmount = document.getElementById('memberCardAmount').value;
-            var zeroDiscounts = document.getElementById('zeroDiscounts').value;
-            window.location.href = '/jinquan/member_card_list?memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
+            var page = document.getElementById('page').value;
+            var parameter2 = document.getElementById('parameter2').value;
+            var parameter3 = document.getElementById('parameter3').value;
+            var parameter4 = document.getElementById('parameter4').value;
+            var parameter6 = document.getElementById('parameter6').value;
+            var parameter7 = document.getElementById('parameter7').value;
+            var parameter9 = document.getElementById('parameter9').value;
+            var type = document.getElementById('type').value;
+            var serialNumber = document.getElementById('serialNumber').value;
+            window.location.href = '/jinquan/member_card_list?type='+type+'&serialNumber='+serialNumber+'&page='+page+'&parameter2='+parameter2+'&parameter3='+parameter3+'&parameter4='+parameter4+'&parameter6='+parameter6+'&parameter7='+parameter7 +'&parameter9='+parameter9;
         }
         function pageturning (selectPage) {
-            var memberCardType = document.getElementById('memberCardType').value;
-            var memberCardAmount = document.getElementById('memberCardAmount').value;
-            var zeroDiscounts = document.getElementById('zeroDiscounts').value;
-            window.location.href = '/jinquan/member_card_list?page='+selectPage+'memberCardType='+memberCardType+'&memberCardAmount='+memberCardAmount+'&zeroDiscounts='+zeroDiscounts;
-         }
+            var page = document.getElementById('page').value;
+            var parameter2 = document.getElementById('parameter2').value;
+            var parameter3 = document.getElementById('parameter3').value;
+            var parameter4 = document.getElementById('parameter4').value;
+            var parameter6 = document.getElementById('parameter6').value;
+            var parameter7 = document.getElementById('parameter7').value;
+            var parameter9 = document.getElementById('parameter9').value;
+            var type = document.getElementById('type').value;
+            var serialNumber = document.getElementById('serialNumber').value;
+            window.location.href = '/jinquan/member_card_list?type='+type+'&serialNumber='+serialNumber+'&page='+page+'&parameter2='+parameter2+'&parameter3='+parameter3+'&parameter4='+parameter4+'&parameter6='+parameter6+'&parameter7='+parameter7 +'&parameter9='+parameter9;
+        }
         function show (id) {
             window.location.href = '/jinquan/member_card_show?op=1&id='+id;
         }
@@ -32,7 +44,26 @@
         function del (id) {
             window.location.href = '/jinquan/member_card_del?id='+id;
         }
-
+        function changType(type)
+        {
+            for (var i=1 ;i <= 3;i++)
+            {
+                var tableId='type'+i;
+                var trId='head_type'+i;
+                var table =  document.getElementById(tableId);
+                var tr =  document.getElementById(trId);
+                if(type==i)
+                {
+                    table.style.display='block';
+                    tr.style.display='block';
+                }
+                else
+                {
+                    table.style.display='none';
+                    tr.style.display='none';
+                }
+            }
+        }
     </script>
 </head>
 
@@ -48,47 +79,70 @@
         <div class="sousuo">
             <table  width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
+
                     <td>会员卡类型：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
-                        <SELECT ID="memberCardType" name="memberCardType"  class="input5" VALUE="<%=data.memberCardType%>" >
+                        <SELECT ID="type" name="type"  class="input5" VALUE="<%=data.type%>"  onchange="changType(this.options[this.options.selectedIndex].value)">
                             <option VALUE="1">充值卡</option>
                             <option VALUE="2">服务次数卡</option>
                             <option VALUE="3">打折卡</option>
                         </SELECT>
                     </td>
-                    <td > &nbsp;会员卡号：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
+                    <td > &nbsp;会员卡号：<input ID="serialNumber" name="serialNumber" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
                     <td> <a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
-                <tr id="type1">
-                    <td  > &nbsp;有效时间：<input ID="effectiveTime" name="effectiveTime" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
-                    <td  > &nbsp;剩余金额：<input ID="parameter2" name="parameter2" type="text" VALUE="<%=data.parameter2%>" class="input5" /></td>
-                </tr>
-                <tr id="type2">
-                    <td  > &nbsp;有效时间：<input ID="parameter5" name="parameter5" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
-                    <td  > &nbsp;剩余服务次数：<input ID="parameter4" name="parameter4" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
-                    <td  > &nbsp;总服务次数：<input ID="parameter3" name="parameter3" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
-                </tr>
-                <tr id="type3">
-                    <td  > &nbsp;有效时间：<input ID="parameter5" name="parameter5" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
-                    <td  > &nbsp;折扣力度：<input ID="parameter3" name="parameter4" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+            </table>
+            <table  id="type1">
+                <tr>
+
+                    <td COLSPAN="3" > &nbsp;剩余金额：<input ID="parameter2" name="parameter2" type="text" VALUE="<%=data.parameter2%>" class="input5" /></td>
                 </tr>
             </table>
-
+            <table id="type2"  style="display: none" >
+                <tr >
+                    <td  > &nbsp;有效时间：<input ID="parameter6" name="parameter6" type="text" VALUE="<%=data.parameter6%>" class="input5" /></td>
+                    <td  > &nbsp;剩余服务次数：<input ID="parameter4" name="parameter4" type="text" VALUE="<%=data.parameter4%>" class="input5" /></td>
+                    <td  > &nbsp;总服务次数：<input ID="parameter3" name="parameter3" type="text" VALUE="<%=data.parameter3%>" class="input5" /></td>
+                </tr>
+            </table>
+            <table  id="type3"  style="display: none">
+                <tr >
+                    <td  colspan="2"> &nbsp;有效时间：<input ID="parameter9" name="parameter9" type="text" VALUE="<%=data.effectiveTime%>" class="input5" /></td>
+                    <td  > &nbsp;折扣力度：<input ID="parameter7" name="parameter7" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
+                </tr>
+            </table>
         </div>
-        <div class="but_0"><a href="/jinquan/to_member_card_Add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/to_member_card_add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
-            <tr>
-                <th>卡号</th>
-                <th>卡种</th>
-                <th>卡面金额</th>
-                <th>实际消费额度</th>
-                <th>当前金额</th>
-                <th>为0后折扣</th>
-                <th>是否多人使用</th>
-                <th>开卡时间</th>
-                <th>最近消费时间</th>
-                <th>操作</th>
+            <tr id="head_type1">
+                <th  width="9%">卡号</th>
+                <th  width="9%">卡种</th>
+                <th  width="9%">卡面金额</th>
+                <th  width="9%">实际消费额度</th>
+                <th  width="9%">当前金额</th>
+                <th  width="9%">为0后折扣</th>
+                <th  width="9%">是否多人使用</th>
+                <th  width="9%">开卡时间</th>
+                <th  width="12%">最近消费时间</th>
+                <th  width="14%">操作</th>
+            </tr>
+            <tr id="head_type2"  style="display: none">
+                <th  width="15%">卡号</th>
+                <th  width="15%">可使用总次数</th>
+                <th  width="15%">已使用次数</th>
+                <th  width="15%">办卡时间</th>
+                <th  width="15%">有效时间</th>
+                <th  width="15%">最近消费时间</th>
+                <th  width="100">操作</th>
+            </tr>
+            <tr id="head_type3"  style="display: none">
+                <th  width="10%">卡号</th>
+                <th  width="20%">折扣力度</th>
+                <th  width="20%">办卡时间</th>
+                <th  width="20%">有效时间</th>
+                <th  width="20%">最近消费时间</th>
+                <th  width="100">操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
 

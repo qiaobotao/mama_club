@@ -10,6 +10,34 @@
     </style>
 </head>
 
+<script type="text/javascript">
+    function search () {
+        var selectPage = document.getElementById('page').value;
+        var serialNumber = document.getElementById('serialNumber').value;
+        var memberName = document.getElementById('memberName').value;
+        var tel = document.getElementById('tel').value;
+        window.location.href = '/jinquan/member_list?serialNumber='+serialNumber+'&page='+selectPage+'&memberName='+memberName+'&tel='+tel;
+    }
+    function pageturning (selectPage) {
+        var selectPage = document.getElementById('page').value;
+        var serialNumber = document.getElementById('serialNumber').value;
+        var memberName = document.getElementById('memberName').value;
+        var tel = document.getElementById('tel').value;
+        window.location.href = '/jinquan/service_meet_list?serialNumber='+serialNumber+'&page='+selectPage+'&memberName='+memberName+'&tel='+tel;
+    }
+
+    function show (id) {
+        window.location.href = '/jinquan/member_show?id='+id;
+    }
+    function preEdit (id) {
+        window.location.href = '/jinquan/member_preEdit?id='+id;
+    }
+    function del (id) {
+        window.location.href = '/jinquan/member_del?id='+id;
+    }
+
+</script>
+
 <body>
 <div class="r_top">
     <div class="weizhi">
@@ -17,20 +45,21 @@
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
+
 <div class="center_con">
     <div class="butSet">
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>卡号：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;会员名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;会员电话：<input name="" type="text" class="input5" /> ~ <input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>卡号：<input id="serialNumber" name="serialNumber" type="text" class="input5" /></td>
+                    <td> &nbsp;会员名称：<input id="memberName" name="memberName" type="text" class="input5" /></td>
+                    <td> &nbsp;会员电话：<input id="tel" name="tel" type="text" class="input5" /></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/member_add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/member_goAdd" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -41,11 +70,26 @@
                 <th>会员卡类型</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].serialNumber%></td>
+                <td><%=data.data[i].memberName%></td>
+                <td><%=data.data[i].tel%></td>
+                <td><%=data.data[i].type%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
+                            <td><div align="center">[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</div></td>
+                            <td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

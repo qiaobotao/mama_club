@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8, parameter9,cb) {
+module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8, parameter9,cb) {
 
-    var sql = 'INSERT INTO memberCard (serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8 ,parameter9) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter5,parameter6 , parameter7 , parameter8,parameter9], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCard (serialNumber  ,createDate  ,dateline  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8 ,parameter9) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber  ,createDate  ,dateline  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5 ,parameter6 , parameter7 , parameter8,parameter9], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -40,15 +40,19 @@ module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline 
  * @param materialid
  * @param cb
  */
-module.exports.fetchAllMemberCard = function(memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
+module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage,cb) {
 
-    var parm = "where memberCardType like '%" + memberCardType + "%' and memberCardAmount like '%" + memberCardAmount
-        + "%' and zeroDiscounts like '%" + zeroDiscounts + "%'";
+    var parm = "where serialNumber like '%" + serialNumber + "%' and type like '%" + type
+        + "%' and parameter1 like '%" + parameter1 + "%' and parameter2 like '% "+ parameter2
+        + "%' and parameter3 like '% "+ parameter3 + "%' and parameter4 like '% "+ parameter4
+        + "%' and parameter5 like '% "+ parameter5 + "%' and parameter6 like '% "+ parameter6
+        + "%' and parameter7 like '% "+ parameter7 + "%' and parameter8 like '% "+ parameter8
+        + "%' and parameter9 like '% "+ parameter9  ;
 
-    var sql_count = 'SELECT count(*) as count FROM memberCardType '+parm;
+    var sql_count = 'SELECT count(*) as count FROM memberCard '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM memberCardType '+parm+'   LIMIT ?,?';
+    var sql_data = 'SELECT * FROM memberCard '+parm+'   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -126,10 +130,10 @@ module.exports.fetchMembercard = function(pages, count, cb) {
 
  * @param cb
  */
-module.exports.updateMemberCard = function(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8,parameter9,cb) {
+module.exports.updateMemberCard = function(id,serialNumber  ,createDate  ,dateline   ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8,parameter9,cb) {
 
-    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,createDate  = ?,   dateline  = ?,   memberId  = ?,  type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?;';
-    var par = [serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, id];
+    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,createDate  = ?,   dateline  = ?,    type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?;';
+    var par = [serialNumber  ,createDate  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

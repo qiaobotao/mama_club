@@ -158,34 +158,35 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/member_add">
+    <form method="post" id="myform" action="/jinquan/member_doEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td colspan="4" align="left">基本信息：</td>
             </tr>
             <tr>
+                <input id="id" type="hidden" name="id" value="<%=member.id%>"/>
                 <td class="regTd_l">会员卡信息：</td>
-                <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" value="<%=member.memberCardType%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">姓名：</td>
-                <td class="regTd_r"><input id="memberName" name="memberName" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="memberName" name="memberName" type="text" class="input5" value="<%=member.memberName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">电话（可增加）：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=member.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">联系人：</td>
-                <td class="regTd_r"><input id="contact" name="contact" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="contact" name="contact" type="text" class="input5" value="<%=member.contact%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">居住地址：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" value="<%=member.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">工作状态：</td>
-                <td class="regTd_r"><input id="workStatus" name="workStatus" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="workStatus" name="workStatus" type="text" class="input5" value="<%=member.workStatus%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈学历：</td>
-                <td class="regTd_r"><input id="motherEducation" name="motherEducation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="motherEducation" name="motherEducation" type="text" class="input5" value="<%=member.motherEducation%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">爸爸学历：</td>
-                <td class="regTd_r"><input id="fatherEducation" name="fatherEducation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="fatherEducation" name="fatherEducation" type="text" class="input5" value="<%=member.fatherEducation%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <!-- 孕产信息 -->
             <tr>
@@ -193,31 +194,31 @@
             </tr>
             <tr>
                 <td class="regTd_l">分娩方式：</td>
-                <td class="regTd_r"><input id="deliveryMode" name="deliveryMode" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="deliveryMode" name="deliveryMode" type="text" class="input5" value="<%=member.deliveryMode%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">分娩时孕周：</td>
-                <td class="regTd_r"><input id="deliveryWeeks" name="deliveryWeeks" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="deliveryWeeks" name="deliveryWeeks" type="text" class="input5" value="<%=member.deliveryWeeks%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">分娩医院：</td>
-                <td class="regTd_r"><input id="deliveryHospital" name="deliveryHospital" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="deliveryHospital" name="deliveryHospital" type="text" class="input5" value="<%=member.deliveryHospital%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">参与育儿：</td>
-                <td class="regTd_r"><input id="parentTraining" name="parentTraining" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="parentTraining" name="parentTraining" type="text" class="input5" value="<%=member.parentTraining%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">二胎经验：</td>
-                <td class="regTd_r"><input id="secondChildExperience" name="secondChildExperience" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="secondChildExperience" name="secondChildExperience" type="text" class="input5" value="<%=member.secondChildExperience%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">二胎经验备注：</td>
-                <td class="regTd_r"><input id="secondChildExperienceRemark" name="secondChildExperienceRemark" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="secondChildExperienceRemark" name="secondChildExperienceRemark" type="text" class="input5" value="<%=member.secondChildExperienceRemark%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妻子儿时母乳多久：</td>
-                <td class="regTd_r"><input id="wifeBreastfeedTime" name="wifeBreastfeedTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="wifeBreastfeedTime" name="wifeBreastfeedTime" type="text" class="input5" value="<%=member.wifeBreastfeedTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">丈夫儿时母乳多久：</td>
-                <td class="regTd_r"><input id="husbandBreastfeedTime" name="husbandBreastfeedTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="husbandBreastfeedTime" name="husbandBreastfeedTime" type="text" class="input5" value="<%=member.husbandBreastfeedTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">母乳喂养理由：</td>
-                <td class="regTd_r" colspan="3"><input id="breastfeedReason" name="breastfeedReason" type="text" class="input5" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r" colspan="3"><input id="breastfeedReason" name="breastfeedReason" type="text" class="input5" style="width: 70%;" value="<%=member.breastfeedReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
 
             <!-- 宝宝信息 -->
@@ -226,43 +227,43 @@
             </tr>
             <tr>
                 <td class="regTd_l">宝宝姓名：</td>
-                <td class="regTd_r"><input id="childName" name="childName" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childName" name="childName" type="text" class="input5" value="<%=member.childName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">宝宝性别：</td>
-                <td class="regTd_r"><input id="childSex" name="childSex" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childSex" name="childSex" type="text" class="input5" value="<%=member.childSex%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出生身高：</td>
-                <td class="regTd_r"><input id="childHeight" name="childHeight" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childHeight" name="childHeight" type="text" class="input5" value="<%=member.childHeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">出生体重：</td>
-                <td class="regTd_r"><input id="childWeight" name="childWeight" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childWeight" name="childWeight" type="text" class="input5" value="<%=member.childWeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出生日期：</td>
-                <td class="regTd_r"><input id="childBirthday" name="childBirthday" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childBirthday" name="childBirthday" type="text" class="input5" value="<%=member.childBirthday%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">如何知道金泉：</td>
                 <td class="regTd_r">
-                    <input id="friendsIntroduce" name="understandJinQuanChannel" type="checkbox" value="friendsIntroduce"/>朋友介绍
-                    <input id="blog" name="understandJinQuanChannel" type="checkbox"  value="blog"/>微博
-                    <input id="wechat" name="understandJinQuanChannel" type="checkbox"  value="wechat"/>微信
-                    <input id="forum" name="understandJinQuanChannel" type="checkbox"  value="forum"/>论坛/社区
-                    <input id="QQ" name="understandJinQuanChannel" type="checkbox"  value="QQ"/>Q群
+                    <input id="friendsIntroduce" name="understandJinQuanChannel" type="checkbox" value="friendsIntroduce" <%if(member.understandJinQuanChannel == 'friendsIntroduce'){%>checked<%}%>>朋友介绍
+                    <input id="blog" name="understandJinQuanChannel" type="checkbox"  value="blog" <%if(member.understandJinQuanChannel == 'blog'){%>checked<%}%>>微博
+                    <input id="wechat" name="understandJinQuanChannel" type="checkbox"  value="wechat" <%if(member.understandJinQuanChannel == 'wechat'){%>checked<%}%>>微信
+                    <input id="forum" name="understandJinQuanChannel" type="checkbox"  value="forum" <%if(member.understandJinQuanChannel == 'forum'){%>checked<%}%>>论坛/社区
+                    <input id="QQ" name="understandJinQuanChannel" type="checkbox"  value="QQ" <%if(member.understandJinQuanChannel == 'QQ'){%>checked<%}%>>Q群
                     <span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">住院添加：</td>
-                <td class="regTd_r"><input id="hospitalization" name="hospitalization" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="hospitalization" name="hospitalization" type="text" class="input5" value="<%=member.hospitalization%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">住院原因：</td>
-                <td class="regTd_r"><input id="hospitalizationReason" name="hospitalizationReason" type="text" class="input5" style="widows:70%;"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加医院) </td>
+                <td class="regTd_r"><input id="hospitalizationReason" name="hospitalizationReason" type="text" class="input5" style="widows:70%;" value="<%=member.hospitalizationReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加医院) </td>
             </tr>
             <tr>
                 <td class="regTd_l">辅助工具：</td>
-                <td class="regTd_r"><input id="assistantTool" name="assistantTool" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加工具）</td>
+                <td class="regTd_r"><input id="assistantTool" name="assistantTool" type="text" class="input5" value="<%=member.assistantTool%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加工具）</td>
                 <td class="regTd_l">使用工具原因：</td>
-                <td class="regTd_r"><input id="useToolReason" name="useToolReason" type="text" class="input5" style="widows:70%;"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加原因) </td>
+                <td class="regTd_r"><input id="useToolReason" name="useToolReason" type="text" class="input5" style="widows:70%;" value="<%=member.useToolReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加原因) </td>
             </tr>
             <tr>
                 <td class="regTd_l">特殊说明：</td>
-                <td class="regTd_r" colspan="3"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" style="width: 70%"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加说明）</td>
+                <td class="regTd_r" colspan="3"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" style="width: 70%" value="<%=member.specialInstructions%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加说明）</td>
             </tr>
         </table>
     </form>

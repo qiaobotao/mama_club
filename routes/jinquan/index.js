@@ -115,7 +115,12 @@ router.all('/activity_manage_list',activityManageAction.list);
 router.all('/activity_manage_edit',activityManageAction.edit);
 // 会员列表
 router.all('/member_list',memberAction.list);
+router.all('/member_goAdd',memberAction.goAdd);
 router.all('/member_add',memberAction.add);
+router.all('/member_show',memberAction.show);
+router.all('/member_preEdit',memberAction.preEdit);
+router.all('/member_doEdit',memberAction.doEdit);
+router.all('/member_del',memberAction.del);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
 router.all('/service_meet_add',serviceMeetAction.add);

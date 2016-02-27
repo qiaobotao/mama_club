@@ -1,6 +1,6 @@
 
 var service = require('../../model/service/membercard');
-var service1 = require('../../model/service/membercardType');
+var service1 = require('../../model/service/membercardtype');
 /**
  * Created by wangjuan on 16/1/13.
  */
@@ -11,16 +11,61 @@ var service1 = require('../../model/service/membercardType');
  */
 module.exports.list = function (req, res) {
 
-    var memberCardType = req.query.memberCardType ? req.query.memberCardType : '1';
-    var memberCardAmount = req.query.memberCardAmount ? req.query.memberCardAmount : '';
-    var zeroDiscounts = req.query.zeroDiscounts ? req.query.zeroDiscounts : '';
+    var parameter1= '';
+    var parameter2=  '';
+    var parameter3=   '';
+    var parameter4=   '';
+    var parameter5=   '';
+    var parameter6=   '';
+    var parameter7=  '';
+    var parameter8=   '';
+    var parameter9=   '';
+    var type=  req.query.type ? req.query.type : '';
+    var serialNumber=  req.query.memberCardAmount ? req.query.memberCardAmount : '';
+    var currentPage = req.query.page ? req.query.page : '1';
+    if(type=='1')
+    {
+        //会员卡类型
+        parameter1=  req.query.parameter1 ? req.query.parameter1 : '';
+        //当前金额/首次应缴费金额/首次应缴费金额
+        parameter2= req.query.parameter2 ? req.query.parameter2 : '';
+    }
+    if(type=='2')
+    {
+        //可使用次数
+        parameter3= req.query.parameter3 ? req.query.parameter3 : '';
+        //已使用次数
+        parameter4=req.query.parameter4 ? req.query.parameter4 : '';
+
+        //首次应缴费金额
+        parameter5= req.query.parameter5 ? req.query.parameter5 : '';
+        //有效时间
+        parameter6= req.query.parameter6 ? req.query.parameter6 : '';
+    }
+    if(type=='3')
+    {
+        //折扣力度
+        parameter7= req.query.parameter7 ? req.query.parameter7 : '';
+        //首次应缴费金额
+        parameter8= req.query.parameter8 ? req.query.parameter8 : '';
+        //有效时间
+        parameter9= req.query.parameter9 ? req.query.parameter9 : '';
+    }
     var page = 1;
 
-    service.fetchAllMemberCard(memberCardType,memberCardAmount,zeroDiscounts,page, function (err, results) {
+    service.fetchAllMemberCard(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,page, function (err, results) {
         if (!err) {
-            results.memberCardType = memberCardType;
-            results.memberCardAmount = memberCardAmount;
-            results.zeroDiscounts = zeroDiscounts;
+            results.serialNumber = serialNumber;
+            results.type = type;
+            results.parameter1 = parameter1;
+            results.parameter2 = parameter2;
+            results.parameter3 = parameter3;
+            results.parameter4 = parameter4;
+            results.parameter5 = parameter5;
+            results.parameter6 = parameter6;
+            results.parameter7 = parameter7;
+            results.parameter8 = parameter8;
+            results.parameter9 = parameter9;
             res.render('memberCard/memberCardList', {data : results});
         } else {
             console.log(err.message);
@@ -75,7 +120,6 @@ module.exports.goEdit = function(req, res) {
 module.exports.addOrEdit = function (req, res) {
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.memberCardNumber ? req.body.memberCardNumber : '';
-    var memberId= req.body.memberId ? req.body.memberId : '';
     var type= req.body.type ? req.body.type : '';
     var parameter1= '';
     var parameter2=  '';
@@ -96,14 +140,14 @@ module.exports.addOrEdit = function (req, res) {
     if(type=='2')
     {
        //可使用次数
-        var parameter3= req.body.parameter3 ? req.body.parameter3 : '';
+          parameter3= req.body.parameter3 ? req.body.parameter3 : '';
          //已使用次数
-        var  parameter4=req.body.parameter4 ? req.body.parameter4 : '';
+           parameter4=req.body.parameter4 ? req.body.parameter4 : '';
 
         //首次应缴费金额
-        var  parameter5= req.body.parameter5 ? req.body.parameter5 : '';
+           parameter5= req.body.parameter5 ? req.body.parameter5 : '';
         //有效时间
-        var parameter6= req.body.parameter6 ? req.body.parameter6 : '';
+          parameter6= req.body.parameter6 ? req.body.parameter6 : '';
     }
     if(type=='3')
     {
@@ -118,7 +162,7 @@ module.exports.addOrEdit = function (req, res) {
     {
         var createDate= new Date().getTime();
         var dateline= new Date().getTime();
-        service.insertMemberCard( serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
+        service.insertMemberCard( serialNumber  ,createDate  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
             } else {
