@@ -216,7 +216,9 @@ router.all('/sys_resources_list',sysResourcesAction.list);
 router.all('/sys_resources_add', sysResourcesAction.add);
 // 菜单管理
 router.all('/sys_menu_list',sysMenuAction.list);
-router.all('/sys_menu_add', sysMenuAction.add);
+router.all('/sys_menu_add', sysMenuAction.edit);
+router.all('/sys_menu_del', sysMenuAction.del);
+router.all('/sys_menu_save', sysMenuAction.save);
 // 角色管理
 router.all('/sys_role_list',sysRoleAction.list);
 router.all('/sys_role_add', sysRoleAction.add);
