@@ -1,19 +1,101 @@
 /**
  * Created by kuanchang on 16/1/21.
  */
+
+var service = require('../../model/service/sysResources');
 /**
  * 获取资源列表
  * @param req
  * @param res
  */
 module.exports.list = function (req, res) {
-    res.render('sysResources/sysResourcesList');
+    var currentPage = req.query.page ? req.query.page : '1';
+    var textCh = req.query.textCh ? req.query.textCh : '';
+
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
+    service.fetchAllSysResources(textCh,currentPage, function (err, results) {
+        if (!err) {
+            results.currentPage = currentPage;
+            results.textCh = textCh;
+            res.render('sysResources/sysResourcesList', {data : results, replytype : replytype});
+        } else {
+            next();
+        }
+    });
 }
+
+
 /**
- * 增加资源
+ * 跳转到编辑资源页面
  * @param req
  * @param res
  */
-module.exports.add = function (req, res) {
-    res.render('sysResources/sysResourcesAdd');
+module.exports.edit = function (req, res) {
+    var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
+    if(id == ''){
+        var sysResources = [];//系统资源
+        res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show});
+    }else{
+        service.fetchSingleSysResources(id, function(err, results) {
+            if (!err) {
+                var sysResources = results.length == 0 ? null : results[0];
+                res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show});
+            } else {
+                next();
+            }
+        })
+    }
+}
+/**
+ * 保存菜单
+ * @param req
+ * @param res
+ */
+module.exports.save = function (req, res) {
+    var id = req.body.id ? req.body.id : '';
+    var textCh = req.body.textCh ? req.body.textCh : '';
+    var textEn = req.body.textEn ? req.body.textEn : '';
+    var menuId = req.body.menuId ? req.body.menuId : '';
+    var orderId = req.body.orderId ? req.body.orderId : '';
+    var url = req.body.url ? req.body.url : '';
+
+    if(id!=''){//修改
+        service.updateSysResources(id,textCh,textEn,menuId,orderId,url,function(err, results) {
+            if(!err) {
+                res.redirect('/jinquan/sys_resources_list?replytype=update');
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
+    }else{//添加
+        service.insertSysResources(textCh,textEn,menuId,orderId,url,function(err, results) {
+            if(!err) {
+                res.redirect('/jinquan/sys_resources_list?replytype=add');
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
+    }
+}
+
+/**
+ * 删除菜单
+ * @param id
+ * @param cb
+ */
+module.exports.del = function (req, res, next) {
+    var id = req.query.id ? req.query.id :'';
+    service.delSysResources(id,function(err, results){
+        if (!err) {
+            res.redirect('/jinquan/sys_resources_list?replytype=del');
+        } else {
+            next();
+        }
+    });
+
 }

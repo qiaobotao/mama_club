@@ -213,7 +213,9 @@ router.all('/sub_classify_update',classifyAction.subUpdate);
 
 // 资源按钮管理
 router.all('/sys_resources_list',sysResourcesAction.list);
-router.all('/sys_resources_add', sysResourcesAction.add);
+router.all('/sys_resources_add', sysResourcesAction.edit);
+router.all('/sys_resources_save', sysResourcesAction.save);
+router.all('/sys_resources_del', sysResourcesAction.del);
 // 菜单管理
 router.all('/sys_menu_list',sysMenuAction.list);
 router.all('/sys_menu_add', sysMenuAction.edit);//跳转适用于查看、修改、添加页面

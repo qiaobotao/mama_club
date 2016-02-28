@@ -8,6 +8,34 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript">
+        var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
+        //查询方法
+        function search () {
+            var textCh = document.getElementById('textCh').value;
+            window.location.href = '/jinquan/sys_resources_list?textCh='+textCh;
+        }
+
+        //跳转到编辑页面
+        function preEdit (id) {
+            window.location.href = '/jinquan/sys_resources_add?id='+id;
+        }
+        //跳转到删除页面
+        function del (id) {
+            window.location.href = '/jinquan/sys_resources_del?id='+id;
+        }
+        //跳转到查看页面
+        function browse (id) {
+            window.location.href = '/jinquan/sys_resources_add?show=view&id='+id;
+        }
+    </script>
 </head>
 
 <body>
@@ -22,8 +50,8 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>资源名称：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>资源名称：<input name="textCh" id="textCh" value="<%=data.textCh%>" type="text" class="input5" /></td>
+                    <td><a href="javascript:search ()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -33,17 +61,33 @@
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>功能名称</th>
-                <th>功能编码</th>
+                <th>功能中文</th>
+                <th>功能英文</th>
                 <th>所属菜单</th>
-                <th>是否启用</th>
+                <th>功能标识</th>
+                <th>显示顺序</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].textCh%></td>
+                <td><%=data.data[i].textEn%></td>
+                <td><%=data.data[i].menuId%></td>
+                <td><%=data.data[i].url%></td>
+                <td><%=data.data[i].orderId%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
-
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 
