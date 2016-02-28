@@ -51,25 +51,33 @@ module.exports.list = function (req, res,next) {
         //有效时间
         parameter9= req.query.parameter9 ? req.query.parameter9 : '';
     }
-
+    var status=  req.query.status ? req.query.status : '0';
     service.fetchAllMemberCard(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage, function (err, results) {
-        if (!err) {
-            results.serialNumber = serialNumber;
-            results.type = type;
-            results.parameter1 = parameter1;
-            results.parameter2 = parameter2;
-            results.parameter3 = parameter3;
-            results.parameter4 = parameter4;
-            results.parameter5 = parameter5;
-            results.parameter6 = parameter6;
-            results.parameter7 = parameter7;
-            results.parameter8 = parameter8;
-            results.parameter9 = parameter9;
-            res.render('memberCard/memberCardList', {data : results});
-        } else {
+        if (err) {
             console.log(err.message);
             next();
+        } else {
+            service1.fetchMembercardtypeByStatus(status, function (err, datas) {
+                if (!err && datas.length != 0) {
+                    results.serialNumber = serialNumber;
+                    results.type = type;
+                    results.parameter1 = parameter1;
+                    results.parameter2 = parameter2;
+                    results.parameter3 = parameter3;
+                    results.parameter4 = parameter4;
+                    results.parameter5 = parameter5;
+                    results.parameter6 = parameter6;
+                    results.parameter7 = parameter7;
+                    results.parameter8 = parameter8;
+                    results.parameter9 = parameter9;
+                    res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results});
+                }
+                else {
+                    next();
+                }
+            });
         }
+
     });
 };
 /**
@@ -101,12 +109,22 @@ module.exports.goAdd = function(req, res,next) {
 module.exports.goEdit = function(req, res,next) {
     var id = req.query.id ? req.query.id : '';
     var type = req.query.type ? req.query.type : '';
+    var status=  req.query.status ? req.query.status : '0';
+
     service.fetchSingleMembercard(id,type,function(err, results) {
-        if (!err) {
-            res.render('memberCard/memberCardEdit', {data :results});
-        } else {
+        if (err) {
             console.log(err.message);
             next();
+        } else {
+            service1.fetchMembercardtypeByStatus(status, function (err, datas) {
+                if (!err && datas.length != 0) {
+                    var memberCard = results.length == 0 ? null : results[0];
+                    res.render('memberCard/memberCardEdit', {memberCard: memberCard, data: datas});
+                }
+                else {
+                    next();
+                }
+            });
         }
     })
 };
@@ -120,6 +138,7 @@ module.exports.addOrEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.memberCardNumber ? req.body.memberCardNumber : '';
     var type= req.body.type ? req.body.type : '';
+    var  memberId = req.body.memberId ? req.body.memberId : '';
     var parameter1= '';
     var parameter2=  '';
     var parameter3=   '';
@@ -161,7 +180,7 @@ module.exports.addOrEdit = function (req, res,next) {
     {
         var createDate= new Date().getTime();
         var dateline= new Date().getTime();
-        service.insertMemberCard( serialNumber  ,createDate  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
+        service.insertMemberCard( serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
             } else {
@@ -171,7 +190,8 @@ module.exports.addOrEdit = function (req, res,next) {
     }
     else
     {
-        service.updateMemberCard(id,serialNumber  ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, function (err, results) {
+        var dateline= new Date().getTime();
+        service.updateMemberCard(id,serialNumber ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
             } else {

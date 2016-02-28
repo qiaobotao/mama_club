@@ -2,17 +2,149 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>新增会员卡</title>
+    <title>编辑会员卡</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        var iframIndex ;
+        function getWares(){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择会员信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/member_select', //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+        function submitForm(){
+            var type= document.getElementById("type").value;
+            var  memberId = document.getElementById("memberId").value;
+            memberId=  document.getElementById("memberId").value;
+            if (!memberId || memberId.length == 0) {
+                alert('请选择会员');
+                return;
+            }
+            var type = document.getElementById("type").value;
+            var parameter1= '';
+            var parameter2=  '';
+            var parameter3=   '';
+            var parameter4=   '';
+            var parameter5=   '';
+            var parameter6=   '';
+            var parameter7=  '';
+            var parameter8=   '';
+            var parameter9=   '';
+            if(type=='1')
+            {
+                //会员卡类型
+                parameter1=  document.getElementById("parameter1").value;
+                if (!parameter1 || parameter1.length == 0) {
+                    alert('会员卡类型不能为空');
+                    return;
+                }
+                //当前金额/首次应缴费金额/首次应缴费金额
+                parameter2= document.getElementById("parameter2").value;
+
+
+            }
+            if(type=='2')
+            {
+                //可使用次数
+                parameter3= document.getElementById("parameter3").value;
+                if (!parameter3 || parameter3.length == 0) {
+                    alert('可使用次数不能为空');
+                    return;
+                }
+                //已使用次数
+                parameter4=document.getElementById("parameter4").value;
+                if (!parameter4 || parameter4.length == 0) {
+                    alert('已使用次数不能为空');
+                    return;
+                }
+
+                //首次应缴费金额
+                parameter5= document.getElementById("parameter5").value;
+                if (!parameter5 || parameter5.length == 0) {
+                    alert('首次应缴费金额不能为空');
+                    return;
+                }
+                //有效时间
+                parameter6= document.getElementById("parameter6").value;
+
+                if (!parameter6 || parameter6.length == 0) {
+                    alert('有效时间不能为空');
+                    return;
+                }
+            }
+            if(type=='3')
+            {
+                //折扣力度
+                parameter7= document.getElementById("parameter7").value;
+                if (!parameter7 || parameter7.length == 0) {
+                    alert('折扣力度不能为空');
+                    return;
+                }
+                //首次应缴费金额
+                parameter8= document.getElementById("parameter8").value;
+                if (!parameter8 || parameter8.length == 0) {
+                    alert('首次应缴费金额不能为空');
+                    return;
+                }
+                //有效时间
+                parameter9= document.getElementById("parameter9").value;
+                if (!parameter9 || parameter9.length == 0) {
+                    alert('有效时间不能为空');
+                    return;
+                }
+            }
+
+            document.getElementById("myform").submit();
+        }
+        function changCartType(cartType  )
+        {
+            $.ajax({
+                data: {"memberCardTypeId":cartType},
+                url: '/jinquan/getMemberCartTypeById',
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                cache: false,
+                timeout: 5000,
+                success: function(data){
+                    if(data) {
+                        var datas = JSON.parse(data);
+                        document.getElementById("memberCardAmount").value=datas.memberCardAmount;
+                        document.getElementById("consumerLimit").value=datas.consumerLimit-datas.memberCardAmount;
+                        document.getElementById("actualAmount").value=datas.consumerLimit;
+                        document.getElementById("zeroDiscounts").value=datas.zeroDiscounts;
+                        document.getElementById("isManyPeopleUsed").value=datas.isManyPeopleUsed;
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    alert("222222");
+                }
+            });
+
+
+        }
         function changType(type)
         {
+
             for (var i=1 ;i <= 3;i++)
             {
                 var divId='type'+i;
@@ -25,118 +157,137 @@
                 {
                     div.style.display='none';
                 }
+
             }
+            document.getElementById("type").value=type;
+
             if(type ==1)
             {
-                document.getElementById("topTitle").innerText="充值卡";
+                document.getElementById("topTitle").innerText="编辑充值卡信息";
             }
             if(type ==2)
             {
-                document.getElementById("topTitle").innerText="服务次卡";
+                document.getElementById("topTitle").innerText="编辑服务次卡信息";
             }
             if(type ==3)
             {
-                document.getElementById("topTitle").innerText="打折卡";
+                document.getElementById("topTitle").innerText="编辑打折卡信息";
             }
-
         }
     </script>
 </head>
+
 <body onload="changType(<%=memberCard.type%>)" >
 <div class="r_top">
     <div class="weizhi">
-        当前位置：会员卡详情页
+        当前位置：编辑会员卡
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div  class="center_con">
     <table  width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td class="regTd_l">
-                <div id="topTitle" class="rb_l"></div>
+            <td class="regTd_l" >
+                <div id="topTitle" class="regTd_l"></div>
             </td>
         </tr>
         <tr>
             <td class="regTd_l">
+
                 <form method="post" id="myform" action="/jinquan/member_card_addOrEdit">
                     <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <td class="regTd_l">卡号：</td>
                             <td class="regTd_r">
                                 <input id="type" name="type" type="hidden" value="<%=memberCard.type%>"/>
-                                <input id="memberCardNumber" name="memberCardNumber" type="text" class="input5" readonly="true" value="<%=memberCard.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                <input id="id" name="id" type="hidden"  value="<%=memberCard.id%>" />
+                                <input id="memberCardNumber" name="memberCardNumber" type="text" class="input5" readonly="true" value="<%=memberCard.serialNumber%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">会员：</td>
+                            <td class="regTd_r">
+                                <input id="memberName" name="memberName" onfocus="getWares()"/>
+                                <input id="memberId" name="memberId" type="hidden" />
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">
                                 <table  id="type1" name="type1" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="regTd_l">卡种：</td>
-                                        <td class="regTd_r"><%=memberCard.memberCardType%>"</td>
+                                        <td class="regTd_r">
+                                            <select name="parameter1" id="parameter1" onchange="changCartType(this.options[this.options.selectedIndex].value)">
+                                                <% for (var i=0;i<data.length;i++) {%>
+                                                <option value="<%=data[i].id%>"><%=data[i].memberCardType%></option>
+                                                <%}%>
+                                            </select>
                                     </tr>
                                     <tr>
                                         <td  class="regTd_l">可充值金额：</td>
-                                        <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5"  readonly="true" value="<%=memberCard.memberCardAmount%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="memberCardAmount" name="memberCardAmount" type="text" class="input5"  readonly="true" value="<%=data[0].memberCardAmount%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">将赠送金额：</td>
-                                        <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" readonly="true" value="<%=memberCard.consumerLimit-memberCard.memberCardAmount%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="consumerLimit" name="consumerLimit" type="text" class="input5" readonly="true" value="<%=data[0].consumerLimit-data[0].memberCardAmount%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">实际金额：</td>
-                                        <td class="regTd_r"><input id="actualAmount" name="actualAmount" type="text" class="input5" readonly="true" value="<%=memberCard.consumerLimit%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="actualAmount" name="actualAmount" type="text" class="input5" readonly="true" value="<%=data[0].consumerLimit%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">余额为0后折扣：</td>
-                                        <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5"  readonly="true" value="<%=memberCard.zeroDiscounts%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="zeroDiscounts" name="zeroDiscounts" type="text" class="input5"  readonly="true" value="<%=data[0].zeroDiscounts%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">是否可以多人使用：</td>
-                                        <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" readonly="true" class="input5" value="<%=memberCard.isManyPeopleUsed%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" readonly="true" class="input5" value="<%=data[0].isManyPeopleUsed%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">当前金额：</td>
-                                        <td class="regTd_r"><input id="parameter2" name="parameter2"  class="input5"  readonly="true" value="<%=memberCard.parameter2%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter2" name="parameter2" readonly="true"  class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                 </table>
                                 <table  id="type2" name="type2" width="100%" class="reg_table" style="display: none" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="regTd_l">可使用次数：</td>
-                                        <td class="regTd_r"><input id="parameter3" name="parameter3" type="text" class="input5" readonly="true" value="<%=memberCard.parameter3%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter3" name="parameter3" type="text" class="input5"   value="<%=memberCard.parameter3%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">已使用次数：</td>
-                                        <td class="regTd_r"><input id="parameter4" name="parameter4" type="text" class="input5"  readonly="true" value="<%=memberCard.parameter4%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter4" name="parameter4" type="text" class="input5"    value="<%=memberCard.parameter4%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">首次应缴费金额：</td>
-                                        <td class="regTd_r"><input id="parameter5" name="parameter5" type="text" class="input5" readonly="true" value="<%=memberCard.parameter5%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter5" name="parameter5" type="text" class="input5"  value="<%=memberCard.parameter5%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l"> 有效时间：</td>
-                                        <td class="regTd_r"><input id="parameter6" name="parameter6" type="text" class="input5"  readonly="true" value="<%=memberCard.parameter6%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter6" name="parameter6" type="text" class="input5"  onclick="laydate()"  value="<%=memberCard.parameter6%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                 </table>
                                 <table id="type3" name="type3" width="100%" class="reg_table"border="0" style="display: none" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td class="regTd_l"> 折扣力度：</td>
-                                        <td class="regTd_r"><input id="parameter7" name="parameter7" type="text" class="input5"  readonly="true" value="<%=memberCard.parameter7%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter7" name="parameter7" type="text" class="input5"    value="<%=memberCard.parameter7%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">首次应缴费金额：</td>
-                                        <td class="regTd_r"><input id="parameter8" name="parameter8" type="text" class="input5"  readonly="true" value="<%=memberCard.parameter8%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter8" name="parameter8" type="text" class="input5"   value="<%=memberCard.parameter8%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l"> 有效时间：</td>
-                                        <td class="regTd_r"><input id="parameter9" name="parameter9" type="text" class="input5"   readonly="true" value="<%=memberCard.parameter9%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter9" name="parameter9" type="text" class="input5" onclick="laydate()"    value="<%=memberCard.parameter9%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                 </table>
-
                                 <!--参与员工 end-->
                             </td>
                         </tr>
+
                     </table>
+
                 </form>
                 <div class="reg_but">
+                    <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
                     <div class="rb_l"><a href="/jinquan/member_card_list" class="close"></a></div>
                 </div>
             </td>

@@ -122,6 +122,7 @@ router.all('/member_show',memberAction.show);
 router.all('/member_preEdit',memberAction.preEdit);
 router.all('/member_doEdit',memberAction.doEdit);
 router.all('/member_del',memberAction.del);
+router.all('/member_select',memberAction.select);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
 router.all('/service_meet_add',serviceMeetAction.add);
@@ -137,10 +138,22 @@ router.all('/class_meet_add',classMeetAction.add);
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);
 router.all('/nurs_service_add',nursServiceAction.add);
+router.all('/nurs_service_goAdd',nursServiceAction.goAdd);
+router.all('/nurs_service_show',nursServiceAction.show);
+router.all('/nurs_service_preEdit',nursServiceAction.preEdit);
+router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
+router.all('/nurs_service_del',nursServiceAction.del);
+
 // 收费信息
 // 回访信息
 router.all('/return_visit_list',returnVisitAction.list);
+router.all('/return_visit_goAdd',returnVisitAction.goAdd);
 router.all('/return_visit_add',returnVisitAction.add);
+router.all('/return_visit_show',returnVisitAction.show);
+router.all('/return_visit_preEdit',returnVisitAction.preEdit);
+router.all('/return_visit_doEdit',returnVisitAction.doEdit);
+router.all('/return_visit_del',returnVisitAction.del);
+
 // 投诉信息
 router.all('/complain_list',complainAction.list);
 router.all('/complain_add',complainAction.add);

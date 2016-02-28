@@ -142,11 +142,15 @@
                     <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                         <td><%=data.data[i].serialNumber%></td>
                         <td><%=data.data[i].parameter1%></td>
-                        <td><%=data.data[i].consumerLimit%></td>
-                        <td><%=data.data[i].memberCardAmount%></td>
-                        <td><%=data.data[i].parameter2%></td>
-                        <td><%=data.data[i].zeroDiscounts%></td>
-                        <td><%=data.data[i].isManyPeopleUsed%></td>
+                        <% for (var j=0;j<memberCardTypes.length;j++) {  %>
+                          <%if(data.data[i].parameter1==memberCardTypes[j].id) {%>
+                            <td><%=memberCardTypes[j].consumerLimit%></td>
+                            <td><%=memberCardTypes[j].memberCardAmount%></td>
+                            <td><%=memberCardTypes[j].parameter2%></td>
+                            <td><%=memberCardTypes[j].zeroDiscounts%></td>
+                            <td><%=memberCardTypes[j].isManyPeopleUsed%></td>
+                          <%}%>
+                        <%}%>
                         <td><%=data.data[i].createDate%></td>
                         <td>服务创建的时间</td>
 
