@@ -8,6 +8,34 @@
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+    <script type="text/javascript">
+        var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
+        //查询方法
+        function search () {
+            var name = document.getElementById('name').value;
+            window.location.href = '/jinquan/sys_role_list?name='+name;
+        }
+
+        //跳转到编辑页面
+        function preEdit (id) {
+            window.location.href = '/jinquan/sys_role_add?id='+id;
+        }
+        //跳转到删除页面
+        function del (id) {
+            window.location.href = '/jinquan/sys_role_del?id='+id;
+        }
+        //跳转到查看页面
+        function browse (id) {
+            window.location.href = '/jinquan/sys_role_add?show=view&id='+id;
+        }
+    </script>
 </head>
 
 <body>
@@ -22,8 +50,8 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>角色名称：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>角色名称：<input name="name" id="name" type="text" class="input5" value="<%=data.name%>" /></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -34,15 +62,25 @@
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
                 <th>角色名称</th>
-                <th>角色编码</th>
-                <th>是否内置角色</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
+        <%- include ../pagination.html -%>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
     </div>
 </div>
 

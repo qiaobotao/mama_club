@@ -12,27 +12,7 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('门店名称不能为空');
-                return;
-            }
-            var serialNumber = document.getElementById("serialNumber").value;
-            if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
-                return;
-            }
-            var tel = document.getElementById("tel").value;
-            if (!tel || tel.length == 0) {
-                alert('电话不能为空');
-                return;
-            }
-            var address = document.getElementById("address").value;
-            if(!address || address.length == 0) {
-                alert('门店地址不能为空');
-                return;
-            }
-            var principal = document.getElementById("principal").value;
-            if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
+                alert('角色不能为空');
                 return;
             }
             document.getElementById("myform").submit();
@@ -48,28 +28,20 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/shop_add">
+    <form method="post" id="myform" action="/jinquan/sys_role_save">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">角色名称：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td  class="regTd_l">角色编码：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">所属菜单：</td>
-                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">所属资源按钮：</td>
-                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">说明：</td>
-                <td class="regTd_r" colspan="3"><input id="tel" name="tel" type="text" class="input5" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=sysRole.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <%
+        if(show == ''){
+        %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
         <div class="rb_l"><a href=/jinquan/sys_role_list" class="close"></a></div>
     </div>
 

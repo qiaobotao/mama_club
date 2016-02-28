@@ -236,7 +236,9 @@ router.all('/sys_menu_del', sysMenuAction.del);
 router.all('/sys_menu_save', sysMenuAction.save);
 // 角色管理
 router.all('/sys_role_list',sysRoleAction.list);
-router.all('/sys_role_add', sysRoleAction.add);
+router.all('/sys_role_add', sysRoleAction.edit);//跳转适用于查看、修改、添加页面
+router.all('/sys_role_save', sysRoleAction.save);
+router.all('/sys_role_del', sysRoleAction.del);
 // 系统用户管理
 router.all('/sys_user_list',sysUserAction.list);
 router.all('/sys_user_add', sysUserAction.add);
