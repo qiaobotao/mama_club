@@ -41,7 +41,7 @@ module.exports.edit = function (req, res) {
     var show = req.query.show ? req.query.show : '';
     if(id == ''){
         var sysMenu = [];//系统菜单
-        res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu});
+        res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu,show:show});
     }else{
         service.fetchSingleSysMenu(id, function(err, results) {
             if (!err) {
