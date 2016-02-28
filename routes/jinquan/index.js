@@ -241,7 +241,9 @@ router.all('/sys_role_save', sysRoleAction.save);
 router.all('/sys_role_del', sysRoleAction.del);
 // 系统用户管理
 router.all('/sys_user_list',sysUserAction.list);
-router.all('/sys_user_add', sysUserAction.add);
+router.all('/sys_user_add', sysUserAction.edit);
+router.all('/sys_user_save', sysUserAction.save);
+router.all('/sys_user_del', sysUserAction.del);
 // 个人设置
 router.all('/sys_user_set',sysUserAction.set);
 

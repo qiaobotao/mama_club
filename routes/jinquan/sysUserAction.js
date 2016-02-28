@@ -1,24 +1,108 @@
 /**
  * Created by kuanchang on 16/1/21.
  */
+var service = require('../../model/service/sysUser');
+
 /**
- * 获取用户列表
+ * 获取系统用户列表
  * @param req
  * @param res
  */
 module.exports.list = function (req, res) {
-    res.render('sysUser/sysUserList');
+
+    var currentPage = req.query.page ? req.query.page : '1';
+    var userName = req.query.userName ? req.query.userName : '';
+
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
+    service.fetchAllSysUser(userName,currentPage, function (err, results) {
+        if (!err) {
+            results.currentPage = currentPage;
+            results.userName = userName;
+            res.render('sysUser/sysUserList', {data : results, replytype : replytype});
+        } else {
+            next();
+        }
+    });
 }
+
+
+
 /**
- * 增加用户
+ * 跳转到编辑系统用户页面
  * @param req
  * @param res
  */
-module.exports.add = function (req, res) {
-    res.render('sysUser/sysUserAdd');
+module.exports.edit = function (req, res) {
+    var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
+    if(id == ''){
+        var sysUser = [];//系统用户
+        res.render('sysUser/sysUserAdd', {sysUser : sysUser,show:show});
+    }else{
+        service.fetchSingleSysUser(id, function(err, results) {
+            if (!err) {
+                var sysUser = results.length == 0 ? null : results[0];
+                res.render('sysUser/sysUserAdd', {sysUser : sysUser,show:show});
+            } else {
+                next();
+            }
+        })
+    }
 }
 /**
- * 设置用户属性
+ * 保存系统用户
+ * @param req
+ * @param res
+ */
+module.exports.save = function (req, res) {
+    var id = req.body.id ? req.body.id : '';
+    var userName = req.body.userName ? req.body.userName : '';
+    var password = req.body.password ? req.body.password : '';
+    var shopId = req.body.shopId ? req.body.shopId : '';
+    var staffId = req.body.staffId ? req.body.staffId : '';
+
+    if(id!=''){//修改
+        service.updateSysUser(id,userName,password,shopId,staffId,function(err, results) {
+            if(!err) {
+                res.redirect('/jinquan/sys_user_list?replytype=update');
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
+    }else{//添加
+        service.insertSysUser(userName,password,shopId,staffId,function(err, results) {
+            if(!err) {
+                res.redirect('/jinquan/sys_user_list?replytype=add');
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
+    }
+}
+
+/**
+ * 删除系统用户
+ * @param id
+ * @param cb
+ */
+module.exports.del = function (req, res, next) {
+    var id = req.query.id ? req.query.id :'';
+    service.delSysUser(id,function(err, results){
+        if (!err) {
+            res.redirect('/jinquan/sys_user_list?replytype=del');
+        } else {
+            next();
+        }
+    });
+
+}
+
+/**
+ * 设置系统用户属性
  * @param req
  * @param res
  */
