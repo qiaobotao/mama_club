@@ -8,7 +8,7 @@ var service = require('../../model/service/membercardtype');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var memberCardType = req.query.memberCardType ? req.query.memberCardType : '';
     var memberCardAmount = req.query.memberCardAmount ? req.query.memberCardAmount : '';
@@ -43,7 +43,7 @@ module.exports.goAdd = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.goEdit = function(req, res) {
+module.exports.goEdit = function(req, res,next) {
 
     var id = req.query.id ? req.query.id : '';
 
@@ -63,7 +63,7 @@ module.exports.goEdit = function(req, res) {
  * @param req
  * @param res
  */
-module.exports.addOrEdit = function (req, res) {
+module.exports.addOrEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var memberCardAmount = req.body.memberCardAmount ? req.body.memberCardAmount : '';
@@ -94,7 +94,7 @@ module.exports.addOrEdit = function (req, res) {
 
 };
 
-module.exports.getMemberCartTypeById = function (req, res) {
+module.exports.getMemberCartTypeById = function (req, res,next) {
     var id = req.body.memberCardTypeId ? req.body.memberCardTypeId : '';
     service.fetchSingleMembercardtype(id, function(err, results) {
         if (!err) {
@@ -111,7 +111,7 @@ module.exports.getMemberCartTypeById = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.del = function (req, res) {
+module.exports.del = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
     if(id!=''){
         service.delMembercardtype(id, function (err, results) {

@@ -9,7 +9,7 @@
 
 var service = require('../../model/service/member');
 
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     //res.render('member/memberList');
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
@@ -38,7 +38,7 @@ module.exports.goAdd = function (req, res) {
     res.render('member/memberAdd');
 }
 
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res,next) {
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var memberName = req.body.memberName ? req.body.memberName : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -82,7 +82,7 @@ module.exports.add = function (req, res) {
 }
 
 
-module.exports.doEdit = function (req, res) {
+module.exports.doEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var memberName = req.body.memberName ? req.body.memberName : '';

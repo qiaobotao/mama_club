@@ -32,7 +32,7 @@
                 }
             });
         }
-
+        //提交表单
         function submitForm(){
             var buyer = document.getElementById("buyer").value;
             if (!buyer || buyer.length == 0) {
@@ -41,10 +41,44 @@
             }
             //两个问题，一个是，我重复了input，但是id都相同，当我创建了多个input的时候，无论修改哪个商品，都是修改第一个输入框的内容
             // 第二个问题是，我怎么在当前页面获取输入商品的array，来验证有没有空输入，提示用户有空的输入，这部验证必须有。
-            alert($(".input5 input_arr").val);
-
+//            alert($(".input5 input_arr").val);
+            //获取所有proname值
+            layer.msg($("input[name='count']").val());
+            var countVal = "";
+            $("input[name='count']").each(
+                function(){
+                    countVal+=","+$(this).val();
+                }
+            );
+            layer.msg(countVal);
 
             //document.getElementById("myform").submit();
+        }
+
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//商品名称
+            var cell2=row.insertCell(1);//商品编号
+            var cell3=row.insertCell(2);//采购数量
+            var cell4=row.insertCell(3);//商品单价
+            var cell5=row.insertCell(4);//删除本行
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares()"/>';
+            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
+            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
         }
     </script>
 </head>
@@ -100,22 +134,24 @@
         <!--商品信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
         <br>
-        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
 
                 <td>商品名称</td>
                 <td>商品编号</td>
                 <td>采购数量</td>
                 <td>商品单价</td>
-                <td><a style="cursor: pointer" onclick="javaScript:$('#qqq').clone(true).insertAfter($('#qqq'))"><h1>+</h1></a></td>
+                <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
+            <!--
             <tr id="qqq">
                 <td><input id="proname"  name="proname" type="text" class="input5 input_arr" onfocus="getWares()"/></td>
                 <td><input id="proNo" name="proNo" type="text" class="input5 input_arr" readonly="true"/></td>
                 <td><input id="count" name="count" type="text" class="input5 input_arr" /></td>
                 <td><input id="price" name="price" type="text" class="input5 input_arr" /></td>
-                <td><a style="cursor: pointer" onclick="javaScript:$(this).parent().parent().remove()"><h1>-</h1></a></td>
+                <td><a style="cursor: pointer" onclick="javaScript:delTr('+1+')"><h1>-</h1></a></td>
             </tr>
+            -->
         </table>
         <!--合同信息 end-->
     </form>

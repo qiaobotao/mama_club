@@ -43,11 +43,11 @@ module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline 
 module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage,cb) {
 
     var parm = "where serialNumber like '%" + serialNumber + "%' and type like '%" + type
-        + "%' and parameter1 like '%" + parameter1 + "%' and parameter2 like '% "+ parameter2
-        + "%' and parameter3 like '% "+ parameter3 + "%' and parameter4 like '% "+ parameter4
-        + "%' and parameter5 like '% "+ parameter5 + "%' and parameter6 like '% "+ parameter6
-        + "%' and parameter7 like '% "+ parameter7 + "%' and parameter8 like '% "+ parameter8
-        + "%' and parameter9 like '% "+ parameter9  ;
+        + "%' and parameter1 like '%" + parameter1 +"%' and parameter2 like '%"+ parameter2
+        + "%' and parameter3 like '%"+ parameter3 + "%' and parameter4 like '%"+ parameter4
+        + "%' and parameter5 like '%"+ parameter5 + "%' and parameter6 like '%"+ parameter6
+        + "%' and parameter7 like '%"+ parameter7 + "%' and parameter8 like '%"+ parameter8
+        + "%' and parameter9 like '%"+ parameter9  +"%'";
 
     var sql_count = 'SELECT count(*) as count FROM memberCard '+parm;
     var start = (currentPage - 1) * 10;
@@ -87,7 +87,7 @@ module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 
     });
 }
 /**
- * 删除教室
+ * 删除
  * @param id
  * @param cb
  */
@@ -150,9 +150,14 @@ module.exports.updateMemberCard = function(id,serialNumber  ,createDate  ,dateli
  * @param id
  * @param cb
  */
-module.exports.fetchSingleMembercard =function (id, cb) {
+module.exports.fetchSingleMembercard =function (id ,type, cb) {
 
-    var sql = 'SELECT * FROM membercard  WHERE id = ?';
+
+    var sql = 'SELECT * FROM memberCard  WHERE id = ?';
+    if(type=='1')
+    {
+        sql='SELECT * FROM memberCard a, memberCardType b WHERE a.id = ? AND a.parameter1=b.id';
+    }
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

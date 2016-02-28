@@ -7,7 +7,7 @@ var service = require('../../model/service/servicemeet');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
@@ -33,7 +33,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
 
     res.render('serviceMeet/serviceMeetAdd');
 }
@@ -59,7 +59,7 @@ module.exports.add = function (req, res) {
 }
 
 
-module.exports.doEdit = function (req, res) {
+module.exports.doEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var tel = req.body.tel ? req.body.tel : '';
     var name = req.body.name ? req.body.name : '';
