@@ -104,12 +104,24 @@ module.exports.add = function (req, res, next) {
     var remark = req.body.remark ? req.body.remark : '';
 
     // 数组
+    var arr_proid = req.body.proid ? req.body.proid : '';
     var arr_proname = req.body.proname ? req.body.proname :'';
-    var proNo = req.body.proNo ? req.body.proNo : '';
-    var count = req.body.count ? req.body.count : '';
-    var price = req.body.price ? req.body.price : '';
+    var arr_proNo = req.body.proNo ? req.body.proNo : '';
+    var arr_count = req.body.count ? req.body.count : '';
+    var arr_price = req.body.price ? req.body.price : '';
 
 
+}
+
+/**
+ * 浏览入库单
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.browse = function (req, res, next) {
+
+    var inLogId = req.query.id ? req.query.id : ''; // 入库单id
 
 
 

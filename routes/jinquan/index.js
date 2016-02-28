@@ -188,6 +188,7 @@ router.all('/storeroom_in_pre_add', storeroomInAction.preAdd);
 router.all('/storeroom_in_add', storeroomInAction.add);
 // 出库管理
 router.all('/storeroom_out_list',storeroomOutAction.list);
+router.all('/storeroom_out_pre_add', storeroomOutAction.preAdd);
 router.all('/storeroom_out_add', storeroomOutAction.add);
 // 移库管理
 router.all('/storeroom_move_list',storeroomMoveAction.list);

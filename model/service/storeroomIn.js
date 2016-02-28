@@ -92,3 +92,145 @@ module.exports.getInTypeClassify = function (cb) {
     });
 
 }
+
+/**
+ * log 主表
+ * @param buyType
+ * @param inType
+ * @param buyer
+ * @param buyDate
+ * @param storeroomId
+ * @param distributorId
+ * @param remarks
+ * @param cb
+ */
+module.exports.insertInLog = function (buyType,inType,buyer,buyDate,storeroomId,distributorId,remarks,cb) {
+
+    var sql = 'INSERT INTO storeroomInLog (buyType,inType,buyer,buyDate,storeroomId,distributorId,remarks,dateline) VALUES (?,?,?,?,?,?,?,?)';
+
+    db.query(sql, [buyType,inType,buyer,buyDate,storeroomId,distributorId,remarks,new Date().getTime()], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * log 详细表
+ * @param arr_obj  [{},{}] 结构
+ * @param cb
+ */
+module.exports.insertInLogMX = function (mid,arr_obj,cb) {
+
+    if (arr_obj.length == 0) {
+        return;
+    }
+    var sql = 'INSERT INTO storeroomInLogMX (inLogId,waresId,count,price) VALUES (?,?,?,?)';
+    async.map(arr_obj, function(item, callback) {
+
+        db.query(sql, [item.inLogId,item.waresId,item.count,item.price], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+          cb(err, results);
+    });
+}
+
+/**
+ * 库存详情表
+ * @param sid 库房id
+ * @param arr_obj [{商品id,商品数量},{商品id,商品数量}]
+ * @param cb
+ */
+module.exports.insertInventory = function (sid,arr_obj,cb) {
+
+    if (arr_obj.length == 0) {
+        return;
+    }
+    // 查看是否原来有库存
+    var check_sql = 'SELECT * FROM inventory WHERE storeroomId = ? AND waresId = ?';
+    // 入库操作
+    var sql = 'INSERT INTO inventory (storeroomId,waresId,count) VALUES (?,?,?)';
+
+    async.map(arr_obj, function(item, callback) {
+
+        db.query(check_sql, [sid,item.waresId],function(cbData, err, rows, fields) {
+
+            if (!err) {
+
+                if (rows.length == 0) {  // 原来没有记录
+
+                    db.query(sql, [sid,item.waresId,item.count], function (cbData, err, rows, fields) {
+
+                        if (!err) {
+                            callback(null, rows);
+                        } else {
+                            callback(err);
+                        }
+                    });
+                } else {  // 有记录
+                    var old_count = rows[0].count;
+                    db.query(sql,[sid,item.waresId,item.count+old_count],function(cbData, err, rows, fields){
+                        if (!err) {
+                            callback(null, rows);
+                        } else {
+                            callback(err);
+                        }
+                    });
+                }
+            } else {
+                callback(err);
+            }
+        });
+
+    }, function(err,results) {
+        cb(err, results);
+    });
+
+}
+
+/**
+ * 查看入库单详情
+ * @param inLogId
+ * @param cb
+ */
+module.exports.detail = function (inLogId,cb) {
+
+    // 分两步查，1先查表单头，2查表单内容
+    var sql = 'SELECT l.buyer,l.buyDate,l.remarks,c. name AS buyTypeName,cc.name AS inTypeName,d.name AS distributorName,s.name AS storeroomName ' +
+        'FROM storeroomInLog l,systemClassify c,systemClassify cc,storeroom s,distributor d ' +
+        'WHERE l.buyType = c.id AND l.inType = cc.id AND l.distributorId = d.id AND l.storeroomId = s.id AND l.id = ?';
+
+    var detail_sql = 'SELECT mx.count,mx.price,w.name,w.serialNumber FROM storeroomInLogMX mx, wares w Where mx.inLogId = ? AND mx.waresId = w.id';
+
+    db.query(sql,[inLogId],function (cbData, err, rows, fields) {
+
+        if (!err) {
+            if (rows.length != 0) {
+
+                var log = row[0];
+                db.query(detail_sql, [inLogId], function (cbData, err, rows, fields) {
+
+                   if (!err) {
+                       var obj = {};
+                       obj.log = log;
+                       obj.logmx = rows;
+                       cb (null, obj);
+                   } else {
+                      cb(err);
+                   }
+                });
+            } else { // 主表没有，直接返回空对象
+               cb(null,{});
+            }
+        } else {
+            cb(err);
+        }
+    });
+}

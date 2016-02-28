@@ -8,6 +8,10 @@ module.exports.index = function (req, res) {
     var passowrd = req.body.password ? req.body.password : '';
 
 
+    var user = {};
+    user.name = '乔伯涛';
+    user.shopId = '40';
+
 
     req.session.user = 'qiaobotao';
 
