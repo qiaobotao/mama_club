@@ -33,7 +33,7 @@ module.exports.insertSysMenu = function(textCh,textEn,parentId,orderId,url,image
  */
 module.exports.delSysMenu= function (id, cb) {
 
-    var sql = 'DELETE sysMenu shop WHERE id = ?';
+    var sql = 'DELETE from sysMenu WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -120,7 +120,7 @@ module.exports.fetchAllSysMenu = function(textCh,currentPage,cb) {
  * @param imageUrl
  * @param cb
  */
-module.exports.updateSysMenu = function(id, textCh,textCh,parentId,orderId,url,imageUrl, cb) {
+module.exports.updateSysMenu = function(id, textCh,textEn,parentId,orderId,url,imageUrl, cb) {
     var sql = 'UPDATE sysMenu SET textCh = ?, textEn = ?, parentId = ?, orderId = ?, url = ?, imageUrl = ? WHERE id = ?';
     var par = [textCh,textEn,parentId,orderId,url,imageUrl, id];
     db.query(sql, par, function (cbData, err, rows, fields) {

@@ -17,7 +17,24 @@
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
+        //查询方法
+        function search () {
+            var textCh = document.getElementById('textCh').value;
+            window.location.href = '/jinquan/sys_menu_list?textCh='+textCh;
+        }
 
+        //跳转到编辑页面
+        function preEdit (id) {
+            window.location.href = '/jinquan/sys_menu_add?id='+id;
+        }
+        //跳转到删除页面
+        function del (id) {
+            window.location.href = '/jinquan/sys_menu_del?id='+id;
+        }
+        //跳转到查看页面
+        function browse (id) {
+            window.location.href = '/jinquan/sys_menu_add?show=view&id='+id;
+        }
     </script>
 </head>
 
@@ -33,8 +50,8 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>菜单名称：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>菜单名称：<input name="textCh" id="textCh" type="text" class="input5" value="<%=data.textCh%>" /></td>
+                    <td><a href="javascript:search();" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -70,10 +87,7 @@
             </tr>
             <%}%>
         </table>
-
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

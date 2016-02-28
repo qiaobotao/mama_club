@@ -38,6 +38,7 @@ module.exports.list = function (req, res) {
  */
 module.exports.edit = function (req, res) {
     var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
     if(id == ''){
         var sysMenu = [];//系统菜单
         res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu});
@@ -45,7 +46,7 @@ module.exports.edit = function (req, res) {
         service.fetchSingleSysMenu(id, function(err, results) {
             if (!err) {
                 var sysMenu = results.length == 0 ? null : results[0];
-                res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu});
+                res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu,show:show});
             } else {
                 next();
             }
@@ -69,7 +70,7 @@ module.exports.save = function (req, res) {
     if(id!=''){//修改
         service.updateSysMenu(id,textCh,textEn,parentId,orderId,url,imageUrl,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/sys_menu_list?replytype=edit');
+                res.redirect('/jinquan/sys_menu_list?replytype=update');
             } else {
                 console.log(err.message);
                 res.render('error');
@@ -96,7 +97,7 @@ module.exports.del = function (req, res, next) {
     var id = req.query.id ? req.query.id :'';
     service.delSysMenu(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/sys_menu_list?replytype=add');
+            res.redirect('/jinquan/sys_menu_list?replytype=del');
         } else {
             next();
         }

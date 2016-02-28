@@ -216,7 +216,7 @@ router.all('/sys_resources_list',sysResourcesAction.list);
 router.all('/sys_resources_add', sysResourcesAction.add);
 // 菜单管理
 router.all('/sys_menu_list',sysMenuAction.list);
-router.all('/sys_menu_add', sysMenuAction.edit);
+router.all('/sys_menu_add', sysMenuAction.edit);//跳转适用于查看、修改、添加页面
 router.all('/sys_menu_del', sysMenuAction.del);
 router.all('/sys_menu_save', sysMenuAction.save);
 // 角色管理
