@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>回访信息</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function submitForm(){
+            var serialNumber = document.getElementById("serialNumber").value;
+            if (!serialNumber || serialNumber.length == 0) {
+                alert('服务单号不能为空');
+                return;
+            }
+            var name = document.getElementById("name").value;
+            if (!name || name.length == 0) {
+                alert('客户姓名不能为空');
+                return;
+            }
+            var tel = document.getElementById("tel").value;
+            if (!tel || tel.length == 0) {
+                alert('电话不能为空');
+                return;
+            }
+            var returnVisitDate = document.getElementById("returnVisitDate").value;
+            if(!returnVisitDate || returnVisitDate.length == 0) {
+                alert('回访日期不能为空');
+                return;
+            }
+            var returnVisitType = document.getElementById("returnVisitType").value;
+            if (!returnVisitType || returnVisitType.length == 0) {
+                alert('回访方式不能为空');
+                return;
+            }
+            var returnVisitResult = document.getElementById("returnVisitResult").value;
+            if (!returnVisitResult || returnVisitResult.length == 0) {
+                alert('回访结果不能为空');
+                return;
+            }
+            var serviceComment = document.getElementById("serviceComment").value;
+            if (!serviceComment || serviceComment.length == 0) {
+                alert('服务评价不能为空');
+                return;
+            }
+            var advice = document.getElementById("advice").value;
+            if (!advice || advice.length == 0) {
+                alert('建议不能为空');
+                return;
+            }
+            var isReturnVisit = document.getElementById("isReturnVisit").value;
+            if (!isReturnVisit || isReturnVisit.length == 0) {
+                alert('是否店长回访不能为空');
+                return;
+            }
+            var returnVisitReason = document.getElementById("returnVisitReason").value;
+            if (!returnVisitReason || returnVisitReason.length == 0) {
+                alert('回访原因不能为空');
+                return;
+            }
+
+            document.getElementById("myform").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：回访信息
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/return_visit_add">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">服务单号：</td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" readonly="true"  value="<%=returnVisit.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">客户姓名：</td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" readonly="true"  value="<%=returnVisit.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">客户电话：</td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" readonly="true"  value="<%=returnVisit.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">回访日期：</td>
+                <td class="regTd_r"><input id="returnVisitDate" name="returnVisitDate" type="text" class="input5" readonly="true"  value="<%=returnVisit.returnVisitDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">回访方式：</td>
+                <td class="regTd_r"><input id="returnVisitType" name="returnVisitType" type="text" class="input5" readonly="true"  value="<%=returnVisit.returnVisitType%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">回访结果：</td>
+                <td class="regTd_r"><input id="returnVisitResult" name="returnVisitResult" type="text" class="input5" readonly="true"  value="<%=returnVisit.returnVisitResult%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">服务效果评价：</td>
+                <td class="regTd_r"><input id="serviceComment" name="serviceComment" type="text" class="input5" readonly="true"  value="<%=returnVisit.serviceComment%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">建议：</td>
+                <td class="regTd_r"><input id="advice" name="advice" type="text" class="input5" readonly="true"  value="<%=returnVisit.advice%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">是否店长回访：</td>
+                <td class="regTd_r"><input id="isReturnVisit" name="isReturnVisit" type="text" class="input5" readonly="true"  value="<%=returnVisit.isReturnVisit%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">回访原因：</td>
+                <td class="regTd_r"><input id="returnVisitReason" name="returnVisitReason" type="text" class="input5" readonly="true"  value="<%=returnVisit.returnVisitReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+        </table>
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/return_visit_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>
