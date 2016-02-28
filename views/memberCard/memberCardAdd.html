@@ -6,25 +6,113 @@
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        var iframIndex ;
+        function getWares(){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择会员信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/member_select', //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
         function submitForm(){
+            var type= document.getElementById("type").value;
+            var  memberId = document.getElementById("memberId").value;
+            memberId=  document.getElementById("memberId").value;
+            if (!memberId || memberId.length == 0) {
+                alert('请选择会员');
+                return;
+            }
             var type = document.getElementById("type").value;
-            if(type==1)
+            var parameter1= '';
+            var parameter2=  '';
+            var parameter3=   '';
+            var parameter4=   '';
+            var parameter5=   '';
+            var parameter6=   '';
+            var parameter7=  '';
+            var parameter8=   '';
+            var parameter9=   '';
+            if(type=='1')
             {
+                //会员卡类型
+                parameter1=  document.getElementById("parameter1").value;
+                if (!parameter1 || parameter1.length == 0) {
+                    alert('会员卡类型不能为空');
+                    return;
+                }
+                //当前金额/首次应缴费金额/首次应缴费金额
+                parameter2= document.getElementById("parameter2").value;
+
 
             }
-            if(type==2)
+            if(type=='2')
             {
+                //可使用次数
+                parameter3= document.getElementById("parameter3").value;
+                if (!parameter3 || parameter3.length == 0) {
+                    alert('可使用次数不能为空');
+                    return;
+                }
+                //已使用次数
+                parameter4=document.getElementById("parameter4").value;
+                if (!parameter4 || parameter4.length == 0) {
+                    alert('已使用次数不能为空');
+                    return;
+                }
 
+                //首次应缴费金额
+                parameter5= document.getElementById("parameter5").value;
+                if (!parameter5 || parameter5.length == 0) {
+                    alert('首次应缴费金额不能为空');
+                    return;
+                }
+                //有效时间
+                parameter6= document.getElementById("parameter6").value;
+
+                if (!parameter6 || parameter6.length == 0) {
+                    alert('有效时间不能为空');
+                    return;
+                }
             }
-            if(type==3)
+            if(type=='3')
             {
-
+                //折扣力度
+                parameter7= document.getElementById("parameter7").value;
+                if (!parameter7 || parameter7.length == 0) {
+                    alert('折扣力度不能为空');
+                    return;
+                }
+                //首次应缴费金额
+                parameter8= document.getElementById("parameter8").value;
+                if (!parameter8 || parameter8.length == 0) {
+                    alert('首次应缴费金额不能为空');
+                    return;
+                }
+                //有效时间
+                parameter9= document.getElementById("parameter9").value;
+                if (!parameter9 || parameter9.length == 0) {
+                    alert('有效时间不能为空');
+                    return;
+                }
             }
+
             document.getElementById("myform").submit();
         }
         function changCartType(cartType  )
@@ -45,7 +133,6 @@
                         document.getElementById("actualAmount").value=datas.consumerLimit;
                         document.getElementById("zeroDiscounts").value=datas.zeroDiscounts;
                         document.getElementById("isManyPeopleUsed").value=datas.isManyPeopleUsed;
-
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
@@ -74,12 +161,11 @@
             }
             document.getElementById("type").value=type;
 
-
         }
     </script>
 </head>
 
-<body>
+<body onload="changType(<%=data.type%>)">
 <div class="r_top">
     <div class="weizhi">
         当前位置：新增会员卡
@@ -104,6 +190,15 @@
                             <td class="regTd_r">
                                 <input id="type" name="type" type="hidden" value="1"/>
                                 <input id="memberCardNumber" name="memberCardNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">
+                                 会员信息:
+                            </td>
+                            <td class="regTd_r">
+                                <input id="memberName" name="memberName" onfocus="getWares()"/>
+                                <input id="memberId" name="memberId" type="hidden" />
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">
@@ -157,7 +252,7 @@
                                     </tr>
                                     <tr>
                                         <td class="regTd_l"> 有效时间：</td>
-                                        <td class="regTd_r"><input id="parameter6" name="parameter6" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter6" name="parameter6" type="text" class="input5" onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                 </table>
                                 <table id="type3" name="type3" width="100%" class="reg_table"border="0" style="display: none" cellspacing="0" cellpadding="0">
@@ -171,18 +266,19 @@
                                     </tr>
                                     <tr>
                                         <td class="regTd_l"> 有效时间：</td>
-                                        <td class="regTd_r"><input id="parameter9" name="parameter9" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="parameter9" name="parameter9" type="text" class="input5" onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                 </table>
 
                                 <!--参与员工 end-->
                             </td>
                         </tr>
+
                     </table>
                 </form>
                 <div class="reg_but">
                     <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-                    <div class="rb_l"><a href="/jinquan/member_card_type_list" class="close"></a></div>
+                    <div class="rb_l"><a href="/jinquan/member_card_list" class="close"></a></div>
                 </div>
             </td>
         </tr>

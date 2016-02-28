@@ -162,3 +162,21 @@ module.exports.del = function (req, res, next) {
     });
 
 }
+module.exports.select = function (req, res, next) {
+    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var memberName = req.query.memberName ? req.query.memberName : '';
+    var tel = req.query.tel ? req.query.tel : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+
+    service.fetchAllMemberByCard(serialNumber,memberName,tel,currentPage, function (err, results) {
+        if (!err) {
+            results.serialNumber = serialNumber;
+            results.memberName = memberName;
+            results.tel = tel;
+            res.render('member/memberSelect', {data : results});
+        } else {
+            next();
+        }
+    });
+
+}

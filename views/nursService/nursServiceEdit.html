@@ -28,29 +28,30 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/nurs_service_add">
+    <form method="post" id="myform" action="/jinquan/nurs_service_doEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <!-- 基本信息 -->
             <tr>
                 <td colspan="4" align="left">基本信息：</td>
             </tr>
             <tr>
+                <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
                 <td class="regTd_l">服务单号：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=nursService.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
-                <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">姓名：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=nursService.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5"  value="<%=nursService.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">开始时间：</td>
-                <td class="regTd_r"><input id="startTime" name="startTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="startTime" name="startTime" type="text" class="input5"  value="<%=nursService.startTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">截止时间：</td>
-                <td class="regTd_r"><input id="endTime" name="endTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="endTime" name="endTime" type="text" class="input5"  value="<%=nursService.endTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">服务地点：</td>
@@ -60,7 +61,7 @@
                         <option value="2">上门</option>
                     </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务地址：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="address" name="address" type="text" class="input5"  value="<%=nursService.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
 
             <!-- 近期哺乳相关 -->
@@ -69,45 +70,45 @@
             </tr>
             <tr>
                 <td class="regTd_l">服务需求：</td>
-                <td class="regTd_r"><input id="serviceNeeds" name="serviceNeeds" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceNeeds" name="serviceNeeds" type="text" class="input5"  value="<%=nursService.serviceNeeds%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">大便次数：</td>
-                <td class="regTd_r"><input id="bowelFrequenc" name="bowelFrequencc" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="bowelFrequenc" name="bowelFrequencc" type="text" class="input5"  value="<%=nursService.bowelFrequencc%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">做过何种处理：</td>
-                <td class="regTd_r"><input id="deal" name="deal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="deal" name="deal" type="text" class="input5"  value="<%=nursService.deal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">形状：</td>
-                <td class="regTd_r"><input id="shape" name="shape" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="shape" name="shape" type="text" class="input5"  value="<%=nursService.shape%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">喂养情况：</td>
-                <td class="regTd_r"><input id="feedSituation" name="feedSituation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="feedSituation" name="feedSituation" type="text" class="input5"  value="<%=nursService.feedSituation%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">尿量：</td>
-                <td class="regTd_r"><input id="urination" name="urination" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="urination" name="urination" type="text" class="input5"  value="<%=nursService.urination%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">喂养备注：</td>
-                <td class="regTd_r"><input id="feedRemark" name="feedRemark" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="feedRemark" name="feedRemark" type="text" class="input5"  value="<%=nursService.feedRemark%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">挤奶情况：</td>
-                <td class="regTd_r"><input id="milkSituation" name="milkSituation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="milkSituation" name="milkSituation" type="text" class="input5"  value="<%=nursService.milkSituation%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">宝宝目前月龄：</td>
-                <td class="regTd_r"><input id="childCurrentMonths" name="childCurrentMonths" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childCurrentMonths" name="childCurrentMonths" type="text" class="input5"  value="<%=nursService.childCurrentMonths%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">挤奶次数：</td>
-                <td class="regTd_r"><input id="milkNumber" name="milkNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="milkNumber" name="milkNumber" type="text" class="input5"  value="<%=nursService.milkNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">目前身高：</td>
-                <td class="regTd_r"><input id="childCurrentHeight" name="childCurrentHeight" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childCurrentHeight" name="childCurrentHeight" type="text" class="input5"  value="<%=nursService.childCurrentHeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">挤奶总量：</td>
-                <td class="regTd_r"><input id="milkAmount " name="milkAmount" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="milkAmount " name="milkAmount" type="text" class="input5"  value="<%=nursService.milkAmount%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">目前体重：</td>
-                <td class="regTd_r"><input id="childCurrentWeight" name="childCurrentWeight" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childCurrentWeight" name="childCurrentWeight" type="text" class="input5"  value="<%=nursService.childCurrentWeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">吸奶器品牌：</td>
-                <td class="regTd_r"><input id="breastpumpBrand" name="breastpumpBrand" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="breastpumpBrand" name="breastpumpBrand" type="text" class="input5"  value="<%=nursService.breastpumpBrand%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
 
             <tr>
@@ -115,9 +116,9 @@
             </tr>
             <tr>
                 <td class="regTd_l">是否观察哺乳：</td>
-                <td class="regTd_r"><input id="isCarefulNurse" name="isCarefulNurse" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="isCarefulNurse" name="isCarefulNurse" type="text" class="input5"  value="<%=nursService.isCarefulNurse%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">转诊建议：</td>
-                <td class="regTd_r"><input id="referralAdvise" name="referralAdvise" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="referralAdvise" name="referralAdvise" type="text" class="input5"  value="<%=nursService.referralAdvise%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">诊断结果：</td>
@@ -127,7 +128,7 @@
                     <input id="diagnosis3" name="diagnosis" type="checkbox"  value="diagnosis3"/>诊断3
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊说明：</td>
-                <td class="regTd_r"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="specialInstructions" name="specialInstructions" type="text" class="input5"  value="<%=nursService.specialInstructions%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">宝宝原因：</td>
@@ -137,7 +138,7 @@
                     <input id="childReason3" name="childReason" type="checkbox"  value="childReason3"/>宝宝原因3
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">乳房示意图说明：</td>
-                <td class="regTd_r"><input id="breastExplain" name="breastExplain" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="breastExplain" name="breastExplain" type="text" class="input5"  value="<%=nursService.breastExplain%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈原因：</td>
@@ -147,7 +148,7 @@
                     <input id="motherReason3" name="motherReason" type="checkbox"  value="motherReason3"/>妈妈原因3
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">离店建议：</td>
-                <td class="regTd_r"><input id="leaveAdvise" name="leaveAdvise" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="leaveAdvise" name="leaveAdvise" type="text" class="input5"  value="<%=nursService.leaveAdvise%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">其他原因：</td>
@@ -157,13 +158,13 @@
                     <input id="otherReason3" name="otherReason" type="checkbox"  value="otherReason3"/>其他原因3
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否带实习技师：</td>
-                <td class="regTd_r"><input id="isLeadTrainee" name="isLeadTrainee" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="isLeadTrainee" name="isLeadTrainee" type="text" class="input5"  value="<%=nursService.isLeadTrainee%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">是否预约二次：</td>
-                <td class="regTd_r"><input id="whetherAppointmentAgain" name="whetherAppointmentAgain" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="whetherAppointmentAgain" name="whetherAppointmentAgain" type="text" class="input5"  value="<%=nursService.whetherAppointmentAgain%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">实习技师姓名：</td>
-                <td class="regTd_r"><input id="traineeName" name="traineeName" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="traineeName" name="traineeName" type="text" class="input5"  value="<%=nursService.traineeName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <!-- 所选商品 -->
             <tr>

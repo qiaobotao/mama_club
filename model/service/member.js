@@ -52,7 +52,6 @@ module.exports.updateMember = function(id,memberCardType,memberName,tel,contact,
         }
     });
 };
-
 module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage,cb) {
 
     var parm = " on (a.id=b.memberId)"
@@ -67,6 +66,53 @@ module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
     var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join memberCard b'+ parm +' LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+module.exports.fetchAllMemberByCard = function(serialNumber,memberName,tel,currentPage,cb) {
+
+    var parm = " "
+    if (serialNumber != '')
+        parm += " and b.serialNumber like'%" + serialNumber + "%'";
+    if (memberName != '')
+        parm += " and a.memberName like'%" + memberName + "%'";
+    if (tel != '')
+        parm += " and a.tel like'%" + tel + "%'";
+
+    var sql_count = 'SELECT count(*) as count FROM member  WHERE id NOT IN(SELECT memberId FROM memberCard WHERE memberId IS NOT NULL)';
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT * FROM member  WHERE id NOT IN(SELECT memberId FROM memberCard WHERE memberId IS NOT NULL)'+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
