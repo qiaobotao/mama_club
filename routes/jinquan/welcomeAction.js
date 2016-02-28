@@ -13,7 +13,7 @@ module.exports.index = function (req, res) {
     user.shopId = '40';
 
 
-    req.session.user = 'qiaobotao';
+    req.session.user = user;
 
     res.render('welcome/index');
 
