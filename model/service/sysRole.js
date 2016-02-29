@@ -10,10 +10,10 @@ var async = require('async');
  * @param name
  * @param cb
  */
-module.exports.insertSysRole = function(name, cb) {
+module.exports.insertSysRole = function(name,describe, cb) {
 
-    var sql = 'INSERT INTO sysRole (name,dateline) VALUES (?,?)';
-    db.query(sql, [name,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO sysRole (name,describe,dateline) VALUES (?,?,?)';
+    db.query(sql, [name,describe,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -94,8 +94,8 @@ module.exports.fetchAllSysRole = function(name,currentPage,cb) {
  * @param name
  * @param cb
  */
-module.exports.updateSysRole = function(id, name, cb) {
-    var sql = 'UPDATE sysRole SET name = ? WHERE id = ?';
+module.exports.updateSysRole = function(id, name,describe, cb) {
+    var sql = 'UPDATE sysRole SET name = ?,describe = ? WHERE id = ?';
     var par = [name, id];
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

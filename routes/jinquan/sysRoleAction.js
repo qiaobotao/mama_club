@@ -61,9 +61,10 @@ module.exports.edit = function (req, res) {
 module.exports.save = function (req, res) {
     var id = req.body.id ? req.body.id : '';
     var name = req.body.name ? req.body.name : '';
+    var describe = req.body.describe ? req.body.describe : '';
 
     if(id!=''){//修改
-        service.updateSysRole(id,name,function(err, results) {
+        service.updateSysRole(id,name,describe,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/sys_role_list?replytype=update');
             } else {
@@ -72,7 +73,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertSysRole(name,function(err, results) {
+        service.insertSysRole(name,describe,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/sys_role_list?replytype=add');
             } else {
