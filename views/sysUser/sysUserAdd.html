@@ -23,7 +23,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：编辑角色
+        当前位置：编辑系统用户
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -46,6 +46,25 @@
                 <td class="regTd_r"><input id="staffId" name="staffId" type="text" class="input5" value="<%=sysUser.staffId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
+        <!--角色信息 start-->
+        <span style="float: left; font-weight:bold;width: 120px;"><h3>角色列表</h3></span>
+        <br>
+        <table id="roleTable" width="60%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td width="5%"><input type="checkbox"/></td>
+                <td width="10%">角色名称</td>
+                <td width="70%">角色描述</td>
+            </tr>
+            <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><input type="checkbox" name="roleId" value="<%=data.data[i].id%>"/></td>
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].describe%></td>
+            </tr>
+            <%}%>
+        </table>
+        <!--角色信息 end-->
     </form>
     <div class="reg_but">
         <%

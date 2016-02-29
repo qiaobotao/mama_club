@@ -26,6 +26,24 @@ module.exports.insertSysUser = function(userName,password,shopId,staffId, cb) {
 };
 
 /**
+ * 增加系统用户与角色关系表
+ * @param userId
+ * @param roleId
+ * @param cb
+ */
+module.exports.insertSysUserRole = function(userId,roleId, cb) {
+
+    var sql = 'INSERT INTO sysUserRole (userId,roleId,dateline) VALUES (?,?,?)';
+    db.query(sql, [userId,roleId,new Date().getTime()], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+
+/**
  * 删除系统用户
  * @param id
  * @param cb

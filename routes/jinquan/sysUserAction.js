@@ -2,6 +2,7 @@
  * Created by kuanchang on 16/1/21.
  */
 var service = require('../../model/service/sysUser');
+var roleService = require('../../model/service/sysRole');
 
 /**
  * 获取系统用户列表
@@ -37,6 +38,7 @@ module.exports.list = function (req, res) {
 module.exports.edit = function (req, res) {
     var id = req.query.id ? req.query.id : '';
     var show = req.query.show ? req.query.show : '';
+    var currentPage = req.query.page ? req.query.page : '1';
     if(id == ''){
         var sysUser = [];//系统用户
         res.render('sysUser/sysUserAdd', {sysUser : sysUser,show:show});
@@ -44,7 +46,16 @@ module.exports.edit = function (req, res) {
         service.fetchSingleSysUser(id, function(err, results) {
             if (!err) {
                 var sysUser = results.length == 0 ? null : results[0];
-                res.render('sysUser/sysUserAdd', {sysUser : sysUser,show:show});
+
+                roleService.fetchAllSysRole("",currentPage, function (err, results) {
+                    if (!err) {
+                        results.currentPage = currentPage;
+                        res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
+                    } else {
+                        next();
+                    }
+                });
+
             } else {
                 next();
             }
@@ -62,6 +73,8 @@ module.exports.save = function (req, res) {
     var password = req.body.password ? req.body.password : '';
     var shopId = req.body.shopId ? req.body.shopId : '';
     var staffId = req.body.staffId ? req.body.staffId : '';
+    var roleId = req.body.roleId ? req.body.roleId : '';
+
 
     if(id!=''){//修改
         service.updateSysUser(id,userName,password,shopId,staffId,function(err, results) {
@@ -82,6 +95,9 @@ module.exports.save = function (req, res) {
             }
         })
     }
+    //将角色——用户关系表进行存储
+    //先删除该用户下所有角色关系
+    //为该用户增加对应的角色关系
 }
 
 /**
