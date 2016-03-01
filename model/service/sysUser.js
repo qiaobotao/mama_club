@@ -26,24 +26,6 @@ module.exports.insertSysUser = function(userName,password,shopId,staffId, cb) {
 };
 
 /**
- * 增加系统用户与角色关系表
- * @param userId
- * @param roleId
- * @param cb
- */
-module.exports.insertSysUserRole = function(userId,roleId, cb) {
-
-    var sql = 'INSERT INTO sysUserRole (userId,roleId,dateline) VALUES (?,?,?)';
-    db.query(sql, [userId,roleId,new Date().getTime()], function(cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-};
-
-/**
  * 删除系统用户
  * @param id
  * @param cb
@@ -136,6 +118,62 @@ module.exports.updateSysUser = function(id, userName,password,shopId,staffId, cb
 module.exports.fetchSingleSysUser =function (id, cb) {
     var sql = 'SELECT * FROM sysUser WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+
+/**
+ * 增加系统用户与角色关系表
+ * @param userId
+ * @param roleId
+ * @param cb
+ */
+module.exports.insertSysUserRole = function(userId,roleIds, cb) {
+
+    var sql = 'INSERT INTO sysUserRole (userId,roleId,dateline) VALUES (?,?,?)';
+    async.map(roleIds, function(item, callback) {
+        db.query(sql, [userId,item,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+};
+
+
+/**
+ * 查询用户所有角色
+ * @param userId
+ * @param cb
+ */
+module.exports.getRoleByUserId =function (userId, cb) {
+    var sql = 'select * from sysUserRole WHERE userId = ?';
+    db.query(sql, [userId],  function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 删除用户所有角色
+ * @param id
+ * @param cb
+ */
+module.exports.deleteRoleByUserId =function (userId, cb) {
+    var sql = 'DELETE from sysUserRole WHERE userId = ?';
+    db.query(sql, [userId],  function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

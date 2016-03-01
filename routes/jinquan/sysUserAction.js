@@ -41,16 +41,31 @@ module.exports.edit = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
     if(id == ''){
         var sysUser = [];//系统用户
-        res.render('sysUser/sysUserAdd', {sysUser : sysUser,show:show});
+        roleService.fetchAllSysRole("",currentPage, function (err, results) {
+            if (!err) {
+                results.currentPage = currentPage;
+                res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
+            } else {
+                next();
+            }
+        });
     }else{
         service.fetchSingleSysUser(id, function(err, results) {
             if (!err) {
                 var sysUser = results.length == 0 ? null : results[0];
-
                 roleService.fetchAllSysRole("",currentPage, function (err, results) {
                     if (!err) {
                         results.currentPage = currentPage;
-                        res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
+
+                        service.getRoleByUserId(id, function (err, roleResults) {
+                            if (!err) {
+                                results.currentPage = currentPage;
+                                results.roleResults = roleResults;
+                                res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
+                            } else {
+                                next();
+                            }
+                        });
                     } else {
                         next();
                     }
@@ -79,7 +94,21 @@ module.exports.save = function (req, res) {
     if(id!=''){//修改
         service.updateSysUser(id,userName,password,shopId,staffId,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/sys_user_list?replytype=update');
+                service.deleteRoleByUserId(id,function(err, results) {
+                    if(!err) {//删除用户——角色关联表成功
+                        service.insertSysUserRole(id,roleId,function(err, results) {
+                            if(!err) {//添加用户——角色关联表成功
+                                res.redirect('/jinquan/sys_user_list?replytype=update');
+                            } else {
+                                console.log(err.message);
+                                res.render('error');
+                            }
+                        })
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');
@@ -88,7 +117,15 @@ module.exports.save = function (req, res) {
     }else{//添加
         service.insertSysUser(userName,password,shopId,staffId,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/sys_user_list?replytype=add');
+                //员工时，不需要员工id
+                service.insertSysUserRole(results.insertId,roleId,function(err, results) {
+                    if(!err) {//添加用户——角色关联表成功
+                        res.redirect('/jinquan/sys_user_list?replytype=add');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');

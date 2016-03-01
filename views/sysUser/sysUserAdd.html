@@ -58,7 +58,16 @@
             <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><input type="checkbox" name="roleId" value="<%=data.data[i].id%>"/></td>
+                <%
+                var selectCheck = '';
+                for (var j=0;j<data.roleResults.length;j++) {
+                    if(data.roleResults[j].roleId == data.data[i].id){
+                        selectCheck = 'checked';
+                        break;
+                    }
+                %>
+                <%}%>
+                <td><input type="checkbox" name="roleId" value="<%=data.data[i].id%>" <%=selectCheck%>/></td>
                 <td><%=data.data[i].name%></td>
                 <td><%=data.data[i].describe%></td>
             </tr>
