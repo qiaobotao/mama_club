@@ -41,6 +41,7 @@ module.exports.goAdd = function (req, res,next) {
 module.exports.add = function (req, res) {
     var tel = req.body.tel ? req.body.tel : '';
     var name = req.body.name ? req.body.name : '';
+    var memberId = req.body.memberId ? req.body.memberId : '';
     var age = req.body.age ? req.body.age : '';
     var principal = req.body.principal ? req.body.principal : '';
     var meetTime = req.body.meetTime ? req.body.meetTime : '';
@@ -49,7 +50,7 @@ module.exports.add = function (req, res) {
     var address = req.body.address ? req.body.address : '';
     var price = req.body.price ? req.body.price : '';
 
-    service.insertServiceMeet(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, function (err, results) {
+    service.insertServiceMeet(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list');
         } else {
@@ -70,8 +71,9 @@ module.exports.doEdit = function (req, res,next) {
     var serviceType = req.body.serviceType ? req.body.serviceType : '';
     var address = req.body.address ? req.body.address : '';
     var price = req.body.price ? req.body.price : '';
+    var memberId = req.body.memberId ? req.body.memberId : '';
 
-    service.updateServiceMeet(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, function (err, results) {
+    service.updateServiceMeet(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list');
         } else {

@@ -123,6 +123,7 @@ router.all('/member_preEdit',memberAction.preEdit);
 router.all('/member_doEdit',memberAction.doEdit);
 router.all('/member_del',memberAction.del);
 router.all('/member_select',memberAction.select);
+router.all('/getMemberByNameTel',memberAction.getMemberByNameTel);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
 router.all('/service_meet_add',serviceMeetAction.add);
@@ -145,6 +146,7 @@ router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
 router.all('/nurs_service_del',nursServiceAction.del);
 
 // 收费信息
+
 // 回访信息
 router.all('/return_visit_list',returnVisitAction.list);
 router.all('/return_visit_goAdd',returnVisitAction.goAdd);
@@ -156,7 +158,13 @@ router.all('/return_visit_del',returnVisitAction.del);
 
 // 投诉信息
 router.all('/complain_list',complainAction.list);
+router.all('/complain_goAdd',complainAction.goAdd);
 router.all('/complain_add',complainAction.add);
+router.all('/complain_show',complainAction.show);
+router.all('/complain_preEdit',complainAction.preEdit);
+router.all('/complain_doEdit',complainAction.doEdit);
+router.all('/complain_del',complainAction.del);
+
 
 
 /*********************进销存管理***************************/

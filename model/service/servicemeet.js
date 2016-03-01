@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
+module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price) VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO serviceMeet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -30,10 +30,10 @@ module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,prob
         }
     });
 };
-module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
+module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId, cb) {
 
-    var sql = 'UPDATE   serviceMeet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ?   WHERE  id  =  ?  ';
-    db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE   serviceMeet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?   WHERE  id  =  ?  ';
+    db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

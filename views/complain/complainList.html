@@ -2,12 +2,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <title>投诉信息</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
+
+    <script type="text/javascript">
+        function search () {
+            var selectPage = document.getElementById('page').value;
+            var name = document.getElementById('name').value;
+            var complainPrincipal = document.getElementById('complainPrincipal').value;
+            var complainTimeStart = document.getElementById('complainTimeStart').value;
+            var complainTimeEnd = document.getElementById('complainTimeEnd').value;
+            var dealPrincipal = document.getElementById('dealPrincipal').value;
+            window.location.href = '/jinquan/complain_list?name='+name+'&page='+selectPage+'&complainPrincipal='+complainPrincipal+'&complainTimeStart='+complainTimeStart+'&complainTimeEnd='+complainTimeEnd+'&dealPrincipal='+dealPrincipal;
+        }
+        function pageturning (selectPage) {
+            var name = document.getElementById('name').value;
+            var complainPrincipal = document.getElementById('complainPrincipal').value;
+            var complainTimeStart = document.getElementById('complainTimeStart').value;
+            var complainTimeEnd = document.getElementById('complainTimeEnd').value;
+            var dealPrincipal = document.getElementById('dealPrincipal').value;
+            window.location.href = '/jinquan/complain_list?name='+name+'&page='+selectPage+'&complainPrincipal='+complainPrincipal+'&complainTimeStart='+complainTimeStart+'&complainTimeEnd='+complainTimeEnd+'&dealPrincipal='+dealPrincipal;
+        }
+
+        function show (id) {
+            window.location.href = '/jinquan/complain_show?id='+id;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/complain_preEdit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/complain_del?id='+id;
+        }
+
+    </script>
 </head>
 
 <body>
@@ -22,16 +56,16 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>客户名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;投诉技师：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;投诉时间：<input name="" type="text" class="input5" /> ~ <input name="" type="text" class="input5" /> </td>
-                    <td> &nbsp;投诉时间处理技师：<input name="" type="text" class="input5" /> </td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>客户名称：<input id="name" name="name" type="text" class="input5" /></td>
+                    <td> &nbsp;投诉技师：<input id="complainPrincipal" name="complainPrincipal" type="text" class="input5" /></td>
+                    <td> &nbsp;投诉时间：<input id="complainTimeStart" name="complainTimeStart" onclick="laydate()" /> ~ <input id="complainTimeEnd" name="complainTimeEnd" onclick="laydate()" /> </td>
+                    <td> &nbsp;处理技师：<input id="dealPrincipal" name="dealPrincipal" type="text" class="input5" /> </td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/complain_add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/complain_goAdd" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -44,11 +78,28 @@
                 <th>处理技师</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].serialNumber%></td>
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].complainPrincipal%></td>
+                <td><%=data.data[i].complainTime%></td>
+                <td><%=data.data[i].complainType%></td>
+                <td><%=data.data[i].dealPrincipal%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
+                            <td><div align="center">[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</div></td>
+                            <td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

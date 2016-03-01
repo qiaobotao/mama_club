@@ -170,3 +170,15 @@ module.exports.delMember= function (id, cb) {
         }
     });
 }
+module.exports.getMemberByNameTel =function (memberName,tel , cb) {
+
+    var sql = 'SELECT * FROM member WHERE memberName = ? and tel=?';
+    db.query(sql, [memberName,tel],  function(cbData, err, rows, fields) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}

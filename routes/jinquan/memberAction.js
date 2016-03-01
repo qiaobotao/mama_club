@@ -180,3 +180,16 @@ module.exports.select = function (req, res, next) {
     });
 
 }
+module.exports.getMemberByNameTel = function(req, res, next) {
+
+    var memberName = req.body.memberName ? req.body.memberName : '';
+    var tel = req.body.memberTel ? req.body.memberTel : '';
+    service.getMemberByNameTel(memberName,tel ,function(err, results) {
+        if (!err) {
+            var member = results.length == 0 ? null : results[0];
+            res.json(JSON.stringify(member));
+        } else {
+            next();
+        }
+    })
+}
