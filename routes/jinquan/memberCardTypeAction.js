@@ -70,7 +70,7 @@ module.exports.addOrEdit = function (req, res,next) {
     var consumerLimit = req.body.consumerLimit ? req.body.consumerLimit : '';
     var zeroDiscounts = req.body.zeroDiscounts ? req.body.zeroDiscounts : '';
     var isManyPeopleUsed = req.body.isManyPeopleUsed ? req.body.isManyPeopleUsed : '';
-    var status = req.body.status ? req.body.status : '';
+    var status = req.body.status ? req.body.status : '1';
     if(id=='')
     {
         service.insertMemberCardType(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {

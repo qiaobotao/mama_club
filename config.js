@@ -31,7 +31,7 @@ module.exports = {
 
     // 数据库连接池配置
     dbConfig: {
-        host     : '*',
+        host     : '123.57.24.162',
         database : 'mama_club',
         user     : 'root',
         password : 'q1w2e3',
@@ -41,7 +41,7 @@ module.exports = {
 
     // 数据库连接池配置(开发版)
     dbConfig_develop: {
-        host     : '127.0.0.1',
+        host     : '123.57.24.162',
         database : 'higuo',
         user     : 'root',
         password : '',
@@ -54,9 +54,7 @@ module.exports = {
         serivce : 17,
         wares : 14,
         storeroom : 9,
-        distributor : 8,
-        inType : 4,
-        buyType : 9
+        distributor : 8
     }
 
 };

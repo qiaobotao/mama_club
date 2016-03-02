@@ -176,6 +176,7 @@ router.all('/service_browse', serviceAction.browse);
 router.all('/service_pre_edit', serviceAction.preEdit);
 router.all('/service_update', serviceAction.update);
 router.all('/service_del', serviceAction.del);
+router.all('/service_select', serviceAction.select);
 // 商品管理
 router.all('/wares_list', waresAction.list);
 router.all('/wares_modular', waresAction.modular);
