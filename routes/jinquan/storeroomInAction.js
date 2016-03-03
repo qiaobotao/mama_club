@@ -5,6 +5,7 @@
 var service = require('../../model/service/storeroomIn');
 var storeroomService = require('../../model/service/storeroom');
 var distributorService = require('../../model/service/distributor');
+var moment = require('moment');
 
 /**
  * 获取入库列表
@@ -18,13 +19,22 @@ module.exports.list = function (req, res, next) {
     var buyDate = req.query.buyDate ? req.query.buyDate : ''; // 采购日期
     var currentPage = req.query.page ? req.query.page : '1';
 
-    service.list(buyer,buyType,buyDate,currentPage, function(err, results) {
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
 
+    service.list(buyer,buyType,buyDate,currentPage, function(err, results) {
         if (!err) {
+            for (var i=0;i<results.data.length;i++) {
+                var dateline = results.data[i].buyDate;
+                if (dateline != '') {
+                    var temp = moment(dateline).format('YYYY-MM-DD');
+                    results.data[i].buyDate = temp;
+                }
+            }
             results.currentPage = currentPage;
-            results.buyer = buyer;
-            results.buyType = buyType;
-            results.buyDate =buyDate;
+            results.par_buyer = buyer;
+            results.par_buyType = buyType;
+            results.par_buyDate =buyDate;
 
             service.getBuyTypeClassify(function(err, buyTypeClassify){
 
@@ -33,7 +43,7 @@ module.exports.list = function (req, res, next) {
                     service.getInTypeClassify(function(err, inTypeClassify) {
                         if (!err) {
                             results.inTypeClassify = inTypeClassify;
-                            res.render('storeroomIn/storeroomInList', {data : results});
+                            res.render('storeroomIn/storeroomInList', {data : results, replytype : replytype});
                         } else {
                             next();
                         }
@@ -104,13 +114,52 @@ module.exports.add = function (req, res, next) {
     var remark = req.body.remark ? req.body.remark : '';
 
     // 数组
-    var arr_proid = req.body.proid ? req.body.proid : '';
+    var arr_proId = req.body.proId ? req.body.proId : '';
     var arr_proname = req.body.proname ? req.body.proname :'';
     var arr_proNo = req.body.proNo ? req.body.proNo : '';
     var arr_count = req.body.count ? req.body.count : '';
     var arr_price = req.body.price ? req.body.price : '';
 
+    // 处理数据
+    var arr = new Array();
+    for (var i=0;i<arr_proId.length;i++) {
+        var obj = {};
+        obj.proId = arr_proId[i];
+        obj.proName = arr_proname[i];
+        obj.proSerial = arr_proNo[i];
+        obj.count = arr_count[i];
+        obj.price = arr_price[i];
+        arr.push(obj);
+    }
 
+    service.insertInLog(buyType,inType,buyer,new Date(),storeroom,distributor,remark,function(err, results) {
+
+        if (!err) {
+            var logId = results.insertId; // 主表id
+            service.insertInLogMX(logId,arr,function (err, results) {
+                if (!err) {
+                    service.insertInventory(storeroom,arr,function(err, results) {
+
+                        if (!err) {
+
+                            res.redirect('/jinquan/storeroom_in_list?replytype=add');
+
+                        } else {
+                            service.delInLog(logId);
+                            service.delInLogMX(logId);
+                            next();
+                        }
+                    });
+
+                } else { // 如果入库详情出现错误，则将主表记录同时删除
+                    service.delInLog(logId);
+                    next();
+                }
+            });
+        } else {
+           next();
+        }
+    });
 }
 
 /**
@@ -119,10 +168,16 @@ module.exports.add = function (req, res, next) {
  * @param res
  * @param next
  */
-module.exports.browse = function (req, res, next) {
+module.exports.detail = function (req, res, next) {
 
     var inLogId = req.query.id ? req.query.id : ''; // 入库单id
 
+    service.detail(inLogId,function(err, results) {
 
-
+        if (!err) {
+            res.render('storeroomIn/storeroomInDetail',{data : results});
+        } else {
+            next();
+        }
+    });
 }

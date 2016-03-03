@@ -197,6 +197,8 @@ module.exports.select = function (req, res, next) {
     var classifyId = req.query.id ? req.query.id : '';  // 商品分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    var index = req.query.index ? req.query.index : '';
+
     service.list(name,classifyId,currentPage,function(err, results){
         if (!err) {
             results.currentPage = currentPage;
@@ -205,7 +207,7 @@ module.exports.select = function (req, res, next) {
             service.getWaresClassify(function(err,classify) {
                 if (!err) {
                     results.classify = classify;
-                    res.render('wares/waresSelect', {data : results});
+                    res.render('wares/waresSelect', {data : results, index : index});
                 } else {
                     console.log(err);
                     next();

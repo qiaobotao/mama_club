@@ -13,6 +13,16 @@
     </style>
 </head>
 <script type="text/javascript">
+
+    var replytype = '<%=replytype%>';
+    if (replytype == 'add') {
+        parent.layer.msg('增加成功');
+    } else if (replytype == 'del') {
+        parent.layer.msg('删除成功');
+    } else if (replytype == 'update') {
+        parent.layer.msg('修改成功');
+    }
+
     function search () {
         var oper = document.getElementById('oper').value;
         var outType = document.getElementById('outType').value;
@@ -58,12 +68,27 @@
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>出库方式</th>
-                <th>领取人</th>
                 <th>出库时间</th>
+                <th>领取人</th>
+                <th>出库方式</th>
                 <th>出库库房</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].outDate%></td>
+                <td><%=data.data[i].oper%></td>
+                <td><%=data.data[i].outName%></td>
+                <td><%=data.data[i].storeroomName%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_in_detail?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
         <%- include ../pagination.html -%>

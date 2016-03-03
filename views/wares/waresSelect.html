@@ -25,9 +25,11 @@
         window.location.href = '/jinquan/wares_modular?page='+selectPage+'&name='+name+'&id='+cid;
     }
     //选择该商品
-    function select(name,seril){
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname').value=name;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo').value=seril;
+    function select(id,name,seril){
+        var index = document.getElementById("index").value;
+        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=id;
+        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=name;
+        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index).value=seril;
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 
@@ -41,6 +43,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
+                    <input id="index" name="index" type="hidden" value="<%=index%>"  />
                     <td>商品名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
                     <td> &nbsp;商品分类：<select id="id" name="id">
                         <option value =""></option>
@@ -72,7 +75,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].serialNumber%>')">选择商品</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].name%>','<%=data.data[i].serialNumber%>')">选择商品</a>]</div></td>
                         </tr>
                     </table>
                 </td>

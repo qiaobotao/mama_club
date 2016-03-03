@@ -200,6 +200,7 @@ router.all('/distributor_update', distributorAction.update);
 router.all('/storeroom_in_list',storeroomInAction.list);
 router.all('/storeroom_in_pre_add', storeroomInAction.preAdd);
 router.all('/storeroom_in_add', storeroomInAction.add);
+router.all('/storeroom_in_detail', storeroomInAction.detail)
 // 出库管理
 router.all('/storeroom_out_list',storeroomOutAction.list);
 router.all('/storeroom_out_pre_add', storeroomOutAction.preAdd);

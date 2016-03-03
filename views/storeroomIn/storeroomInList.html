@@ -14,6 +14,16 @@
 </head>
 
 <script type="text/javascript">
+
+    var replytype = '<%=replytype%>';
+    if (replytype == 'add') {
+        parent.layer.msg('增加成功');
+    } else if (replytype == 'del') {
+        parent.layer.msg('删除成功');
+    } else if (replytype == 'update') {
+        parent.layer.msg('修改成功');
+    }
+
     function search () {
         var buyer = document.getElementById('buyer').value;
         var buyType = document.getElementById('buyType').value;
@@ -41,14 +51,14 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>采购人：<input id="buyer" name="buyer" type="text" class="input5" value="<%=data.buyer%>"/></td>
+                    <td>采购人：<input id="buyer" name="buyer" type="text" class="input5" value="<%=data.par_buyer%>"/></td>
                     <td> &nbsp;采购方式：<select id="buyType" name="buyType">
                         <option value =""></option>
                         <%for(var i=0;i<data.buyTypeClassify.length;i++){%>
-                        <option value ="<%=data.buyTypeClassify[i].id%>" <%if(data.buyType == data.buyTypeClassify[i].id){%>selected<%}%> ><%=data.buyTypeClassify[i].name%></option>
+                        <option value ="<%=data.buyTypeClassify[i].id%>" <%if(data.par_buyType == data.buyTypeClassify[i].id){%>selected<%}%> ><%=data.buyTypeClassify[i].name%></option>
                         <%}%>
                     </select></td>
-                    <td> &nbsp;采购时间：<input id="buyDate" name="buyDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.buyDate%>"/> </td>
+                    <td> &nbsp;采购时间：<input id="buyDate" name="buyDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.par_buyDate%>"/> </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -65,6 +75,21 @@
                 <th>入库库房</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].buyDate%></td>
+                <td><%=data.data[i].buyer%></td>
+                <td><%=data.data[i].inname%></td>
+                <td><%=data.data[i].storeroomName%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_in_detail?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
         <%- include ../pagination.html -%>
     </div>

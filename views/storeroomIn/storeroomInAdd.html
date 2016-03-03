@@ -14,7 +14,7 @@
     <script type="text/javascript">
 
         var iframIndex ;
-        function getWares(){
+        function getWares(index){
             //iframe层
             iframIndex = parent.layer.open({
 
@@ -23,7 +23,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/wares_select', //iframe的url
+                content: '/jinquan/wares_select?index='+index, //iframe的url
                 success: function(layero, index){
 
                 },
@@ -39,20 +39,35 @@
                 parent.layer.alert('采购人不能为空',{icon: 2});
                 return;
             }
-            //两个问题，一个是，我重复了input，但是id都相同，当我创建了多个input的时候，无论修改哪个商品，都是修改第一个输入框的内容
-            // 第二个问题是，我怎么在当前页面获取输入商品的array，来验证有没有空输入，提示用户有空的输入，这部验证必须有。
-//            alert($(".input5 input_arr").val);
-            //获取所有proname值
-            layer.msg($("input[name='count']").val());
-            var countVal = "";
-            $("input[name='count']").each(
-                function(){
-                    countVal+=","+$(this).val();
+            var arr_proname = document.getElementsByName('proname');
+            for (var i=0;i<arr_proname.length;i++) {
+                if(arr_proname[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
+                    return;
                 }
-            );
-            layer.msg(countVal);
+            }
 
-            //document.getElementById("myform").submit();
+            var arr_count = document.getElementsByName('count');
+            for (var i=0;i<arr_count.length;i++) {
+                if(arr_count[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_price = document.getElementsByName('price');
+            for (var i=0;i<arr_price.length;i++) {
+                if(arr_price[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品单价不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            document.getElementById("myform").submit();
+
         }
 
         //当前商品显示位置
@@ -69,10 +84,12 @@
             var cell3=row.insertCell(2);//采购数量
             var cell4=row.insertCell(3);//商品单价
             var cell5=row.insertCell(4);//删除本行
-            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares()"/>';
+            var cell6=row.insertCell(5);//商品id
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
             cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" />';
             cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
+            cell6.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
             cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
         }
         //table中删除选中的行数据
@@ -143,17 +160,7 @@
                 <td>商品单价</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
-            <!--
-            <tr id="qqq">
-                <td><input id="proname"  name="proname" type="text" class="input5 input_arr" onfocus="getWares()"/></td>
-                <td><input id="proNo" name="proNo" type="text" class="input5 input_arr" readonly="true"/></td>
-                <td><input id="count" name="count" type="text" class="input5 input_arr" /></td>
-                <td><input id="price" name="price" type="text" class="input5 input_arr" /></td>
-                <td><a style="cursor: pointer" onclick="javaScript:delTr('+1+')"><h1>-</h1></a></td>
-            </tr>
-            -->
         </table>
-        <!--合同信息 end-->
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>

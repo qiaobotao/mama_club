@@ -5,6 +5,7 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var moment = require('moment');
 var mainInTypeClassifyId = require('../../config').mainClassifyId.inType;
 var mainBuyTypeClassifyId = require('../../config').mainClassifyId.buyType;
 
@@ -17,14 +18,14 @@ module.exports.list = function (buyer,buyType,buyDate,currentPage,cb) {
     }
 
     if (buyDate != '') {
-        parm = parm + " AND s.buyDate ="+buyDate;
+        parm = parm + " AND s.buyDate >="+buyDate;
     }
 
     var sql_count = 'SELECT count(*) as count FROM storeroomInLog s '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
 
-    var sql_data = 'SELECT s.*, c.id AS inid, c.name AS inname, cc.id AS buyid, cc.name AS buyName FROM storeroomInLog AS s, systemClassify AS c, systemClassify cc '+parm+' AND s.inType = c.id AND s.buyType = cc.id ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, c.id AS inid, c.name AS inname, cc.id AS buyid, cc.name AS buyName, st.name AS storeroomName FROM storeroomInLog AS s, systemClassify AS c, systemClassify cc, storeroom st '+parm+' AND s.inType = c.id AND s.buyType = cc.id AND s.storeroomId = st.id ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -127,10 +128,10 @@ module.exports.insertInLogMX = function (mid,arr_obj,cb) {
     if (arr_obj.length == 0) {
         return;
     }
-    var sql = 'INSERT INTO storeroomInLogMX (inLogId,waresId,count,price) VALUES (?,?,?,?)';
+    var sql = 'INSERT INTO storeroomInLogMX (inLogId,waresName,waresSerial,count,price) VALUES (?,?,?,?,?)';
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [item.inLogId,item.waresId,item.count,item.price], function (cbData, err, rows, fields) {
+        db.query(sql, [mid,item.proName,item.proSerial,item.count,item.price], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -160,13 +161,13 @@ module.exports.insertInventory = function (sid,arr_obj,cb) {
 
     async.map(arr_obj, function(item, callback) {
 
-        db.query(check_sql, [sid,item.waresId],function(cbData, err, rows, fields) {
+        db.query(check_sql, [sid,item.proId],function(cbData, err, rows, fields) {
 
             if (!err) {
 
                 if (rows.length == 0) {  // 原来没有记录
 
-                    db.query(sql, [sid,item.waresId,item.count], function (cbData, err, rows, fields) {
+                    db.query(sql, [sid,item.proId,item.count], function (cbData, err, rows, fields) {
 
                         if (!err) {
                             callback(null, rows);
@@ -207,14 +208,16 @@ module.exports.detail = function (inLogId,cb) {
         'FROM storeroomInLog l,systemClassify c,systemClassify cc,storeroom s,distributor d ' +
         'WHERE l.buyType = c.id AND l.inType = cc.id AND l.distributorId = d.id AND l.storeroomId = s.id AND l.id = ?';
 
-    var detail_sql = 'SELECT mx.count,mx.price,w.name,w.serialNumber FROM storeroomInLogMX mx, wares w Where mx.inLogId = ? AND mx.waresId = w.id';
+    var detail_sql = 'SELECT * FROM storeroomInLogMX Where inLogId = ?';
 
     db.query(sql,[inLogId],function (cbData, err, rows, fields) {
 
         if (!err) {
             if (rows.length != 0) {
 
-                var log = row[0];
+                var log = rows[0];
+                // 处理日期显示
+                log.buyDate = moment(log.buyDate).format('YYYY-MM-DD');
                 db.query(detail_sql, [inLogId], function (cbData, err, rows, fields) {
 
                    if (!err) {
@@ -234,3 +237,31 @@ module.exports.detail = function (inLogId,cb) {
         }
     });
 }
+
+/**
+ * 当代码出错时，做删除
+ * @param inLogId
+ * @param cb
+ */
+module.exports.delInLog = function (inLogId) {
+
+    var sql = 'DELETE FROM storeroomInLog WHERE id = ?';
+
+    db.query(sql, [inLogId], function (err, results) {
+        console.error(new Error('删除INLOG主表信息'));
+    });
+}
+
+/**
+ * 根据inlogid 删除
+ * @param inLogId
+ */
+module.exports.delInLogMX = function (inLogId) {
+
+    var sql = 'DELETE FROM storeroomInLogMX WHERE inLogId = ?';
+
+    db.query(sql, [inLogId], function(err, results){
+        console.error(new Error('删除INLOG明细表信息'));
+    });
+}
+

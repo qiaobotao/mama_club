@@ -5,7 +5,7 @@
 
 var service = require('../../model/service/storeroomOut');
 var storeroomService = require('../../model/service/storeroom');
-
+var moment = require('moment');
 /**
  * 获取出库列表
  * @param req
@@ -18,10 +18,19 @@ module.exports.list = function (req, res, next) {
     var outDate = req.query.outDate ? req.query.outDate : ''; // 出库日期
     var currentPage = req.query.page ? req.query.page : '1';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
 
     service.list(outType,oper,outDate,currentPage,function (err, results) {
 
         if (!err) {
+            for (var i=0;i<results.data.length;i++) {
+                var dateline = results.data[i].outDate;
+                if (dateline != '') {
+                    var temp = moment(dateline).format('YYYY-MM-DD');
+                    results.data[i].outDate = temp;
+                }
+            }
             results.currentPage = currentPage;
             results.oper = oper;
             results.outType = outType;
@@ -31,7 +40,7 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.outTypeClassify = outTypeClassify;
-                    res.render('storeroomOut/storeroomOutList',{data : results});
+                    res.render('storeroomOut/storeroomOutList',{data : results,replytype : replytype});
                 } else {
                     next();
                 }
@@ -69,6 +78,87 @@ module.exports.preAdd = function (req, res, next) {
     });
 }
 
+/**
+ * 增加出库单
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.add = function (req, res, next) {
 
+    var oper = req.body.oper ? req.body.oper : '';
+    var outType = req.body.outType ? req.body.outType : '';
+    var storeroom = req.body.storeroom ? req.body.storeroom : '';
+    var remarks = req.body.remarks ? req.body.remarks : '';
+
+
+    // 数组
+    var arr_proId = req.body.proId ? req.body.proId : '';
+    var arr_proname = req.body.proname ? req.body.proname :'';
+    var arr_proNo = req.body.proNo ? req.body.proNo : '';
+    var arr_count = req.body.count ? req.body.count : '';
+    var arr_price = req.body.price ? req.body.price : '';
+
+    // 处理数据
+    var arr = new Array();
+    for (var i=0;i<arr_proId.length;i++) {
+        var obj = {};
+        obj.proId = arr_proId[i];
+        obj.proName = arr_proname[i];
+        obj.proSerial = arr_proNo[i];
+        obj.count = arr_count[i];
+        obj.price = arr_price[i];
+        arr.push(obj);
+    }
+
+    service.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+
+        if (!err) {
+
+            var outLogId = results.insertId;
+            service.insertOutLogMX(outLogId,arr,function (err, results) {
+
+                if (!err) {
+                    service.updateInventory(storeroom,arr,function(err, results) {
+
+                        if (!err) {
+                            res.redirect('/jinquan/storeroom_out_list?replytype=add');
+
+                        } else {
+                            service.delOutLog(outLogId);
+                            service.delOutLogMX(outLogId);
+                            next();
+                        }
+                    });
+                } else {
+                    service.delOutLog(outLogId);
+                    next();
+                }
+            })
+        } else {
+            next();
+        }
+    });
+}
+
+/**
+ * 验证库存
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.checkResidue = function (req, res, next) {
+
+    var num = req.query.num ? req.query.num : 0;
+    var waresId = req.query.waresId ? req.query.waresId : '';
+    var storeroomId = req.query.storeroomId ? req.query.storeroomId : '';
+
+    service.checkResidue(storeroomId,waresId,num,function (err, flag) {
+
+        if (!err) {
+            res.json({flag : flag});
+        } else {
+          next();
+        }
+    });
 }

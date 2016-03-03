@@ -113,10 +113,10 @@ module.exports.insertOutLogMX = function (mid,arr_obj,cb) {
         return;
     }
 
-    var sql = 'INSERT INTO storeroomOutLogMX (outLogId,waresId,count,price) VALUES (?,?,?,?)';
+    var sql = 'INSERT INTO storeroomOutLogMX (outLogId,waresSerial,waresName,count,price) VALUES (?,?,?,?,?)';
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [item.outLogId,item.waresId,item.count,item.price], function (cbData, err, rows, fields) {
+        db.query(sql, [mid,item.proSerial,item.proName,item.count,item.price], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -136,6 +136,80 @@ module.exports.insertOutLogMX = function (mid,arr_obj,cb) {
  */
 module.exports.updateInventory = function (sid,arr_obj,cb) {
 
+    if (arr_obj.length == 0) {
+        return;
+    }
 
+    var sql = 'UPDATE inventory SET count = count - ? WHERE storeroomId = ? AND waresId = ?';
+
+    async.map(arr_obj, function(item, callback) {
+
+        db.query(sql, [item.num,sid,item.proId],function(cbData, err, rows, fields) {
+
+            if (!err) {
+
+                callback(null, rows);
+
+            } else {  // 有记录
+                callback(err);
+            }
+        });
+
+    }, function(err,results) {
+        cb(err, results);
+    });
+
+}
+
+
+/**
+ * 检查库存量
+ * @param storeroomId
+ * @param waresId
+ * @param num
+ * @param cb
+ */
+module.exports.checkResidue = function (storeroomId, waresId, num, cb) {
+
+    var sql = 'SELECT count FROM inventory WHERE storeroomId = ? AND waresId = ?';
+
+    db.query(sql, [storeroomId,waresId], function (cbData, err, rows, fields) {
+
+        if (!err) {
+            if (rows.length != 0) {
+                var temp = rows[0].count - num;
+                cb(null, temp >= 0 ? true : false);
+            } else {
+                cb(null, false);
+            }
+        } else {
+            cb(err);
+        }
+    });
+}
+
+
+/**
+ * 出错后 删掉
+ * @param outLogId
+ */
+module.exports.delOutLog = function (outLogId) {
+
+    var sql = 'DELETE FROM storeroomOutLog WHERE id = ?';
+    db.query(sql, [outLogId], function (err, results) {
+        console.error(new Error('删除OUTLOG主表信息'));
+    });
+}
+
+/**
+ * 出错后删掉
+ * @param outLogId
+ */
+module.exports.delOutLogMX = function (outLogId) {
+
+    var sql = 'DELETE FROM storeroomOutLogMX WHERE outLogId = ?';
+    db.query(sql, [outLogId], function (err, results) {
+        console.error(new Error('删除OUTLOG明细表信息'));
+    });
 
 }
