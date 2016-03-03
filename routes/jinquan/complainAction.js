@@ -45,7 +45,7 @@ module.exports.goAdd = function (req, res) {
 
 
 module.exports.add = function (req, res, next) {
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
     var complainPrincipal = req.body.complainPrincipal ? req.body.complainPrincipal : '';
@@ -53,7 +53,7 @@ module.exports.add = function (req, res, next) {
     var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
     var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
 
-    service.insertComplain(serialNumber,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
+    service.insertComplain(serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/complain_list');
             } else {
@@ -66,7 +66,7 @@ module.exports.add = function (req, res, next) {
 
 module.exports.doEdit = function (req, res, next) {
     var id = req.body.id ? req.body.id : '';
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
     var complainPrincipal = req.body.complainPrincipal ? req.body.complainPrincipal : '';
@@ -74,7 +74,7 @@ module.exports.doEdit = function (req, res, next) {
     var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
     var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
 
-    service.updateComplain(id,serialNumber,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
+    service.updateComplain(id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/complain_list');
         } else {

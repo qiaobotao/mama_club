@@ -33,10 +33,35 @@
                 cache: false,
                 timeout: 5000,
                 success: function(data){
+                    //JSON.parse(data)
+                    //jQuery 方式
+                    //javascript 方式
+                    //var jsonData = eval("(" + jsonDataString + ")");
+                    //var dataset = $.parseJSON(jsonstr);
                     var datas = JSON.parse(data);
+                    alert(datas);
                     if(datas) {
                         document.getElementById("memberId").value=datas.id;
                         document.getElementById("age").value=datas.age;
+                        var  serviceMeets =datas.serviceMeets;
+                        //获取表格对象
+                        var table=document.getElementById("serviceMeets");
+                        //获取当前行数
+                        serviceMeetsIndex = $("#serviceMeets tr").length;
+                        for(var i=0;i<serviceMeets.length;i++)
+                        {
+                            var row=table.insertRow(serviceMeetsIndex);
+                            var cell1=row.insertCell(0);//预约时间
+                            var cell2=row.insertCell(1);//预约技师
+                            var cell3=row.insertCell(2);//如约、爽约
+                            cell1.innerHTML =serviceMeets[i].meetTime;
+                            cell1.innerHTML =serviceMeets[i].principal;
+                            cell1.innerHTML =serviceMeets[i].status;
+                            serviceMeetsIndex++;
+                        }
+
+                        var  nursServices =datas.nursServices;
+                        var  complains =datas.complains;
                     }
                     else
                     {
@@ -68,11 +93,11 @@
                 alert('电话不能为空');
                 return;
             }
-            var age = document.getElementById("age").value;
-            if (!age || age.length == 0) {
-                alert('年龄不能为空');
-                return;
-            }
+//            var age = document.getElementById("age").value;
+//            if (!age || age.length == 0) {
+//                alert('年龄不能为空');
+//                return;
+//            }
             var principal = document.getElementById("principal").value;
             if(!principal || principal.length == 0) {
                 alert('技师不能为空');
@@ -136,13 +161,13 @@
             </tr>
             <tr>
                 <td class="regTd_l">年龄：</td>
-                <td class="regTd_r"><input id="age" name="age" type="text" class="input5"  value="<%=service_meet.age%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="age" name="age" type="text" class="input5"  readonly="true" value="<%=service_meet.age%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">技师：</td>
                 <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5"  value="<%=service_meet.principal%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">预约时间：</td>
-                <td class="regTd_r"><input id="meetTime" name="meetTime" type="text" class="input5"  value="<%=service_meet.meetTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="meetTime" name="meetTime" type="text" class="input5" onclick="laydate()"  value="<%=service_meet.meetTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">问题描述：</td>
                 <td class="regTd_r"><input id="problemDescription" name="problemDescription" type="text" class="input5"  value="<%=service_meet.problemDescription%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -183,7 +208,7 @@
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table id="serviceMeets" name="serviceMeets" style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
                             <td>预约时间</td>
                             <td>预约技师</td>
@@ -195,11 +220,11 @@
 
             <!-- 服务情况 -->
             <tr>
-                <td colspan="4" align="left">服务情况：</td>
+                <td colspan="4" align="left">护理情况：</td>
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table id="nursServices" name="nursServices" style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
                             <td>服务时间</td>
                             <td>服务技师</td>
@@ -214,7 +239,7 @@
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table  id="complains" name="complains" style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
                             <td>投诉时间</td>
                             <td>投诉技师</td>

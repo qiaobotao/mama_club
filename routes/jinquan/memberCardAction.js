@@ -51,7 +51,7 @@ module.exports.list = function (req, res,next) {
         //有效时间
         parameter9= req.query.parameter9 ? req.query.parameter9 : '';
     }
-    var status=  req.query.status ? req.query.status : '0';
+    var status=  req.query.status ? req.query.status : '1';
     service.fetchAllMemberCard(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage, function (err, results) {
         if (err) {
             console.log(err.message);
@@ -210,7 +210,6 @@ module.exports.addOrEdit = function (req, res,next) {
  */
 module.exports.del = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
-    var type = req.query.type ? req.query.type : '';
         service.delMembercard(id, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list');
@@ -218,11 +217,12 @@ module.exports.del = function (req, res,next) {
                 next();
             }
         });
-}
+};
 /**
  * 查看页面
  * @param req
  * @param res
+ * @param next
  */
 module.exports.show = function(req, res,next) {
 

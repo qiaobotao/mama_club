@@ -34,6 +34,8 @@
                 timeout: 5000,
                 success: function(data){
                     var datas = JSON.parse(data);
+
+
                     if(datas) {
                         document.getElementById("memberId").value=datas.id;
                         document.getElementById("age").value=datas.age;
@@ -85,11 +87,11 @@
                 alert('电话不能为空');
                 return;
             }
-            var age = document.getElementById("age").value;
-            if (!age || age.length == 0) {
-                alert('年龄不能为空');
-                return;
-            }
+//            var age = document.getElementById("age").value;
+//            if (!age || age.length == 0) {
+//                alert('年龄不能为空');
+//                return;
+//            }
             var principal = document.getElementById("principal").value;
             if(!principal || principal.length == 0) {
                 alert('技师不能为空');
@@ -136,13 +138,13 @@
             </tr>
             <tr>
                 <td class="regTd_l">年龄：</td>
-                <td class="regTd_r"><input id="age" name="age" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="age" name="age" type="text"  readonly="true" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">技师：</td>
                 <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">预约时间：</td>
-                <td class="regTd_r"><input id="meetTime" name="meetTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="meetTime" name="meetTime" type="text" class="input5" onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">问题描述：</td>
                 <td class="regTd_r"><input id="problemDescription" name="problemDescription" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
