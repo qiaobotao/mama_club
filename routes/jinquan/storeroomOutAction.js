@@ -149,16 +149,38 @@ module.exports.add = function (req, res, next) {
  */
 module.exports.checkResidue = function (req, res, next) {
 
-    var num = req.query.num ? req.query.num : 0;
-    var waresId = req.query.waresId ? req.query.waresId : '';
-    var storeroomId = req.query.storeroomId ? req.query.storeroomId : '';
+    var num = req.body.num ? req.body.num : 0;
+    var waresId = req.body.waresId ? req.body.waresId : '';
+    var storeroomId = req.body.storeroomId ? req.body.storeroomId : '';
 
     service.checkResidue(storeroomId,waresId,num,function (err, flag) {
-
         if (!err) {
             res.json({flag : flag});
         } else {
           next();
         }
     });
+}
+
+/**
+ * 出库详情
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.detail = function (req, res, next) {
+
+    var outLogId = req.query.id ? req.query.id : '';
+
+    service.detail(outLogId,function(err, results) {
+
+        if (!err) {
+            res.render('storeroomOut/storeroomOutDetail',{data : results});
+        } else {
+            next();
+        }
+    });
+
+
+
 }

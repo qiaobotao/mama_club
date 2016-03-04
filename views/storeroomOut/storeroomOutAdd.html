@@ -35,12 +35,29 @@
         // 验证库存量
         function check (index) {
 
+            var proId = $("#proId"+index).val();
+            if (proId == '') {
+                parent.layer.alert('请先选择商品！',{icon: 2});
+                document.getElementById("count"+index).value = '';
+                return;
+            }
 
-
+            $.ajax({
+                type: "post",
+                url: "/jinquan/storeroom_check",
+                data: {'storeroomId':$("#storeroom").val(),'waresId':$("#proId"+index).val(),'num':$("#count"+index).val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById("count"+index).value = '';
+                        parent.layer.alert('该商品库存不够！',{icon: 2});
+                    }
+                }
+            });
         }
 
         //提交表单
         function submitForm(){
+
             var oper = document.getElementById("oper").value;
             if (!oper || oper.length == 0) {
                 parent.layer.alert('领取人不能为空',{icon: 2});
@@ -94,7 +111,7 @@
             var cell6=row.insertCell(5);//商品id
             cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
-            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" />';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="check('+waresIndex+')"/>';
             cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
             cell6.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
             cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';

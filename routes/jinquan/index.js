@@ -214,6 +214,8 @@ router.all('/storeroom_in_detail', storeroomInAction.detail)
 router.all('/storeroom_out_list',storeroomOutAction.list);
 router.all('/storeroom_out_pre_add', storeroomOutAction.preAdd);
 router.all('/storeroom_out_add', storeroomOutAction.add);
+router.all('/storeroom_check', storeroomOutAction.checkResidue);
+router.all('/storeroom_out_detail', storeroomOutAction.detail);
 // 移库管理
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_add', storeroomMoveAction.add);

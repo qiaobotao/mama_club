@@ -5,6 +5,7 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var moment = require('moment');
 var mainOutTypeClassifyId = require('../../config').mainClassifyId.outType;
 
 
@@ -188,6 +189,48 @@ module.exports.checkResidue = function (storeroomId, waresId, num, cb) {
     });
 }
 
+/**
+ * 获取出库表详情
+ * @param outLogId
+ * @param cb
+ */
+module.exports.detail = function (outLogId,cb) {
+
+    // 分两步查，1先查表单头，2查表单内容
+    var sql = 'SELECT l.oper,l.outDate,l.remarks, s.name AS storeroomName, c.name AS outTypeName ' +
+        'FROM storeroomOutLog l, systemClassify c, storeroom s ' +
+        'WHERE l.outType = c.id AND l.storeroomId = s.id AND l.id = ?';
+
+    var detail_sql = 'SELECT * FROM storeroomOutLogMX Where outLogId = ?';
+
+    db.query(sql,[outLogId],function (cbData, err, rows, fields) {
+
+        if (!err) {
+            if (rows.length != 0) {
+
+                var log = rows[0];
+                // 处理日期显示
+                log.outDate = moment(log.outDate).format('YYYY-MM-DD');
+                db.query(detail_sql, [outLogId], function (cbData, err, rows, fields) {
+
+                    if (!err) {
+                        var obj = {};
+                        obj.log = log;
+                        obj.logmx = rows;
+                        cb (null, obj);
+                    } else {
+                        cb(err);
+                    }
+                });
+            } else { // 主表没有，直接返回空对象
+                cb(null,{});
+            }
+        } else {
+            cb(err);
+        }
+    });
+
+}
 
 /**
  * 出错后 删掉
