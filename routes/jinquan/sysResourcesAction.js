@@ -3,6 +3,7 @@
  */
 
 var service = require('../../model/service/sysResources');
+var menuService = require('../../model/service/sysMenu');
 /**
  * 获取资源列表
  * @param req
@@ -37,12 +38,29 @@ module.exports.edit = function (req, res) {
     var show = req.query.show ? req.query.show : '';
     if(id == ''){
         var sysResources = [];//系统资源
-        res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show});
+        //获取所有菜单数据
+        menuService.fetchSysMenus(0,20,function(err, results) {
+            if(!err) {
+                res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show,menus:results});
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
     }else{
         service.fetchSingleSysResources(id, function(err, results) {
             if (!err) {
                 var sysResources = results.length == 0 ? null : results[0];
-                res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show});
+                //res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show});
+                //获取所有菜单数据
+                menuService.fetchSysMenus(0,20,function(err, results) {
+                    if(!err) {
+                        res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show,menus:results});
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 next();
             }
