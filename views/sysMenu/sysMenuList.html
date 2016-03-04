@@ -72,7 +72,13 @@
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].textCh%></td>
                 <td><%=data.data[i].textEn%></td>
-                <td><%=data.data[i].parentId%></td>
+                <td>
+                    <%if(data.data[i].parentName != null){%>
+                        <%=data.data[i].parentName%>
+                    <%}else{%>
+                        根菜单
+                    <%}%>
+                </td>
                 <td><%=data.data[i].url%></td>
                 <td><%=data.data[i].orderId%></td>
                 <td>

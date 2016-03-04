@@ -30,27 +30,11 @@
             }
         };
 
-
-        var zNodes =[
-            { id:1, pId:0, name:"随意勾选 1", open:true},
-            { id:11, pId:1, name:"随意勾选 1-1", open:true},
-            { id:111, pId:11, name:"随意勾选 1-1-1"},
-            { id:112, pId:11, name:"随意勾选 1-1-2"},
-            { id:12, pId:1, name:"随意勾选 1-2", open:true},
-            { id:121, pId:12, name:"随意勾选 1-2-1"},
-            { id:122, pId:12, name:"随意勾选 1-2-2"},
-            { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
-            { id:21, pId:2, name:"随意勾选 2-1"},
-            { id:22, pId:2, name:"随意勾选 2-2", open:true},
-            { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
-            { id:222, pId:22, name:"随意勾选 2-2-2"},
-            { id:23, pId:2, name:"随意勾选 2-3"}
-        ];
         //点击后回调函数
         function beforeClick(treeId, treeNode) {
             var check = (treeNode && !treeNode.isParent);
             if (!check) {
-                layer.msg("只能选择子菜单");
+                parent.layer.msg("只能选择子菜单");
                 return check;
             }else{
                 hideMenu();
@@ -61,19 +45,23 @@
         function onClick(e, treeId, treeNode) {
             var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
                     nodes = zTree.getSelectedNodes(),
-                    v = "";
+                    v = "",mId = "";
             nodes.sort(function compare(a,b){return a.id-b.id;});
             for (var i=0, l=nodes.length; i<l; i++) {
                 v += nodes[i].name + ",";
+                mId += nodes[i].id + ",";
             }
             if (v.length > 0 ) v = v.substring(0, v.length-1);
-            var cityObj = $("#menuId");
-            cityObj.attr("value", v);
+            if (mId.length > 0 ) mId = mId.substring(0, mId.length-1);
+            var menuIdObj = $("#menuId");
+            menuIdObj.attr("value", mId);
+            var menuNameObj = $("#menuName");
+            menuNameObj.attr("value", v);
         }
 
         function showMenu() {
-            var cityObj = $("#menuId");
-            var cityOffset = $("#menuId").offset();
+            var cityObj = $("#menuName");
+            var cityOffset = $("#menuName").offset();
             $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
 
             $("body").bind("mousedown", onBodyDown);
@@ -87,8 +75,39 @@
                 hideMenu();
             }
         }
+
+        var index = 0;
+        var zNodes = [];
         //为菜单下拉框增加树形结构
         $(document).ready(function(){
+            var selectMenuId = '<%=data.menuId%>';
+            console.log("selectMenuId"+selectMenuId);
+            var menus = '<%-JSON.stringify(menus)%>';
+            menus = JSON.parse(menus);
+            for(var i = 0 ; i < menus.length ; i ++){
+                if(selectMenuId == menus[i].id){
+                    var menuNameObj = $("#menuName");
+                    menuNameObj.attr("value", menus[i].textCh);
+                }
+                if(menus[i].parentId == 0){
+                    var nodesObj = {};
+                    nodesObj.id = menus[i].id;
+                    nodesObj.pId = menus[i].parentId;
+                    nodesObj.name = menus[i].textCh;
+                    zNodes[index]= nodesObj;
+                    index++;
+                    for(var j = i ; j < menus.length ; j ++){
+                        if(menus[j].parentId == menus[i].id){
+                            var nodesObj = {};
+                            nodesObj.id = menus[j].id;
+                            nodesObj.pId = menus[j].parentId;
+                            nodesObj.name = menus[j].textCh;
+                            zNodes[index]= nodesObj;
+                            index++;
+                        }
+                    }
+                }
+            }
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
         });
         function submitForm(){
@@ -146,16 +165,9 @@
             <tr>
                 <td class="regTd_l">所属菜单：</td>
                 <td class="regTd_r">
-                    <input id="menuId" name="menuId" type="text" class="input5" value="<%=data.menuId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input id="menuId" name="menuId" type="hidden" value="<%=data.menuId%>" />
+                    <input id="menuName" name="menuName" type="text" class="input5" value="<%=data.menuId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                     <a id="menuBtn" href="#" onclick="showMenu(); return false;">选择</a>
-                    <!--
-                    <div class="zTreeDemoBackground left">
-                        <ul class="list">
-                            <li class="title">&nbsp;&nbsp;城市：<input id="menuId" type="text" readonly value="" style="width:120px;"/>
-                                &nbsp;</li>
-                        </ul>
-                    </div>
-                    -->
                     <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
                         <ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>
                     </div>
