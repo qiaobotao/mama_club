@@ -14,10 +14,10 @@ var async = require('async');
  * @param imageUrl
  * @param cb
  */
-module.exports.insertSysMenu = function(textCh,textEn,parentId,orderId,url,imageUrl, cb) {
+module.exports.insertSysMenu = function(textCh,textEn,parentId,orderId,url, cb) {
 
-    var sql = 'INSERT INTO sysMenu (textCh,textEn,parentId,orderId,url,imageUrl,dateline) VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [textCh,textEn,parentId,orderId,url,imageUrl, new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO sysMenu (textCh,textEn,parentId,orderId,url,dateline) VALUES (?,?,?,?,?,?)';
+    db.query(sql, [textCh,textEn,parentId,orderId,url, new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -120,9 +120,9 @@ module.exports.fetchAllSysMenu = function(textCh,currentPage,cb) {
  * @param imageUrl
  * @param cb
  */
-module.exports.updateSysMenu = function(id, textCh,textEn,parentId,orderId,url,imageUrl, cb) {
-    var sql = 'UPDATE sysMenu SET textCh = ?, textEn = ?, parentId = ?, orderId = ?, url = ?, imageUrl = ? WHERE id = ?';
-    var par = [textCh,textEn,parentId,orderId,url,imageUrl, id];
+module.exports.updateSysMenu = function(id, textCh,textEn,parentId,orderId,url, cb) {
+    var sql = 'UPDATE sysMenu SET textCh = ?, textEn = ?, parentId = ?, orderId = ?, url = ? WHERE id = ?';
+    var par = [textCh,textEn,parentId,orderId,url, id];
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -143,6 +143,23 @@ module.exports.fetchSingleSysMenu =function (id, cb) {
     var sql = 'SELECT * FROM sysMenu WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 获取父菜单为空的所有菜单
+ * @param id
+ * @param cb
+ */
+module.exports.findAllParentSysMenu =function (cb) {
+
+    var sql = 'SELECT * FROM sysMenu where parentId = 0';
+    db.query(sql, [],  function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
