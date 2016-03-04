@@ -193,15 +193,31 @@ module.exports.getMemberByNameTel = function(req, res, next) {
     var tel = req.body.memberTel ? req.body.memberTel : '';
     service.getMemberByNameTel(memberName,tel ,function(err, results) {
         if (!err) {
-            var member = results.length == 0 ? null : results[0];
-            if(member.id!=null)
-            {
-                //如果是会员查询历史预约单
+                var member = results.length == 0 ? null : results[0];
+                if(member.id!=null)
+                {
+                    results.member=member;
+                    //预约服务单
+                      servicemeet.getTop3ServiceMeet(member.id,memberName,tel,function(err, services) {
+                          results.services=services;
 
-                //历史护理情况
-                //时间投诉情况
-            }
-            res.json(JSON.stringify(member));
+                          var serviceMeetIds="";
+                          for(var i=0;i<services.length;i++)
+                          {
+                              serviceMeetIds+="'"+services[i].id+"'";
+                          }
+                          //护理服务
+                          nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
+                                  results.nursServices=nursServices;
+                                  complain.getTop3Complain(serviceMeetIds,function(err, complains) {
+                                      results.complains=complains;
+                                      console.log(JSON.stringify(complains));
+                                      res.json(JSON.stringify(results));
+                                 });
+                              })
+                          });
+                }
+
         } else {
             next();
         }
