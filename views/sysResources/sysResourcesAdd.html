@@ -5,10 +5,92 @@
     <title>编辑资源按钮</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="../../../css/zTreeStyle/demo.css" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../js/zTree/jquery.ztree.core.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../js/zTree/jquery.ztree.excheck.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../../js/layer/layer.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        var setting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeClick: beforeClick,
+                onClick: onClick
+            }
+        };
+
+
+        var zNodes =[
+            { id:1, pId:0, name:"随意勾选 1", open:true},
+            { id:11, pId:1, name:"随意勾选 1-1", open:true},
+            { id:111, pId:11, name:"随意勾选 1-1-1"},
+            { id:112, pId:11, name:"随意勾选 1-1-2"},
+            { id:12, pId:1, name:"随意勾选 1-2", open:true},
+            { id:121, pId:12, name:"随意勾选 1-2-1"},
+            { id:122, pId:12, name:"随意勾选 1-2-2"},
+            { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
+            { id:21, pId:2, name:"随意勾选 2-1"},
+            { id:22, pId:2, name:"随意勾选 2-2", open:true},
+            { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
+            { id:222, pId:22, name:"随意勾选 2-2-2"},
+            { id:23, pId:2, name:"随意勾选 2-3"}
+        ];
+        //点击后回调函数
+        function beforeClick(treeId, treeNode) {
+            var check = (treeNode && !treeNode.isParent);
+            if (!check) {
+                layer.msg("只能选择子菜单");
+                return check;
+            }else{
+                hideMenu();
+                return check;
+            }
+        }
+
+        function onClick(e, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                    nodes = zTree.getSelectedNodes(),
+                    v = "";
+            nodes.sort(function compare(a,b){return a.id-b.id;});
+            for (var i=0, l=nodes.length; i<l; i++) {
+                v += nodes[i].name + ",";
+            }
+            if (v.length > 0 ) v = v.substring(0, v.length-1);
+            var cityObj = $("#menuId");
+            cityObj.attr("value", v);
+        }
+
+        function showMenu() {
+            var cityObj = $("#menuId");
+            var cityOffset = $("#menuId").offset();
+            $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+            $("body").bind("mousedown", onBodyDown);
+        }
+        function hideMenu() {
+            $("#menuContent").fadeOut("fast");
+            $("body").unbind("mousedown", onBodyDown);
+        }
+        function onBodyDown(event) {
+            if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+                hideMenu();
+            }
+        }
+        //为菜单下拉框增加树形结构
+        $(document).ready(function(){
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        });
         function submitForm(){
             /*
             var name = document.getElementById("name").value;
@@ -63,7 +145,21 @@
             </tr>
             <tr>
                 <td class="regTd_l">所属菜单：</td>
-                <td class="regTd_r"><input id="menuId" name="menuId" type="text" class="input5" value="<%=data.menuId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="menuId" name="menuId" type="text" class="input5" value="<%=data.menuId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <a id="menuBtn" href="#" onclick="showMenu(); return false;">选择</a>
+                    <!--
+                    <div class="zTreeDemoBackground left">
+                        <ul class="list">
+                            <li class="title">&nbsp;&nbsp;城市：<input id="menuId" type="text" readonly value="" style="width:120px;"/>
+                                &nbsp;</li>
+                        </ul>
+                    </div>
+                    -->
+                    <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
+                        <ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>
+                    </div>
+                </td>
                 <td class="regTd_l">排序：</td>
                 <td class="regTd_r"><input id="orderId" name="orderId" type="text" class="input5"  value="<%=data.orderId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -79,7 +175,7 @@
         %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
         }
         %>
-        <div class="rb_l"><a href=/jinquan/storeroom_move_list" class="close"></a></div>
+        <div class="rb_l"><a href=/jinquan/sys_resources_list class="close"></a></div>
     </div>
 
 

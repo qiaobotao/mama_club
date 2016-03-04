@@ -66,7 +66,7 @@ module.exports.save = function (req, res) {
     if(id!=''){//修改
         service.updateAttendanceChange(id,categoryName,jobTime,startDate,endDate,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/attendance_type_list');
+                res.redirect('/jinquan/attendance_change_list');
             } else {
                 console.log(err.message);
                 res.render('error');
@@ -75,7 +75,7 @@ module.exports.save = function (req, res) {
     }else{//添加
         service.insertAttendanceChange(categoryName,jobTime,startDate,endDate,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/attendance_type_list');
+                res.redirect('/jinquan/attendance_change_list');
             } else {
                 console.log(1123);
                 console.log(err.message);
@@ -96,7 +96,7 @@ module.exports.del = function (req, res, next) {
 
     service.delAttendanceChange(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/attendance_type_list');
+            res.redirect('/jinquan/attendance_change_list');
         } else {
             next();
         }
