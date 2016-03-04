@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
+module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price) VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO serviceMeet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -30,10 +30,10 @@ module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,prob
         }
     });
 };
-module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, cb) {
+module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
 
-    var sql = 'UPDATE   serviceMeet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ?   WHERE  id  =  ?  ';
-    db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE   serviceMeet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
+    db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -43,12 +43,11 @@ module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,p
 };
 /**
  * 添加教室
- * @param serialNumber
+ * @param tel
  * @param name
- * @param classCode
- * @param classType
- * @param remark
- * @param materialid
+ * @param meetTime
+ * @param status
+ * @param currentPage
  * @param cb
  */
 module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPage,cb) {
@@ -94,7 +93,7 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
             cb(err);
         }
     });
-}
+};
 /**
  * 删除教室
  * @param id
@@ -110,7 +109,7 @@ module.exports.delServiceMeet= function (id, cb) {
             cb(err);
         }
     });
-}
+};
 
 module.exports.fetchSingleServiceMeet =function (id, cb) {
 
@@ -123,4 +122,32 @@ module.exports.fetchSingleServiceMeet =function (id, cb) {
             cb(err);
         }
     });
-}
+};
+/**
+ * 获取前三条预约数据根据会员id 或者 姓名和电话
+ * @param id
+ * @param cb
+ */
+module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
+
+    var parm ="";
+
+    if(memberId !=null && memberId !="")
+    {
+        parm=   "where memberId='" + memberId + "'" ;
+    }
+    else
+    {
+        parm=   "where tel='" + tel + "' and name ='" + name + "'" ;
+    }
+    parm=" order by dateline limit 0,3";
+    var sql = 'SELECT * FROM serviceMeet '+parm ;
+    db.query(sql, [],  function(cbData, err, rows, fields) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};

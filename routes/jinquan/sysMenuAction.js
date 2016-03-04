@@ -40,13 +40,29 @@ module.exports.edit = function (req, res) {
     var id = req.query.id ? req.query.id : '';
     var show = req.query.show ? req.query.show : '';
     if(id == ''){
-        var sysMenu = [];//系统菜单
-        res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu,show:show});
+        //获取父菜单为空的所有菜单
+        service.findAllParentSysMenu(function(err, results) {
+            if(!err) {
+                var sysMenu = [];//系统菜单
+                res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu,show:show,data : results});
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
     }else{
         service.fetchSingleSysMenu(id, function(err, results) {
             if (!err) {
                 var sysMenu = results.length == 0 ? null : results[0];
-                res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu,show:show});
+                //获取父菜单为空的所有菜单
+                service.findAllParentSysMenu(function(err, results) {
+                    if(!err) {
+                        res.render('sysMenu/sysMenuAdd', {sysMenu : sysMenu,show:show,data : results});
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 next();
             }
@@ -68,7 +84,7 @@ module.exports.save = function (req, res) {
     var imageUrl = req.body.imageUrl ? req.body.imageUrl : '';
 
     if(id!=''){//修改
-        service.updateSysMenu(id,textCh,textEn,parentId,orderId,url,imageUrl,function(err, results) {
+        service.updateSysMenu(id,textCh,textEn,parentId,orderId,url,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/sys_menu_list?replytype=update');
             } else {
@@ -77,7 +93,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertSysMenu(textCh,textEn,parentId,orderId,url,imageUrl,function(err, results) {
+        service.insertSysMenu(textCh,textEn,parentId,orderId,url,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/sys_menu_list?replytype=add');
             } else {

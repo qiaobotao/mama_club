@@ -10,8 +10,8 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
-            var serialNumber = document.getElementById("serialNumber").value;
-            if (!serialNumber || name.serialNumber == 0) {
+            var serviceMeetId = document.getElementById("serviceMeetId").value;
+            if (!serviceMeetId || name.serviceMeetId == 0) {
                 alert('服务单号不能为空');
                 return;
             }
@@ -37,7 +37,7 @@
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
                 <td class="regTd_l">服务单号：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=nursService.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=nursService.serviceMeetId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
                 <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>

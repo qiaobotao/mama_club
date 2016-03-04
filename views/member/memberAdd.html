@@ -11,13 +11,18 @@
     <script type="text/javascript">
         function submitForm(){
             var memberCardType = document.getElementById("memberCardType").value;
-            if (!memberCardType || memberCardType.length == 0) {
-                alert('会员卡信息不能为空');
-                return;
-            }
+//            if (!memberCardType || memberCardType.length == 0) {
+//                alert('会员卡信息不能为空');
+//                return;
+//            }
             var memberName = document.getElementById("memberName").value;
             if (!memberName || memberName.length == 0) {
                 alert('姓名不能为空');
+                return;
+            }
+            var age = document.getElementById("age").value;
+            if (!age || age.length == 0) {
+                alert('年龄不能为空');
                 return;
             }
             var tel = document.getElementById("tel").value;
@@ -165,9 +170,10 @@
             </tr>
             <tr>
                 <td class="regTd_l">会员卡信息：</td>
-                <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" disabled="true" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">姓名：</td>
                 <td class="regTd_r"><input id="memberName" name="memberName" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+
             </tr>
             <tr>
                 <td class="regTd_l">电话（可增加）：</td>
@@ -176,16 +182,20 @@
                 <td class="regTd_r"><input id="contact" name="contact" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">居住地址：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">年龄：</td>
+                <td class="regTd_r"><input id="age" name="age" type="text" class="input5"  />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">工作状态：</td>
-                <td class="regTd_r"><input id="workStatus" name="workStatus" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="workStatus" name="workStatus" type="text" class="input5"  />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈学历：</td>
                 <td class="regTd_r"><input id="motherEducation" name="motherEducation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">爸爸学历：</td>
                 <td class="regTd_r"><input id="fatherEducation" name="fatherEducation" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l" >居住地址：</td>
+                <td class="regTd_r" colspan="3"><input id="address" name="address" type="text" class="input5"   />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <!-- 孕产信息 -->
             <tr>

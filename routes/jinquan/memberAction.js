@@ -8,7 +8,12 @@
  */
 
 var service = require('../../model/service/member');
-
+//预约服务单
+var servicemeet = require('../../model/service/servicemeet');
+//护理服务
+var nursservice = require('../../model/service/nursservice');
+//投诉
+var complain = require('../../model/service/complain');
 module.exports.list = function (req, res,next) {
     //res.render('member/memberList');
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
@@ -40,6 +45,7 @@ module.exports.goAdd = function (req, res) {
 
 module.exports.add = function (req, res,next) {
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
+    var age = req.body.age ? req.body.age : 0;
     var memberName = req.body.memberName ? req.body.memberName : '';
     var tel = req.body.tel ? req.body.tel : '';
     var contact = req.body.contact ? req.body.contact : '';
@@ -68,7 +74,7 @@ module.exports.add = function (req, res,next) {
     var useToolReason = req.body.useToolReason ? req.body.useToolReason : '';
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
 
-    service.insertMember(memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+    service.insertMember(age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -84,6 +90,7 @@ module.exports.add = function (req, res,next) {
 
 module.exports.doEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
+    var age = req.body.age ? req.body.age : 0;
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var memberName = req.body.memberName ? req.body.memberName : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -113,7 +120,7 @@ module.exports.doEdit = function (req, res,next) {
     var useToolReason = req.body.useToolReason ? req.body.useToolReason : '';
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
 
-    service.updateMember(id,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+    service.updateMember(id,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -179,4 +186,40 @@ module.exports.select = function (req, res, next) {
         }
     });
 
+}
+module.exports.getMemberByNameTel = function(req, res, next) {
+
+    var memberName = req.body.memberName ? req.body.memberName : '';
+    var tel = req.body.memberTel ? req.body.memberTel : '';
+    service.getMemberByNameTel(memberName,tel ,function(err, results) {
+        if (!err) {
+                var member = results.length == 0 ? null : results[0];
+                if(member.id!=null)
+                {
+                    results.member=member;
+                    //预约服务单
+                      servicemeet.getTop3ServiceMeet(member.id,memberName,tel,function(err, services) {
+                          results.services=services;
+
+                          var serviceMeetIds="";
+                          for(var i=0;i<services.length;i++)
+                          {
+                              serviceMeetIds+="'"+services[i].id+"'";
+                          }
+                          //护理服务
+                          nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
+                                  results.nursServices=nursServices;
+                                  complain.getTop3Complain(serviceMeetIds,function(err, complains) {
+                                      results.complains=complains;
+                                      console.log(JSON.stringify(complains));
+                                      res.json(JSON.stringify(results));
+                                 });
+                              })
+                          });
+                }
+
+        } else {
+            next();
+        }
+    })
 }

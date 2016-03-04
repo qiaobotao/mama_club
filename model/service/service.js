@@ -14,7 +14,7 @@ var mainServiceClassifyId = require('../../config').mainClassifyId.serivce;
  */
 module.exports.list = function(name,cid,currentPage,cb) {
 
-    var parm = "WHERE s.name LIKE '%"+name+"%' ";
+    var parm = "WHERE status=1 and s.name LIKE '%"+name+"%' ";
 
     if (cid != '') {
        parm = parm + " AND classify ="+cid;

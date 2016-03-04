@@ -53,7 +53,8 @@
     <form method="post" id="myform" action="/jinquan/sys_menu_save">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="regTd_l">菜单中文：</td>
+                <td class="regTd_l">菜单中文：
+                </td>
                 <td class="regTd_r">
                     <input type="hidden" id="id" name="id" value="<%=sysMenu.id%>"  />
                     <input id="textCh" name="textCh" type="text" class="input5" value="<%=sysMenu.textCh%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
@@ -64,14 +65,27 @@
             <tr>
                 <td class="regTd_l">菜单URL：</td>
                 <td class="regTd_r"><input id="url" name="url" type="text" class="input5" value="<%=sysMenu.url%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">菜单父页面：</td>
-                <td class="regTd_r"><input id="imageUrl" name="imageUrl" type="text" class="input5" value="<%=sysMenu.imageUrl%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">父菜单：</td>
+                <td class="regTd_r">
+                    <!--
+                    <input id="parentId" name="parentId" type="text" class="input5" value="<%=sysMenu.parentId%>" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    -->
+                    <select id="parentId"  name="parentId">
+                        <option value="0">父菜单</option>
+                        <%for(var i = 0 ; i < data.length ; i ++){
+                            if(data[i].id == sysMenu.parentId){
+                                %><option value="<%=data[i].id%>" selected><%=data[i].textCh%></option><%}%>
+                            }else{
+                                %><option value="<%=data[i].id%>" ><%=data[i].textCh%></option><%}%>
+                            }
+                        }
+
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">排序：</td>
                 <td class="regTd_r"><input id="orderId" name="orderId" type="text" class="input5" value="<%=sysMenu.orderId%>" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">父菜单：</td>
-                <td class="regTd_r"><input id="parentId" name="parentId" type="text" class="input5" value="<%=sysMenu.parentId%>" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
     </form>
@@ -81,7 +95,7 @@
         %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
         }
         %>
-        <div class="rb_l"><a href=/jinquan/sys_menu_list" class="close"></a></div>
+        <div class="rb_l"><a href=/jinquan/sys_menu_list class="close"></a></div>
     </div>
 
 

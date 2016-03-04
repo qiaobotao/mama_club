@@ -8,6 +8,7 @@ var service = require('../../model/service/service');
  * 获取服务列表
  * @param req
  * @param res
+ * @param next
  */
 module.exports.list = function (req, res, next) {
 
@@ -45,6 +46,7 @@ module.exports.list = function (req, res, next) {
  * 增加服务
  * @param req
  * @param res
+ * @param next
  */
 module.exports.preAdd = function (req, res, next) {
 
@@ -62,6 +64,7 @@ module.exports.preAdd = function (req, res, next) {
  * 增加服务表单
  * @param req
  * @param res
+ * @param next
  */
 module.exports.add = function (req, res, next) {
 
@@ -84,6 +87,7 @@ module.exports.add = function (req, res, next) {
  * 查看
  * @param req
  * @param res
+ * @param next
  */
 module.exports.browse = function (req, res, next) {
 
@@ -155,4 +159,29 @@ module.exports.del = function(req, res, next) {
             next();
         }
     });
+}
+module.exports.select = function(req, res, next) {
+    var name = req.query.name ? req.query.name : '';    // 服务名称
+    var classifyId = req.query.id ? req.query.id : '';  // 服务分类
+    var currentPage = req.query.page ? req.query.page : '1';
+    service.list(name,classifyId,currentPage, function(err, results) {
+
+        if (!err) {
+            results.currentPage = currentPage;
+            results.name = name;
+            results.classifyId = classifyId;
+            service.getServiceClassify(function(err,classify) {
+                if (!err) {
+                    results.classify = classify;
+                    res.render('service/serviceSelect', {data : results});
+                } else {
+                    next();
+                }
+            });
+        } else {
+            next();
+        }
+
+    });
+
 }

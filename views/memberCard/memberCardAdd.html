@@ -16,7 +16,6 @@
         function getWares(){
             //iframe层
             iframIndex = parent.layer.open({
-
                 type: 2,
                 title: '选择会员信息',
                 shadeClose: true,
@@ -24,10 +23,8 @@
                 area: ['80%', '90%'],
                 content: '/jinquan/member_select', //iframe的url
                 success: function(layero, index){
-
                 },
                 close: function(d){
-
                 }
             });
         }
@@ -59,8 +56,6 @@
                 }
                 //当前金额/首次应缴费金额/首次应缴费金额
                 parameter2= document.getElementById("parameter2").value;
-
-
             }
             if(type=='2')
             {

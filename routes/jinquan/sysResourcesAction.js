@@ -50,7 +50,7 @@ module.exports.edit = function (req, res) {
     }
 }
 /**
- * 保存菜单
+ * 保存资源
  * @param req
  * @param res
  */
@@ -65,6 +65,7 @@ module.exports.save = function (req, res) {
     if(id!=''){//修改
         service.updateSysResources(id,textCh,textEn,menuId,orderId,url,function(err, results) {
             if(!err) {
+                //获取
                 res.redirect('/jinquan/sys_resources_list?replytype=update');
             } else {
                 console.log(err.message);
@@ -84,7 +85,7 @@ module.exports.save = function (req, res) {
 }
 
 /**
- * 删除菜单
+ * 删除资源
  * @param id
  * @param cb
  */

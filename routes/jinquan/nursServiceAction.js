@@ -38,7 +38,7 @@ module.exports.goAdd = function (req, res) {
 }
 
 module.exports.add = function (req, res) {
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var serviceDate = req.body.serviceDate ? req.body.serviceDate : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -73,7 +73,7 @@ module.exports.add = function (req, res) {
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
 
-    service.insertNursService(serialNumber,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+    service.insertNursService(serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
@@ -89,7 +89,7 @@ module.exports.add = function (req, res) {
 
 module.exports.doEdit = function (req, res) {
     var id = req.body.id ? req.body.id : '';
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var serviceDate = req.body.serviceDate ? req.body.serviceDate : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -124,7 +124,7 @@ module.exports.doEdit = function (req, res) {
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
 
-    service.updateNursService(id,serialNumber,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+    service.updateNursService(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
