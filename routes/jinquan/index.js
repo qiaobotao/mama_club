@@ -113,7 +113,12 @@ router.all('/member_card_addOrEdit',memberCardAction.addOrEdit);
 router.all('/member_card_show',memberCardAction.show);
 // 活动管理
 router.all('/activity_manage_list',activityManageAction.list);
-router.all('/activity_manage_edit',activityManageAction.edit);
+router.all('/activity_manage_goAdd',activityManageAction.goAdd);
+router.all('/activity_manage_add',activityManageAction.add);
+router.all('/activity_manage_show',activityManageAction.show);
+router.all('/activity_manage_preEdit',activityManageAction.preEdit);
+router.all('/activity_manage_doEdit',activityManageAction.doEdit);
+router.all('/activity_manage_del',activityManageAction.del);
 // 会员列表
 router.all('/member_list',memberAction.list);
 router.all('/member_goAdd',memberAction.goAdd);
@@ -132,6 +137,7 @@ router.all('/service_meet_show',serviceMeetAction.show);
 router.all('/service_meet_preEdit',serviceMeetAction.preEdit);
 router.all('/service_meet_doEdit',serviceMeetAction.doEdit);
 router.all('/service_meet_del',serviceMeetAction.del);
+router.all('/service_meet_select', serviceMeetAction.select);
 
 // 课程报名
 router.all('/class_meet_list',classMeetAction.list);

@@ -2,14 +2,14 @@ var service = require('../../model/service/returnvisit');
 module.exports.list = function (req, res) {
     //res.render('returnVisit/returnVisitList');
 
-    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var serviceMeetId = req.query.serviceMeetId ? req.query.serviceMeetId : '';
     var returnVisitDate = req.query.returnVisitDate ? req.query.returnVisitDate : '';
     var returnVisitType = req.query.returnVisitType ? req.query.returnVisitType : '';
     var currentPage = req.query.page ? req.query.page : 1;
 
-    service.fetchAllReturnVisit(serialNumber,returnVisitDate,returnVisitType,currentPage, function (err, results) {
+    service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,currentPage, function (err, results) {
         if (!err) {
-            results.serialNumber = serialNumber;
+            results.serviceMeetId = serviceMeetId;
             results.returnVisitDate = returnVisitDate;
             results.returnVisitType = returnVisitType;
             res.render('returnVisit/returnVisitList', {data : results});
@@ -25,7 +25,7 @@ module.exports.goAdd = function (req, res) {
 }
 
 module.exports.add = function (req, res) {
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
     var returnVisitDate = req.body.returnVisitDate ? req.body.returnVisitDate : '';
@@ -36,7 +36,7 @@ module.exports.add = function (req, res) {
     var isReturnVisit = req.body.isReturnVisit ? req.body.isReturnVisit : '';
     var returnVisitReason = req.body.returnVisitReason ? req.body.returnVisitReason : '';
 
-    service.insertReturnVisit(serialNumber,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    service.insertReturnVisit(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/return_visit_list');
@@ -50,7 +50,7 @@ module.exports.add = function (req, res) {
 
 module.exports.doEdit = function (req, res) {
     var id = req.body.id ? req.body.id : '';
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
     var returnVisitDate = req.body.returnVisitDate ? req.body.returnVisitDate : '';
@@ -61,7 +61,7 @@ module.exports.doEdit = function (req, res) {
     var isReturnVisit = req.body.isReturnVisit ? req.body.isReturnVisit : '';
     var returnVisitReason = req.body.returnVisitReason ? req.body.returnVisitReason : '';
 
-    service.updateReturnVisit(id,serialNumber,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    service.updateReturnVisit(id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/return_visit_list');

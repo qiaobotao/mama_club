@@ -10,17 +10,17 @@
     </style>
     <script type="text/javascript">
         function search () {
-            var serialNumber = document.getElementById('serialNumber').value;
+            var serviceMeetId = document.getElementById('serviceMeetId').value;
             var returnVisitDate = document.getElementById('returnVisitDate').value;
             var returnVisitType = document.getElementById('returnVisitType').value;
             var selectPage = document.getElementById('page').value;
-            window.location.href = '/jinquan/return_visit_list?serialNumber='+serialNumber+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType ;
+            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType ;
         }
         function pageturning (selectPage) {
-            var serialNumber = document.getElementById('serialNumber').value;
+            var serviceMeetId = document.getElementById('serviceMeetId').value;
             var returnVisitDate = document.getElementById('returnVisitDate').value;
             var returnVisitType = document.getElementById('returnVisitType').value;
-            window.location.href = '/jinquan/return_visit_list?serialNumber='+serialNumber+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType ;
+            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType ;
         }
         function show (id) {
             window.location.href = '/jinquan/return_visit_show?id='+id;
@@ -47,7 +47,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>服务单信息：<input id="serialNumber" name="serialNumber" type="text" class="input5" /></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>服务单信息：<input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" /></td>
                     <td> &nbsp;回访时间：<input id="returnVisitDate" name="returnVisitDate" type="text" class="input5" /></td>
                     <td> &nbsp;回访方式：<input id="returnVisitType" name="returnVisitType" type="text" class="input5" /> </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>

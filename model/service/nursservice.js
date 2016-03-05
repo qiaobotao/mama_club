@@ -136,9 +136,9 @@ module.exports.delNursService= function (id, cb) {
  * @param cb
  */
 module.exports.getTop3NursService =function (serviceMeetIds, cb) {
-    var  parm=   "where serviceMeetId in(" + serviceMeetIds + ")" ;
-    parm=" order by dateLine limit 0,3";
-    var sql = 'SELECT * FROM nursService '+parm;
+    var  parm=   "and a.serviceMeetId in(" + serviceMeetIds + ")" ;
+    parm+=" order by dateLine";
+    var sql = 'SELECT   a.*,  c.name AS serviceName,  b.principal AS principal,  d.name AS serviceType FROM  nursService a,  serviceMeet b,  service c,  systemClassify d WHERE a.serviceMeetId = b.id AND b.serviceId = c.id  AND c.classify = d.id  '+parm;
     db.query(sql, [],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -146,5 +146,31 @@ module.exports.getTop3NursService =function (serviceMeetIds, cb) {
         } else {
             cb(err);
         }
+    });
+}
+/**
+ * 操作明细表
+ * @param mid
+ * @param arr_obj  [{},{}] 结构
+ * @param cb
+ */
+module.exports.insertnsMX = function (mid,arr_obj,cb) {
+
+    if (arr_obj.length == 0) {
+        return;
+    }
+
+    var sql = 'INSERT INTO nursServiceMX (nursServiceId,waresSerial,waresName,count,price) VALUES (?,?,?,?,?)';
+    async.map(arr_obj, function(item, callback) {
+
+        db.query(sql, [mid,item.proSerial,item.proName,item.count,item.price], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
     });
 }

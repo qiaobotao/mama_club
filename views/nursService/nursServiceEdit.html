@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添服务单维护</title>
+    <title>编辑护理服务单信息</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -17,13 +17,79 @@
             }
             document.getElementById("myform").submit();
         }
+        var iframIndex ;
+        function getServiceMeets(){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择预约服务单信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/service_meet_select', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        var iframIndex1 ;
+        function getWares(index){
+            //iframe层
+            iframIndex1 = parent.layer.open({
+
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/wares_select?index='+index, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//商品名称
+            var cell2=row.insertCell(1);//商品编号
+            var cell3=row.insertCell(2);//采购数量
+            var cell4=row.insertCell(3);//商品单价
+            var cell5=row.insertCell(4);//商品单价
+            var cell6=row.insertCell(6);//删除本行
+            var cell7=row.insertCell(5);//商品id
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
+            cell5.innerHTML='<input id="price'+waresIndex+'" name="prices" type="text" class="input5 input_arr" />';
+
+            cell7.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+            cell6.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+        }
     </script>
 </head>
 
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：服务单维护
+        当前位置：编辑护理服务单信息
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -36,8 +102,8 @@
             </tr>
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
-                <td class="regTd_l">服务单号：</td>
-                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=nursService.serviceMeetId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">预约服务单号：</td>
+                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=nursService.serviceMeetId%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
                 <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -49,9 +115,9 @@
             </tr>
             <tr>
                 <td class="regTd_l">开始时间：</td>
-                <td class="regTd_r"><input id="startTime" name="startTime" type="text" class="input5"  value="<%=nursService.startTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="startTime" name="startTime" type="text" class="input5"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" value="<%=nursService.startTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">截止时间：</td>
-                <td class="regTd_r"><input id="endTime" name="endTime" type="text" class="input5"  value="<%=nursService.endTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="endTime" name="endTime" type="text" class="input5" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"  value="<%=nursService.endTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">服务地点：</td>
@@ -172,12 +238,15 @@
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
+
                             <td>商品名称</td>
-                            <td>单价</td>
-                            <td>数量</td>
+                            <td>商品编号</td>
+                            <td>选购数量</td>
+                            <td>商品单价</td>
                             <td>小计</td>
+                            <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
                         </tr>
                     </table>
                 </td>
