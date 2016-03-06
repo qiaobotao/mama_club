@@ -42,13 +42,17 @@
 
             // 判断该表单中 是否有相同的 商品
             var arr_proId = document.getElementsByName('proId');
-            for (var i=0;i<arr_proId.length;i++) {
-                 for (var j=0;j<arr_proId.length;j++) {
-                     if (arr_proId[i].value == arr_proId[j].value) {
-                         parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
-                         return;
-                     }
-                 }
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
             }
 
 
