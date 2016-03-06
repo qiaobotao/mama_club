@@ -57,7 +57,8 @@ module.exports = {
         distributor : 8,
         inType : 4,
         buyType : 9,
-        outType : 18
+        outType : 18,
+        classroomType : 19
     }
 
 };
