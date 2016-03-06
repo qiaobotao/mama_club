@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>编辑移库单</title>
+    <title>增加移库单</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
@@ -15,6 +15,13 @@
 
         var iframIndex ;
         function getWares(index){
+
+            var outId = document.getElementById('outId').value;
+            if (outId == '' || outId.length == 0) { //库房不能为空
+                parent.layer.alert('请先选择库房！',{icon: 2});
+                return;
+            }
+
             //iframe层
             iframIndex = parent.layer.open({
 
@@ -23,7 +30,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/wares_select?index='+index, //iframe的url
+                content: '/jinquan/wares_select_in_storeroom?index='+index+'&sid='+outId, //iframe的url
                 success: function(layero, index){
 
                 },
@@ -46,7 +53,7 @@
             $.ajax({
                 type: "post",
                 url: "/jinquan/storeroom_check",
-                data: {'storeroomId':$("#storeroom").val(),'waresId':$("#proId"+index).val(),'num':$("#count"+index).val()},
+                data: {'storeroomId':$("#outId").val(),'waresId':$("#proId"+index).val(),'num':$("#count"+index).val()},
                 success: function (result) {
                     if(!result.flag){
                         document.getElementById("count"+index).value = '';
@@ -58,22 +65,45 @@
 
 
         function submitForm(){
-            var outId = document.getElementById("outId").value;
-            if (!outId || outId.length == 0) {
-                parent.layer.alert('出库库房不能为空',{icon: 2});
-                return;
-            }
-            var inId = document.getElementById("inId").value;
-            if (!inId || inId.length == 0) {
-                parent.layer.alert('入库库房不能为空',{icon: 2});
-                return;
-            }
+
             var oper = document.getElementById("oper").value;
             if (!oper || oper.length == 0) {
                 parent.layer.alert('经办人不能为空',{icon: 2});
                 return;
             }
 
+            // 判断该表单中 是否有相同的 商品
+            var arr_proId = document.getElementsByName('proId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_proname = document.getElementsByName('proname');
+            for (var i=0;i<arr_proname.length;i++) {
+                if(arr_proname[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_count = document.getElementsByName('count');
+            for (var i=0;i<arr_count.length;i++) {
+                if(arr_count[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    return;
+                }
+            }
             document.getElementById("myform").submit();
         }
 
@@ -109,7 +139,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：编辑移库单
+        当前位置：增加移库单
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -118,9 +148,17 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">出库库房：</td>
-                <td class="regTd_r"><input id="outId" name="outId" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><select id="outId" name="outId">
+                    <%for(var i=0;i<data.length;i++){%>
+                    <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
+                    <%}%>
+                </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">入库库房：</td>
-                <td class="regTd_r"><input id="inId" name="inId" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><select id="inId" name="inId">
+                    <%for(var i=0;i<data.length;i++){%>
+                    <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
+                    <%}%>
+                </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">经办人：</td>

@@ -159,6 +159,8 @@ module.exports.insertInventory = function (sid,arr_obj,cb) {
     // 入库操作
     var sql = 'INSERT INTO inventory (storeroomId,waresId,count) VALUES (?,?,?)';
 
+    var update_sql = 'UPDATE inventory SET count = ? WHERE storeroomId = ? AND waresId = ?';
+
     async.map(arr_obj, function(item, callback) {
 
         db.query(check_sql, [sid,item.proId],function(cbData, err, rows, fields) {
@@ -177,7 +179,7 @@ module.exports.insertInventory = function (sid,arr_obj,cb) {
                     });
                 } else {  // 有记录
                     var old_count = rows[0].count;
-                    db.query(sql,[sid,item.waresId,item.count+old_count],function(cbData, err, rows, fields){
+                    db.query(update_sql,[Number(item.count)+Number(old_count),sid,item.proId],function(cbData, err, rows, fields){
                         if (!err) {
                             callback(null, rows);
                         } else {

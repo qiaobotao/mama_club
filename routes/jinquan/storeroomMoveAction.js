@@ -58,6 +58,14 @@ module.exports.list = function (req, res, next) {
  */
 module.exports.preadd = function (req, res, next) {
 
+    service_storeroom.getAllStorerooms(function (err, storerooms) {
 
-    res.render('storeroomMove/storeroomMoveAdd');
+        if (!err) {
+            res.render('storeroomMove/storeroomMoveAdd', {data : storerooms});
+        } else {
+            next();
+        }
+    });
+
+
 }

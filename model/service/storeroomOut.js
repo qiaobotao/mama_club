@@ -145,7 +145,7 @@ module.exports.updateInventory = function (sid,arr_obj,cb) {
 
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [item.num,sid,item.proId],function(cbData, err, rows, fields) {
+        db.query(sql, [item.count,sid,item.proId],function(cbData, err, rows, fields) {
 
             if (!err) {
 
