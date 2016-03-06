@@ -87,7 +87,7 @@ module.exports.list = function (req, res,next) {
  */
 module.exports.goAdd = function(req, res,next) {
 
-    var status=  req.query.status ? req.query.status : '0';
+    var status=  req.query.status ? req.query.status : '1';
     var type=  req.query.type ? req.query.type : '1';
 
     service1.fetchMembercardtypeByStatus(status, function (err, results) {

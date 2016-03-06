@@ -57,7 +57,13 @@ module.exports = {
         distributor : 8,
         inType : 4,
         buyType : 9,
-        outType : 18
+        outType : 18,
+        diagnosticResult:23,
+        momReasons:21 ,
+        babyReasons:20,
+        otherReasons:22
+
+
     }
 
 };

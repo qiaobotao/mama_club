@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
-                <td class="regTd_l"><预约服务单号></预约服务单号>：</td>
+                <td class="regTd_l">预约服务单号：</td>
                 <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5"  readonly="true" value="<%=nursService.serviceMeetId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
                 <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5"  readonly="true" value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -47,12 +47,7 @@
                 <td class="regTd_l">电话：</td>
                 <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5"  readonly="true" value="<%=nursService.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
-            <tr>
-                <td class="regTd_l">开始时间：</td>
-                <td class="regTd_r"><input id="startTime" name="startTime" type="text" class="input5"  readonly="true" value="<%=nursService.startTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">截止时间：</td>
-                <td class="regTd_r"><input id="endTime" name="endTime" type="text" class="input5"  readonly="true" value="<%=nursService.endTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
+
             <tr>
                 <td class="regTd_l">服务地点：</td>
                 <td class="regTd_r">
@@ -63,7 +58,12 @@
                 <td class="regTd_l">服务地址：</td>
                 <td class="regTd_r"><input id="address" name="address" type="text" class="input5"  readonly="true" value="<%=nursService.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
-
+            <tr>
+                <td class="regTd_l">开始时间：</td>
+                <td class="regTd_r"><input id="startTime" name="startTime" type="text" class="input5"  readonly="true" value="<%=nursService.startTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">截止时间：</td>
+                <td class="regTd_r"><input id="endTime" name="endTime" type="text" class="input5"  readonly="true" value="<%=nursService.endTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
             <!-- 近期哺乳相关 -->
             <tr>
                 <td colspan="4" align="left">近期哺乳相关：</td>
@@ -123,9 +123,15 @@
             <tr>
                 <td class="regTd_l">诊断结果：</td>
                 <td class="regTd_r">
-                    <input id="diagnosis1" name="diagnosis" type="checkbox" value="diagnosis1"/>诊断1
-                    <input id="diagnosis2" name="diagnosis" type="checkbox"  value="diagnosis2"/>诊断2
-                    <input id="diagnosis3" name="diagnosis" type="checkbox"  value="diagnosis3"/>诊断3
+                   <%
+                    var checkedarry =nursService.diagnosis.split(",");
+                    for (var j=0;j<checkedarry.length;j++)
+                    {
+                    for(var i=0;i<data1.ClassifyId1.length;i++){
+                    var diagnosisId ='diagnosis'+i;%>
+                    <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" checked="<%=data1.ClassifyId1[i].id==checkedarry[j]?true:false%>" value ="<%=data1.ClassifyId1[i].id%>"/>
+                    <%=data1.ClassifyId1[i].name%>
+                    <%}}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊说明：</td>
                 <td class="regTd_r"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" readonly="true"  value="<%=nursService.specialInstructions%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -133,9 +139,12 @@
             <tr>
                 <td class="regTd_l">宝宝原因：</td>
                 <td class="regTd_r">
-                    <input id="childReason1" name="childReason" type="checkbox" value="childReason1"/>宝宝原因1
-                    <input id="childReason2" name="childReason" type="checkbox"  value="childReason2"/>宝宝原因2
-                    <input id="childReason3" name="childReason" type="checkbox"  value="childReason3"/>宝宝原因3
+                    <%for(var i=0;i<data1.ClassifyId3.length;i++){
+                    var childReasonId='childReason'+i;
+                    %>
+                    <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=data1.ClassifyId3[i].id%>"/>
+                    <%=data1.ClassifyId3[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">乳房示意图说明：</td>
                 <td class="regTd_r"><input id="breastExplain" name="breastExplain" type="text" class="input5" readonly="true"  value="<%=nursService.breastExplain%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -143,9 +152,12 @@
             <tr>
                 <td class="regTd_l">妈妈原因：</td>
                 <td class="regTd_r">
-                    <input id="motherReason1" name="motherReason" type="checkbox" value="motherReason1"/>妈妈原因1
-                    <input id="motherReason2" name="motherReason" type="checkbox"  value="motherReason2"/>妈妈原因2
-                    <input id="motherReason3" name="motherReason" type="checkbox"  value="motherReason3"/>妈妈原因3
+                    <%for(var i=0;i<data1.ClassifyId2.length;i++){
+                    var motherReasonId='motherReason'+i;
+                    %>
+                    <input id="<%=motherReasonId%>" name="motherReason" type="checkbox" value ="<%=data1.ClassifyId2[i].id%>"/>
+                    <%=data1.ClassifyId2[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">离店建议：</td>
                 <td class="regTd_r"><input id="leaveAdvise" name="leaveAdvise" type="text" class="input5" readonly="true"  value="<%=nursService.leaveAdvise%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -153,9 +165,12 @@
             <tr>
                 <td class="regTd_l">其他原因：</td>
                 <td class="regTd_r">
-                    <input id="otherReason1" name="otherReason" type="checkbox" value="otherReason1"/>其他原因1
-                    <input id="otherReason2" name="otherReason" type="checkbox"  value="otherReason2"/>其他原因2
-                    <input id="otherReason3" name="otherReason" type="checkbox"  value="otherReason3"/>其他原因3
+                    <%for(var i=0;i<data1.ClassifyId4.length;i++){
+                    var otherReasonId='otherReason'+i;
+                    %>
+                    <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=data1.ClassifyId4[i].id%>"/>
+                    <%=data1.ClassifyId4[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否带实习技师：</td>
                 <td class="regTd_r"><input id="isLeadTrainee" name="isLeadTrainee" type="text" class="input5" readonly="true"  value="<%=nursService.isLeadTrainee%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -175,17 +190,26 @@
                     <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
                             <td>商品名称</td>
-                            <td>单价</td>
-                            <td>数量</td>
+                            <td>商品编号</td>
+                            <td>选购数量</td>
+                            <td>商品单价</td>
                             <td>小计</td>
                         </tr>
+                        <%for(var i=0;i<data.logmx.length;i++) {%>
+                        <tr id="qqq">
+                            <td><input   name="proname" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresName%>" readonly="true" /></td>
+                            <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresSerial%>" readonly="true"/></td>
+                            <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.logmx[i].count%>" readonly="true"/></td>
+                            <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.logmx[i].price%>" readonly="true"/></td>
+                            <td><%=data.logmx[i].price*data.logmx[i].count%></td>
+                        </tr>
+                        <%}%>
                     </table>
                 </td>
             </tr>
         </table>
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
         <div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div>
     </div>
 

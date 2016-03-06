@@ -1,5 +1,7 @@
 var service = require('../../model/service/nursservice');
 var storeroomOutService = require('../../model/service/storeroomOut');
+var serviceMeetService = require('../../model/service/serviceMeet');
+
 /**
  * Created by kuanchang on 16/1/18.
  */
@@ -35,7 +37,19 @@ module.exports.list = function (req, res) {
  * @param res
  */
 module.exports.goAdd = function (req, res) {
-    res.render('nursService/nursServiceAdd');
+    //查询页面需要展示的数据库字典表
+    //诊断结果
+    service.getnursserviceClassify(function (err, results) {
+        if (!err) {
+            res.render('nursService/nursServiceAdd', {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+    //宝宝原因
+    //妈妈原因
+    //其他原因
 }
 
 module.exports.add = function (req, res) {
@@ -63,21 +77,42 @@ module.exports.add = function (req, res) {
     var breastpumpBrand = req.body.breastpumpBrand ? req.body.breastpumpBrand : '';
     var isCarefulNurse = req.body.isCarefulNurse ? req.body.isCarefulNurse : '';
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
-    var diagnosis = req.body.diagnosis ? req.body.diagnosis : '';
+    var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
+    var diagnosis="" ;
+    for(var i=0;i<diagnosisTemp.length;i++){
+        diagnosis+=diagnosisTemp[i]+",";
+    }
+    diagnosis= diagnosis.substr(0,diagnosis.length-1);
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
-    var childReason = req.body.childReason ? req.body.childReason : '';
+    var childReasonTemp = req.body.childReason ? req.body.childReason : '';
+    var childReason ="" ;
+    for(var i=0;i<childReasonTemp.length;i++){
+        childReason+=childReasonTemp[i]+",";
+    }
+    childReason= childReason.substr(0,childReason.length-1);
     var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
-    var motherReason = req.body.motherReason ? req.body.motherReason : '';
+    var motherReasonTemp = req.body.motherReason ? req.body.motherReason : '';
+    var motherReason ="" ;
+    for(var i=0;i<motherReasonTemp.length;i++){
+        motherReason+=motherReasonTemp[i]+",";
+    }
+    motherReason= motherReason.substr(0,motherReason.length-1);
     var leaveAdvise = req.body.leaveAdvise ? req.body.leaveAdvise : '';
-    var otherReason = req.body.otherReason ? req.body.otherReason : '';
+    var otherReasonTemp = req.body.otherReason ? req.body.otherReason : '';
+    var otherReason="" ;
+    for(var i=0;i<otherReasonTemp.length;i++){
+        otherReason+=otherReasonTemp[i]+",";
+    }
+    otherReason= otherReason.substr(0,otherReason.length-1);
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
-    // 数组
-    var oper = req.body.oper ? req.body.oper : '';
-    var outType = req.body.outType ? req.body.outType : '';
-    var storeroom = req.body.storeroom ? req.body.storeroom : '';
-    var remarks = req.body.remarks ? req.body.remarks : '';
+
+    // 获取
+    var oper = req.body.principalId ? req.body.principalId : '';
+    var outType = req.body.outType ? req.body.outType : '37';
+    var storeroom = req.body.storeroom ? req.body.storeroom : '1';//暂时无参数
+    var remarks = req.body.remarks ? req.body.remarks : '护理服务时，会员购买商品';
 
     var arr_proId = req.body.proId ? req.body.proId : '';
     var arr_proname = req.body.proname ? req.body.proname :'';
@@ -96,45 +131,51 @@ module.exports.add = function (req, res) {
         obj.price = arr_price[i];
         arr.push(obj);
     }
+    //生成出库单信息
+    storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
 
-    service.insertNursService(serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
-        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
-        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
-            if (!err) {
-                service.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+        if (!err) {
 
-                    if (!err) {
+            var outLogId = results.insertId;
+            storeroomOutService.insertOutLogMX(outLogId,arr,function (err, results) {
 
-                        var outLogId = results.insertId;
-                        service.insertOutLogMX(outLogId,arr,function (err, results) {
-
-                            if (!err) {
-                                service.updateInventory(storeroom,arr,function(err, results) {
-
+                if (!err) {
+                    //修改物资信息
+                    storeroomOutService.updateInventory(storeroom,arr,function(err, results) {
+                        if (!err) {
+                            //生成护理信息
+                            service.insertNursService(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+                                bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
+                                milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
+                                diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+                                isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
                                     if (!err) {
-                                        res.redirect('/jinquan/nurs_service_list');
-
+                                        //修改服务单状态 2，如约
+                                        serviceMeetService.setStatus(serviceMeetId,2,function (err, results)
+                                            {
+                                                res.redirect('/jinquan/nurs_service_list');
+                                            }
+                                        );
                                     } else {
-                                        service.delOutLog(outLogId);
-                                        service.delOutLogMX(outLogId);
                                         next();
                                     }
                                 });
-                            } else {
-                                service.delOutLog(outLogId);
-                                next();
-                            }
-                        })
-                    } else {
-                        next();
-                    }
-                });
-            } else {
-                next();
-            }
-        });
+                        } else {
+                            storeroomOutService.delOutLog(outLogId);
+                            storeroomOutService.delOutLogMX(outLogId);
+                            next();
+                        }
+                    });
+                } else {
+                    storeroomOutService.delOutLog(outLogId);
+                    next();
+                }
+            })
+        } else {
+            next();
+        }
+    });
+
 }
 
 
@@ -164,16 +205,37 @@ module.exports.doEdit = function (req, res) {
     var breastpumpBrand = req.body.breastpumpBrand ? req.body.breastpumpBrand : '';
     var isCarefulNurse = req.body.isCarefulNurse ? req.body.isCarefulNurse : '';
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
-    var diagnosis = req.body.diagnosis ? req.body.diagnosis : '';
+    var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
+    var diagnosis ="" ;
+    for(var i=0;i<diagnosisTemp.length;i++){
+        diagnosis+=diagnosisTemp[i]+",";
+    }
+    diagnosis= diagnosis.substr(0,diagnosis.length-1);
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
-    var childReason = req.body.childReason ? req.body.childReason : '';
+    var childReasonTemp = req.body.childReason ? req.body.childReason : '';
+    var childReason ="" ;
+    for(var i=0;i<childReasonTemp.length;i++){
+        childReason+=childReasonTemp[i]+",";
+    }
+    childReason= childReason.substr(0,childReason.length-1);
     var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
-    var motherReason = req.body.motherReason ? req.body.motherReason : '';
+    var motherReasonTemp = req.body.motherReason ? req.body.motherReason : '';
+    var motherReason ="" ;
+    for(var i=0;i<motherReasonTemp.length;i++){
+        motherReason+=motherReasonTemp[i]+",";
+    }
+    motherReason= motherReason.substr(0,motherReason.length-1);
     var leaveAdvise = req.body.leaveAdvise ? req.body.leaveAdvise : '';
-    var otherReason = req.body.otherReason ? req.body.otherReason : '';
+    var otherReasonTemp = req.body.otherReason ? req.body.otherReason : '';
+    var otherReason ="" ;
+    for(var i=0;i<otherReasonTemp.length;i++){
+        otherReason+=otherReasonTemp[i]+",";
+    }
+    otherReason= otherReason.substr(0,otherReason.length-1);
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
+
 
     service.updateNursService(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
@@ -194,7 +256,23 @@ module.exports.show = function(req, res, next) {
     service.fetchSingleNursService(id, function(err, results) {
         if (!err) {
             var nursService = results.length == 0 ? null : results[0];
-            res.render('nursService/nursServiceDetail', {nursService : nursService});
+            var outLogId =nursService.outLogId;
+            storeroomOutService.detail(outLogId,function(err, results1) {
+
+                if (!err) {
+                    service.getnursserviceClassify(function (err, results2) {
+                        if (!err) {
+                            res.render('nursService/nursServiceDetail', {nursService : nursService,data : results1,data1 : results2});
+                        } else {
+                            console.log(err.message);
+                            next()
+                        }
+                    });
+                } else {
+                    next();
+                }
+            });
+
         } else {
             next();
         }
@@ -207,7 +285,20 @@ module.exports.preEdit = function(req, res, next) {
     service.fetchSingleNursService(id, function(err, results) {
         if (!err) {
             var nursService = results.length == 0 ? null : results[0];
-            res.render('nursService/nursServiceEdit', {nursService : nursService});
+            var outLogId =nursService.outLogId;
+            storeroomOutService.detail(outLogId,function(err, results) {
+                if (!err) {
+                    service.getnursserviceClassify(function (err, results1) {
+                        if (!err) {
+                            res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,data1 : results1});
+                        } else {
+                            next();
+                        }
+                    });
+                } else {
+                    next();
+                }
+            });
         } else {
             next();
         }

@@ -150,3 +150,22 @@ module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
         }
     });
 };
+/**
+ * 设置状态
+ * @param id
+ * @param status
+ */
+module.exports.setStatus = function (id, status, cb) {
+
+    var sql = 'UPDATE serviceMeet  SET status = ? WHERE id = ?';
+    db.query(sql, [status,id], function(cbData, err, rows, filelds) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+
+    });
+}
+
