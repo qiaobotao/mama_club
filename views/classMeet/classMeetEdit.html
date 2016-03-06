@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加课程报名</title>
+    <title>编辑课程报名</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
@@ -100,66 +100,67 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/class_meet_add">
+    <form method="post" id="myform" action="/jinquan/class_meet_doEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
+                <input id="id" type="hidden" name="id" value="<%=classMeet.id%>"/>
                 <td class="regTd_l">会员名称：</td>
                 <td class="regTd_r">
-                    <input id="memberName" name="memberName" onfocus="getWares()"/>
-                    <input id="memberId" name="memberId" type="hidden" />
+                    <input id="memberName" name="memberName" type="text" class="input5" value="<%=classMeet.memberName%>" onfocus="getWares()"/>
+                    <input id="memberId" name="memberId" type="hidden" class="input5" value="<%=classMeet.memberId%>"/>
                 </td>
                 <td  class="regTd_l">课程名称：</td>
-                <td class="regTd_r"><input id="courseName" name="courseName" type="text" class="input5" onfocus="getCourseIfram()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
-                    <input id="courseId" name="courseId" type="hidden" class="input5" /></td>
+                <td class="regTd_r"><input id="courseName" name="courseName" type="text" class="input5" value="<%=classMeet.courseName%>" onfocus="getCourseIfram()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input id="courseId" name="courseId" type="hidden" class="input5" value="<%=classMeet.courseId%>"/></td>
             </tr>
             <tr>
                 <td class="regTd_l">上课时间：</td>
-                <td class="regTd_r"><input id="courseTimeStart" name="courseTimeStart" type="text" class="input5" readonly="true" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="courseTimeStart" name="courseTimeStart" type="text" class="input5" value="<%=classMeet.courseTimeStart%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">课程费用：</td>
-                <td class="regTd_r"><input id="coursePrice" name="coursePrice" type="text" class="input5" readonly="true" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="coursePrice" name="coursePrice" type="text" class="input5" value="<%=classMeet.coursePrice%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">宝宝月龄/预产期：</td>
-                <td class="regTd_r"><input id="childMonths" name="childMonths" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childMonths" name="childMonths" type="text" class="input5" value="<%=classMeet.childMonths%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">除宝宝外人数：</td>
-                <td class="regTd_r"><input id="externPersons" name="externPersons" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="externPersons" name="externPersons" type="text" class="input5" value="<%=classMeet.externPersons%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">是否可带宝宝：</td>
-                <td class="regTd_r"><input id="weatherLeadBaby" name="weatherLeadBaby" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="weatherLeadBaby" name="weatherLeadBaby" type="text" class="input5" value="<%=classMeet.weatherLeadBaby%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">备注：</td>
-                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" value="<%=classMeet.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">是否报名成功：</td>
                 <td class="regTd_r" colspan="3">
                     <select id="isRegisterSuccess" name="isRegisterSuccess"/>
-                        <option value="yes">是</option>
-                        <option value="no">否</option>
+                        <option value="yes" <%if(classMeet.isRegisterSuccess == 'yes'){%>selected<%}%>>是</option>
+                        <option value="no" <%if(classMeet.isRegisterSuccess == 'no'){%>selected<%}%>>否</option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td class="regTd_l">课前电话确认：</td>
-                <td class="regTd_r"><input id="isPhoneConfirm" name="isPhoneConfirm" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="isPhoneConfirm" name="isPhoneConfirm" type="text" class="input5" value="<%=classMeet.isPhoneConfirm%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">课前短信确认：</td>
-                <td class="regTd_r"><input id="isSmConfirm" name="isSmConfirm" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="isSmConfirm" name="isSmConfirm" type="text" class="input5" value="<%=classMeet.isSmConfirm%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">上课确认：</td>
                 <td class="regTd_r">
                     <select id="courseConfirm" name="courseConfirm">
-                        <option value="yes">是</option>
-                        <option value="no">否</option>
+                        <option value="yes" <%if(classMeet.courseConfirm == 'yes'){%>selected<%}%>>是</option>
+                        <option value="no" <%if(classMeet.courseConfirm == 'no'){%>selected<%}%>>否</option>
                     </select>
                 </td>
                 <td class="regTd_l">未来原因：</td>
                 <td class="regTd_r">
                     <select id="ReasonForNotCome" name="ReasonForNotCome">
-                        <option value="0">请选择</option>
-                        <option value="1">来上课</option>
-                        <option value="2">未来上课</option>
-                        <option value="3">转至下一期</option>
+                        <option value="0" <%if(classMeet.ReasonForNotCome == '0'){%>selected<%}%>>请选择</option>
+                        <option value="1" <%if(classMeet.ReasonForNotCome == '1'){%>selected<%}%>>来上课</option>
+                        <option value="2" <%if(classMeet.ReasonForNotCome == '2'){%>selected<%}%>>未来上课</option>
+                        <option value="3" <%if(classMeet.ReasonForNotCome == '3'){%>selected<%}%>>转至下一期</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>

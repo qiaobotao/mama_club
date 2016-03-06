@@ -128,10 +128,10 @@ module.exports.insertInLogMX = function (mid,arr_obj,cb) {
     if (arr_obj.length == 0) {
         return;
     }
-    var sql = 'INSERT INTO storeroomInLogMX (inLogId,waresName,waresSerial,count,price,waresId) VALUES (?,?,?,?,?,?)';
+    var sql = 'INSERT INTO storeroomInLogMX (inLogId,waresName,waresSerial,count,price) VALUES (?,?,?,?,?)';
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [mid,item.proName,item.proSerial,item.count,item.price,item.proId], function (cbData, err, rows, fields) {
+        db.query(sql, [mid,item.proName,item.proSerial,item.count,item.price], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {

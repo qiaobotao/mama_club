@@ -9,19 +9,23 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var mainDiagnosticResultClassifyId = require('../../config').mainClassifyId.diagnosticResult;
+var mainMomReasonsClassifyId = require('../../config').mainClassifyId.momReasons;
+var mainBabyResultClassifyId = require('../../config').mainClassifyId.babyReasons;
+var mainOtherReasonsClassifyId = require('../../config').mainClassifyId.otherReasons;
 
-module.exports.insertNursService = function(serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+module.exports.insertNursService = function(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
                                        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
                                        isLeadTrainee,whetherAppointmentAgain,traineeName, cb) {
 
-    var sql = 'INSERT INTO nursService(serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,'
+    var sql = 'INSERT INTO nursService(outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,'
         + 'bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,'
         + 'milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,'
         + 'diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,'
-        + 'isLeadTrainee,whetherAppointmentAgain,traineeName,dateLine) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
+        + 'isLeadTrainee,whetherAppointmentAgain,traineeName,dateLine) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
@@ -148,29 +152,59 @@ module.exports.getTop3NursService =function (serviceMeetIds, cb) {
         }
     });
 }
-/**
- * 操作明细表
- * @param mid
- * @param arr_obj  [{},{}] 结构
- * @param cb
- */
-module.exports.insertnsMX = function (mid,arr_obj,cb) {
 
-    if (arr_obj.length == 0) {
-        return;
-    }
+module.exports.getnursserviceClassify = function (cb) {
+    var sql = 'SELECT id,name FROM systemClassify WHERE parentId = ?';
+    async.series({
+        ClassifyId1: function(callback){
+            db.query(sql, [mainDiagnosticResultClassifyId], function (cbData, err, rows, fields) {
 
-    var sql = 'INSERT INTO nursServiceMX (nursServiceId,waresSerial,waresName,count,price) VALUES (?,?,?,?,?)';
-    async.map(arr_obj, function(item, callback) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        ClassifyId2 : function(callback){
+            db.query(sql, [mainMomReasonsClassifyId], function (cbData, err, rows, fields) {
 
-        db.query(sql, [mid,item.proSerial,item.proName,item.count,item.price], function (cbData, err, rows, fields) {
-            if (!err) {
-                callback(null, rows);
-            } else {
-                callback(err);
-            }
-        });
-    }, function(err,results) {
-        cb(err, results);
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+
+        ClassifyId3: function(callback){
+            db.query(sql, [mainBabyResultClassifyId], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        ClassifyId4 : function(callback){
+            db.query(sql, [mainOtherReasonsClassifyId], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
     });
+
+
 }

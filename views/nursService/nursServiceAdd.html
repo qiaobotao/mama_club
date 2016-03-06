@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添服务单维护</title>
+    <title>添护理服务单信息</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
@@ -18,11 +18,11 @@
                 alert('服务单号不能为空');
                 return;
             }
-            var buyer = document.getElementById("buyer").value;
-            if (!buyer || buyer.length == 0) {
-                parent.layer.alert('采购人不能为空',{icon: 2});
-                return;
-            }
+//            var buyer = document.getElementById("buyer").value;
+//            if (!buyer || buyer.length == 0) {
+//                parent.layer.alert('采购人不能为空',{icon: 2});
+//                return;
+//            }
             var arr_proname = document.getElementsByName('proname');
             for (var i=0;i<arr_proname.length;i++) {
                 if(arr_proname[i].value == '') {
@@ -143,7 +143,9 @@
                 <td class="regTd_l">预约服务单号：</td>
                 <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId"  type="text" class="input5" onfocus="getServiceMeets()" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
-                <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="principalId" name="principalId" type="hidden" type="text" class="input5" readonly="true"/>
+                    <input id="serviceDate" name="serviceDate" type="text" class="input5" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">姓名：</td>
@@ -226,19 +228,26 @@
             <tr>
                 <td class="regTd_l">诊断结果：</td>
                 <td class="regTd_r">
-                    <input id="diagnosis1" name="diagnosis" type="checkbox" value="diagnosis1"/>诊断1
-                    <input id="diagnosis2" name="diagnosis" type="checkbox"  value="diagnosis2"/>诊断2
-                    <input id="diagnosis3" name="diagnosis" type="checkbox"  value="diagnosis3"/>诊断3
+                    <%for(var i=0;i<data.ClassifyId1.length;i++){
+                        var diagnosisId ='diagnosis'+i;
+                    %>
+                    <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=data.ClassifyId1[i].id%>"/>
+                      <%=data.ClassifyId1[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊说明：</td>
-                <td class="regTd_r"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" />
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">宝宝原因：</td>
                 <td class="regTd_r">
-                    <input id="childReason1" name="childReason" type="checkbox" value="childReason1"/>宝宝原因1
-                    <input id="childReason2" name="childReason" type="checkbox"  value="childReason2"/>宝宝原因2
-                    <input id="childReason3" name="childReason" type="checkbox"  value="childReason3"/>宝宝原因3
+                    <%for(var i=0;i<data.ClassifyId3.length;i++){
+                    var childReasonId='childReason'+i;
+                    %>
+                    <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=data.ClassifyId3[i].id%>"/>
+                    <%=data.ClassifyId3[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">乳房示意图说明：</td>
                 <td class="regTd_r"><input id="breastExplain" name="breastExplain" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -246,9 +255,12 @@
             <tr>
                 <td class="regTd_l">妈妈原因：</td>
                 <td class="regTd_r">
-                    <input id="motherReason1" name="motherReason" type="checkbox" value="motherReason1"/>妈妈原因1
-                    <input id="motherReason2" name="motherReason" type="checkbox"  value="motherReason2"/>妈妈原因2
-                    <input id="motherReason3" name="motherReason" type="checkbox"  value="motherReason3"/>妈妈原因3
+                    <%for(var i=0;i<data.ClassifyId2.length;i++){
+                        var motherReasonId='motherReason'+i;
+                    %>
+                      <input id="<%=motherReasonId%>" name="motherReason" type="checkbox" value ="<%=data.ClassifyId2[i].id%>"/>
+                      <%=data.ClassifyId2[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">离店建议：</td>
                 <td class="regTd_r"><input id="leaveAdvise" name="leaveAdvise" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -256,9 +268,12 @@
             <tr>
                 <td class="regTd_l">其他原因：</td>
                 <td class="regTd_r">
-                    <input id="otherReason1" name="otherReason" type="checkbox" value="otherReason1"/>其他原因1
-                    <input id="otherReason2" name="otherReason" type="checkbox"  value="otherReason2"/>其他原因2
-                    <input id="otherReason3" name="otherReason" type="checkbox"  value="otherReason3"/>其他原因3
+                    <%for(var i=0;i<data.ClassifyId4.length;i++){
+                    var otherReasonId='otherReason'+i;
+                    %>
+                    <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=data.ClassifyId4[i].id%>"/>
+                    <%=data.ClassifyId4[i].name%>
+                    <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否带实习技师：</td>
                 <td class="regTd_r"><input id="isLeadTrainee" name="isLeadTrainee" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>

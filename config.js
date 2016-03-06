@@ -58,7 +58,11 @@ module.exports = {
         inType : 4,
         buyType : 9,
         outType : 18,
-        classroomType : 19
+        classroomType : 19,
+        diagnosticResult:23,
+        momReasons:21 ,
+        babyReasons:20,
+        otherReasons:22
     }
 
 };

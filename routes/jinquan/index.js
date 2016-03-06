@@ -67,6 +67,7 @@ router.all('/classroom_browse',classroomAction.detail);
 // 课程查询
 router.all('/course_list',courseAction.list);
 router.all('/course_add',courseAction.add);
+router.all('/course_select',courseAction.select);
 
 /*********************员工管理****************************/
 // 员工列表
@@ -139,7 +140,12 @@ router.all('/service_meet_select', serviceMeetAction.select);
 
 // 课程报名
 router.all('/class_meet_list',classMeetAction.list);
+router.all('/class_meet_goAdd',classMeetAction.goAdd);
 router.all('/class_meet_add',classMeetAction.add);
+router.all('/class_meet_show',classMeetAction.show);
+router.all('/class_meet_preEdit',classMeetAction.preEdit);
+router.all('/class_meet_doEdit',classMeetAction.doEdit);
+router.all('/class_meet_del',classMeetAction.del);
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);
 router.all('/nurs_service_add',nursServiceAction.add);
