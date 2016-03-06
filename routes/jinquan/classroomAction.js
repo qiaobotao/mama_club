@@ -7,23 +7,24 @@
  * @param res
  */
 var service = require('../../model/service/classroom');
-var waresService = require('../../model/service/wares');
+
 module.exports.list = function (req, res,next) {
+
     var currentPage = req.query.page ? req.query.page : '1';
     var classRoomName = req.query.classRoomName ? req.query.classRoomName : '';
     var classRoomCode = req.query.classRoomCode ? req.query.classRoomCode : '';
-    var classType = req.query.number ? req.query.number : '';
 
-    service.fetchAllCLassRoom(classRoomName,classRoomCode,classType,currentPage, function (err, results) {
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
+    service.fetchAllCLassRoom(classRoomName,classRoomCode,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.classRoomName = classRoomName;
             results.classRoomCode = classRoomCode;
-            results.classType = classType;
-            res.render('classroom/classroomList', {data : results});
+            res.render('classroom/classroomList', {data : results, replytype : replytype});
         } else {
-            console.log(err.message);
-            res.render('error', {error : err});
+            next();
         }
     });
 
@@ -34,126 +35,67 @@ module.exports.list = function (req, res,next) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res,next) {
-    var currentPage = req.query.page ? req.query.page : '1';
-    var className = req.query.className ? req.query.className : '';
-    var classCode = req.query.classCode ? req.query.classCode : '';
-    var classType = req.query.number ? req.query.number : '';
-    waresService.fetchAllWares( function (err, results)
-    {
+module.exports.preAdd = function (req, res,next) {
+
+    service.getClassroomClassify(function (err, results) {
         if (!err) {
-            results.currentPage = currentPage;
-            results.className = className;
-            results.classCode = classCode;
-            results.classType = classType;
-            res.render('classroom/classroomAdd', {datas : results});
+            res.render('classroom/classroomAdd', {data : results});
         } else {
-            console.log(err.message);
-            res.render('error', {error : err});
+            next();
         }
-    });
+    })
 };
 /**
- * 修改
+ * 添加
  * @param req
  * @param res
  */
-module.exports.preEdit = function(req, res,next) {
+module.exports.Add = function (req, res,next) {
+
+    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var name = req.body.name ? req.body.name : '';
+    var classType = req.body.cid ? req.body.cid : '';
+    var remark = req.body.remark ? req.body.remark : '';
+    var materialId = req.body.outLogId ? req.body.outLogId : '';
+
+    service.insertClassroom(serialNumber,name,classType,remark,materialId,function(err, results) {
+        if(!err) {
+            res.redirect('/jinquan/classroom_list?replytype=add');
+        } else {
+            next();
+        }
+    })
+};
+
+module.exports.set = function (req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var type = req.query.type ? req.query.type : '';
 
-    service.fetchSingleClassRoom(id, function(err, results) {
+    service.setClassroomStatus(id, type, function (err, results) {
+
         if (!err) {
-            var classroom = results.length == 0 ? null : results[0];
-            var materialId=classroom.materialId;
-            res.render('classroom/classroomEdit', {classroom : classroom});
-
-
+            res.redirect('/jinquan/classroom_list');
         } else {
-            console.log(err.message);
-            res.render('error', {message : err});
+            next();
         }
     })
 }
-/**
- * 添加
- * @param req
- * @param res
- */
-module.exports.doEdit = function (req, res,next) {
 
-    var id = req.body.id ? req.body.id : '';
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
-    var name = req.body.name ? req.body.name : '';
-    var classCode = req.body.classCode ? req.body.classCode : '';
-    var classType = req.body.classType ? req.body.classType : '';
-    var remark = req.body.remark ? req.body.remark : '';
-    var materialId = req.body.materialId ? req.body.materialId : '';
+module.exports.detail = function (req, res, next) {
 
-    service.updateClassRoom(id,serialNumber,name,classCode,classType,remark,materialId,function(err, results) {
-        if(!err) {
-            res.redirect('/jinquan/classroom_list');
+    var id = req.query.id ? req.query.id : '';
+
+    service.detail(id,function(err, results) {
+
+        if (!err) {
+
+            res.render('classroom/classroomDetail', {data : results});
+
         } else {
-            console.log(err.message);
-            res.render('error');
-        }
-    })
-};
-/**
- * 添加
- * @param req
- * @param res
- */
-module.exports.doAdd = function (req, res,next) {
-
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
-    var name = req.body.name ? req.body.name : '';
-    var classCode = req.body.classCode ? req.body.classCode : '';
-    var classType = req.body.classType ? req.body.classType : '';
-    var remark = req.body.remark ? req.body.remark : '';
-    var materialId = req.body.materialId ? req.body.materialId : '';
-
-    service.insertClassRoom(serialNumber,name,classCode,classType,remark,materialId,function(err, results) {
-        if(!err) {
-            res.redirect('/jinquan/classroom_list');
-        } else {
-            console.log(err.message);
-            res.render('error');
-        }
-    })
-};
-
-/**
- * 删除教室为0的
- * 库房有数据不能删除
- * @param req
- * @param res
- */
-module.exports.del = function(req, res,next) {
-
-    var id = req.query.id ? req.query.id : 0;
-    service.delClassRoom(id, function(err, results){
-
-
-
-    });
-};
-/**
- * 设置状态
- * @param req
- * @param res
- */
-module.exports.setStatus = function(req, res,next) {
-
-    var status = req.query.status ? req.query.status : 0;
-    var id = req.query.id ?  req.query.id : 0;
-
-    service.setStatus(id,status,function(err, results){
-        if(!err) {
-            res.redirect('/jinquan/classRoom_list');
-        } else {
-            console.log(err.message);
-            res.render('error');
+            next();
         }
     });
-};
+}
+
+

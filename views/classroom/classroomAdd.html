@@ -12,7 +12,7 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('门店名称不能为空');
+                alert('教室名称不能为空');
                 return;
             }
             var serialNumber = document.getElementById("serialNumber").value;
@@ -20,17 +20,11 @@
                 alert('序列号不能为空');
                 return;
             }
-            var classCode = document.getElementById("classCode").value;
-            if (!classCode || classCode.length == 0) {
-                alert('教室编码不能为空');
+            var outLogId = document.getElementById("outLogId").value;
+            if (!outLogId || outLogId.length == 0) {
+                alert('教室物资不能为空');
                 return;
             }
-            var remark = document.getElementById("remark").value;
-            if(!remark || remark.length == 0) {
-                alert('说明不能为空');
-                return;
-            }
-
             document.getElementById("myform").submit();
         }
     </script>
@@ -44,7 +38,7 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/classroom_do_add">
+    <form method="post" id="myform" action="/jinquan/classroom_add">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">序列号：</td>
@@ -56,51 +50,28 @@
                 <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td  class="regTd_l">教室编码：</td>
-                <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
                 <td class="regTd_l">教室分类：</td>
                 <td class="regTd_r">
-                    <select  id="classType" name="classType">
-                        <option  value="1"><5人</option>
-                        <option  value="2">5~10人</option>
-                        <option  value="3">10~20人</option>
+                    <select id="cid" name="cid">
+                        <%for(var i=0;i<data.length;i++){%>
+                        <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
+                        <%}%>
                     </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>
-                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19"></textarea></td>
             </tr>
             <tr>
-                <td class="regTd_l">教室物资：</td>
-                <td>
-                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
-                        <tr>
-                            <th>商品名称</th>
-                            <th>商品商标</th>
-                            <th>商品规格</th>
-                            <th>最低库存</th>
-                            <th>操作</th>
-                        </tr>
-                        <tr>
-                            <% for (var i=0;i<datas.length;i++) {%>
-                            <td><%=datas[i].name%></td>
-                            <td><%=datas[i].brand%></td>
-                            <td><%=datas[i].standard%></td>
-                            <td><%=datas[i].lowData%></td>
-                           <td> <input name ='materialId' type="checkbox" value='<%=datas[i].id%>'/> </td>
-                            <%}%>
-                         </tr>
-                    </table>
-                </td>
+                <td class="regTd_l">教室物资（出库单号）：</td>
+                <td class="regTd_r"><input id="outLogId" name="outLogId" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
 
         </table>
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href=/jinquan/classroom_list" class="close"></a></div>
+        <div class="rb_l"><a href="/jinquan/classroom_list" class="close"></a></div>
     </div>
 
 

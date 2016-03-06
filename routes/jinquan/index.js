@@ -58,12 +58,10 @@ router.all('/shop_update',shopAction.update);
 /*********************教室及课程管理****************************/
 // 教室管理
 router.all('/classroom_list',classroomAction.list);
-router.all('/classroom_to_add',classroomAction.goAdd);
-router.all('/classroom_do_add',classroomAction.doAdd);
-router.all('/classroom_set', classroomAction.setStatus);
-router.all('/classroom_to_edit', classroomAction.preEdit);
-router.all('/classroom_do_edit', classroomAction.doEdit);
-router.all('/classroom_del', classroomAction.del);
+router.all('/classroom_pre_add',classroomAction.preAdd);
+router.all('/classroom_add',classroomAction.Add);
+router.all('/classroom_set', classroomAction.set);
+router.all('/classroom_browse',classroomAction.detail);
 
 // 排课情况
 // 课程查询

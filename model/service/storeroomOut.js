@@ -114,10 +114,10 @@ module.exports.insertOutLogMX = function (mid,arr_obj,cb) {
         return;
     }
 
-    var sql = 'INSERT INTO storeroomOutLogMX (outLogId,waresSerial,waresName,count,price) VALUES (?,?,?,?,?)';
+    var sql = 'INSERT INTO storeroomOutLogMX (outLogId,waresSerial,waresName,count,price,waresId) VALUES (?,?,?,?,?,?)';
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [mid,item.proSerial,item.proName,item.count,item.price], function (cbData, err, rows, fields) {
+        db.query(sql, [mid,item.proSerial,item.proName,item.count,item.price,item.proId], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {

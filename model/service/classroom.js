@@ -6,6 +6,26 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var mainClassroomClassifyId = require('../../config').mainClassifyId.classroomType;
+
+
+/**
+ * 获取教室分类
+ * @param cb
+ */
+module.exports.getClassroomClassify = function (cb) {
+
+    var sql = 'SELECT id,name FROM systemClassify WHERE parentId = ?';
+    db.query(sql, [mainClassroomClassifyId], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+
+}
+
 /**
  * 添加教室
  * @param serialNumber
@@ -16,13 +36,14 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertClassRoom = function(serialNumber,name,classCode,classType,remark,materialId, cb) {
+module.exports.insertClassroom = function(serialNumber,name,classType,remark,materialId, cb) {
 
-    var sql = 'INSERT INTO classroom (serialNumber,name,classCode,classType,remark,materialId,dateline,status) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,classCode,classType,remark,materialId, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO classroom (serialNumber,name,classType,remark,outLogId,dateline,status) VALUES (?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,name,classType,remark,materialId,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
+            console.log(err);
             cb(err);
         }
     });
@@ -33,30 +54,10 @@ module.exports.insertClassRoom = function(serialNumber,name,classCode,classType,
  * @param id
  * @param cb
  */
-module.exports.delClassRoom= function (id, cb) {
+module.exports.setClassroomStatus= function (id, type, cb) {
 
-    var sql = 'DELETE FROM classroom WHERE id = ?';
-    db.query(sql, [id], function(cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-}
-
-/**
- * 查询菜单
- * @param pages
- * @param count
- * @param cb
- */
-module.exports.fetchClassRoom = function(pages, count, cb) {
-
-    var start = pages * count;
-    var end = start + count;
-    var sql = 'SELECT * FROM classroom ORDER BY dateline DESC LIMIT ?, ?';
-    db.query(sql, [start, end], function (cbData, err, rows, fields) {
+    var sql = 'UPDATE classroom SET status = ?  WHERE id = ?';
+    db.query(sql, [type,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -69,14 +70,14 @@ module.exports.fetchClassRoom = function(pages, count, cb) {
  * 获取所有门店
  * @param cb
  */
-module.exports.fetchAllCLassRoom = function(className,classCode,classType,currentPage,cb) {
+module.exports.fetchAllCLassRoom = function(className,classCode,currentPage,cb) {
 
-    var parm = "WHERE name LIKE '%"+className+"%' AND classCode LIKE '%"+classCode+"%' AND classType LIKE '%"+classType+"%' ";
+    var parm = " WHERE r.name LIKE '%"+className+"%' AND r.serialNumber LIKE '%"+classCode+"%' ";
 
-    var sql_count = 'SELECT count(*) as count FROM classroom '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM classroom AS r '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM classroom '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT r.id,r.name,r.serialNumber,r.status,c.name AS cname FROM classroom AS r,systemClassify AS c '+parm+' AND r.classType = c.id ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -112,61 +113,37 @@ module.exports.fetchAllCLassRoom = function(className,classCode,classType,curren
 }
 
 /**
- * 修改教室
- * @param id
- * @param name
- * @param address
- * @param principal
- * @param cb
- */
-module.exports.updateClassRoom = function(id,serialNumber,name,classCode,classType,remark,materialId, cb) {
-
-    var sql = 'update   classroom  set  serialNumber =?, NAME =?, classCode =?, classType =?, remark =?,  materialId =?, dateline =?  where id =? ';
-    var par = [serialNumber,name,classCode,classType,remark,materialId, new Date().getTime(), id];
-
-    db.query(sql, par, function (cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-
-}
-
-/**
- * 获取门店详情
+ * 教室详情
  * @param id
  * @param cb
  */
-module.exports.fetchSingleClassRoom =function (id, cb) {
+module.exports.detail = function (id, cb) {
 
-    var sql = 'SELECT * FROM classroom WHERE id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    var sql = 'SELECT c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc WHERE cc.id = c.classType AND c.id = ?';
+
+    var detail_sql = 'SELECT * FROM storeroomOutLogMX WHERE outLogId = ?';
+
+    db.query(sql,[id],function (cbData, err, rows, fields) {
 
         if (!err) {
-            cb(null, rows);
+            if (rows != null && rows.length != 0) {
+
+                var data = {};
+                data.classroom = rows[0];
+                var outLogId = rows[0].outLogId;
+
+                db.query(detail_sql, [outLogId], function (cbData, err, rows, fields) {
+
+                    if (!err) {
+                        data.detail = rows;
+                        cb (null, data);
+                    } else {
+                        cb(err);
+                    }
+                });
+            }
         } else {
             cb(err);
         }
-    });
-}
-
-/**
- * 设置状态
- * @param id
- * @param status
- */
-module.exports.setStatus = function (id, status, cb) {
-
-    var sql = 'UPDATE classroom  SET status = ? WHERE id = ?';
-    db.query(sql, [status,id], function(cbData, err, rows, filelds) {
-
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-
     });
 }
