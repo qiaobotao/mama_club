@@ -30,14 +30,15 @@
         var outId = document.getElementById('outId').value;
         var inId = document.getElementById('inId').value;
         var moveDate = document.getElementById('moveDate').value;
-        window.location.href = '/jinquan/storeroom_move_list?oper='+oper+'&outStoreroom='+outId+'&inStoreroom='+inId+'&moveDate='+moveDate;
+        window.location.href = '/jinquan/storeroom_move_list?oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate;
     }
 
     function pageturning (selectPage) {
         var oper = document.getElementById('oper').value;
-        var outType = document.getElementById('outType').value;
-        var outDate = document.getElementById('outDate').value;
-        window.location.href = '/jinquan/storeroom_out_list?page='+selectPage+'&oper='+oper+'&outType='+outType+'&outDate='+outDate;
+        var outId = document.getElementById('outId').value;
+        var inId = document.getElementById('inId').value;
+        var moveDate = document.getElementById('moveDate').value;
+        window.location.href = '/jinquan/storeroom_out_list?page='+selectPage+'&oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate;
     }
 </script>
 
@@ -53,7 +54,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>出库库房：<select id="outId" name="outType">
+                    <td>出库库房：<select id="outId" name="outId">
                         <option value =""></option>
                         <%for(var i=0;i<data.storerooms.length;i++){%>
                         <option value ="<%=data.storerooms[i].id%>" <%if(data.outId == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>

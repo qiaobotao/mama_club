@@ -230,6 +230,7 @@ router.all('/storeroom_out_detail', storeroomOutAction.detail);
 // 移库管理
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_pre_add', storeroomMoveAction.preadd);
+router.all('/storeroom_move_add', storeroomMoveAction.add);
 
 
 /*********************权限管理******************************/

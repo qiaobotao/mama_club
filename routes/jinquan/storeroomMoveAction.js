@@ -13,8 +13,8 @@ var service = require('../../model/service/storeroomMove');
 module.exports.list = function (req, res, next) {
 
         var oper = req.query.oper ? req.query.oper : ''; // 经办人
-        var outId = req.query.outStoreroom ? req.query.outStoreroom : '';// 出库房
-        var inId = req.query.inStoreroom ? req.query.inStoreroom : ''; // 入库房
+        var outId = req.query.outId ? req.query.outId : '';// 出库房
+        var inId = req.query.inId ? req.query.inId : ''; // 入库房
         var moveDate = req.query.moveDate ? req.query.moveDate : ''; // 入库房
         var currentPage = req.query.page ? req.query.page : '1';
 
@@ -66,6 +66,11 @@ module.exports.preadd = function (req, res, next) {
             next();
         }
     });
+}
+
+
+module.exports.add = function (req, res, next) {
+
 
 
 }
