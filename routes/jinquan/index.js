@@ -191,6 +191,7 @@ router.all('/wares_pre_add', waresAction.preAdd);
 router.all('/wares_add', waresAction.add);
 router.all('/wares_del', waresAction.del);
 router.all('/wares_select', waresAction.select);
+router.all('/wares_select_in_storeroom', waresAction.selectFromInventory);
 
 // 库房管理
 router.all('/storeroom_list',storeroomAction.list);
@@ -222,7 +223,7 @@ router.all('/storeroom_check', storeroomOutAction.checkResidue);
 router.all('/storeroom_out_detail', storeroomOutAction.detail);
 // 移库管理
 router.all('/storeroom_move_list',storeroomMoveAction.list);
-router.all('/storeroom_move_add', storeroomMoveAction.add);
+router.all('/storeroom_move_pre_add', storeroomMoveAction.preadd);
 
 
 /*********************权限管理******************************/

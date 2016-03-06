@@ -14,6 +14,12 @@
     <script type="text/javascript">
         var iframIndex ;
         function getWares(index){
+
+            var sid = document.getElementById('storeroom').value;
+            if (sid == '' || sid.length == 0) { //库房不能为空
+                parent.layer.alert('请先选择库房！',{icon: 2});
+                return;
+            }
             //iframe层
             iframIndex = parent.layer.open({
 
@@ -22,7 +28,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/wares_select?index='+index, //iframe的url
+                content: '/jinquan/wares_select_in_storeroom?index='+index+'&sid='+sid, //iframe的url
                 success: function(layero, index){
 
                 },

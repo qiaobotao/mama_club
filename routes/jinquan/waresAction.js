@@ -214,11 +214,48 @@ module.exports.select = function (req, res, next) {
                 }
             });
         } else {
-            console.log(err);
             next();
         }
     });
+}
 
+
+/**
+ * 出库时调用的选择页面数据
+ * 从库存中查找
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.selectFromInventory = function (req, res, next) {
+
+    var sid = req.query.sid ? req.query.sid : '';
+    var name = req.query.name ? req.query.name : '';    // 商品名称
+    var classifyId = req.query.id ? req.query.id : '';  // 商品分类
+    var currentPage = req.query.page ? req.query.page : '1';
+
+    var index = req.query.index ? req.query.index : '';
+
+    service.listByInventory(sid,name,classifyId,currentPage,function (err, results) {
+
+        if (!err) {
+            results.currentPage = currentPage;
+            results.name = name;
+            results.classifyId = classifyId;
+            service.getWaresClassify(function(err,classify) {
+                if (!err) {
+                    results.classify = classify;
+                    res.render('wares/waresSelectFromInventory', {data : results, index : index, sid : sid});
+                } else {
+                    console.log(err);
+                    next();
+                }
+            });
+        } else {
+            next();
+        }
+
+    });
 }
 
 

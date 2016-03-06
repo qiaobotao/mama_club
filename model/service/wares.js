@@ -155,3 +155,61 @@ module.exports.getWaresClassify = function (cb) {
     });
 
 }
+
+
+
+/**
+ * 查看库存商品信息
+ * @param pages
+ * @param count
+ * @param cb
+ */
+module.exports.listByInventory = function(sid,name,cid,currentPage, cb) {
+
+    if (sid == '') { // 库房id不能为空
+       return;
+    }
+
+    var parm = "WHERE s.name LIKE '%"+name+"%' AND i.storeroomId = "+sid;
+
+    if (cid != '') {
+        parm = parm + " AND classify ="+cid;
+    }
+
+    var sql_count = 'SELECT count(*) as count FROM wares AS s,  inventory AS i '+parm+' AND s.id = i.waresId  ORDER BY dateline DESC';
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname, i.count FROM wares AS s, systemClassify AS c , inventory AS i '+parm+' AND s.classify = c.id AND s.id = i.waresId ORDER BY dateline DESC LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}

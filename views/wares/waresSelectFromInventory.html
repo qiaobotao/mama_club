@@ -14,15 +14,17 @@
 
 <script type="text/javascript">
     function search () {
+        var sid = document.getElementById('sid').value;
         var name = document.getElementById('name').value;
         var cid = document.getElementById('id').value;
-        window.location.href = '/jinquan/wares_select?name='+name+'&id='+cid;
+        window.location.href = '/jinquan/wares_select_in_storeroom?name='+name+'&id='+cid+'&sid='+sid;
     }
 
     function pageturning (selectPage) {
         var name = document.getElementById('name').value;
         var cid = document.getElementById('id').value;
-        window.location.href = '/jinquan/wares_select?page='+selectPage+'&name='+name+'&id='+cid;
+        var sid = document.getElementById('sid').value;
+        window.location.href = '/jinquan/wares_select_in_storeroom?page='+selectPage+'&name='+name+'&id='+cid+'&sid='+sid;
     }
     //选择该商品
     function select(id,name,seril){
@@ -44,6 +46,7 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <input id="index" name="index" type="hidden" value="<%=index%>"  />
+                    <input id="sid" name="sid" type="hidden" value="<%=sid%>"  />
                     <td>商品名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
                     <td> &nbsp;商品分类：<select id="id" name="id">
                         <option value =""></option>
@@ -64,6 +67,7 @@
                 <th>商品商标</th>
                 <th>商品分类</th>
                 <th>最低库存</th>
+                <th>目前库存</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
@@ -72,6 +76,11 @@
                 <td><%=data.data[i].brand%></td>
                 <td><%=data.data[i].cname%></td>
                 <td><%=data.data[i].lowData%></td>
+                <%if (data.data[i].count - data.data[i].lowData >0 ) {%>
+                <td><%=data.data[i].count%></td>
+                <%} else {%>
+                <td><span style="color:#FF0000;"><%=data.data[i].count%>(超出最低库存)</span></td>
+                <%}%>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

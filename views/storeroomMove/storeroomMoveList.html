@@ -5,10 +5,41 @@
     <title>移库管理</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
 </head>
+
+<script type="text/javascript">
+
+    var replytype = '<%=replytype%>';
+    if (replytype == 'add') {
+        parent.layer.msg('增加成功');
+    } else if (replytype == 'del') {
+        parent.layer.msg('删除成功');
+    } else if (replytype == 'update') {
+        parent.layer.msg('修改成功');
+    }
+
+    function search () {
+
+        var oper = document.getElementById('oper').value;
+        var outId = document.getElementById('outId').value;
+        var inId = document.getElementById('inId').value;
+        var moveDate = document.getElementById('moveDate').value;
+        window.location.href = '/jinquan/storeroom_move_list?oper='+oper+'&outStoreroom='+outId+'&inStoreroom='+inId+'&moveDate='+moveDate;
+    }
+
+    function pageturning (selectPage) {
+        var oper = document.getElementById('oper').value;
+        var outType = document.getElementById('outType').value;
+        var outDate = document.getElementById('outDate').value;
+        window.location.href = '/jinquan/storeroom_out_list?page='+selectPage+'&oper='+oper+'&outType='+outType+'&outDate='+outDate;
+    }
+</script>
 
 <body>
 <div class="r_top">
@@ -22,16 +53,26 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>出库库房：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;经手人：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;入库库房：<input name="" type="text" class="input5" /> </td>
-                    <td> &nbsp;移库时间：<input name="" type="text" class="input5" /> </td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>出库库房：<select id="outId" name="outType">
+                        <option value =""></option>
+                        <%for(var i=0;i<data.storerooms.length;i++){%>
+                        <option value ="<%=data.storerooms[i].id%>" <%if(data.outId == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
+                        <%}%>
+                    </select></td>
+                    <td> &nbsp;经手人：<input id="oper" name="oper" type="text" class="input5" value="<%=data.oper%>" /></td>
+                    <td> &nbsp;入库库房：<select id="inId" name="inId">
+                        <option value =""></option>
+                        <%for(var i=0;i<data.storerooms.length;i++){%>
+                        <option value ="<%=data.storerooms[i].id%>" <%if(data.inId == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
+                        <%}%>
+                    </select> </td>
+                    <td> &nbsp;移库时间：<input id="moveDate" name="moveDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.moveDate%>"/> </td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/storeroom_move_add" class="bsty0"></a></div>
+        <div class="but_0"><a href="/jinquan/storeroom_move_pre_add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -44,9 +85,7 @@
             </tr>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 
