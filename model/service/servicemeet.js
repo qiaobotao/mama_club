@@ -112,8 +112,7 @@ module.exports.delServiceMeet= function (id, cb) {
 };
 
 module.exports.fetchSingleServiceMeet =function (id, cb) {
-
-    var sql = 'SELECT * FROM serviceMeet WHERE id = ?';
+    var sql = 'SELECT a.*,b.id as serviceId,b.name AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  and a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -134,14 +133,14 @@ module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
 
     if(memberId !=null && memberId !="")
     {
-        parm=   "where memberId='" + memberId + "'" ;
+        parm=   " and  memberId='" + memberId + "'" ;
     }
     else
     {
-        parm=   "where tel='" + tel + "' and name ='" + name + "'" ;
+        parm=   " and tel='" + tel + "' and name ='" + name + "'" ;
     }
-    parm=" order by dateline limit 0,3";
-    var sql = 'SELECT * FROM serviceMeet '+parm ;
+    parm+=" order by dateline limit 0,3";
+    var sql = 'SELECT a.*,b.`name` AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  '+parm ;
     db.query(sql, [],  function(cbData, err, rows, fields) {
 
         if (!err) {

@@ -5,12 +5,12 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertReturnVisit = function(serialNumber,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+module.exports.insertReturnVisit = function(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
                                             isReturnVisit,returnVisitReason, cb) {
 
     var sql = 'INSERT INTO returnVisit (serialNumber,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
         + 'isReturnVisit,returnVisitReason) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    db.query(sql, [serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -20,7 +20,7 @@ module.exports.insertReturnVisit = function(serialNumber,name,tel,returnVisitDat
     });
 };
 
-module.exports.updateReturnVisit = function(id,serialNumber,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+module.exports.updateReturnVisit = function(id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
                                             isReturnVisit,returnVisitReason, cb) {
 
     var sql = 'UPDATE returnVisit set returnVisitDate=?,returnVisitType=?,returnVisitResult=?,serviceComment=?,advice=?,'
@@ -35,11 +35,11 @@ module.exports.updateReturnVisit = function(id,serialNumber,name,tel,returnVisit
     });
 };
 
-module.exports.fetchAllReturnVisit = function(serialNumber,returnVisitDate,returnVisitType,currentPage,cb) {
+module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,returnVisitType,currentPage,cb) {
 
-    var parm = " on (a.serialNumber=b.id and b.id=c.serialNumber)"
-    if (serialNumber != '')
-        parm += " and a.serialNumber like'%" + serialNumber + "%'";
+    var parm = " on (a.serviceMeetId=b.id and b.id=c.serviceMeetId)"
+    if (serviceMeetId != '')
+        parm += " and a.serviceMeetId like'%" + serviceMeetId + "%'";
     if (returnVisitDate != '')
         parm += " and a.returnVisitDate like'%" + returnVisitDate + "%'";
     if (returnVisitType != '')
@@ -86,7 +86,7 @@ module.exports.fetchAllReturnVisit = function(serialNumber,returnVisitDate,retur
 module.exports.fetchSingleReturnVisit =function (id, cb) {
 
     var sql = 'SELECT a.*,'
-    + 'b.tel,b.name,b.address FROM returnVisit a inner join serviceMeet b on(a.serialNumber=b.id) WHERE a.id = ?';
+    + 'b.tel,b.name,b.address FROM returnVisit a inner join serviceMeet b on(a.serviceMeetId=b.id) WHERE a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

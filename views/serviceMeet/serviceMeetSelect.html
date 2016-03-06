@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>预约服务</title>
+    <title>选择预约服务单</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -26,14 +26,17 @@
             var status = document.getElementById('status').value;
             window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&customerName='+name+ '&meetStartTime='+meetTime ;
         }
-        function show (id) {
-            window.location.href = '/jinquan/service_meet_show?id='+id;
-        }
-        function preEdit (id) {
-            window.location.href = '/jinquan/service_meet_preEdit?id='+id;
-        }
-        function del (id) {
-            window.location.href = '/jinquan/service_meet_del?id='+id;
+        //选择该商品
+        function select(serviceMeet){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId').value=serviceMeet.id;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceDate').value=serviceMeet.meetTime;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('name').value=serviceMeet.name;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel').value=serviceMeet.tel;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceType').value=serviceMeet.serviceType;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('address').value=serviceMeet.address;
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+
         }
 
     </script>
@@ -66,7 +69,6 @@
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/service_meet_goadd" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -89,9 +91,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select(<%=JSON.stringify(data.data[i])%>)">选择预约服务单</a>]</div></td>
                         </tr>
                     </table>
                 </td>

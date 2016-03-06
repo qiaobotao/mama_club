@@ -1,4 +1,5 @@
 var service = require('../../model/service/nursservice');
+var storeroomOutService = require('../../model/service/storeroomOut');
 /**
  * Created by kuanchang on 16/1/18.
  */
@@ -72,6 +73,29 @@ module.exports.add = function (req, res) {
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
+    // 数组
+    var oper = req.body.oper ? req.body.oper : '';
+    var outType = req.body.outType ? req.body.outType : '';
+    var storeroom = req.body.storeroom ? req.body.storeroom : '';
+    var remarks = req.body.remarks ? req.body.remarks : '';
+
+    var arr_proId = req.body.proId ? req.body.proId : '';
+    var arr_proname = req.body.proname ? req.body.proname :'';
+    var arr_proNo = req.body.proNo ? req.body.proNo : '';
+    var arr_count = req.body.count ? req.body.count : '';
+    var arr_price = req.body.price ? req.body.price : '';
+
+    // 处理数据
+    var arr = new Array();
+    for (var i=0;i<arr_proId.length;i++) {
+        var obj = {};
+        obj.proId = arr_proId[i];
+        obj.proName = arr_proname[i];
+        obj.proSerial = arr_proNo[i];
+        obj.count = arr_count[i];
+        obj.price = arr_price[i];
+        arr.push(obj);
+    }
 
     service.insertNursService(serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
@@ -79,7 +103,34 @@ module.exports.add = function (req, res) {
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
         isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/nurs_service_list');
+                service.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+
+                    if (!err) {
+
+                        var outLogId = results.insertId;
+                        service.insertOutLogMX(outLogId,arr,function (err, results) {
+
+                            if (!err) {
+                                service.updateInventory(storeroom,arr,function(err, results) {
+
+                                    if (!err) {
+                                        res.redirect('/jinquan/nurs_service_list');
+
+                                    } else {
+                                        service.delOutLog(outLogId);
+                                        service.delOutLogMX(outLogId);
+                                        next();
+                                    }
+                                });
+                            } else {
+                                service.delOutLog(outLogId);
+                                next();
+                            }
+                        })
+                    } else {
+                        next();
+                    }
+                });
             } else {
                 next();
             }

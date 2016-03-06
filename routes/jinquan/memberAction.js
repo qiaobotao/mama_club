@@ -143,6 +143,7 @@ module.exports.show = function(req, res, next) {
         }
     })
 }
+
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
@@ -156,6 +157,7 @@ module.exports.preEdit = function(req, res, next) {
         }
     })
 }
+
 module.exports.del = function (req, res, next) {
 
     var id = req.query.id ? req.query.id :'';
@@ -191,35 +193,45 @@ module.exports.getMemberByNameTel = function(req, res, next) {
 
     var memberName = req.body.memberName ? req.body.memberName : '';
     var tel = req.body.memberTel ? req.body.memberTel : '';
+    var result={} ;
+    result.flag= false;
+
     service.getMemberByNameTel(memberName,tel ,function(err, results) {
         if (!err) {
                 var member = results.length == 0 ? null : results[0];
-                if(member.id!=null)
+                if(member!=null)
                 {
-                    results.member=member;
+                    result.member=member;
                     //预约服务单
                       servicemeet.getTop3ServiceMeet(member.id,memberName,tel,function(err, services) {
-                          results.services=services;
+                          result.serviceMeets=services;
 
                           var serviceMeetIds="";
                           for(var i=0;i<services.length;i++)
                           {
-                              serviceMeetIds+="'"+services[i].id+"'";
+                              serviceMeetIds+="'"+services[i].id+"',";
                           }
+                          serviceMeetIds= serviceMeetIds.substr(0,serviceMeetIds.length-1);
                           //护理服务
                           nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
-                                  results.nursServices=nursServices;
+                              result.nursServices=nursServices;
                                   complain.getTop3Complain(serviceMeetIds,function(err, complains) {
-                                      results.complains=complains;
-                                      console.log(JSON.stringify(complains));
-                                      res.json(JSON.stringify(results));
+                                      result.complains=complains;
+                                      result.flag= true;
+                                      console.log(JSON.stringify(result));
+                                      res.json(JSON.stringify(result));
                                  });
                               })
                           });
+                }else
+                {
+                    console.log(JSON.stringify(result));
+                    res.json(JSON.stringify(result));
                 }
 
         } else {
             next();
         }
-    })
+    }
+    )
 }

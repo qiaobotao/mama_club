@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加预约服务</title>
+    <title>新增预约服务</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
@@ -33,15 +33,18 @@
                 cache: false,
                 timeout: 5000,
                 success: function(data){
-                    var datas = JSON.parse(data);
+                    var datas =eval('(' + data + ')');
+                    if(datas.flag) {
 
-
-                    if(datas) {
-                        document.getElementById("memberId").value=datas.id;
-                        document.getElementById("age").value=datas.age;
+                        document.getElementById("memberId").value=datas.member.id;
+                        document.getElementById("age").value=datas.member.age;
+                        renderTables(datas);
                     }
                     else
                     {
+                        $("#serviceMeets  tr:not(:first)").empty("");
+                        $("#nursServices  tr:not(:first)").empty("");
+                        $("#complains  tr:not(:first)").empty("");
                         document.getElementById("memberId").value=null;
                         var msg = '非会员预约服务，是否确认预约？';
                         var index = parent.layer.confirm(msg, {
@@ -55,26 +58,71 @@
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    alert("访问系统出问题，请联系管理员~");
+                    $("#serviceMeets  tr:not(:first)").empty("");
+                    $("#nursServices  tr:not(:first)").empty("");
+                    $("#complains  tr:not(:first)").empty("");
+                    alert("系统错误请系统管理员！")
                 }
             });
         }
-        var iframIndex ;
-        function getServices(){
-            //iframe层
-            iframIndex = parent.layer.open({
+        function renderTables(datas)
+        {
 
-                type: 2,
-                title: '选择服务项目',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['80%', '90%'],
-                content: '/jinquan/service_select', //iframe的url
-                success: function(layero, index){
-                },
-                close: function(d){
-                }
-            });
+            var  serviceMeets =datas.serviceMeets;
+            //获取表格对象
+            var serviceMeetsTable=document.getElementById("serviceMeets");
+            //获取当前行数
+            serviceMeetsIndex = $("#serviceMeets tr").length;
+            $("#serviceMeets  tr:not(:first)").empty("");
+            for(var i=0;i<serviceMeets.length;i++)
+            {
+                var row=serviceMeetsTable.insertRow(serviceMeetsIndex);
+                var cell1=row.insertCell(0);//预约时间
+                var cell2=row.insertCell(1);//预约技师
+                var cell3=row.insertCell(2);//如约、爽约
+                var cell4=row.insertCell(3);//如约、爽约
+                cell1.innerHTML =serviceMeets[i].serviceName;
+                cell2.innerHTML =serviceMeets[i].meetTime;
+                cell3.innerHTML =serviceMeets[i].principal;
+                cell4.innerHTML =serviceMeets[i].status;
+                serviceMeetsIndex++;
+            }
+            //获取表格对象
+            var nursServicesTable=document.getElementById("nursServices");
+            var  nursServices =datas.nursServices;
+            nursServicesIndex = $("#nursServices tr").length;
+            $("#nursServices  tr:not(:first)").empty("");
+            for(var i=0;i<nursServices.length;i++)
+            {
+                var row=nursServicesTable.insertRow(nursServicesIndex);
+                var cell1=row.insertCell(0);//护理服务项目
+                var cell2=row.insertCell(1);//服务时间
+                var cell3=row.insertCell(2);//服务技师
+                var cell4=row.insertCell(3);//服务类型
+                cell1.innerHTML =nursServices[i].serviceName;
+                cell2.innerHTML =nursServices[i].startTime;
+                cell3.innerHTML =nursServices[i].principal;
+                cell4.innerHTML =nursServices[i].serviceType;
+                nursServicesIndex++;
+            }
+            //获取表格对象
+            var complainsTable=document.getElementById("complains");
+            var  complains =datas.complains;
+            complainsIndex = $("#complains tr").length;
+            $("#complains  tr:not(:first)").empty("");
+            for(var i=0;i<complains.length;i++)
+            {
+                var row=complainsTable.insertRow(complainsIndex);
+                var cell1=row.insertCell(0);//预约时间
+                var cell2=row.insertCell(1);//预约技师
+                var cell3=row.insertCell(2);//如约、爽约
+                var cell4=row.insertCell(3);//如约、爽约
+                cell1.innerHTML =complains[i].serviceName;
+                cell2.innerHTML =complains[i].complainTime;
+                cell3.innerHTML =complains[i].dealPrincipal;
+                cell4.innerHTML =complains[i].complainDetail;
+                complainsIndex++;
+            }
         }
         function submitForm(){
             var name = document.getElementById("name").value;
@@ -114,6 +162,23 @@
             }
 
             document.getElementById("myform").submit();
+        }
+        var iframIndex ;
+        function getServices(){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择服务项目',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/service_select', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
         }
     </script>
 </head>
@@ -176,8 +241,9 @@
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table id="serviceMeets" name="serviceMeets" style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
+                            <td>服务项目</td>
                             <td>预约时间</td>
                             <td>预约技师</td>
                             <td>如约/爽约</td>
@@ -192,8 +258,9 @@
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table id="nursServices" name="nursServices" style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
+                            <td>服务项目</td>
                             <td>服务时间</td>
                             <td>服务技师</td>
                             <td>服务类型</td>
@@ -207,11 +274,12 @@
             </tr>
             <tr>
                 <td colspan="4" style="width:100%;">
-                    <table style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <table  id="complains" name="complains" style="width:60%;" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                         <tr bgcolor="lightblue">
+                            <td>服务项目</td>
                             <td>投诉时间</td>
                             <td>投诉技师</td>
-                            <td>解决办法</td>
+                            <td>投诉情况</td>
 
                         </tr>
                     </table>

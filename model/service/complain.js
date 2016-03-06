@@ -113,9 +113,9 @@ module.exports.delComplaint= function (id, cb) {
  * @param cb
  */
 module.exports.getTop3Complain =function (serviceMeetIds, cb) {
-    var  parm=   "where serviceMeetId in(" + serviceMeetIds + ")" ;
-    parm=" order by dateLine limit 0,3";
-    var sql = 'SELECT * FROM complain '+parm;
+    var  parm=   "and serviceMeetId in(" + serviceMeetIds + ")" ;
+    parm+=" order by dateLine";
+    var sql = 'SELECT a.*,b.name AS serviceName FROM complain a,service b WHERE a.serviceMeetId=b.id   '+parm;
     db.query(sql, [],  function(cbData, err, rows, fields) {
 
         if (!err) {
