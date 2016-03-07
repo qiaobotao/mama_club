@@ -25,54 +25,47 @@
 <body>
 <frameset rows="81,*,32" cols="*" framespacing="0" frameborder="no" border="0">
     <div id="l_top">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td width="296" ><div class="logo"><img src="../images/logo.jpg" /></div> </td>
-                <td >
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td class="l_top_c">&nbsp;</td>
-                        </tr>
-                    </table>
-                </td>
-                <td width="331" class="l_top_r"></td>
-            </tr>
-        </table>
-
+        <div style="margin:0px auto; padding:0px; width:1000px;">
+            <table width="1000"  align="center" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="296" ><div class="logo"><img src="images/logo.jpg" /></div> </td>
+                    <td >
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td class="l_top_c">&nbsp;</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="331" class="l_top_r"></td>
+                </tr>
+            </table>
+        </div>
     </div>
+
+
+
     <div id="l_center">
         <div class="ppt">
-            <script>
-                var box =new PPTBox();
-                box.width = 650; //宽度
-                box.height = 400;//高度
-                box.autoplayer = 3;//自动播放间隔时间
-                box.add({"url":"../images/tu1.jpg","href":"#","title":"悬浮提示标题1"})
-                box.add({"url":"../images/tu2.jpg","href":"#","title":"悬浮提示标题2"})
-                box.add({"url":"../images/tu3.jpg","href":"#","title":"悬浮提示标题3"})
-                box.add({"url":"../images/tu4.jpg","href":"#","title":"悬浮提示标题4"})
-                box.show();
-            </script>
+            <img src="images/tu1.jpg"/>
 
         </div>
-        <form method="post" id="myform" action="/jinquan">
         <div class="dl_wai">
-            <div class="dl">
-                <div class="dl_0">
-                    <div class="dl0_l">账 号：</div><div class="dl0_r"><input id="account" name="account" class="input1" /></div>
+            <form method="post" id="myform" action="/jinquan">
+                <div class="dl">
+                    <div class="dl_0">
+                        <div class="dl0_l">账 号：</div><div class="dl0_r"><input id="account" name="account" class="input1" /></div>
+                    </div>
+                    <div class="dl_0">
+                        <div class="dl0_l">密 码：</div><div class="dl0_r"><input id="password" name="password" class="input1" /></div>
+                    </div>
+                    <div class="dl_bt">
+                        <input onclick="submitForm()" class="button1" value=" " />
+                    </div>
                 </div>
-                <div class="dl_0">
-                    <div class="dl0_l">密 码：</div><div class="dl0_r"><input id="password" name="password" class="input1" /></div>
-                </div>
-                <div class="dl_bt">
-                    <input class="button1" onclick="submitForm()" value="" />
-                </div>
-            </div>
-
+            </form>
         </div>
-        </form>
     </div>
-    <div id="l_bottom">北京金禾天成科技有限公司 版权所有@2012</div>
+    <div id="l_bottom">金泉母乳妈妈会所 版权所有@2012</div>
 </frameset>
 </body>
 </html>

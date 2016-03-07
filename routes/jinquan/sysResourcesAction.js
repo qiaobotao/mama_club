@@ -39,7 +39,7 @@ module.exports.edit = function (req, res) {
     if(id == ''){
         var sysResources = [];//系统资源
         //获取所有菜单数据
-        menuService.fetchSysMenus(0,20,function(err, results) {
+        menuService.fetchSysMenus(0,100,function(err, results) {
             if(!err) {
                 res.render('sysResources/sysResourcesAdd', {data : sysResources,show:show,menus:results});
             } else {

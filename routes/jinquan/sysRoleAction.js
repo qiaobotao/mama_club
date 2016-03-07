@@ -4,6 +4,8 @@
  */
 
 var service = require('../../model/service/sysRole');
+var menuService = require('../../model/service/sysMenu');
+var resourcesService = require('../../model/service/sysResources');
 
 /**
  * 获取角色列表
@@ -41,7 +43,26 @@ module.exports.edit = function (req, res) {
     var show = req.query.show ? req.query.show : '';
     if(id == ''){
         var sysRole = [];//系统菜单
-        res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show});
+
+        //获取所有菜单数据
+        menuService.fetchSysMenus(0,100,function(err, results) {
+            if(!err) {
+                var menus = results;
+                //获取所有资源数据
+                resourcesService.fetchSysResourcess(0,200,function(err, results) {
+                    if(!err) {
+                        var resourcess = results;
+                        res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show,menus:menus,resourcess:resourcess});
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
+            } else {
+                console.log(err.message);
+                res.render('error');
+            }
+        })
     }else{
         service.fetchSingleSysRole(id, function(err, results) {
             if (!err) {
