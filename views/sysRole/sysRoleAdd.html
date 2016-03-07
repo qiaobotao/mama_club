@@ -26,46 +26,68 @@
             }
         };
 
-        var zNodes =[
-            { id:1, pId:0, name:"随意勾选 1", open:true},
-            { id:11, pId:1, name:"随意勾选 1-1", open:true},
-            { id:111, pId:11, name:"随意勾选 1-1-1"},
-            { id:112, pId:11, name:"随意勾选 1-1-2"},
-            { id:12, pId:1, name:"随意勾选 1-2", open:true},
-            { id:121, pId:12, name:"随意勾选 1-2-1"},
-            { id:122, pId:12, name:"随意勾选 1-2-2"},
-            { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
-            { id:21, pId:2, name:"随意勾选 2-1"},
-            { id:22, pId:2, name:"随意勾选 2-2", open:true},
-            { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
-            { id:222, pId:22, name:"随意勾选 2-2-2"},
-            { id:23, pId:2, name:"随意勾选 2-3"}
-        ];
+        var index = 0;//该添加第几个节点
+        var zNodes =[];
         var code;
 
-//        function setCheck() {
-//            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
-//                    py = $("#py").attr("checked")? "p":"",
-//                    sy = $("#sy").attr("checked")? "s":"",
-//                    pn = $("#pn").attr("checked")? "p":"",
-//                    sn = $("#sn").attr("checked")? "s":"",
-//                    type = { "Y":py + sy, "N":pn + sn};
-//            zTree.setting.check.chkboxType = type;
-//            showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
-//        }
-//        function showCode(str) {
-//            if (!code) code = $("#code");
-//            code.empty();
-//            code.append("<li>"+str+"</li>");
-//        }
+
+
+        function setCheck() {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                    type = { "Y":"", "N":""};
+            zTree.setting.check.chkboxType = type;
+            showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+        }
+        function showCode(str) {
+            if (!code) code = $("#code");
+            code.empty();
+            code.append("<li>"+str+"</li>");
+        }
 
         $(document).ready(function(){
+            //获取所有菜单
+            var mmm = '<%=menus%>';
+            console.log("aaa"+mmm);
+            var menus = '<%-JSON.stringify(menus)%>';
+            menus = JSON.parse(menus);
+            //获取所有资源
+            var resourcess = '<%-JSON.stringify(resourcess)%>';
+            resourcess = JSON.parse(resourcess);
+            console.log("resourcess==="+resourcess);
+            for(var i = 0 ; i < menus.length ; i ++){
+                if(menus[i].parentId == 0){
+                    var nodesObj = {};
+                    nodesObj.id = menus[i].id;
+                    nodesObj.pId = menus[i].parentId;
+                    nodesObj.name = menus[i].textCh;
+                    nodesObj.nocheck = true;
+                    zNodes[index]= nodesObj;
+                    index++;
+                    for(var j = i ; j < menus.length ; j ++){
+                        if(menus[j].parentId == menus[i].id){
+                            var nodesObj = {};
+                            nodesObj.id = menus[j].id;
+                            nodesObj.pId = menus[j].parentId;
+                            nodesObj.name = menus[j].textCh;
+                            zNodes[index]= nodesObj;
+                            index++;
+                            for(var k = 0 ; k < resourcess.length ; k ++){
+                                if(resourcess[k].menuId == menus[j].id){
+                                    var nodesObj = {};
+                                    nodesObj.id = resourcess[k].id;
+                                    nodesObj.pId = resourcess[k].menuId;
+                                    nodesObj.name = resourcess[k].textCh;
+                                    zNodes[index]= nodesObj;
+                                    index++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            console.log("zNodes="+zNodes);
+
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-//            setCheck();
-//            $("#py").bind("change", setCheck);
-//            $("#sy").bind("change", setCheck);
-//            $("#pn").bind("change", setCheck);
-//            $("#sn").bind("change", setCheck);
         });
 
 
@@ -92,7 +114,7 @@
     <form method="post" id="myform" action="/jinquan/sys_role_save">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="regTd_l">角色名称：</td>
+                <td class="regTd_l">角色22名称：</td>
                 <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=sysRole.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">角色描述：</td>
                 <td class="regTd_r"><input id="describe" name="describe" type="text" class="input5" value="<%=sysRole.describe%>" /></td>

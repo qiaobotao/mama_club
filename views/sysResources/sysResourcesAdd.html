@@ -81,7 +81,6 @@
         //为菜单下拉框增加树形结构
         $(document).ready(function(){
             var selectMenuId = '<%=data.menuId%>';
-            console.log("selectMenuId"+selectMenuId);
             var menus = '<%-JSON.stringify(menus)%>';
             menus = JSON.parse(menus);
             for(var i = 0 ; i < menus.length ; i ++){

@@ -67,7 +67,25 @@ module.exports.edit = function (req, res) {
         service.fetchSingleSysRole(id, function(err, results) {
             if (!err) {
                 var sysRole = results.length == 0 ? null : results[0];
-                res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show});
+                //获取所有菜单数据
+                menuService.fetchSysMenus(0,100,function(err, results) {
+                    if(!err) {
+                        var menus = results;
+                        //获取所有资源数据
+                        resourcesService.fetchSysResourcess(0,200,function(err, results) {
+                            if(!err) {
+                                var resourcess = results;
+                                res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show,menus:menus,resourcess:resourcess});
+                            } else {
+                                console.log(err.message);
+                                res.render('error');
+                            }
+                        })
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 next();
             }
