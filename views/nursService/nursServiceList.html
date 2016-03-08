@@ -53,7 +53,7 @@
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                         客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>  </td>
                     <td> &nbsp;技师名称：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" /> </td>
-                    <td> &nbsp;服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" /></td>
+                    <td> &nbsp;服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate()" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -78,7 +78,33 @@
                 <td><%=data.data[i].tel%></td>
                 <td><%=data.data[i].serviceDate%></td>
                 <td><%=data.data[i].principal%></td>
-                <td><%=data.data[i].status%></td>
+                <td>
+                <%
+                var zhuangtai ="";
+                if(data.data[i].status==1){
+                zhuangtai="预约成功";
+                }
+                else if(data.data[i].status==2)
+                {
+                zhuangtai="已护理";
+                }
+                else if(data.data[i].status==3)
+                {
+                zhuangtai="已收费";
+                }
+                else if(data.data[i].status==4)
+                {
+                zhuangtai="已回访";
+                }
+                else if(data.data[i].status==5)
+                {
+                zhuangtai="已投诉";
+                }
+                else
+                {
+                zhuangtai="处理失败";
+                }
+                %><%=zhuangtai%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

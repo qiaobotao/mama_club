@@ -67,7 +67,27 @@
             <td><%=data.data[i].serialNumber%></td>
             <td><%=data.data[i].memberName%></td>
             <td><%=data.data[i].tel%></td>
-            <td><%=data.data[i].type%></td>
+            <td>
+
+                <%
+                var zhuangtai ="";
+                if(data.data[i].type==1){
+                zhuangtai="充值卡";
+                }
+                else if(data.data[i].type==2)
+                {
+                zhuangtai="服务次数卡";
+                }
+                else if(data.data[i].type==3)
+                {
+                zhuangtai="打折卡";
+                }else
+                {
+                zhuangtai="暂无关联会员卡";
+                }
+                %>
+
+                <%=zhuangtai%></td>
             <td>
                 <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                     <tr>

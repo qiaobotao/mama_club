@@ -54,7 +54,7 @@ module.exports.updateMember = function(id,age,memberCardType,memberName,tel,cont
 };
 module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage,cb) {
 
-    var parm = " where  (a.id=b.memberId)"
+    var parm = " on   (a.id=b.memberId)  where 1=1"
     if (serialNumber != '')
         parm += " and b.serialNumber like'%" + serialNumber + "%'";
     if (memberName != '')
@@ -65,7 +65,7 @@ module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage
     var sql_count = 'SELECT count(*) as count FROM member';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a , memberCard b'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join  memberCard b'+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

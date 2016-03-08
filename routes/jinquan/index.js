@@ -127,6 +127,7 @@ router.all('/member_preEdit',memberAction.preEdit);
 router.all('/member_doEdit',memberAction.doEdit);
 router.all('/member_del',memberAction.del);
 router.all('/member_select',memberAction.select);
+router.all('/member_all_select',memberAction.selectAll);
 router.all('/getMemberByNameTel',memberAction.getMemberByNameTel);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
@@ -146,6 +147,7 @@ router.all('/class_meet_show',classMeetAction.show);
 router.all('/class_meet_preEdit',classMeetAction.preEdit);
 router.all('/class_meet_doEdit',classMeetAction.doEdit);
 router.all('/class_meet_del',classMeetAction.del);
+
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);
 router.all('/nurs_service_add',nursServiceAction.add);
@@ -232,6 +234,7 @@ router.all('/storeroom_out_detail', storeroomOutAction.detail);
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_pre_add', storeroomMoveAction.preadd);
 router.all('/storeroom_move_add', storeroomMoveAction.add);
+
 
 
 /*********************权限管理******************************/

@@ -91,10 +91,14 @@
                     {
                     zhuangtai="服务次数卡";
                     }
-                    else
+                    else if(data.data[i].type==3)
                     {
                     zhuangtai="打折卡";
-                    }%>
+                    }else
+                    {
+                    zhuangtai="暂无关联会员卡";
+                    }
+                    %>
 
                     <%=zhuangtai%></td>
                 <td>

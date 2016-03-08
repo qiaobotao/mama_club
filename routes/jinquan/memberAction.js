@@ -189,6 +189,26 @@ module.exports.select = function (req, res, next) {
     });
 
 }
+module.exports.selectAll = function (req, res, next) {
+    //res.render('member/memberList');
+    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var memberName = req.query.memberName ? req.query.memberName : '';
+    var tel = req.query.tel ? req.query.tel : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+
+    service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
+        if (!err) {
+            results.serialNumber = serialNumber;
+            results.memberName = memberName;
+            results.tel = tel;
+            res.render('member/memberSelect', {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+
+}
 module.exports.getMemberByNameTel = function(req, res, next) {
 
     var memberName = req.body.memberName ? req.body.memberName : '';
