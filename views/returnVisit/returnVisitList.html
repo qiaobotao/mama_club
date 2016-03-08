@@ -47,9 +47,10 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>服务单信息：<input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" /></td>
-                    <td> &nbsp;回访时间：<input id="returnVisitDate" name="returnVisitDate" type="text" class="input5" /></td>
-                    <td> &nbsp;回访方式：<input id="returnVisitType" name="returnVisitType" type="text" class="input5" /> </td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        服务单编号：<input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=data.serviceMeetId%>"/></td>
+                    <td> &nbsp;回访时间：<input id="returnVisitDate" name="returnVisitDate" type="text" class="input5" value="<%=data.returnVisitDate%>"/></td>
+                    <td> &nbsp;回访方式：<input id="returnVisitType" name="returnVisitType" type="text" class="input5" value="<%=data.returnVisitType%>"/> </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

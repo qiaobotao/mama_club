@@ -8,7 +8,7 @@ var async = require('async');
 module.exports.insertReturnVisit = function(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
                                             isReturnVisit,returnVisitReason, cb) {
 
-    var sql = 'INSERT INTO returnVisit (serialNumber,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
+    var sql = 'INSERT INTO returnVisit (serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
         + 'isReturnVisit,returnVisitReason) VALUES (?,?,?,?,?,?,?,?)';
     db.query(sql, [serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason], function(cbData, err, rows, fields) {
@@ -37,7 +37,7 @@ module.exports.updateReturnVisit = function(id,serviceMeetId,name,tel,returnVisi
 
 module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,returnVisitType,currentPage,cb) {
 
-    var parm = " on (a.serviceMeetId=b.id and b.id=c.serviceMeetId)"
+    var parm = " where  (a.serviceMeetId=b.id and b.id=c.serviceMeetId)"
     if (serviceMeetId != '')
         parm += " and a.serviceMeetId like'%" + serviceMeetId + "%'";
     if (returnVisitDate != '')
@@ -48,7 +48,7 @@ module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,retu
     var sql_count = 'SELECT count(*) as count FROM returnVisit';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.name,b.tel,c.serviceDate,a.returnVisitType,a.returnVisitResult FROM returnVisit a inner join serviceMeet b inner join nursService c'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.name,b.tel,c.serviceDate,a.returnVisitType,a.returnVisitResult FROM returnVisit a , serviceMeet b , nursService c'+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

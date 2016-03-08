@@ -34,9 +34,9 @@ module.exports.updateComplain = function(id,serviceMeetId,name,tel,complainPrinc
 
 module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage,cb) {
 
-    var parm = " on (a.serviceMeetId=b.id)"
+    var parm = " where (a.serviceMeetId=b.id)"
     if (name != '')
-        parm += " where b.name like '%" + name + "%'";
+        parm += " and  b.name like '%" + name + "%'";
     if (complainPrincipal != '')
         parm += " and a.complainPrincipal like '%" + complainPrincipal + "%'";
     if (complainTimeStart != '')
@@ -49,7 +49,7 @@ module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeSt
     var sql_count = 'SELECT count(*) as count FROM complain';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT b.name,a.* FROM complain a inner join serviceMeet b'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT b.name,a.* FROM complain a , serviceMeet b '+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -86,7 +86,7 @@ module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeSt
 
 module.exports.fetchSingleComplain =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.name,a.* FROM complain a inner join serviceMeet b on(a.serviceMeetId=b.id) WHERE a.id = ?';
+    var sql = 'SELECT a.*,b.name,a.* FROM complain a , serviceMeet b where (a.serviceMeetId=b.id) WHERE a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

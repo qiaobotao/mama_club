@@ -132,49 +132,71 @@ module.exports.add = function (req, res) {
         arr.push(obj);
     }
     //生成出库单信息
-    storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+    if(arr.length>0){
+        storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
 
-        if (!err) {
+            if (!err) {
 
-            var outLogId = results.insertId;
-            storeroomOutService.insertOutLogMX(outLogId,arr,function (err, results) {
+                var outLogId = results.insertId;
+                storeroomOutService.insertOutLogMX(outLogId,arr,function (err, results) {
 
+                    if (!err) {
+                        //修改物资信息
+                        storeroomOutService.updateInventory(storeroom,arr,function(err, results) {
+                            if (!err) {
+                                //生成护理信息
+                                service.insertNursService(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+                                    bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
+                                    milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
+                                    diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+                                    isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
+                                        if (!err) {
+                                            //修改服务单状态 2，如约
+                                            serviceMeetService.setStatus(serviceMeetId,2,function (err, results)
+                                                {
+                                                    res.redirect('/jinquan/nurs_service_list');
+                                                }
+                                            );
+                                        } else {
+                                            next();
+                                        }
+                                    });
+                            } else {
+                                storeroomOutService.delOutLog(outLogId);
+                                storeroomOutService.delOutLogMX(outLogId);
+                                next();
+                            }
+                        });
+                    } else {
+                        storeroomOutService.delOutLog(outLogId);
+                        next();
+                    }
+                })
+            } else {
+                next();
+            }
+        });
+    }
+    else{
+        var outLogId="";
+        service.insertNursService(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+            bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
+            milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
+            diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+            isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
                 if (!err) {
-                    //修改物资信息
-                    storeroomOutService.updateInventory(storeroom,arr,function(err, results) {
-                        if (!err) {
-                            //生成护理信息
-                            service.insertNursService(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
-                                bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
-                                milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-                                diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-                                isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
-                                    if (!err) {
-                                        //修改服务单状态 2，如约
-                                        serviceMeetService.setStatus(serviceMeetId,2,function (err, results)
-                                            {
-                                                res.redirect('/jinquan/nurs_service_list');
-                                            }
-                                        );
-                                    } else {
-                                        next();
-                                    }
-                                });
-                        } else {
-                            storeroomOutService.delOutLog(outLogId);
-                            storeroomOutService.delOutLogMX(outLogId);
-                            next();
+                    //修改服务单状态 2，如约
+                    serviceMeetService.setStatus(serviceMeetId,2,function (err, results)
+                        {
+                            res.redirect('/jinquan/nurs_service_list');
                         }
-                    });
+                    );
                 } else {
-                    storeroomOutService.delOutLog(outLogId);
                     next();
                 }
-            })
-        } else {
-            next();
-        }
-    });
+            });
+    }
+
 
 }
 
@@ -235,19 +257,92 @@ module.exports.doEdit = function (req, res) {
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
+    var outLogId= req.body.outLogId ? req.body.outLogId : '';
 
+    // 获取
+    var oper = req.body.principalId ? req.body.principalId : '';
+    var outType = req.body.outType ? req.body.outType : '37';
+    var storeroom = req.body.storeroom ? req.body.storeroom : '1';//暂时无参数
+    var remarks = req.body.remarks ? req.body.remarks : '护理服务时，会员购买商品';
 
-    service.updateNursService(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
-        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
-        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
+    var arr_proId = req.body.proId ? req.body.proId : '';
+    var arr_proname = req.body.proname ? req.body.proname :'';
+    var arr_proNo = req.body.proNo ? req.body.proNo : '';
+    var arr_count = req.body.count ? req.body.count : '';
+    var arr_price = req.body.price ? req.body.price : '';
+
+    // 处理数据
+    var arr = new Array();
+    for (var i=0;i<arr_proId.length;i++) {
+        var obj = {};
+        obj.proId = arr_proId[i];
+        obj.proName = arr_proname[i];
+        obj.proSerial = arr_proNo[i];
+        obj.count = arr_count[i];
+        obj.price = arr_price[i];
+        arr.push(obj);
+    }
+    if(outLogId!="")
+    {
+        storeroomOutService.delOutLog(outLogId);
+        storeroomOutService.delOutLogMX(outLogId);
+    }
+    if(arr.length>0){
+        storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+
             if (!err) {
-                res.redirect('/jinquan/nurs_service_list');
+
+                var outLogId = results.insertId;
+                storeroomOutService.insertOutLogMX(outLogId,arr,function (err, results) {
+
+                    if (!err) {
+                        //修改物资信息
+                        storeroomOutService.updateInventory(storeroom,arr,function(err, results) {
+                            if (!err) {
+                                service.updateNursService(outLogId,id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+                                    bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
+                                    milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
+                                    diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+                                    isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
+                                        if (!err) {
+                                            res.redirect('/jinquan/nurs_service_list');
+                                        } else {
+                                            next();
+                                        }
+                                    });
+                            } else {
+                                storeroomOutService.delOutLog(outLogId);
+                                storeroomOutService.delOutLogMX(outLogId);
+                                next();
+                            }
+                        });
+                    } else {
+                        storeroomOutService.delOutLog(outLogId);
+                        next();
+                    }
+                })
             } else {
                 next();
             }
         });
+
+    }
+    else
+    {
+        var outLogId="";
+        service.updateNursService(outLogId,id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+            bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
+            milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
+            diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+            isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
+                if (!err) {
+                    res.redirect('/jinquan/nurs_service_list');
+                } else {
+                    next();
+                }
+            });
+    }
+
 }
 
 module.exports.show = function(req, res, next) {
@@ -255,6 +350,7 @@ module.exports.show = function(req, res, next) {
 
     service.fetchSingleNursService(id, function(err, results) {
         if (!err) {
+
             var nursService = results.length == 0 ? null : results[0];
             var outLogId =nursService.outLogId;
             storeroomOutService.detail(outLogId,function(err, results1) {

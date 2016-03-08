@@ -13,11 +13,11 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
-            var serviceMeetId = document.getElementById("serviceMeetId").value;
-            if (!serviceMeetId || serviceMeetId.length == 0) {
-                alert('服务单号不能为空');
-                return;
-            }
+//            var serviceMeetId = document.getElementById("serviceMeetId").value;
+//            if (!serviceMeetId || serviceMeetId.length == 0) {
+//                alert('服务单号不能为空');
+//                return;
+//            }
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
                 alert('客户姓名不能为空');
@@ -66,6 +66,23 @@
 
             document.getElementById("myform").submit();
         }
+        var iframIndex ;
+        function getServiceMeets(){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择预约服务单信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/return_visit_select', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
     </script>
 </head>
 
@@ -81,13 +98,13 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">服务单号：</td>
-                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5"   onfocus="getServiceMeets()" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">客户姓名：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"   readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">客户电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" readonly="true" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">回访日期：</td>
                 <td class="regTd_r"><input id="returnVisitDate" name="returnVisitDate" onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>

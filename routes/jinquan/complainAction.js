@@ -9,7 +9,7 @@
  */
 
 var service = require('../../model/service/complain');
-
+var servicemeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res) {
    // res.render('complain/complainList');
 
@@ -55,7 +55,16 @@ module.exports.add = function (req, res, next) {
 
     service.insertComplain(serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/complain_list');
+                if (!err) {
+                    //修改服务单状态 4，已做回访
+                    serviceMeetService.setStatus(serviceMeetId,5,function (err, results)
+                        {
+                            res.redirect('/jinquan/complain_list');
+                        }
+                    );
+                } else {
+                    next();
+                }
             } else {
                 next();
             }
@@ -120,4 +129,21 @@ module.exports.del = function (req, res, next) {
         }
     });
 
+}
+module.exports.select = function (req, res,next) {
+    var tel = req.query.phone ? req.query.phone : '';
+    var name = req.query.name ? req.query.name : '';
+    var meetTime = req.query.meetTime ? req.query.meetTime : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+    servicemeetService.fetchAllServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
+        if (!err) {
+            results.phone = tel;
+            results.name = name;
+            results.meetTime = meetTime;
+            res.render('complain/serviceMeetSelect', {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
 }

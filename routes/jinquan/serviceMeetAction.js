@@ -210,18 +210,12 @@ module.exports.select = function (req, res,next) {
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
-    var status = req.query.status ? req.query.status : '';
-    if("-1"==req.query.status)
-    {
-        status="";
-    }
     var currentPage = req.query.page ? req.query.page : 1;
-    service.fetchAllServiceMeet(tel,name,meetTime,status,currentPage, function (err, results) {
+    service.fetchAllServiceMeet(tel,name,meetTime,1,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
             results.meetTime = meetTime;
-            results.status = status;
             res.render('serviceMeet/serviceMeetSelect', {data : results});
         } else {
             console.log(err.message);

@@ -84,7 +84,31 @@
                 cell1.innerHTML =serviceMeets[i].serviceName;
                 cell2.innerHTML =serviceMeets[i].meetTime;
                 cell3.innerHTML =serviceMeets[i].principal;
-                cell4.innerHTML =serviceMeets[i].status;
+                var zhuangtai ="";
+                if(serviceMeets[i].status==1){
+                    zhuangtai="预约成功";
+                }
+                else if(serviceMeets[i].status==2)
+                {
+                    zhuangtai="已护理";
+                }
+                else if(serviceMeets[i].status==3)
+                {
+                    zhuangtai="已收费";
+                }
+                else if(serviceMeets[i].status==4)
+                {
+                    zhuangtai="已回访";
+                }
+                else if(serviceMeets[i].status==5)
+                {
+                    zhuangtai="已投诉";
+                }
+                else
+                {
+                    zhuangtai="处理失败";
+                }
+                cell4.innerHTML =zhuangtai;
                 serviceMeetsIndex++;
             }
             //获取表格对象

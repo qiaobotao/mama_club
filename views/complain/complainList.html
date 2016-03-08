@@ -56,10 +56,11 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>客户名称：<input id="name" name="name" type="text" class="input5" /></td>
-                    <td> &nbsp;投诉技师：<input id="complainPrincipal" name="complainPrincipal" type="text" class="input5" /></td>
-                    <td> &nbsp;投诉时间：<input id="complainTimeStart" name="complainTimeStart" onclick="laydate()" /> ~ <input id="complainTimeEnd" name="complainTimeEnd" onclick="laydate()" /> </td>
-                    <td> &nbsp;处理技师：<input id="dealPrincipal" name="dealPrincipal" type="text" class="input5" /> </td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>" /></td>
+                    <td> &nbsp;投诉技师：<input id="complainPrincipal" name="complainPrincipal" type="text" class="input5" value="<%=data.complainPrincipal%>"/></td>
+                    <td> &nbsp;投诉时间：<input id="complainTimeStart" name="complainTimeStart" onclick="laydate()" value="<%=data.complainTimeStart%>" /> ~ <input id="complainTimeEnd" name="complainTimeEnd" onclick="laydate()" value="<%=data.complainTimeEnd%>"/> </td>
+                    <td> &nbsp;处理技师：<input id="dealPrincipal" name="dealPrincipal" type="text" class="input5" value="<%=data.dealPrincipal%>"/> </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

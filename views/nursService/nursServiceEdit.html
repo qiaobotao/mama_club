@@ -142,9 +142,9 @@
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
                 <td class="regTd_l">预约服务单号：</td>
-                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=nursService.serviceMeetId%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId"  type="text" class="input5" value="<%=nursService.serviceMeetId%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
-                <td class="regTd_r"><input id="serviceDate" name="serviceDate" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceDate" name="serviceDate"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">姓名：</td>
@@ -283,7 +283,9 @@
             </tr>
         </table>
         <!--商品信息 start-->
-        <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息
+            <input type="hidden" id="outLogId" name="outLogId" value="<%=nursService.outLogId%>"/>
+        </h3></span>
         <br>
         <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
@@ -294,14 +296,20 @@
                 <td>小计</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
-            <%for(var i=0;i<data.logmx.length;i++) {%>
+            <%
+            if(data!=null && data.logmx!=null){
+            for(var i=0;i<data.logmx.length;i++) {%>
             <tr id="qqq">
-                <td><input   name="proname" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresName%>" readonly="true" /></td>
+
+                <td><input   name="proId" type="hidden" class="input5 input_arr" value="<%=data.logmx[i].waresId%>" readonly="true" />
+                    <input   name="proname" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresName%>" readonly="true" /></td>
                 <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresSerial%>" readonly="true"/></td>
                 <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.logmx[i].count%>" readonly="true"/></td>
                 <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.logmx[i].price%>" readonly="true"/></td>
+                <td><input  type="text" class="input5 input_arr" value="<%=data.logmx[i].count * data.logmx[i].price %>" readonly="true"</td>
+               <td><a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a></td>
             </tr>
-            <%}%>
+            <%}}%>
         </table>
     </form>
     <div class="reg_but">

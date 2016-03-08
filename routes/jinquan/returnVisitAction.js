@@ -1,4 +1,5 @@
 var service = require('../../model/service/returnvisit');
+var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res) {
     //res.render('returnVisit/returnVisitList');
 
@@ -38,11 +39,16 @@ module.exports.add = function (req, res) {
 
     service.insertReturnVisit(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
-            if (!err) {
-                res.redirect('/jinquan/return_visit_list');
-            } else {
-                next();
-            }
+                if (!err) {
+                    //修改服务单状态 4，已做回访
+                    serviceMeetService.setStatus(serviceMeetId,4,function (err, results)
+                        {
+                            res.redirect('/jinquan/return_visit_list');
+                        }
+                    );
+                } else {
+                    next();
+                }
         });
 
 }
@@ -108,4 +114,26 @@ module.exports.del = function (req, res, next) {
         }
     });
 
+}
+/**
+ * 获取预约服务列表
+ * @param req
+ * @param res
+ */
+module.exports.select = function (req, res,next) {
+    var tel = req.query.phone ? req.query.phone : '';
+    var name = req.query.name ? req.query.name : '';
+    var meetTime = req.query.meetTime ? req.query.meetTime : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+    serviceMeetService.fetchAllServiceMeet(tel,name,meetTime,3,currentPage, function (err, results) {
+        if (!err) {
+            results.phone = tel;
+            results.name = name;
+            results.meetTime = meetTime;
+            res.render('returnVisit/serviceMeetSelect', {data : results});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
 }

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>预约服务</title>
+    <title>选择预约服务单</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -26,14 +26,16 @@
             var status = document.getElementById('status').value;
             window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&customerName='+name+ '&meetStartTime='+meetTime ;
         }
-        function show (id) {
-            window.location.href = '/jinquan/service_meet_show?id='+id;
-        }
-        function preEdit (id) {
-            window.location.href = '/jinquan/service_meet_preEdit?id='+id;
-        }
-        function del (id) {
-            window.location.href = '/jinquan/service_meet_del?id='+id;
+        //选择该商品
+        function select(serviceMeet){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId').value=serviceMeet.id;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('name').value=serviceMeet.name;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel').value=serviceMeet.tel;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('complainPrincipal').value=serviceMeet.principal;
+
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+
         }
 
     </script>
@@ -42,7 +44,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：预约服务列表
+        当前位置：已回访服务列表
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -55,77 +57,32 @@
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                         电话：<input id="phone" name="phone" type="text" class="input5" value="<%=data.phone%>" /></td>
                     <td> &nbsp;预约时间：<input id="meetTime" name="meetTime" type="text" class="input5" value="<%=data.meetTime%>"/></td>
-                    <td> &nbsp;状态： <select id="serviceType" name="serviceType" >
-                        <option value="'-1" <%if(data.status == '-1'){%>selected<%}%>>全部</option>
-                        <option value="0"   <%if(data.status == '0'){%>selected<%}%>>预约失败</option>
-                        <option value="1"   <%if(data.status == '1'){%>selected<%}%>>预约成功</option>
-                        <option value="2"   <%if(data.status == '2'){%>selected<%}%>>已护理</option>
-                        <option value="3"   <%if(data.status == '3'){%>selected<%}%>>已收费</option>
-                        <option value="4"   <%if(data.status == '4'){%>selected<%}%>>已回访</option>
-                        <option value="5"   <%if(data.status == '4'){%>selected<%}%>>已投诉</option>
-
-                    </select>
-                    </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/service_meet_goadd" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>预约服务单号</th>
                 <th>客户名称</th>
                 <th>电话</th>
                 <th>预约时间</th>
                 <th>技师</th>
-                <th>状态</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
 
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td width="10%"><%=data.data[i].id%></td>
                 <td><%=data.data[i].name%></td>
                 <td><%=data.data[i].tel%></td>
                 <td><%=data.data[i].meetTime%></td>
                 <td><%=data.data[i].principal%></td>
                 <td>
-
-                    <%
-                    var zhuangtai ="";
-                    if(data.data[i].status==1){
-                    zhuangtai="预约成功";
-                    }
-                    else if(data.data[i].status==2)
-                    {
-                    zhuangtai="已护理";
-                    }
-                    else if(data.data[i].status==3)
-                    {
-                     zhuangtai="已收费";
-                    }
-                    else if(data.data[i].status==4)
-                    {
-                     zhuangtai="已回访";
-                    }
-                    else if(data.data[i].status==5)
-                    {
-                    zhuangtai="已投诉";
-                    }
-                    else
-                    {
-                    zhuangtai="处理失败";
-                    }
-                    %><%=zhuangtai%></td>
-                <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select(<%=JSON.stringify(data.data[i])%>)">选择预约服务单</a>]</div></td>
                         </tr>
                     </table>
                 </td>

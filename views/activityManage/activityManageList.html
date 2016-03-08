@@ -59,9 +59,10 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>活动名称：<input id="activityName" name="activityName" type="text" class="input5" /></td>
-                    <td> &nbsp;活动类型：<input id="activityType" name="activityType" type="text" class="input5" /></td>
-                    <td> &nbsp;有效时间范围：<input id="effectiveTimeStart" name="effectiveTimeStart"  onclick="laydate()" /> ~ <input id="effectiveTimeEnd" name="effectiveTimeEnd"  onclick="laydate()" /></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        活动名称：<input id="activityName" name="activityName" type="text" class="input5"  value="<%=data.activityName%>"/></td>
+                    <td> &nbsp;活动类型：<input id="activityType" name="activityType" type="text" class="input5"  value="<%=data.activityType%>" /></td>
+                    <td> &nbsp;有效时间范围：<input id="effectiveTimeStart" name="effectiveTimeStart" value="<%=data.effectiveTimeStart%>"  onclick="laydate()" /> ~ <input id="effectiveTimeEnd" name="effectiveTimeEnd"  value="<%=data.effectiveTimeEnd%>"  onclick="laydate()" /></td>
                     <td> &nbsp;状态：<select id="status" name="status">
                         <option value="0">启用</option>
                         <option value="1">停用</option>

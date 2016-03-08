@@ -21,7 +21,7 @@ module.exports.list = function (req, res,next) {
     var parameter8=   '';
     var parameter9=   '';
     var type=  req.query.type ? req.query.type : '1';
-    var serialNumber=  req.query.memberCardAmount ? req.query.memberCardAmount : '';
+    var serialNumber=  req.query.serialNumber ? req.query.serialNumber : '';
     var currentPage = req.query.page ? req.query.page : '1';
     if(type=='1')
     {

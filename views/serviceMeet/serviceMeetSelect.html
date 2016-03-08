@@ -29,12 +29,9 @@
         //选择该商品
         function select(serviceMeet){
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId').value=serviceMeet.id;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceDate').value=serviceMeet.meetTime;
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('name').value=serviceMeet.name;
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel').value=serviceMeet.tel;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceType').value=serviceMeet.serviceType;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('address').value=serviceMeet.address;
-            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
 
         }
@@ -45,7 +42,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：预约服务列表
+        当前位置：已预约服务列表
     </div>
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
@@ -58,12 +55,6 @@
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                         电话：<input id="phone" name="phone" type="text" class="input5" value="<%=data.phone%>" /></td>
                     <td> &nbsp;预约时间：<input id="meetTime" name="meetTime" type="text" class="input5" value="<%=data.meetTime%>"/></td>
-                    <td> &nbsp;状态： <select id="serviceType" name="serviceType" >
-                        <option value="'-1" <%if(data.status == '-1'){%>selected<%}%>>全部</option>
-                        <option value="1"   <%if(data.status == '1'){%>selected<%}%>>预约成功</option>
-                        <option value="2"   <%if(data.status == '0'){%>selected<%}%>>预约失败</option>
-                    </select>
-                    </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -87,7 +78,33 @@
                 <td><%=data.data[i].tel%></td>
                 <td><%=data.data[i].meetTime%></td>
                 <td><%=data.data[i].principal%></td>
-                <td><%=data.data[i].status!=0?'预约成功':'预约有误'%></td>
+                <td>
+                    <%
+                    var zhuangtai ="";
+                    if(data.data[i].status==1){
+                    zhuangtai="预约成功";
+                    }
+                    else if(data.data[i].status==2)
+                    {
+                    zhuangtai="已护理";
+                    }
+                    else if(data.data[i].status==3)
+                    {
+                    zhuangtai="已收费";
+                    }
+                    else if(data.data[i].status==4)
+                    {
+                    zhuangtai="已回访";
+                    }
+                    else if(data.data[i].status==5)
+                    {
+                    zhuangtai="已投诉";
+                    }
+                    else
+                    {
+                    zhuangtai="处理失败";
+                    }
+                    %><%=zhuangtai%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

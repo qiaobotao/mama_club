@@ -5,6 +5,10 @@
     <title>会员列表</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -51,9 +55,10 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>卡号：<input id="serialNumber" name="serialNumber" type="text" class="input5" /></td>
-                    <td> &nbsp;会员名称：<input id="memberName" name="memberName" type="text" class="input5" /></td>
-                    <td> &nbsp;会员电话：<input id="tel" name="tel" type="text" class="input5" /></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        卡号：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>"  /></td>
+                    <td> &nbsp;会员名称：<input id="memberName" name="memberName" value="<%=data.memberName%>" type="text" class="input5" /></td>
+                    <td> &nbsp;会员电话：<input id="tel" name="tel" type="text" value="<%=data.tel%>" class="input5" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -75,7 +80,23 @@
                 <td><%=data.data[i].serialNumber%></td>
                 <td><%=data.data[i].memberName%></td>
                 <td><%=data.data[i].tel%></td>
-                <td><%=data.data[i].type%></td>
+                <td>
+
+                    <%
+                    var zhuangtai ="";
+                    if(data.data[i].type==1){
+                    zhuangtai="充值卡";
+                    }
+                    else if(data.data[i].type==2)
+                    {
+                    zhuangtai="服务次数卡";
+                    }
+                    else
+                    {
+                    zhuangtai="打折卡";
+                    }%>
+
+                    <%=zhuangtai%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

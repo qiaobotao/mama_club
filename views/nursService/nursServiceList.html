@@ -5,6 +5,9 @@
     <title>服务单管理</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -47,9 +50,10 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/> 客户名称：<input id="name" name="name" type="text" class="input5" /></td>
-                    <td> &nbsp;技师名称：<input id="principal" name="principal" type="text" class="input5" /> </td>
-                    <td> &nbsp;服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" /></td>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>  </td>
+                    <td> &nbsp;技师名称：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" /> </td>
+                    <td> &nbsp;服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

@@ -165,6 +165,7 @@ router.all('/return_visit_show',returnVisitAction.show);
 router.all('/return_visit_preEdit',returnVisitAction.preEdit);
 router.all('/return_visit_doEdit',returnVisitAction.doEdit);
 router.all('/return_visit_del',returnVisitAction.del);
+router.all('/return_visit_select', returnVisitAction.select);
 
 // 投诉信息
 router.all('/complain_list',complainAction.list);
@@ -174,7 +175,7 @@ router.all('/complain_show',complainAction.show);
 router.all('/complain_preEdit',complainAction.preEdit);
 router.all('/complain_doEdit',complainAction.doEdit);
 router.all('/complain_del',complainAction.del);
-
+router.all('/complain_select', complainAction.select);
 
 
 /*********************进销存管理***************************/
