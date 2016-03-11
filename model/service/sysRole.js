@@ -94,17 +94,91 @@ module.exports.fetchAllSysRole = function(name,currentPage,cb) {
  * @param name
  * @param cb
  */
-module.exports.updateSysRole = function(id, name,describe, cb) {
-    var sql = 'UPDATE sysRole SET name = ?,describe = ? WHERE id = ?';
-    var par = [name, id];
-    db.query(sql, par, function (cbData, err, rows, fields) {
+module.exports.updateSysRole = function(id, name,describe,cb) {
+    //修改角色信息
+    var updateRoleSql = 'UPDATE sysRole SET `name` = ?,`describe` = ? WHERE `id` = ?';
+    var updateRolePar = [name,describe, id];
+    //删除角色与之对应的菜单关系
+    var deleteRoleMenuSql = 'delete from sysRoleMenu WHERE roleId = ?';
+    var deleteRoleMenuPar = [id];
+    //删除角色与之对应的资源关系
+    var deleteRoleResourcesSql = 'delete from sysRoleResources WHERE roleId = ?';
+    var deleteRoleResourcesPar = [id];
+    async.series({
+        updateCount : function(callback){
+            db.query(updateRoleSql, updateRolePar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        deleteRoleMenuCount : function(callback){
+            db.query(deleteRoleMenuSql, deleteRoleMenuPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        deleteRoleResourcesCount : function(callback){
+            db.query(deleteRoleResourcesSql, deleteRoleResourcesPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+}
 
+
+
+/**
+ * 添加角色与菜单、资源之间的关系
+ * @param id
+ * @param name
+ * @param cb
+ */
+module.exports.addRoleByMenuAndResources = function(id,selectMenus,selectResources,cb) {
+    //添加角色与之对应的菜单关系
+    var addRoleMenuSql = 'insert into sysRoleMenu(roleId,menuId,dateline) VALUES (?,?,?)';
+    //添加角色与之对应的资源关系
+    var addRoleResourcesSql = 'insert into sysRoleResources(roleId,resourcesId,dateline) VALUES (?,?,?)';
+    //批量添加角色对应菜单
+    async.map(selectMenus, function(item, callback) {
+        db.query(addRoleMenuSql, [id,item,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        callback(err, results);
+    });
+    //批量添加角色对应资源按钮
+    async.map(roleIds, function(item, callback) {
+        db.query(addRoleResourcesSql, [id,item,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
 }
 
 /**

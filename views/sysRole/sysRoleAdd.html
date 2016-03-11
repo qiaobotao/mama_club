@@ -23,15 +23,39 @@
                 simpleData: {
                     enable: true
                 }
+            },
+            callback: {
+                onCheck: onCheck
+//                afterCheck:onCheck
             }
         };
 
         var index = 0;//该添加第几个节点
         var zNodes =[];
         var code;
-
-
-
+        //点击节点后，回调事件
+        function onCheck(e,treeId,treeNode) {
+            var treeObj = $.fn.zTree.getZTreeObj("treeDemo"),
+                    nodes = treeObj.getCheckedNodes(true),
+                    selectMenus = "",
+                    selectResources = "";
+            for (var i = 0; i < nodes.length; i++) {
+                if(nodes[i].resource != null){
+                    selectResources += nodes[i].id + ",";
+                }else{
+                    selectMenus += nodes[i].id + ",";
+                }
+            }
+            if(selectResources != ""){
+                selectResources = selectResources.substring(0,selectResources.length - 1);
+            }
+            if(selectMenus != ""){
+                selectMenus = selectMenus.substring(0,selectMenus.length - 1);
+            }
+            $("#selectMenus").val(selectMenus);
+            $("#selectResources").val(selectResources);
+        }
+        //设置点击
         function setCheck() {
             var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
                     type = { "Y":"", "N":""};
@@ -77,6 +101,7 @@
                                     nodesObj.id = resourcess[k].id;
                                     nodesObj.pId = resourcess[k].menuId;
                                     nodesObj.name = resourcess[k].textCh;
+                                    nodesObj.resource = "resource--";
                                     zNodes[index]= nodesObj;
                                     index++;
                                 }
@@ -114,8 +139,13 @@
     <form method="post" id="myform" action="/jinquan/sys_role_save">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="regTd_l">角色22名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=sysRole.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">角色名称：</td>
+                <td class="regTd_r">
+                    <input id="name" name="name" type="text" class="input5" value="<%=sysRole.name%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input type="hidden" name="selectMenus" id="selectMenus"/>
+                    <input type="hidden" name="id" id="id" value="<%=sysRole.id%>"/>
+                    <input type="hidden" name="selectResources" id="selectResources"/>
+                </td>
                 <td class="regTd_l">角色描述：</td>
                 <td class="regTd_r"><input id="describe" name="describe" type="text" class="input5" value="<%=sysRole.describe%>" /></td>
             </tr>
