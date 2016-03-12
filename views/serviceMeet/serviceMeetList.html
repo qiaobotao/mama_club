@@ -15,7 +15,7 @@
             var phone = document.getElementById('phone').value;
             var name = document.getElementById('name').value;
             var meetTime = document.getElementById('meetTime').value;
-            var status = document.getElementById('status').value;
+            var status = document.getElementById('serviceType').value;
             window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&name='+name+ '&meetTime='+meetTime+ '&status='+status ;
         }
         function pageturning (selectPage) {
@@ -56,7 +56,7 @@
                         电话：<input id="phone" name="phone" type="text" class="input5" value="<%=data.phone%>" /></td>
                     <td> &nbsp;预约时间：<input id="meetTime" name="meetTime" type="text" class="input5" value="<%=data.meetTime%>"/></td>
                     <td> &nbsp;状态： <select id="serviceType" name="serviceType" >
-                        <option value="'-1" <%if(data.status == '-1'){%>selected<%}%>>全部</option>
+                        <option value="-1" <%if(data.status == '-1'){%>selected<%}%>>全部</option>
                         <option value="0"   <%if(data.status == '0'){%>selected<%}%>>预约失败</option>
                         <option value="1"   <%if(data.status == '1'){%>selected<%}%>>预约成功</option>
                         <option value="2"   <%if(data.status == '2'){%>selected<%}%>>已护理</option>

@@ -9,7 +9,7 @@
  */
 
 var service = require('../../model/service/complain');
-var servicemeetService = require('../../model/service/servicemeet');
+var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res) {
    // res.render('complain/complainList');
 
@@ -135,7 +135,7 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
-    servicemeetService.fetchAllServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
+    serviceMeetService.fetchAllServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;

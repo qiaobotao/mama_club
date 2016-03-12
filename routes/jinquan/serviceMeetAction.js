@@ -20,9 +20,9 @@ module.exports.list = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var status = req.query.status ? req.query.status : '';
-    if("-1"==req.query.status)
+    if('-1'==status)
     {
-        status="";
+        status='';
     }
     var currentPage = req.query.page ? req.query.page : 1;
 

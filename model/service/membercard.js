@@ -43,17 +43,25 @@ module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline 
  */
 module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage,cb) {
 
-    var parm = " ON a.parameter1= b.id  where a.serialNumber like '%" + serialNumber + "%' and a.type like '%" + type
+    var parm = "  where a.serialNumber like '%" + serialNumber + "%' and a.type like '%" + type
         + "%' and a.parameter1 like '%" + parameter1 +"%' and a.parameter2 like '%"+ parameter2
         + "%' and a.parameter3 like '%"+ parameter3 + "%' and a.parameter4 like '%"+ parameter4
         + "%' and a.parameter5 like '%"+ parameter5 + "%' and a.parameter6 like '%"+ parameter6
         + "%' and a.parameter7 like '%"+ parameter7 + "%' and a.parameter8 like '%"+ parameter8
         + "%' and a.parameter9 like '%"+ parameter9  +"%'";
 
-    var sql_count = 'SELECT count(*) as count FROM memberCard a LEFT JOIN memberCardType b '+parm;
+    var sql_count = 'SELECT count(*) as count FROM memberCard a  ';
+    var sql_data = 'SELECT * FROM memberCard a '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM memberCard a LEFT JOIN memberCardType b '+parm+'   LIMIT ?,?';
+    if (type=='1')
+    {
+        sql_count='SELECT count(*) as count FROM memberCard a   LEFT JOIN memberCardType b  ON a.parameter1= b.id '+parm;
+        sql_data= 'SELECT a.*,b.memberCardType,b.memberCardAmount,b.consumerLimit ,b.zeroDiscounts,b.isManyPeopleUsed FROM memberCard a  LEFT JOIN memberCardType b ON a.parameter1= b.id '+parm;
+
+    }
+    sql_data+= '  LIMIT ?,?';
+
 
     async.series({
         totalPages : function(callback){
