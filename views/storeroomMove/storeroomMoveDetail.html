@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>出库单详情</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：移库单详情
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="regTd_l">出库库房：</td>
+            <td class="regTd_r"><input id="out" name="out" type="text" class="input5" value="<%=data.log.outStoreroomName%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            <td  class="regTd_l">入库库房：</td>
+            <td class="regTd_r"><input id="in" name="in" type="text" class="input5" value="<%=data.log.inStoreroomName%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">经办人：</td>
+            <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5" readonly="true" value="<%=data.log.oper%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">说明：</td>
+            <td class="regTd_r" colspan="3"><textarea id="remark" name="remark" rows="8" cols="19" style="width : 70%" readonly="true" value="<%=data.log.remark%>"></textarea></td>
+        </tr>
+    </table>
+
+    <!--商品信息 start-->
+    <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
+    <br>
+    <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <tr bgcolor="lightblue">
+
+            <td>商品名称</td>
+            <td>商品编号</td>
+            <td>采购数量</td>
+        </tr>
+        <%for(var i=0;i<data.logmx.length;i++) {%>
+        <tr id="qqq">
+            <td><input   name="proname" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresName%>" readonly="true" /></td>
+            <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.logmx[i].waresSerial%>" readonly="true"/></td>
+            <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.logmx[i].count%>" readonly="true"/></td>
+        </tr>
+        <%}%>
+    </table>
+    <!--合同信息 end-->
+    <div class="reg_but">
+        <div class="rb_l"><a href="/jinquan/storeroom_move_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>

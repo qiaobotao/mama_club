@@ -4,6 +4,7 @@
 
 var service_storeroom = require('../../model/service/storeroom');
 var service = require('../../model/service/storeroomMove');
+var moment = require('moment');
 
 /**
  * 获取移库列表
@@ -71,6 +72,63 @@ module.exports.preadd = function (req, res, next) {
 
 module.exports.add = function (req, res, next) {
 
+    var outId = req.body.outId ? req.body.outId : '';
+    var inId = req.body.inId ? req.body.inId : '';
+    var oper = req.body.oper ? req.body.oper : '';
+    var remark = req.body.remark ? req.body.remark : '';
 
+    // 商品数组
+    var arr_proId = req.body.proId ? req.body.proId : '';
+    var arr_proname = req.body.proname ? req.body.proname :'';
+    var arr_proNo = req.body.proNo ? req.body.proNo : '';
+    var arr_count = req.body.count ? req.body.count : '';
+    // 处理数据
+    var arr = new Array();
+    for (var i=0;i<arr_proId.length;i++) {
+        var obj = {};
+        obj.proId = arr_proId[i];
+        obj.proName = arr_proname[i];
+        obj.proSerial = arr_proNo[i];
+        obj.count = arr_count[i];
+        arr.push(obj);
+    }
+   service.insertMoveLog(oper,outId,inId,remark,function(err, results) {
 
+       if (!err) {
+           var moveLogId = results.insertId;
+           service.insertMoveLogMX(moveLogId,arr,function(err, results) {
+
+               if (!err) {
+                   service.updateInventory(outId,inId,arr,function(err, results) {
+                      if (!err) {
+                          res.redirect('/jinquan/storeroom_move_list?replytype=add');
+                      } else {
+                          service.delMoveLog(moveLogId);
+                          service.delMoveLogMX(moveLogId);
+                          next();
+                      }
+                   })
+               } else {
+                   service.delMoveLog(moveLogId);
+                   next();
+               }
+           })
+       } else {
+           next();
+       }
+   })
+}
+
+module.exports.detail = function (req, res, next) {
+
+    var moveLogId = req.query.id ? req.query.id : '';
+
+    service.detail(moveLogId, function (err, results) {
+
+        if (!err) {
+            res.render('storeroomMove/storeroomMoveDetail', {data : results});
+        } else {
+            next();
+        }
+    });
 }

@@ -79,6 +79,7 @@ router.all('/staff_del',staffAction.del);
 // 员工培训
 router.all('/staff_train_list',staffTrainAction.list);
 router.all('/staff_train_edit',staffTrainAction.edit);
+
 // 打卡记录
 // 考勤类别
 router.all('/attendance_type_list',attendanceTypeAction.list);
@@ -234,6 +235,7 @@ router.all('/storeroom_out_detail', storeroomOutAction.detail);
 router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_pre_add', storeroomMoveAction.preadd);
 router.all('/storeroom_move_add', storeroomMoveAction.add);
+router.all('/storeroom_move_detail', storeroomMoveAction.detail);
 
 
 

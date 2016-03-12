@@ -66,6 +66,15 @@
 
         function submitForm(){
 
+
+            // 库房不能相同
+            var outId = document.getElementById('outId').value;
+            var inId = document.getElementById('inId').value;
+            if (outId == inId) {
+                parent.layer.alert('请选择不同的库房！',{icon: 2});
+                return;
+            }
+
             var oper = document.getElementById("oper").value;
             if (!oper || oper.length == 0) {
                 parent.layer.alert('经办人不能为空',{icon: 2});
@@ -121,8 +130,8 @@
             var cell1=row.insertCell(0);//商品名称
             var cell2=row.insertCell(1);//商品编号
             var cell3=row.insertCell(2);//采购数量
-            var cell4=row.insertCell(3);//删除本行
-            var cell5=row.insertCell(4);//商品id
+            var cell4=row.insertCell(3);//商品id
+            var cell5=row.insertCell(4);//删除本行
             cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
             cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="check('+waresIndex+')"/>';

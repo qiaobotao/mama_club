@@ -38,7 +38,7 @@
         var outId = document.getElementById('outId').value;
         var inId = document.getElementById('inId').value;
         var moveDate = document.getElementById('moveDate').value;
-        window.location.href = '/jinquan/storeroom_out_list?page='+selectPage+'&oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate;
+        window.location.href = '/jinquan/storeroom_move_list?page='+selectPage+'&oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate;
     }
 </script>
 
@@ -84,6 +84,21 @@
                 <th>移库时间</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].outStoreName%></td>
+                <td><%=data.data[i].inStoreroomName%></td>
+                <td><%=data.data[i].oper%></td>
+                <td><%=data.data[i].moveDate%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/storeroom_move_detail?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
         <%- include ../pagination.html -%>
