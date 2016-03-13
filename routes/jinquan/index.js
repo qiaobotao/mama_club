@@ -13,6 +13,7 @@ var waresAction = require('./waresAction');
 var classifyAction = require('./classifyAction');
 var classroomAction = require('./classroomAction');//教室管理
 var courseAction = require('./courseAction');//课程管理
+var coursePlanAction = require('./coursePlanAction');//排课管理
 var staffAction = require('./staffAction');//员工管理
 var staffTrainAction = require('./staffTrainAction');//员工培训
 var attendanceTypeAction = require('./attendanceTypeAction');//考勤类型
@@ -65,6 +66,9 @@ router.all('/classroom_set', classroomAction.set);
 router.all('/classroom_browse',classroomAction.detail);
 
 // 排课情况
+router.all('/course_plan',coursePlanAction.list);
+router.all('/course_plan_add',coursePlanAction.add);
+
 // 课程查询
 router.all('/course_list',courseAction.list);
 router.all('/course_add',courseAction.add);

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>排课情况</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function (){
+            $("#classForm tr td[class='']").html(function(){  //穿过子元素的时候不会触发
+                $(this).mouseenter(function(){
+                    $(this).append("<strong>点击添加</strong>");
+                    $(this).click(function(){
+                        window.location.href="/jinquan/course_plan_add";
+                    });
+                }).mouseleave(function(){
+                    $(this).empty();
+                })
+            });
+        })
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：系统排课
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="notes">
+        <div class="button2"><button type="button" class="button gray">导出Excel</button></div>
+        <ul class="noteUi">
+            <li><span class="color1"></span>会议</li>
+            <li><span class="color2"></span>催乳师专业课程</li>
+            <li><span class="color3"></span>父母课程</li>
+            <li><span class="color4"></span> 内训</li>
+        </ul>
+    </div>
+    <div class="tabCon" style="clear:both;">
+        <form id="classForm">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bordered">
+                <thead>
+
+                <tr>
+                    <th><input name="" type="checkbox" value=""></th>
+                    <th>日期</th>
+                    <th>教室编码</th>
+                    <th>8:00~8:30</th>
+                    <th>8:30~9:00</th>
+                    <th>9:30~10:00</th>
+                    <th>10:00~10:30</th>
+                    <th>10:30~11:00</th>
+                    <th>11:30~12:00</th>
+                    <th>14:00~14:30</th>
+                    <th>14:30~15:00</th>
+                    <th>15:00~15:30</th>
+                    <th>15:30~16:00</th>
+                    <th>16:00~16:30</th>
+                    <th>16:30~17:00</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td  rowspan="2"><input name="" type="checkbox" value=""></td>
+                    <td rowspan="2">1月1日</td>
+                    <td>302</td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="classViolet">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="classRed">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td >305</td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><input name="" type="checkbox" value=""></td>
+                    <td rowspan="2">1月1日</td>
+                    <td>302</td>
+                    <td class="classBlue"></td>
+                    <td class="classBlue">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="classViolet">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="classRed">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td >305</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="classGreen">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="classRed">&nbsp;</td>
+                    <td class="classRed">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                    <td class="">&nbsp;</td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>

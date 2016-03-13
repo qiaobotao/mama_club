@@ -153,3 +153,240 @@ DIV.black2 SPAN.disabled {
 
 .error{ margin:0 auto; padding:0px; width:400px; padding-top:50px; height:200px;}
 .errorSty1{ font-size:16px; text-align:left; color:#eb8636; font-weight:bold;}
+
+
+/*********课程表样式***********/
+
+table {
+    border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 100%;
+}
+.bordered {
+    border: solid #ccc 1px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+
+}
+
+/*.bordered tr td:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}*/
+
+.bordered td, .bordered th {
+    border-left: 1px solid #ccc;
+
+    border-top: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.bordered th {
+    background-color: #dce9f9;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#eeeeee));
+    background-image: -webkit-linear-gradient(top, #f5f5f5, #eeeeee);
+    background-image:    -moz-linear-gradient(top, #f5f5f5, #eeeeee);
+    background-image:     -ms-linear-gradient(top, #f5f5f5, #eeeeee);
+    background-image:      -o-linear-gradient(top, #f5f5f5, #eeeeee);
+    background-image:         linear-gradient(top, #f5f5f5, #eeeeee);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+.borderedblue th {
+    background-color: #f8f8f8;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f8f8f8));
+    background-image: -webkit-linear-gradient(top, #f8f8f8, #f8f8f8);
+    background-image:    -moz-linear-gradient(top, #f8f8f8, #f8f8f8);
+    background-image:     -ms-linear-gradient(top, #f8f8f8, #f8f8f8);
+    background-image:      -o-linear-gradient(top, #f8f8f8, #f8f8f8);
+    background-image:         linear-gradient(top, #f8f8f8, #f8f8f8);
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+.bordered td:first-child, .bordered th:first-child {
+    border-left: none;
+}
+
+.bordered th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+.bordered th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+.bordered th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.bordered tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+.bordered tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+.bordered tr td{ color:#333;}
+.classBlue{ background:#7097ee;}
+.classViolet{ background:#ba7bcc;}
+.classGreen{ background:#70c370;}
+.classRed{ background:#ed5565;}
+.notes{margin:0px; padding:0px; list-style-type:none; height:40px; clear:both;}
+.noteUi{ margin:0px; padding:0px; list-style-type:none; width:600px; float:right;}
+.noteUi li{ display:inline-block; float: right; font-family:12px; height:35px; line-height:35px;}
+.noteUi  li span{ display:inline-block; width:8px; height:8px;  background:#F00; margin-right:5px;margin-left:10px;}
+.noteUi  li  span.color1{ background:#7097ee;}
+.noteUi  li  span.color2{ background:#ba7bcc;}
+.noteUi  li  span.color3{ background:#70c370;}
+.noteUi  li  span.color4{ background:#ed5565;}
+.addClass{ display:block;font-size:15px; color:#333; background:#FFF; border:1px solid #063; width:15px; height:15px; line-height:15px;}
+.button2{ height:35px; float:left; width:100px;}
+/*按钮样式*/
+.button{
+    width: 100px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+
+    border-radius: 2px;
+
+    position: relative;
+    overflow: hidden;
+    cursor:pointer;
+}
+.searchBut{
+    width: 60px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+
+    border-radius: 2px;
+
+
+    overflow: hidden;
+    cursor:pointer; margin-left:15px;}
+.button.gray{
+    color: #8c96a0;
+
+    border:1px solid #dce1e6;
+
+    background: -webkit-linear-gradient(top,#f2f3f7,#e4e8ec);
+    background: -moz-linear-gradient(top,#f2f3f7,#e4e8ec);
+    background: linear-gradient(top,#f2f3f7,#e4e8ec);
+}
+.gray:hover{
+    background: -webkit-linear-gradient(top,#fefefe,#ebeced);
+    background: -moz-linear-gradient(top,#f2f3f7,#ebeced);
+    background: linear-gradient(top,#f2f3f7,#ebeced);
+}
+.gray:active{
+    top:1px;
+    background: -webkit-linear-gradient(top,#e4e8ec,#e4e8ec);
+    background: -moz-linear-gradient(top,#e4e8ec,#e4e8ec);
+    background: linear-gradient(top,#e4e8ec,#e4e8ec);
+}
+
+.button.feise{
+    color: #fff;
+    border:1px solid #e44f81;
+    background: -webkit-linear-gradient(top,#f66294,#f66294);
+    background: -moz-linear-gradient(top,#f66294,#f66294);
+    background: linear-gradient(top,#f66294,#f66294);
+}
+.feise:hover{
+    background: -webkit-linear-gradient(top,#ff6c9e,#ff6c9e);
+    background: -moz-linear-gradient(top,#ff6c9e,#ff6c9e);
+    background: linear-gradient(top,#ff6c9e,#ff6c9e);
+}
+.feise:active{
+    top:1px;
+
+    background: -webkit-linear-gradient(top,#e25081,#e25081);
+    background: -moz-linear-gradient(top,#e25081,#e25081);
+    background: linear-gradient(top,#e25081,#e25081);
+}
+
+/*下拉框样式*/
+
+.btn-select {
+    position: relative;
+    display: inline-block;
+    width: 170px;
+    height: 25px;
+    line-height:25px;
+    background-color: #fff; border:2px solid #f66294;
+    color: #333;
+    font: 14px/20px "Microsoft YaHei";
+}
+.btn-select .cur-select {
+    position: absolute;
+    display: block;
+    width: 170px;
+    height: 25px;
+    line-height:25px;
+    background: url(../images/ico-arrow.png) no-repeat 155px center;
+    text-indent: 6px;
+    font: 14px/20px "Microsoft YaHei";
+    color: #333;
+    line-height:25px;
+}
+
+.btn-select select {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 172px;
+    height: 25px; line-height:25px;
+    opacity: 0;
+    filter: alpha(opacity: 0;);
+    font: 14px/20px "Microsoft YaHei";
+    color: #333; background:#FFF;
+}
+.btn-select select option {
+    text-indent: 10px; border:1px solid #030;
+}
+.btn-select select option:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+/*******内训*****/
+.input6{ border:1px solid #dcdcdc; width:200px; height:25px; line-height:25px;font: 12px/20px "Microsoft YaHei"; color:#333; padding-left:5px; }
+.tablebox{ margin:0 auto; padding:0px;}
+.tablebox  tr td {line-height:35px; padding:2px; white-space:nowrap; text-align:left}
+.lineSty{border:1px dashed #e2e2e2;border-bottom:0;border-right:0;border-left:0; margin-top:10px; margin-bottom:10px;}
+.nx1{ margin:10px 0px; text-align:left; display:block; clear:both;}
+.textarea1{ margin:0px; padding:0px;border:1px solid #dcdcdc;line-height:25px;font: 12px/20px "Microsoft YaHei"; padding-left:5px; }
+a.addyg:link,a.addyg:visited{ margin:0px auto; display:inline-block; margin-right:10px; background:#FFF; padding:3px 15px; line-height:25px;font: 12px/20px "Microsoft YaHei"; color:333px; border:1px solid #e8e8e8;}
+a.addyg:hover{ background:#fcfcfc; color:#333; border:1px solid #f66294;}
+a.deleteyg:link,a.deleteyg:visited{ margin:0px auto; display:inline-block;margin-right:10px; background:#FFF; padding:3px 15px; line-height:25px;font: 12px/20px "Microsoft YaHei"; color:333px; border:1px solid #e8e8e8;}
+a.deleteyg:hover{ background:#fcfcfc; color:#333; border:1px solid #f66294;}
+.select2{ margin:0 auto; padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; height:25px;border:1px solid #cccccc; }
+.select2 option{ line-height:25px;}
+.searchbox{ position:relative; width:100%; }
