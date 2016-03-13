@@ -42,6 +42,8 @@
 
 
         function submitForm () {
+
+
         }
 
         var $$ = function (id) {
@@ -91,14 +93,12 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                 <tr>
                     <td width="10%">课程名称：</td>
-                    <td width="40%"><input type="text" class="input6" disabled placeholder="xxxxxx" /></td>
-                    <td width="10%" disabled>授课教师：</td>
+                    <td width="40%"><input type="text" class="input6"  /></td>
+                    <td width="10%">授课教师：</td>
                     <td width="40%"><input type="text" class="input6"  /></td>
                 </tr>
                 <tr>
                     <td>授课讲师：</td>
-                    <td><input type="text" class="input6" disabled  placeholder="xxxxxx"/></td>
-                    <td>授课日期：</td>
                     <td><input type="text" class="input6" /></td>
                 </tr>
             </table>
@@ -157,7 +157,7 @@
                         </select>
 
                     </td>
-                    <td width="10%" disabled>课程满分：</td>
+                    <td width="10%">课程满分：</td>
                     <td width="40%"><input type="text" class="input6"  /></td>
                 </tr>
                 <tr>
@@ -198,16 +198,12 @@
 
             <form id="zhuanyekeFrom">
                 <div class="nx1">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
+                    <table width="30%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td width="10%">课程名称：</td>
-                            <td width="40%"><input type="text" class="input6"  /></td>
                         </tr>
                         <tr>
-                            <td>授课日期：</td>
-                            <td><input type="text" class="input6" /></td>
-                            <td>授课教室：</td>
-                            <td><input type="text" class="input6" /></td>
+                            <td width="40%"><input type="text" class="input6"  /></td>
                         </tr>
                     </table>
                     <hr class="lineSty" />
@@ -249,6 +245,18 @@
                         </tbody>
                     </table>
                     <hr class="lineSty" />
+                    <td width="10%">选择授课时间段：</td>
+                    <td width="40%">
+                        <select name="" class="select2" style="width:100px;">
+                            <option>8:00</option>
+                            <option>8:30</option>
+                            <option>9:00</option>
+                        </select> --
+                        <select name="" class="select2" style="width:100px;">
+                            <option>8:30</option>
+                        </select>
+
+                    </td>
                 </div>
 
                 <div class="nx1">
@@ -286,12 +294,6 @@
             <form id="fumukeFrom">
                 <div class="nx1">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
-                        <tr>
-                            <td width="10%">授课日期：</td>
-                            <td width="40%"><input type="text" class="input6" disabled placeholder="xxxxxx" /></td>
-                            <td width="10%" disabled>授课教室：</td>
-                            <td width="40%"><input type="text" class="input6"  /></td>
-                        </tr>
                         <tr>
                             <td>预计人数：</td>
                             <td><input type="text" class="input6" disabled  placeholder="xxxxxx"/></td>
@@ -403,17 +405,7 @@
         <div id="huiyi">
 
             <form id="huiyiFrom">
-                <div class="nx1">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
-                        <tr>
-                            <td width="10%">会议日期：</td>
-                            <td width="40%"><input type="text" class="input6" disabled placeholder="xxxxxx" /></td>
-                            <td width="10%" disabled>使用教室：</td>
-                            <td width="40%"><input type="text" class="input6"  /></td>
-                        </tr>
-                    </table>
-                    <hr class="lineSty" />
-                </div>
+
                 <div class="nx1">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bordered">
                         <thead>

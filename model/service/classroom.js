@@ -147,3 +147,20 @@ module.exports.detail = function (id, cb) {
         }
     });
 }
+
+/**
+ * 不分页显示获取所有教室
+ * @param cb
+ */
+module.exports.getAllClassroom = function (cb) {
+
+    var sql = 'SELECT * FROM classroom';
+    db.query(sql, [],function (cbData, err, rows, fields) {
+        if (!err) {
+            cb (null, rows);
+        } else {
+            cb(err);
+        }
+    });
+
+}

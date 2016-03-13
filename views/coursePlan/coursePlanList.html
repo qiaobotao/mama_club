@@ -18,7 +18,52 @@
                     $(this).empty();
                 })
             });
+
+            $("#classForm tr td[class='classBlue']").html(function(){  //穿过子元素的时候不会触发
+                $(this).mouseenter(function(){
+                    $(this).append("<strong>点击修改</strong>");
+                    $(this).click(function(){
+                        window.location.href="/jinquan/course_plan_add";
+                    });
+                }).mouseleave(function(){
+                    $(this).empty();
+                })
+            });
+
+            $("#classForm tr td[class='classViolet']").html(function(){  //穿过子元素的时候不会触发
+                $(this).mouseenter(function(){
+                    $(this).append("<strong>点击修改</strong>");
+                    $(this).click(function(){
+                        window.location.href="/jinquan/course_plan_add";
+                    });
+                }).mouseleave(function(){
+                    $(this).empty();
+                })
+            });
+
+            $("#classForm tr td[class='classGreen']").html(function(){  //穿过子元素的时候不会触发
+                $(this).mouseenter(function(){
+                    $(this).append("<strong>点击修改</strong>");
+                    $(this).click(function(){
+                        window.location.href="/jinquan/course_plan_add";
+                    });
+                }).mouseleave(function(){
+                    $(this).empty();
+                })
+            });
+
+            $("#classForm tr td[class='classRed']").html(function(){  //穿过子元素的时候不会触发
+                $(this).mouseenter(function(){
+                    $(this).append("<strong>点击修改</strong>");
+                    $(this).click(function(){
+                        window.location.href="/jinquan/course_plan_add";
+                    });
+                }).mouseleave(function(){
+                    $(this).empty();
+                })
+            });
         })
+
     </script>
 </head>
 
@@ -45,7 +90,7 @@
                 <thead>
 
                 <tr>
-                    <th><input name="" type="checkbox" value=""></th>
+                    <!--<th><input name="" type="checkbox" value=""></th>-->
                     <th>日期</th>
                     <th>教室编码</th>
                     <th>8:00~8:30</th>
@@ -65,7 +110,7 @@
                 <tbody>
 
                 <tr>
-                    <td  rowspan="2"><input name="" type="checkbox" value=""></td>
+                    <!--<td  rowspan="2"><input name="" type="checkbox" value=""></td>-->
                     <td rowspan="2">1月1日</td>
                     <td>302</td>
                     <td class="classBlue">&nbsp;</td>
@@ -97,7 +142,7 @@
                     <td class="">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td rowspan="2"><input name="" type="checkbox" value=""></td>
+                    <!--<td rowspan="2"><input name="" type="checkbox" value=""></td>-->
                     <td rowspan="2">1月1日</td>
                     <td>302</td>
                     <td class="classBlue"></td>
