@@ -30,6 +30,7 @@ var distributorAction = require('./distributorAction');//经销商管理
 var storeroomInAction = require('./storeroomInAction');//入库管理
 var storeroomOutAction = require('./storeroomOutAction');//出库管理
 var storeroomMoveAction = require('./storeroomMoveAction');//移库管理
+var inventoryAction = require('./inventoryAction');//库存管理
 
 var sysResourcesAction = require('./sysResourcesAction');//资源管理
 var sysMenuAction = require('./sysMenuAction');//菜单管理
@@ -236,7 +237,8 @@ router.all('/storeroom_move_list',storeroomMoveAction.list);
 router.all('/storeroom_move_pre_add', storeroomMoveAction.preadd);
 router.all('/storeroom_move_add', storeroomMoveAction.add);
 router.all('/storeroom_move_detail', storeroomMoveAction.detail);
-
+// 查看库存
+router.all('/storeroom_inventory', inventoryAction.list);
 
 
 /*********************权限管理******************************/

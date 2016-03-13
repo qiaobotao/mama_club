@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>经销商管理</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+</head>
+<script type="text/javascript">
+
+    function search () {
+        var sid = document.getElementById('sid').value;
+        window.location.href = '/jinquan/storeroom_inventory?sid='+sid;
+    }
+
+    function pageturning (selectPage) {
+        var sid = document.getElementById('sid').value;
+        window.location.href = '/jinquan/storeroom_inventory?page='+selectPage+'&sid='+sid;
+    }
+</script>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：经销商列表
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td> 库房名称：<select id="sid" name="sid">
+                        <option value =""></option>
+                        <%for(var i=0;i<data.storerooms.length;i++){%>
+                        <option value ="<%=data.storerooms[i].id%>" <%if(data.sid == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
+                        <%}%>
+                    </select></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>商品名称</th>
+                <th>商品编码</th>
+                <th>商品数量</th>
+            </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].waresName%></td>
+                <td><%=data.data[i].serialNumber%></td>
+                <td><%=data.data[i].data_count%></td>
+            </tr>
+            <%}%>
+        </table>
+
+        <%- include ../pagination.html -%>
+    </div>
+</div>
+
+</body>
+</html>
