@@ -122,15 +122,26 @@ module.exports.add = function (req, res, next) {
 
     // 处理数据
     var arr = new Array();
-    for (var i=0;i<arr_proId.length;i++) {
+    if (arr_proId instanceof Array) {
+        for (var i=0;i<arr_proId.length;i++) {
+            var obj = {};
+            obj.proId = arr_proId[i];
+            obj.proName = arr_proname[i];
+            obj.proSerial = arr_proNo[i];
+            obj.count = arr_count[i];
+            obj.price = arr_price[i];
+            arr.push(obj);
+        }
+    } else {
         var obj = {};
-        obj.proId = arr_proId[i];
-        obj.proName = arr_proname[i];
-        obj.proSerial = arr_proNo[i];
-        obj.count = arr_count[i];
-        obj.price = arr_price[i];
+        obj.proId = arr_proId;
+        obj.proName = arr_proname;
+        obj.proSerial = arr_proNo;
+        obj.count = arr_count;
+        obj.price = arr_price;
         arr.push(obj);
     }
+
 
     service.insertInLog(buyType,inType,buyer,new Date(),storeroom,distributor,remark,function(err, results) {
 

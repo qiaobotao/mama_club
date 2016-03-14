@@ -84,14 +84,25 @@ module.exports.add = function (req, res, next) {
     var arr_count = req.body.count ? req.body.count : '';
     // 处理数据
     var arr = new Array();
-    for (var i=0;i<arr_proId.length;i++) {
+
+    if (arr_proId instanceof Array) {
+        for (var i=0;i<arr_proId.length;i++) {
+            var obj = {};
+            obj.proId = arr_proId[i];
+            obj.proName = arr_proname[i];
+            obj.proSerial = arr_proNo[i];
+            obj.count = arr_count[i];
+            arr.push(obj);
+        }
+    } else {
         var obj = {};
-        obj.proId = arr_proId[i];
-        obj.proName = arr_proname[i];
-        obj.proSerial = arr_proNo[i];
-        obj.count = arr_count[i];
+        obj.proId = arr_proId;
+        obj.proName = arr_proname;
+        obj.proSerial = arr_proNo;
+        obj.count = arr_count;
         arr.push(obj);
     }
+
    service.insertMoveLog(oper,outId,inId,remark,function(err, results) {
 
        if (!err) {
