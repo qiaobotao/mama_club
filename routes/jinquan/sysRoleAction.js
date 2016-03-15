@@ -103,13 +103,29 @@ module.exports.save = function (req, res) {
     var describe = req.body.describe ? req.body.describe : '';
     var selectMenus = req.body.selectMenus ? req.body.selectMenus : '';//选中菜单
     var selectResources = req.body.selectResources ? req.body.selectResources : '';//选中资源
+    selectMenus = selectMenus.split(",");
+    selectResources = selectResources.split(",");
+
+    // 处理菜单、资源ids数据
+    var selectMenusArr = new Array();
+    var selectResourcesArr = new Array();
+    for (var i=0;i<selectMenus.length;i++) {
+        var obj = {};
+        obj.menuId = selectMenus[i];
+        selectMenusArr.push(obj);
+    }
+    for (var i=0;i<selectResources.length;i++) {
+        var obj = {};
+        obj.resourcesId = selectResources[i];
+        selectResourcesArr.push(obj);
+    }
 
     if(id!=''){//修改，同时对菜单、资源一并保存
         service.updateSysRole(id,name,describe,function(err, results) {
             if(!err) {
                 //添加角色与菜单、资源之间的关系
                 //res.redirect('/jinquan/sys_role_list?replytype=update');
-                service.addRoleByMenuAndResources(id,selectMenus,selectResources,function(err, results) {
+                service.addRoleByMenuAndResources(id,selectMenusArr,selectResourcesArr,function(err, results) {
                     if(!err) {
                         res.redirect('/jinquan/sys_role_list?replytype=update');
                     } else {

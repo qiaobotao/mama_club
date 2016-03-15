@@ -157,7 +157,7 @@ module.exports.addRoleByMenuAndResources = function(id,selectMenus,selectResourc
     var addRoleResourcesSql = 'insert into sysRoleResources(roleId,resourcesId,dateline) VALUES (?,?,?)';
     //批量添加角色对应菜单
     async.map(selectMenus, function(item, callback) {
-        db.query(addRoleMenuSql, [id,item,new Date().getTime()], function (cbData, err, rows, fields) {
+        db.query(addRoleMenuSql, [id,item.menuId,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -165,11 +165,11 @@ module.exports.addRoleByMenuAndResources = function(id,selectMenus,selectResourc
             }
         });
     }, function(err,results) {
-        callback(err, results);
+        //callback(err, results);
     });
     //批量添加角色对应资源按钮
-    async.map(roleIds, function(item, callback) {
-        db.query(addRoleResourcesSql, [id,item,new Date().getTime()], function (cbData, err, rows, fields) {
+    async.map(selectResources, function(item, callback) {
+        db.query(addRoleResourcesSql, [id,item.resourcesId,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
