@@ -10,10 +10,10 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertActivityManage = function(activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, cb) {
+module.exports.insertActivityManage = function(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, cb) {
 
-    var sql = 'INSERT INTO activityManage(activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,`describe`,`status`) VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO activityManage(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,`describe`,`status`) VALUES (?,?,?,?,?,?,?)';
+    db.query(sql, [proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -22,10 +22,31 @@ module.exports.insertActivityManage = function(activityName,activityType,memberC
     });
 };
 
-module.exports.updateActivityManage = function(id,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, cb) {
+module.exports.insertActivityManageMx = function (mid,arr_obj,cb) {
 
-    var sql = 'UPDATE activityManage set activityName=?,activityType=?,memberCardType=?,effectiveTimeStart=?,effectiveTimeEnd=?,`describe`=?,`status`=? where id=?';
-    db.query(sql, [activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,id], function(cbData, err, rows, fields) {
+        if (arr_obj.length == 0) {
+            return;
+        }
+
+        var sql = 'INSERT INTO activityManageMX (activityId,totalCount,usedCount,activityDynamics,dateLine) VALUES (?,?,?,?,?)';
+        async.map(arr_obj, function(item, callback) {
+
+            db.query(sql, [mid, item.totalCount,item.usedCount,item.activityDynamics,new Date().getTime], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null, rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }, function(err,results) {
+            cb(err, results);
+        });
+}
+
+module.exports.updateActivityManage = function(id,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,proIds,courseIds,memberIds,serviceIds,cb) {
+
+    var sql = 'UPDATE activityManage set activityName=?,activityType=?,memberCardType=?,effectiveTimeStart=?,effectiveTimeEnd=?,`describe`=?,`status`=?,proIds=?,courseIds=?,`memberIds`=?,`serviceIds`=? where id=?';
+    db.query(sql, [activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,proIds,courseIds,memberIds,serviceIds,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -35,9 +56,10 @@ module.exports.updateActivityManage = function(id,activityName,activityType,memb
 };
 module.exports.fetchAllActivityManage = function(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage,cb) {
 
-    var parm = '';
+    var parm = 'WHERE 1=1';
     if (activityName != '')
-        parm += " WHERE activityName like '%" + activityName + "%'";
+        parm += " and" +
+            " activityName like '%" + activityName + "%'";
     if (activityType != '')
         parm += " and activityType = '" + activityType + "'";
     if (effectiveTimeStart != '')
@@ -100,6 +122,19 @@ module.exports.delActivityManage= function (id, cb) {
 
     var sql = 'DELETE FROM activityManage WHERE id = ?';
     db.query(sql, [id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+/**根据主表id删除
+ **/
+module.exports.delActivityManageMX= function (mid, cb) {
+
+    var sql = 'DELETE FROM activityManageMx WHERE activityId = ?';
+    db.query(sql, [mid], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

@@ -165,8 +165,9 @@ module.exports.waresUpdate = function (req, res, next) {
     var standard = req.body.standard ? req.body.standard : '';
     var remarks = req.body.remarks ? req.body.remarks  : '';
     var lowdata = req.body.lowdata ? req.body.lowdata : '';
+    var price = req.body.price ? req.body.price : '';
 
-    service.updateWares(id,name,longname,brand,standard,serial,remarks,lowdata,cid, function(err, results) {
+    service.updateWares(price,id,name,longname,brand,standard,serial,remarks,lowdata,cid, function(err, results) {
 
         if (!err) {
             res.redirect('/jinquan/wares_list?replytype=update');
@@ -190,7 +191,12 @@ module.exports.del = function (req, res, next) {
     })
 
 }
-
+/**
+ * 护理服务的时候使用的选择商品的方法
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.select = function (req, res, next) {
 
     var name = req.query.name ? req.query.name : '';    // 商品名称

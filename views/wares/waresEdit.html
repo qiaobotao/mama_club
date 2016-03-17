@@ -15,6 +15,11 @@
                 alert('商品名称不能为空');
                 return;
             }
+            var price = document.getElementById("price").value;
+            if (!price || price.length == 0) {
+                alert('商品售价不能为空');
+                return;
+            }
             var serial = document.getElementById("serial").value;
             if (!serial || serial.length == 0) {
                 alert('序列号不能为空');
@@ -56,6 +61,10 @@
         <tr>
             <td class="regTd_l">商品别名：</td>
             <td class="regTd_r"><input id="longname" name="longname" type="text" class="input5"  value="<%=wares.longname%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+        </tr>
+        <tr>
+            <td class="regTd_l">商品售价：</td>
+            <td class="regTd_r"><input id="price" name="price" class="input5" type="text" value="<%=wares.price%>"/></td>
         </tr>
         <tr>
             <td class="regTd_l">商标：</td>

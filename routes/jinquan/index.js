@@ -73,7 +73,7 @@ router.all('/course_plan_add',coursePlanAction.add);
 router.all('/course_list',courseAction.list);
 router.all('/course_add',courseAction.add);
 router.all('/course_select',courseAction.select);
-
+router.all('/course_select_activity',courseAction.selectForActivity);
 /*********************员工管理****************************/
 // 员工列表
 router.all('/staff_list',staffAction.list);
@@ -109,6 +109,7 @@ router.all('/member_card_type_del',memberCardTypeAction.del);
 router.all('/member_card_type_addOrEdit',memberCardTypeAction.addOrEdit);
 router.all('/getMemberCartTypeById',memberCardTypeAction.getMemberCartTypeById);
 
+
 // 会员卡管理
 router.all('/member_card_list',memberCardAction.list);
 router.all('/to_member_card_edit',memberCardAction.goEdit);
@@ -135,6 +136,7 @@ router.all('/member_del',memberAction.del);
 router.all('/member_select',memberAction.select);
 router.all('/member_all_select',memberAction.selectAll);
 router.all('/getMemberByNameTel',memberAction.getMemberByNameTel);
+router.all('/member_select_activity',memberAction.selectForActivity);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
 router.all('/service_meet_add',serviceMeetAction.add);
@@ -196,6 +198,7 @@ router.all('/service_pre_edit', serviceAction.preEdit);
 router.all('/service_update', serviceAction.update);
 router.all('/service_del', serviceAction.del);
 router.all('/service_select', serviceAction.select);
+router.all('/service_select_activity', serviceAction.selectForActivity);
 // 商品管理
 router.all('/wares_list', waresAction.list);
 router.all('/wares_modular', waresAction.modular);

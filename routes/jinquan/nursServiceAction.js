@@ -114,6 +114,7 @@ module.exports.add = function (req, res) {
     var storeroom = req.body.storeroom ? req.body.storeroom : '1';//暂时无参数
     var remarks = req.body.remarks ? req.body.remarks : '护理服务时，会员购买商品';
 
+    // 数组
     var arr_proId = req.body.proId ? req.body.proId : '';
     var arr_proname = req.body.proname ? req.body.proname :'';
     var arr_proNo = req.body.proNo ? req.body.proNo : '';
@@ -122,13 +123,24 @@ module.exports.add = function (req, res) {
 
     // 处理数据
     var arr = new Array();
-    for (var i=0;i<arr_proId.length;i++) {
+
+    if (arr_proId instanceof Array) {
+        for (var i=0;i<arr_proId.length;i++) {
+            var obj = {};
+            obj.proId = arr_proId[i];
+            obj.proName = arr_proname[i];
+            obj.proSerial = arr_proNo[i];
+            obj.count = arr_count[i];
+            obj.price = arr_price[i];
+            arr.push(obj);
+        }
+    } else {
         var obj = {};
-        obj.proId = arr_proId[i];
-        obj.proName = arr_proname[i];
-        obj.proSerial = arr_proNo[i];
-        obj.count = arr_count[i];
-        obj.price = arr_price[i];
+        obj.proId = arr_proId;
+        obj.proName = arr_proname;
+        obj.proSerial = arr_proNo;
+        obj.count = arr_count;
+        obj.price = arr_price;
         arr.push(obj);
     }
     //生成出库单信息
@@ -265,6 +277,7 @@ module.exports.doEdit = function (req, res) {
     var storeroom = req.body.storeroom ? req.body.storeroom : '1';//暂时无参数
     var remarks = req.body.remarks ? req.body.remarks : '护理服务时，会员购买商品';
 
+    // 数组
     var arr_proId = req.body.proId ? req.body.proId : '';
     var arr_proname = req.body.proname ? req.body.proname :'';
     var arr_proNo = req.body.proNo ? req.body.proNo : '';
@@ -273,13 +286,24 @@ module.exports.doEdit = function (req, res) {
 
     // 处理数据
     var arr = new Array();
-    for (var i=0;i<arr_proId.length;i++) {
+
+    if (arr_proId instanceof Array) {
+        for (var i=0;i<arr_proId.length;i++) {
+            var obj = {};
+            obj.proId = arr_proId[i];
+            obj.proName = arr_proname[i];
+            obj.proSerial = arr_proNo[i];
+            obj.count = arr_count[i];
+            obj.price = arr_price[i];
+            arr.push(obj);
+        }
+    } else {
         var obj = {};
-        obj.proId = arr_proId[i];
-        obj.proName = arr_proname[i];
-        obj.proSerial = arr_proNo[i];
-        obj.count = arr_count[i];
-        obj.price = arr_price[i];
+        obj.proId = arr_proId;
+        obj.proName = arr_proname;
+        obj.proSerial = arr_proNo;
+        obj.count = arr_count;
+        obj.price = arr_price;
         arr.push(obj);
     }
     if(outLogId!="")

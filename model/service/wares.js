@@ -93,10 +93,10 @@ module.exports.list = function(name,cid,currentPage, cb) {
  * @param lowData
  * @param cb
  */
-module.exports.updateWares = function(id, name, longname, brand, standard, serialNumber, remarks, lowData, cid, cb) {
+module.exports.updateWares = function(price,id, name, longname, brand, standard, serialNumber, remarks, lowData, cid, cb) {
 
-    var sql = 'UPDATE wares SET name = ?, longname = ?, brand = ?, standard = ?, serialNumber = ?, remarks = ?, lowData = ?, classify = ? WHERE id = ?';
-    var par = [name, longname, brand, standard, serialNumber, remarks, lowData, cid, id];
+    var sql = 'UPDATE wares SET price=?, name = ?, longname = ?, brand = ?, standard = ?, serialNumber = ?, remarks = ?, lowData = ?, classify = ? WHERE id = ?';
+    var par = [price,name, longname, brand, standard, serialNumber, remarks, lowData, cid, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

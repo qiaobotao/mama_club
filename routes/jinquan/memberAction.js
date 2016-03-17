@@ -255,3 +255,26 @@ module.exports.getMemberByNameTel = function(req, res, next) {
     }
     )
 }
+
+
+module.exports.selectForActivity = function (req, res, next) {
+    //res.render('member/memberList');
+    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var memberName = req.query.memberName ? req.query.memberName : '';
+    var tel = req.query.tel ? req.query.tel : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+    var index = req.query.index ? req.query.index : '';
+
+    service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
+        if (!err) {
+            results.serialNumber = serialNumber;
+            results.memberName = memberName;
+            results.tel = tel;
+            res.render('member/memberSelectActivity', {data : results,index:index});
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+
+}

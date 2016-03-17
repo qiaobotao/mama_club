@@ -185,3 +185,30 @@ module.exports.select = function(req, res, next) {
     });
 
 }
+
+module.exports.selectForActivity = function(req, res, next) {
+    var name = req.query.name ? req.query.name : '';    // 服务名称
+    var classifyId = req.query.id ? req.query.id : '';  // 服务分类
+    var currentPage = req.query.page ? req.query.page : '1';
+    var index = req.query.index ? req.query.index : '';
+    service.list(name,classifyId,currentPage, function(err, results) {
+
+        if (!err) {
+            results.currentPage = currentPage;
+            results.name = name;
+            results.classifyId = classifyId;
+            service.getServiceClassify(function(err,classify) {
+                if (!err) {
+                    results.classify = classify;
+                    res.render('service/serviceSelectActivity', {data : results,index:index});
+                } else {
+                    next();
+                }
+            });
+        } else {
+            next();
+        }
+
+    });
+
+}
