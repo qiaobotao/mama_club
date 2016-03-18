@@ -88,6 +88,48 @@ module.exports.fetchAllSysRole = function(name,currentPage,cb) {
     });
 }
 
+
+
+/**
+ * 根据角色id，获取该角色拥有的菜单及按钮资源
+ * @param id
+ * @param name
+ * @param cb
+ */
+module.exports.getMenuAndResourcesByRoleId = function(id,cb) {
+    //根据角色id获取菜单、资源信息
+    var getMenusByRoleIdSql = 'select * from sysRoleMenu where roleId = ?';
+    var getRoleResourcesByRoleIdSql = 'select * from sysRoleResources where roleId = ?';
+    var roleIdPar = [id];
+    async.series({
+        menusByRole : function(callback){
+            db.query(getMenusByRoleIdSql, roleIdPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        resourcesByRole : function(callback){
+            db.query(getRoleResourcesByRoleIdSql, roleIdPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+
 /**
  * 修改角色
  * @param id

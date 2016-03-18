@@ -70,14 +70,13 @@
 
         $(document).ready(function(){
             //获取所有菜单
-            var mmm = '<%=menus%>';
-            console.log("aaa"+mmm);
+            var menusByRoleList = JSON.parse('<%-JSON.stringify(menusByRole)%>');//该角色对应的菜单
+            var resourcesByRoleList = JSON.parse('<%-JSON.stringify(resourcesByRole)%>');//该角色对应的资源
             var menus = '<%-JSON.stringify(menus)%>';
             menus = JSON.parse(menus);
             //获取所有资源
             var resourcess = '<%-JSON.stringify(resourcess)%>';
             resourcess = JSON.parse(resourcess);
-            console.log("resourcess==="+resourcess);
             for(var i = 0 ; i < menus.length ; i ++){
                 if(menus[i].parentId == 0){
                     var nodesObj = {};
@@ -93,6 +92,12 @@
                             nodesObj.id = menus[j].id;
                             nodesObj.pId = menus[j].parentId;
                             nodesObj.name = menus[j].textCh;
+                            for(var k = 0 ; k < menusByRoleList.length ; k ++){
+                                if(menusByRoleList[k].menuId == menus[j].id){
+                                    nodesObj.checked = true;
+                                    break;
+                                }
+                            }
                             zNodes[index]= nodesObj;
                             index++;
                             for(var k = 0 ; k < resourcess.length ; k ++){
@@ -102,6 +107,12 @@
                                     nodesObj.pId = resourcess[k].menuId;
                                     nodesObj.name = resourcess[k].textCh;
                                     nodesObj.resource = "resource--";
+                                    for(var l = 0 ; l < resourcesByRoleList.length ; l ++){
+                                        if(resourcesByRoleList[l].resourcesId == resourcess[k].id){
+                                            nodesObj.checked = true;
+                                            break;
+                                        }
+                                    }
                                     zNodes[index]= nodesObj;
                                     index++;
                                 }
@@ -110,7 +121,25 @@
                     }
                 }
             }
-            console.log("zNodes="+zNodes);
+//            console.log("zNodes="+zNodes);
+            //为所选菜单赋值
+            var selectMenus = "";
+            var selectResources = "";
+
+            for(var k = 0 ; k < menusByRoleList.length ; k ++){
+                selectMenus += menusByRoleList[k].menuId+",";
+            }
+            for(var l = 0 ; l < resourcesByRoleList.length ; l ++){
+                selectResources += resourcesByRoleList[l].resourcesId+",";
+            }
+            if(selectResources != ""){
+                selectResources = selectResources.substring(0,selectResources.length - 1);
+            }
+            if(selectMenus != ""){
+                selectMenus = selectMenus.substring(0,selectMenus.length - 1);
+            }
+            $("#selectMenus").val(selectMenus);
+            $("#selectResources").val(selectResources);
 
             $.fn.zTree.init($("#treeDemo"), setting, zNodes);
         });
@@ -118,6 +147,7 @@
 
 
         function submitForm(){
+            console.log($("#selectMenus").val());
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
                 alert('角色不能为空');

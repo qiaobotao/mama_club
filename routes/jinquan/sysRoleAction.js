@@ -75,7 +75,17 @@ module.exports.edit = function (req, res) {
                         resourcesService.fetchSysResourcess(0,200,function(err, results) {
                             if(!err) {
                                 var resourcess = results;
-                                res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show,menus:menus,resourcess:resourcess});
+                                //获取当前用户所拥有的菜单、资源
+                                service.getMenuAndResourcesByRoleId(id,function(err, results){
+                                    if(!err) {
+                                        var menusByRole = results.menusByRole;
+                                        var resourcesByRole = results.resourcesByRole;
+                                        res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show,menus:menus,resourcess:resourcess,menusByRole:menusByRole,resourcesByRole:resourcesByRole});
+                                    } else {
+                                        console.log(err.message);
+                                        res.render('error');
+                                    }
+                                })
                             } else {
                                 console.log(err.message);
                                 res.render('error');
