@@ -84,6 +84,7 @@ router.all('/staff_del',staffAction.del);
 // 员工培训
 router.all('/staff_train_list',staffTrainAction.list);
 router.all('/staff_train_edit',staffTrainAction.edit);
+router.all('/staff_train_save',staffTrainAction.save);
 
 // 打卡记录
 // 考勤类别

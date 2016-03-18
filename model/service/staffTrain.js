@@ -58,7 +58,7 @@ module.exports.fetchAllStaffTrain = function(trainName,teacherName,currentPage,c
 module.exports.fetchSingleStaffTrain =function (id, cb) {
     var sqlCourseData = 'SELECT r.id,r.name,c.teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName , r.scorse,r.content ' +
         ' FROM course AS r,courseTeacher AS c,classroom room WHERE r.id = ? AND courseType = 1 AND r.id = c.courseId AND r.classroomId = room.id ORDER BY r.dateline DESC ';
-    var sqlStaffTrain = 'select * from staffTrain where courseId = ?';
+    var sqlStaffTrain = 'select sf.*,s.name as staffName from staffTrain sf,staff s where courseId = ? and s.id = sf.staffId';
     async.series({
         courseData : function(callback){
             db.query(sqlCourseData, [id], function (cbData, err, rows, fields) {
@@ -87,3 +87,44 @@ module.exports.fetchSingleStaffTrain =function (id, cb) {
         }
     });
 }
+
+/**
+ * 删除用户培训信息
+ * @param id
+ * @param cb
+ */
+module.exports.delStaffTrain= function (id, cb) {
+
+    var sql = 'DELETE from staffTrain WHERE courseId = ?';
+    db.query(sql, [id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 增加员工培训信息
+ * @param name
+ * @param address
+ * @param principal
+ * @param cb
+ */
+module.exports.insertStaffTrain = function(courseId,staffTrainArr, cb) {
+
+    var sql = 'INSERT INTO staffTrain (courseId,staffId,beforeClassIntegration,classIntegration,afterClassIntegration,status,dateline) VALUES (?,?,?,?,?,?,?)';
+    //批量添加培训信息
+    async.map(staffTrainArr, function(item, callback) {
+        db.query(sql, [courseId,item.staffId,item.beforeClassIntegration,item.classIntegration,item.afterClassIntegration,item.status,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+};
