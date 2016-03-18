@@ -52,25 +52,25 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">课程名称：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=course.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">授课教室：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=course.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">授课讲师：</td>
-                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5"  value="<%=course.teacherName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">授课日期：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5"  value="<%=course.courseDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">授课时间：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5"  value="<%=course.courseTimeStart%>~<%=course.courseTimeEnd%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">课程满分：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5"  value="<%=course.scorse%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">培训内容：</td>
-                <td class="regTd_r" colspan="3"><input id="tel" name="tel" type="text" class="input5" style="width: 80%" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r" colspan="3"><input id="tel" name="tel" type="text" class="input5" value="<%=course.content%>" style="width: 80%" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
         <!--参与员工 start-->
@@ -80,25 +80,32 @@
             <tr bgcolor="lightblue">
                 <td>+</td>
                 <td>员工姓名</td>
-                <td>员工级别</td>
                 <td>预习积分</td>
                 <td>上课积分</td>
                 <td>课后积分</td>
+                <td>打分状态</td>
             </tr>
+
+            <% for (var i=0;i<staffTrains.length;i++) {%>
             <tr>
-                <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td>&nbsp;</td>
+                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].staffName%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%>/></td>
+                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].beforeClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%> /></td>
+                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].classIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%>/></td>
+                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].afterClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%></td>
+                <td>
+                    <input id="tel" name="tel" type="text" class="input5" value="<% if(staffTrains[i].status == 'Y'){ %>已打分<%}else{%>未打分 <%}%>" readonly/>
+                    <select></select>
+                </td>
             </tr>
+            <%}%>
+
         </table>
         <!--参与员工 end-->
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href=/jinquan/shop_list" class="close"></a></div>
+        <div class="rb_l"><a href=/jinquan/staff_train_list class="close"></a></div>
     </div>
 
 

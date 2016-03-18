@@ -42,11 +42,25 @@
                 <th>培训地点</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].courseTimeStart %>~<%=data.data[i].courseTimeEnd %></td>
+                <td><%=data.data[i].roomName%></td>
+                <td><%=data.data[i].teacherName%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/staff_train_edit?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/staff_train_edit?id=<%=data.data[i].id%>">编辑</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
+        <%- include ../pagination.html -%>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
     </div>
 </div>
 
