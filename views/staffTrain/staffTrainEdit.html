@@ -18,11 +18,11 @@
             //iframe层
             memberIndex = parent.layer.open({
                 type: 2,
-                title: '选择会员信息',
+                title: '选择员工信息',
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/member_select_activity?index='+index, //iframe的url
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
@@ -45,7 +45,7 @@
             var cell5=row.insertCell(4);//打分状态
             var cell6=row.insertCell(5);//删除员工
             cell1.innerHTML = '<input type="hidden" id="staffId'+staffTrainIndex+'" name="staffId"/>'
-                    +'<input id="memberName'+staffTrainIndex+'"  name="staffName"  type="text" class="input5 input_arr" onfocus="getmembers('+staffTrainIndex+')"/>';
+                    +'<input id="staffName'+staffTrainIndex+'"  name="staffName"  type="text" class="input5 input_arr" onfocus="getmembers('+staffTrainIndex+')"/>';
             cell2.innerHTML='<input name="beforeClassIntegration" type="text" class="input5 input_arr" />';
             cell3.innerHTML='<input name="classIntegration" type="text" class="input5 input_arr" />';
             cell4.innerHTML='<input name="afterClassIntegration" type="text" class="input5 input_arr" />';
@@ -144,8 +144,8 @@
             <% for (var i=0;i<staffTrains.length;i++) {%>
             <tr>
                 <td>
-                    <input type="hidden" name="staffId" value="<%=staffTrains[i].staffId%>"/>
-                    <input name="staffName" type="text" class="input5" value="<%=staffTrains[i].staffName%>" readonly/>
+                    <input type="hidden" id="staffId<%=i%>" name="staffId" value="<%=staffTrains[i].staffId%>"/>
+                    <input name="staffName" id="staffName<%=i%>" type="text" class="input5" value="<%=staffTrains[i].staffName%>" readonly/>
                 </td>
                 <td><input name="beforeClassIntegration" type="text" class="input5" value="<%=staffTrains[i].beforeClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%> /></td>
                 <td><input name="classIntegration" type="text" class="input5" value="<%=staffTrains[i].classIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%>/></td>
@@ -167,7 +167,11 @@
         <!--参与员工 end-->
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:submitForm();" class="reset"></a></div>
+        <%
+        if(show == ''){
+        %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
         <div class="rb_l"><a href=/jinquan/staff_train_list class="close"></a></div>
     </div>
 

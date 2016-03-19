@@ -10,17 +10,19 @@ var service = require('../../model/service/staffTrain');
 module.exports.list = function (req, res) {
 
     var currentPage = req.query.page ? req.query.page : '1';
-    var trainName = req.query.trainName ? req.query.trainName : '';
-    var teacherName = req.query.teacherNamee ? req.query.teacherNamee : '';
+    var courseName = req.query.courseName ? req.query.courseName : '';
+    var teacherName = req.query.teacherName ? req.query.teacherName : '';
+    var classroomName = req.query.classroomName ? req.query.classroomName : '';
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
-    service.fetchAllStaffTrain(trainName,teacherName,currentPage, function (err, results) {
+    service.fetchAllStaffTrain(courseName,teacherName,classroomName,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
+            results.courseName = courseName;
             results.teacherName = teacherName;
-            results.trainName = trainName;
+            results.classroomName = classroomName;
             res.render('staffTrain/staffTrainList', {data : results,replytype:replytype});
         } else {
             next();
@@ -62,16 +64,32 @@ module.exports.save = function (req, res) {
 
     // 处理培训信息数据
     var staffTrainArr = new Array();
-    for (var i=0;i<staffId.length;i++) {
+
+
+    if (staffId instanceof Array) {
+        for (var i=0;i<staffId.length;i++) {
+            var obj = {};
+            obj.staffId = staffId[i];
+            obj.staffName = staffName[i];
+            obj.beforeClassIntegration = beforeClassIntegration[i];
+            obj.classIntegration = classIntegration[i];
+            obj.afterClassIntegration = afterClassIntegration[i];
+            obj.status = status[i];
+            staffTrainArr.push(obj);
+        }
+    } else {
         var obj = {};
-        obj.staffId = staffId[i];
-        obj.staffName = staffName[i];
-        obj.beforeClassIntegration = beforeClassIntegration[i];
-        obj.classIntegration = classIntegration[i];
-        obj.afterClassIntegration = afterClassIntegration[i];
-        obj.status = status[i];
+        obj.staffId = staffId;
+        obj.staffName = staffName;
+        obj.beforeClassIntegration = beforeClassIntegration;
+        obj.classIntegration = classIntegration;
+        obj.afterClassIntegration = afterClassIntegration;
+        obj.status = status;
         staffTrainArr.push(obj);
     }
+
+
+
 
 
     //先删除课程对应的所有培训内容，然后在进行添加

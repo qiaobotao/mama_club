@@ -6,16 +6,18 @@ var async = require('async');
 
 /**
  * 获取所有培训列表
+ * @param courseName 课程名称
+ * @param teacherName  教师名称
  * @param cb
  */
-module.exports.fetchAllStaffTrain = function(trainName,teacherName,currentPage,cb) {
+module.exports.fetchAllStaffTrain = function(courseName,teacherName,classroomName,currentPage,cb) {
 
-    var parm = " WHERE r.name LIKE '%"+trainName+"%' AND c.teacherName LIKE '%"+trainName+"%' ";
+    var parm = " WHERE r.name LIKE '%"+courseName+"%' AND c.teacherName LIKE '%"+teacherName+"%' AND room.name LIKE '%"+classroomName+"%' ";
 
-    var sql_count = 'SELECT count(*) as count FROM course AS r ,courseTeacher AS c '+parm+' AND r.id = c.courseId ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM course AS r ,courseTeacher AS c ,classroom room '+parm+' AND r.id = c.courseId AND r.classroomId = room.id ORDER BY r.dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT r.id,r.name,c.teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName ' +
+    var sql_data = 'SELECT r.id as `id`,r.name as `name`,c.teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName ' +
         ' FROM course AS r,courseTeacher AS c,classroom room '+parm+' AND courseType = 1 AND r.id = c.courseId AND r.classroomId = room.id ORDER BY r.dateline DESC LIMIT ?,?';
 
     async.series({
