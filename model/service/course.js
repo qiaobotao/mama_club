@@ -97,3 +97,109 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
         }
     });
 };
+
+
+/**
+ * 返回par后的日期
+ * 返回格式 是数组 [2016-1-1,2016-1-2,...]
+ * @param par
+ */
+function getLateDays (par) {
+
+    var re = /^[0-9]*[1-9][0-9]*$/ ;
+    if (!re.test(par)) {
+        return [];
+    }
+
+    var arr_date = new Array();
+    var date_temp = new Date();
+    var date = new Date(date_temp);
+    for (var i=1;i<par;i++) {
+        date.setDate(date_temp.getDate()+i);
+        var times = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+        arr_date.push(times);
+    }
+
+    return arr_date;
+}
+
+/**
+ * 返回sql中的数据串
+ * 格式 ('2016-1-1','2016-1-1','2016-1-1')
+ * @param arr
+ */
+function formatDatePar (arr) {
+
+    if (arr.length == 0) {
+        return ('()');
+    }
+    var temp = "(";
+    for (var i=0;i<arr.length;i++) {
+        if (i != arr.length - 1) {
+            temp = temp +"'"+arr[i] + "',";
+        } else {
+            temp = temp +"'"+arr[i] + "')";
+        }
+    }
+    return temp;
+}
+
+/**
+ * 获取两个时间段之间 每30分钟的值
+ * 返回数组 格式 [8:30,9:00,9:30,10:00]
+ * @param startTime
+ * @param endTime
+ */
+function getTime (startTime,endTime) {
+
+    if(!compareTime(startTime,endTime)) {
+        return [];
+    }
+    // endTime 是否 是半点 没关系，主要是 两个小时 之间
+    var start_temp = startTime.split(':');
+    var end_temp = endTime.split(':');
+
+    var start = start_temp[0];
+    var end = end_temp[0];
+    var arr = new Array();
+    if (start_temp[1] == '00') {
+        arr.push(startTime);
+    }
+    while (end - start > 0 ) {
+        var v = start + ':30';
+        var vv = Number(start)+1 + ':00';
+        arr.push(v);
+        arr.push(vv);
+        start = Number(start) + 1;
+    }
+
+    if (end_temp[1] == '30') {
+        arr.push(endTime);
+    }
+
+    return arr;
+}
+
+/**
+ * 比较两个时间段 哪个排在前边
+ * 后边的比前面大返回true
+ * @param startTime
+ * @param endTime
+ */
+function compareTime (startTime, endTime) {
+
+    var start_temp = startTime.split(':');
+    var end_temp = endTime.split(':');
+
+    var start_hour = +start_temp[0];
+    var end_hour = +end_temp[0];
+    var start_second = start_temp[1];
+    var end_second = end_temp[1];
+    if (end_hour>start_hour) {
+        return true;
+    } else if (end_hour == start_hour && end_second == '30' && start_second =='00') {
+        return true;
+    } else {
+        return false;
+    }
+}

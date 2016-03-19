@@ -8,11 +8,18 @@
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript">
         $(function (){
+
+            var classroomid = document.getElementById('classroomId').value;
+            var date = document.getElementById('date').value;
+
+            var add_url = "/jinquan/course_plan_add?classroomid="+classroomid+'&date='+date;
+            var edit_url = "/jinquan/course_plan_edit?classroomid="+classroomid+'&date='+date;
+
             $("#classForm tr td[class='']").html(function(){  //穿过子元素的时候不会触发
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击添加</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        window.location.href=add_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -23,7 +30,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -34,7 +41,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -45,7 +52,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -56,7 +63,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -76,7 +83,7 @@
 </div>
 <div class="center_con">
     <div class="notes">
-        <div class="button2"><button type="button" class="button gray">导出Excel</button></div>
+       <!-- <div class="button2"><button type="button" class="button gray">导出Excel</button></div> -->
         <ul class="noteUi">
             <li><span class="color1"></span>会议</li>
             <li><span class="color2"></span>催乳师专业课程</li>
@@ -111,6 +118,8 @@
 
                 <tr>
                     <!--<td  rowspan="2"><input name="" type="checkbox" value=""></td>-->
+                    <input type="hidden" id="date" name="date" value="2016-1-1"/>
+                    <input type="hidden" id="classroomId" name="classroomId" value="123"/>
                     <td rowspan="2">1月1日</td>
                     <td>302</td>
                     <td class="classBlue">&nbsp;</td>
