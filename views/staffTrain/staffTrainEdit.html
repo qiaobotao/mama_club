@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <title>编辑培训信息</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
@@ -9,7 +12,55 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+
+        //员工的选择
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //当前商品显示位置
+        var staffTrainIndex = 0;
+        //table中增加需要添加的行信息
+        function addMemberTr(index){
+            //获取表格对象
+            var table=document.getElementById("staffTrainTab");
+            //获取当前行数
+            staffTrainIndex = $("#staffTrainTab tr").length;
+            var row=table.insertRow(staffTrainIndex);
+            var cell1=row.insertCell(0);//员工名称
+            var cell2=row.insertCell(1);//预习积分
+            var cell3=row.insertCell(2);//上课积分
+            var cell4=row.insertCell(3);//课后积分
+            var cell5=row.insertCell(4);//打分状态
+            var cell6=row.insertCell(5);//删除员工
+            cell1.innerHTML = '<input type="hidden" id="staffId'+staffTrainIndex+'" name="staffId"/>'
+                    +'<input id="staffName'+staffTrainIndex+'"  name="staffName"  type="text" class="input5 input_arr" onfocus="getmembers('+staffTrainIndex+')"/>';
+            cell2.innerHTML='<input name="beforeClassIntegration" type="text" class="input5 input_arr" />';
+            cell3.innerHTML='<input name="classIntegration" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input name="afterClassIntegration" type="text" class="input5 input_arr" />';
+            cell5.innerHTML='<select name="status"><option value="N">暂不打分</option><option value="Y">确定打分</option></select>';
+            cell6.innerHTML='<a style="cursor: pointer" onclick="javaScript:delMemberTr(this)"><h1>-</h1></a>';
+        }
+
+        //table中删除选中的行数据
+        function delMemberTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#staffTrainTab tr:eq('+deltr.rowIndex+')').remove();
+        }
+
         function submitForm(){
+            /*
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
                 alert('门店名称不能为空');
@@ -35,6 +86,7 @@
                 alert('负责人不能为空');
                 return;
             }
+            */
             document.getElementById("myform").submit();
         }
     </script>
@@ -48,11 +100,14 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/shop_add">
+    <form method="post" id="myform" action="/jinquan/staff_train_save">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">课程名称：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=course.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input type="hidden" name="id" value="<%=course.id%>"/>
+                    <input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=course.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
                 <td  class="regTd_l">授课教室：</td>
                 <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=course.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -76,27 +131,35 @@
         <!--参与员工 start-->
         <span style="float: left; font-weight:bold;width: 100px;">参与员工</span>
         <br>
-        <table width="80%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="staffTrainTab" width="80%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>员工姓名</td>
                 <td>预习积分</td>
                 <td>上课积分</td>
                 <td>课后积分</td>
                 <td>打分状态</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addMemberTr()"><h1>+</h1></a></td>
             </tr>
 
             <% for (var i=0;i<staffTrains.length;i++) {%>
             <tr>
-                <td>&nbsp;</td>
-                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].staffName%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%>/></td>
-                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].beforeClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%> /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].classIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%>/></td>
-                <td><input id="tel" name="tel" type="text" class="input5" value="<%=staffTrains[i].afterClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%></td>
                 <td>
-                    <input id="tel" name="tel" type="text" class="input5" value="<% if(staffTrains[i].status == 'Y'){ %>已打分<%}else{%>未打分 <%}%>" readonly/>
-                    <select></select>
+                    <input type="hidden" id="staffId<%=i%>" name="staffId" value="<%=staffTrains[i].staffId%>"/>
+                    <input name="staffName" id="staffName<%=i%>" type="text" class="input5" value="<%=staffTrains[i].staffName%>" readonly/>
                 </td>
+                <td><input name="beforeClassIntegration" type="text" class="input5" value="<%=staffTrains[i].beforeClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%> /></td>
+                <td><input name="classIntegration" type="text" class="input5" value="<%=staffTrains[i].classIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%>/></td>
+                <td><input name="afterClassIntegration" type="text" class="input5" value="<%=staffTrains[i].afterClassIntegration%>" <% if(staffTrains[i].status == 'Y') {%>readonly<%}%> /></td>
+                <td>
+                    <select name="status" <% if(staffTrains[i].status == 'Y') {%>disabled<%}%>>
+                        <option value="N">暂不打分</option>
+                        <option value="Y" <% if(staffTrains[i].status == 'Y') {%>selected<%}%>>确定打分</option>
+                    </select>
+                </td>
+                <td>
+                    <a style="cursor: pointer" onclick="javaScript:delMemberTr(this)"><h1>-</h1></a>
+                </td>
+
             </tr>
             <%}%>
 
@@ -104,7 +167,11 @@
         <!--参与员工 end-->
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <%
+        if(show == ''){
+        %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
         <div class="rb_l"><a href=/jinquan/staff_train_list class="close"></a></div>
     </div>
 

@@ -195,7 +195,7 @@
             cell3.innerHTML='<a style="cursor: pointer" onclick="javaScript:delMemberTr(this)"><h1>-</h1></a>';
         }
         //table中删除选中的行数据
-        function delMemberTr(delObj){
+        function getmembers(delObj){
             var deltr = delObj.parentNode.parentNode;
             $('#memberTable tr:eq('+deltr.rowIndex+')').remove();
         }

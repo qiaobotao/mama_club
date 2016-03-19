@@ -10,6 +10,32 @@
     </style>
 </head>
 
+
+<script type="text/javascript">
+
+    var replytype = '<%=replytype%>';
+    if (replytype == 'add') {
+        parent.layer.msg('增加成功');
+    } else if (replytype == 'del') {
+        parent.layer.msg('删除成功');
+    } else if (replytype == 'update') {
+        parent.layer.msg('修改成功');
+    }
+
+    function search () {
+        var courseName = document.getElementById('courseName').value;
+        var teacherName = document.getElementById('teacherName').value;
+        var classroomName = document.getElementById('classroomName').value;
+        window.location.href = '/jinquan/staff_train_list?courseName='+courseName+'&teacherName='+teacherName+'&classroomName='+classroomName;
+    }
+//
+//    function pageturning (selectPage) {
+//        var name = document.getElementById('name').value;
+//        var cid = document.getElementById('id').value;
+//        window.location.href = '/jinquan/storeroom_list?page='+selectPage+'&name='+name+'&id='+cid;
+//    }
+</script>
+
 <body>
 <div class="r_top">
     <div class="weizhi">
@@ -22,16 +48,20 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>课程名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;讲师名称：<input name="" type="text" class="input5" /></td>
+                    <td>课程名称：<input id="courseName" type="text" value="<%=data.courseName%>" class="input5" /></td>
+                    <td> &nbsp;讲师名称：<input id="teacherName" type="text" value="<%=data.teacherName%>" class="input5" /></td>
+                    <!--
                     <td> &nbsp;培训时间：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;培训教室：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    -->
+                    <td> &nbsp;培训教室：<input id="classroomName" value="<%=data.classroomName%>" type="text" class="input5" /></td>
+                    <td><a href="javascript:search();" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
+        <!--
         <div class="but_0"><a href="/jinquan/staff_train_edit" class="bsty0"></a></div>
+        -->
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -46,12 +76,12 @@
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].name%></td>
                 <td><%=data.data[i].courseTimeStart %>~<%=data.data[i].courseTimeEnd %></td>
-                <td><%=data.data[i].roomName%></td>
                 <td><%=data.data[i].teacherName%></td>
+                <td><%=data.data[i].roomName%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/staff_train_edit?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/staff_train_edit?show=view&id=<%=data.data[i].id%>">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/staff_train_edit?id=<%=data.data[i].id%>">编辑</a>]</div></td>
                         </tr>
                     </table>
