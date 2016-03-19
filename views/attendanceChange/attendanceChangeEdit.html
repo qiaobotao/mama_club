@@ -5,10 +5,21 @@
     <title>编辑考勤变更</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        $(document).ready(function(){
+            //获取变更类型对象
+            var attendanceChangeObj = JSON.parse('<%-JSON.stringify(attendanceChange)%>');
+            //为默认选中的单选按钮赋值
+            $(":radio[name=attendanceType][value="+attendanceChangeObj.attendanceType+"]").attr("checked","true");
+            onchangeRadio();
+            $("#attendanceTypeDetailed").attr("value",attendanceChangeObj.attendanceTypeDetailed);
+        });
         //提交表单
         function submitForm(){
             /*
@@ -49,7 +60,7 @@
                     break;
                 }
             }
-            if(attendanceType == 1){//加班
+            if(attendanceType == 'jb'){//加班
                 //调整下拉框内容
                 var attendanceTypeDetailed = document.getElementById("attendanceTypeDetailed");
                 attendanceTypeDetailed.innerHTML = "";
@@ -85,6 +96,23 @@
                 document.getElementById("changeCategory").innerHTML = "请假类型";
             }
         }
+
+        //员工的选择
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
     </script>
 </head>
 
@@ -96,44 +124,43 @@
     <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/attendance_type_save">
+    <form method="post" id="myform" action="/jinquan/attendance_change_save">
         <table width="100%" class="reg_table" border="1" cellspacing="0" cellpadding="0">
             <tr>
                 <td  colspan="4">
                     <center>
-                        <input type="radio" checked="checked" name="attendanceType" value="1" onchange="onchangeRadio()"/>&nbsp;加班 &nbsp;
-                        <input type="radio" name="attendanceType" value="2" onchange="onchangeRadio()"/>&nbsp;请假
-                    <input id="id" name="id" type="hidden" value="<%=attendanceType.id%>"/>
+                        <input type="radio" checked="checked" name="attendanceType" value="jb" onchange="onchangeRadio()"/>&nbsp;加班 &nbsp;
+                        <input type="radio" name="attendanceType" value="qj" onchange="onchangeRadio()"/>&nbsp;请假
+                    <input id="id" name="id" type="hidden" value="<%=attendanceChange.id%>"/>
                     </center>
                 </td>
             </tr>
             <tr>
                 <td class="regTd_l">员工名称：</td>
-                <td class="regTd_r"><input id="staffId" name="staffId" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="staffName" name="staffName" type="text" class="input5" value="<%=attendanceChange.staffName%>" onfocus="getmembers('')"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input type="hidden" id="staffId" name="staffId" value="<%=attendanceChange.staffId%>"/>
+                    选择员工后，显示该员工的考勤时间
+                </td>
                 <td class="regTd_l"><span id="changeCategory">加班类型</span>：</td>
                 <td class="regTd_r">
                     <select name="attendanceTypeDetailed" id="attendanceTypeDetailed">
-                        <option value="技师">文职</option>
-                        <option value="文职">技师</option>
+                        <option value="">请选择</option>
+                        <option value="jb_wz">文职</option>
+                        <option value="jb_js">技师</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">加班时间：</td>
-                <td class="regTd_r"><input id="leaveStartDate" name="leaveStartDate" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">考勤时间：</td>
-                <td class="regTd_r"><input id="tempTime" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
                 <td class="regTd_l">开始时间：</td>
-                <td class="regTd_r"><input id="startDate" name="startDate" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="startDate" name="startDate" type="text" class="input5" value="<%=attendanceChange.startDate2Str%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">截止时间：</td>
-                <td class="regTd_r"><input id="endDate" name="endDate" type="text" class="input5" value="<%=attendanceType.endDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="endDate" name="endDate" type="text" class="input5" value="<%=attendanceChange.endDate2Str%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">工作内容：</td>
                 <td class="regTd_r" colspan="3">
-                    <textarea name="leaveReason" id="leaveReason" rows="8" cols="100"></textarea>
+                    <textarea name="leaveReason" id="leaveReason" rows="8" cols="100" ><%=attendanceChange.leaveReason%></textarea>
                 </td>
             </tr>
         </table>

@@ -13,15 +13,15 @@ module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
     var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
     var attendanceType = req.query.attendanceType ? req.query.attendanceType : '';//变更类型
-    var leaveStartDate = req.query.leaveStartDate ? req.query.leaveStartDate : '';//请假开始日期
-    var leaveEndDate = req.query.leaveEndDate ? req.query.leaveEndDate : '';//请假截止日期
+    var startDate = req.query.startDate ? req.query.startDate : '';//请假开始日期
+    var endDate = req.query.endDate ? req.query.endDate : '';//请假截止日期
 
-    service.fetchAllAttendanceChange(staffName,attendanceType,leaveStartDate,leaveEndDate,currentPage, function (err, results) {
+    service.fetchAllAttendanceChange(staffName,attendanceType,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
             results.staffName = staffName;
             results.attendanceType = attendanceType;
-            results.leaveStartDate = leaveStartDate;
-            results.leaveEndDate = leaveEndDate;
+            results.startDate = startDate;
+            results.endDate = endDate;
             res.render('attendanceChange/attendanceChangeList', {data : results});
         } else {
             console.log(err.message);
@@ -38,13 +38,13 @@ module.exports.list = function (req, res) {
 module.exports.edit = function (req, res) {
     var id = req.query.id ? req.query.id : '';
     if(id == ''){
-        var attendanceType = [];
-        res.render('attendanceChange/attendanceChangeEdit', {attendanceType : attendanceType});
+        var attendanceChange = [];
+        res.render('attendanceChange/attendanceChangeEdit', {attendanceChange : attendanceChange});
     }else{
         service.fetchSingleAttendanceChange(id, function(err, results) {
             if (!err) {
-                var attendanceType = results.length == 0 ? null : results[0];
-                res.render('attendanceChange/attendanceChangeEdit', {attendanceType : attendanceType});
+                var attendanceChange = results.length == 0 ? null : results[0];
+                res.render('attendanceChange/attendanceChangeEdit', {attendanceChange : attendanceChange});
             } else {
                 next();
             }
@@ -52,19 +52,27 @@ module.exports.edit = function (req, res) {
     }
 }
 /**
- * 保存考勤类型
+ * 保存考勤变更
  * @param req
  * @param res
  */
 module.exports.save = function (req, res) {
     var id = req.body.id ? req.body.id : '';
-    var categoryName = req.body.categoryName ? req.body.categoryName : '';
-    var jobTime = req.body.jobTime ? req.body.jobTime : '';
-    var startDate = req.body.startDate ? req.body.startDate : '';
-    var endDate = req.body.endDate ? req.body.endDate : '';
+    var staffId = req.body.staffId ? req.body.staffId : '';//员工id
+    var attendanceType = req.body.attendanceType ? req.body.attendanceType : '';//类型
+    var leaveStartDate = req.body.leaveStartDate ? req.body.leaveStartDate : '';//开始日期
+    var leaveEndDate = req.body.endDate ? req.body.leaveEndDate : '';//截止日期
+    var startDate = req.body.endDate ? req.body.startDate : '';//开始小时
+    var endDate = req.body.endDate ? req.body.endDate : '';//截止小时
+    var leaveReason = req.body.leaveReason ? req.body.leaveReason : '';//原因
+    var attendanceTypeDetailed = req.body.attendanceTypeDetailed ? req.body.attendanceTypeDetailed : '';//加班或请假明细
+
+    if(leaveEndDate == null){
+        leaveEndDate = leaveStartDate;
+    }
 
     if(id!=''){//修改
-        service.updateAttendanceChange(id,categoryName,jobTime,startDate,endDate,function(err, results) {
+        service.updateAttendanceChange(id,staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/attendance_change_list');
             } else {
@@ -73,7 +81,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertAttendanceChange(categoryName,jobTime,startDate,endDate,function(err, results) {
+        service.insertAttendanceChange(staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/attendance_change_list');
             } else {
