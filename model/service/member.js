@@ -149,7 +149,7 @@ module.exports.fetchAllMemberByCard = function(serialNumber,memberName,tel,curre
 
 module.exports.fetchSingleMember =function (id, cb) {
 
-    var sql = 'SELECT * FROM member WHERE id = ?';
+    var sql = 'SELECT a.*,b.`serialNumber` FROM member a LEFT JOIN memberCard b ON b.`memberId`=a.`id`  WHERE a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

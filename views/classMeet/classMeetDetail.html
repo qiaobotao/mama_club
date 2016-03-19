@@ -117,7 +117,7 @@
                 <td class="regTd_r">
                     <select id="courseConfirm" name="courseConfirm">
                         <option value="yes" <%if(classMeet.courseConfirm == 'yes'){%>selected<%}%>>是</option>
-                        <option value="no" <%if(classMeet.courseConfirm == 'no'){%>selected<%}%>>否</option>
+                        <option value="no" <%if(classMeet.courseConfirm != 'yes'){%>selected<%}%>>否</option>
                     </select>
                 </td>
                 <td class="regTd_l">未来原因：</td>

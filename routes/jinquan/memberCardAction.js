@@ -1,6 +1,7 @@
 
 var service = require('../../model/service/membercard');
 var service1 = require('../../model/service/membercardtype');
+var moment = require('moment');
 /**
  * Created by wangjuan on 16/1/13.
  */
@@ -57,6 +58,13 @@ module.exports.list = function (req, res,next) {
             console.log(err.message);
             next();
         } else {
+            for (var i=0;i<results.data.length;i++) {
+                var dateline = results.data[i].createDate;
+                if (dateline != '') {
+                    var temp = moment(dateline).format('YYYY-MM-DD');
+                    results.data[i].createDate = temp;
+                }
+            }
             service1.fetchMembercardtypeByStatus(status, function (err, datas) {
                 if (!err && datas.length != 0) {
                     results.serialNumber = serialNumber;
@@ -109,13 +117,9 @@ module.exports.goAdd = function(req, res,next) {
 module.exports.goEdit = function(req, res,next) {
     var id = req.query.id ? req.query.id : '';
     var type = req.query.type ? req.query.type : '';
-    var status=  req.query.status ? req.query.status : '0';
-
-    service.fetchSingleMembercard(id,type,function(err, results) {
-        if (err) {
-            console.log(err.message);
-            next();
-        } else {
+    var status=  req.query.status ? req.query.status : '1';
+    service.fetchSingleMembercard(id,type, function(err, results) {
+        if (!err) {
             service1.fetchMembercardtypeByStatus(status, function (err, datas) {
                 if (!err && datas.length != 0) {
                     var memberCard = results.length == 0 ? null : results[0];
@@ -125,8 +129,11 @@ module.exports.goEdit = function(req, res,next) {
                     next();
                 }
             });
+        } else {
+            next();
         }
     })
+
 };
 
 /**
@@ -238,3 +245,21 @@ module.exports.show = function(req, res,next) {
         }
     })
 };
+/**
+ * 校验会员卡编码唯一性
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.checkResidue = function (req, res, next) {
+
+    var num = req.body.memberCardNumber ? req.body.memberCardNumber : 0;
+    var type = req.body.type ? req.body.type : 0;
+    service.checkResidue(num,type,function (err, flag) {
+        if (!err) {
+            res.json({flag : flag});
+        } else {
+            next();
+        }
+    });
+}

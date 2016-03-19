@@ -41,6 +41,206 @@
             }
             document.getElementById("myform").submit();
         }
+
+        //选择 活动个的打折、优惠信息
+        var index1 = 0;
+        //table中增加需要添加的行信息
+        function addComplainMXTr(){
+            //获取表格对象
+            var table=document.getElementById('complainMX');
+            //获取当前行数
+            index1 = $('#complainMX tr').length;
+            var row=table.insertRow(index1);
+            var cell1=row.insertCell(0);//优惠力度
+            var cell2=row.insertCell(1);//总数量
+            var cell3=row.insertCell(2);//已使用数量
+            var cell4=row.insertCell(3);//活动mx的Id
+            var cell5=row.insertCell(4);//删除本行
+            cell1.innerHTML = '<input id="activityDynamics'+index1+'"  name="activityDynamics" type="text" class="input5 input_arr"  />';
+            cell2.innerHTML='<input id="totalCount'+index1+'" name="totalCount" type="text" class="input5 input_arr"  />';
+            cell3.innerHTML='<input id="usedCount'+index1+'" name="usedCount" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input id="activityMxId'+index1+'" name="activityMxId" type="hidden" class="input5 input_arr" />';
+            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delComplainMXTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delComplainMXTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#complainMX tr:eq('+deltr.rowIndex+')').remove();
+        }
+        //选择 活动个的打折、优惠信息
+        var iframIndex ;
+        function getWares(index){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/wares_select?index='+index, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+        //商品的选择
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addWaresTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//商品名称
+            var cell2=row.insertCell(1);//商品编号
+            var cell3=row.insertCell(2);//商品单价
+            var cell4=row.insertCell(3);//删除本行
+            var cell5=row.insertCell(4);//商品id
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname"  type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" readonly="true" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="price'+waresIndex+'" name="price" type="text"  readonly="true" class="input5 input_arr" />';
+            cell5.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+            cell4.innerHTML='<a style="cursor: pointer" onclick="javaScript:delWaresTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delWaresTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
+
+
+        var courseIfram ;
+        function getCourseIfram(index){
+            //iframe层
+            courseIfram = parent.layer.open({
+                type: 2,
+                title: '选择课程信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/course_select_activity?index='+index+'&courseType='+3, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //商品的选择
+        //当前商品显示位置
+        var courseIndex = 0;
+        //table中增加需要添加的行信息
+        function addCourseTr(){
+            //获取表格对象
+            var table=document.getElementById("courseTable");
+            //获取当前行数
+            courseIndex = $("#courseTable tr").length;
+            var row=table.insertRow(courseIndex);
+            var cell1=row.insertCell(0);//课程名称
+            var cell2=row.insertCell(1);//课程时间
+            var cell3=row.insertCell(2);//课程老师
+            var cell4=row.insertCell(3);//删除本行
+            var cell5=row.insertCell(4);//商品id
+            cell1.innerHTML = '<input id="courseName'+courseIndex+'"  name="courseName"  type="text" class="input5 input_arr" onfocus="getCourseIfram('+courseIndex+')"/>';
+            cell2.innerHTML='<input id="courseTimeStart'+courseIndex+'" name="courseTimeStart" readonly="true" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="courseTeacher'+courseIndex+'" name="courseTeacher" type="text"  readonly="true" class="input5 input_arr" />';
+            cell5.innerHTML='<input id="courseId'+courseIndex+'" name="courseId" type="hidden" class="input5 input_arr" />';
+            cell4.innerHTML='<a style="cursor: pointer" onclick="javaScript:delCourseTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delCourseTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#courseTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
+        var memberIndex ;
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择会员信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/member_select_activity?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //商品的选择
+        //当前商品显示位置
+        var memberIndex = 0;
+        //table中增加需要添加的行信息
+        function addMemberTr(index){
+            //获取表格对象
+            var table=document.getElementById("memberTable");
+            //获取当前行数
+            memberIndex = $("#memberTable tr").length;
+            var row=table.insertRow(memberIndex);
+            var cell1=row.insertCell(0);//会员名称
+            var cell2=row.insertCell(1);//会员电话
+            var cell3=row.insertCell(2);//删除本行
+            var cell4=row.insertCell(3);//会员id
+            cell1.innerHTML = '<input id="memberName'+memberIndex+'"  name="memberName"  type="text" class="input5 input_arr" onfocus="getmembers('+memberIndex+')"/>';
+            cell2.innerHTML='<input id="memberTel'+memberIndex+'" name="memberTel" readonly="true" type="text" class="input5 input_arr" readonly="true"/>';
+            cell4.innerHTML='<input id="memberId'+memberIndex+'" name="memberId" type="hidden" class="input5 input_arr" />';
+            cell3.innerHTML='<a style="cursor: pointer" onclick="javaScript:delMemberTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delMemberTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#memberTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
+
+        var serviceIndex ;
+        function getservices(index){
+            //iframe层
+            serviceIndex = parent.layer.open({
+                type: 2,
+                title: '选择服务信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/service_select_activity?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //商品的选择
+        //当前商品显示位置
+        var serviceIndex = 0;
+        //table中增加需要添加的行信息
+        function addServiceTr(){
+            //获取表格对象
+            var table=document.getElementById("serviceTable");
+            //获取当前行数
+            serviceIndex = $("#serviceTable tr").length;
+            var row=table.insertRow(serviceIndex);
+            var cell1=row.insertCell(0);//服务名
+            var cell2=row.insertCell(1);//服务编码
+            var cell3=row.insertCell(2);//服务内容
+            var cell4=row.insertCell(3);//删除本行
+            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'"  name="serviceName"  type="text" class="input5 input_arr" onfocus="getservices('+serviceIndex+')"/>';
+            cell2.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" readonly="true" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="serviceContent'+serviceIndex+'" name="serviceContent" readonly="true" type="text" class="input5 input_arr" readonly="true"/>';
+            cell4.innerHTML='<a style="cursor: pointer" onclick="javaScript:delServiceTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delServiceTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#serviceTable tr:eq('+deltr.rowIndex+')').remove();
+        }
     </script>
 </head>
 
@@ -55,11 +255,16 @@
     <form method="post" id="myform" action="/jinquan/activity_manage_doEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <input id="id" type="hidden" name="id" value="<%=activityManage.id%>"/>
+                <input id="id" type="hidden" name="id" value="<%=data.activityManage.id%>"/>
                 <td class="regTd_l">活动名称：</td>
-                <td class="regTd_r"><input id="activityName" name="activityName" type="text" class="input5" value="<%=activityManage.activityName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="activityName" name="activityName" type="text" class="input5" value="<%=data.activityManage.activityName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">活动类型：</td>
-                <td class="regTd_r"><input id="activityType" name="activityType" type="text" class="input5" value="<%=activityManage.activityType%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="activityType" name="activityType"/>
+                    <option value="0" <%if(data.activityManage.activityType == '0'){%>selected<%}%>>打折活动</option>
+                    <option value="1" <%if(data.activityManage.activityType == '1'){%>selected<%}%>>收费减免活动</option>
+                    </select>
+                   </td>
             </tr>
             <tr>
                 <td class="regTd_l">可用卡片类型：</td>
@@ -70,115 +275,136 @@
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">有效时间：</td>
                 <td class="regTd_r">
-                    <input id="effectiveTimeStart" name="effectiveTimeStart" onclick="laydate()" value="<%=activityManage.effectiveTimeStart%>"/>&nbsp;&nbsp;~
-                    <input id="effectiveTimeEnd" name="effectiveTimeEnd" onclick="laydate()" value="<%=activityManage.effectiveTimeEnd%>"/>&nbsp;&nbsp;
+                    <input id="effectiveTimeStart" name="effectiveTimeStart" onclick="laydate()" value="<%=data.activityManage.effectiveTimeStart%>"/>&nbsp;&nbsp;~
+                    <input id="effectiveTimeEnd" name="effectiveTimeEnd" onclick="laydate()" value="<%=data.activityManage.effectiveTimeEnd%>"/>&nbsp;&nbsp;
                     <span style="color:#FF0000;">*</span>
                 </td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>
-                <td class="regTd_r"><input id="describe" name="describe" type="text" class="input5" value="<%=activityManage.describe%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="describe" name="describe" type="text" class="input5" value="<%=data.activityManage.describe%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">状态：</td>
                 <td class="regTd_r">
-                    <select id="status" name="status">
-                        <option value="0">启用</option>
-                        <option value="1">停用</option>
+                    <select id="status" name="status"/>
+                    <option value="0" <%if(data.activityManage.status == '0'){%>selected<%}%>>启用</option>
+                    <option value="1" <%if(data.activityManage.status == '1'){%>selected<%}%>>停用</option>
                     </select> &nbsp;&nbsp;
                     <span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
 
+
         <!--活动类目信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">活动类目</span>
         <br>
-        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="complainMX" width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
-                <td>优惠类型</td>
                 <td>优惠力度</td>
                 <td>总数量</td>
                 <td>已使用数量</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addComplainMXTr()"><h1>+</h1></a></td>
             </tr>
+            <%if(data!=null && data.activityManageMxs!=null){
+            for(var i=0;i<data.activityManageMxs.length;i++) {%>
             <tr>
-                <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td> <input id="activityDynamics<%=i%>"   name="activityDynamics" type="text" class="input5 input_arr"  value="<%=data.activityManageMxs[i].activityDynamics%>"/></td>
+                <td> <input id="totalCount<%=i%>"  name="totalCount" type="text" class="input5 input_arr"  value="<%=data.activityManageMxs[i].totalCount%>"/></td>
+                <td> <input id="usedCount0<%=i%>"  name="usedCount" type="text" class="input5 input_arr" value="<%=data.activityManageMxs[i].usedCount%>"/></td>
+                <td> <input id="activityMxId<%=i%>"  name="activityMxId" type="hidden" class="input5 input_arr" value="<%=data.activityManageMxs[i].id%>"/></td>
             </tr>
+            <%}}%>
         </table>
         <!--活动类目信息 end-->
-
         <!--可用商品信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">可用商品</span>
         <br>
-        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="waresTable" width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>商品名称</td>
                 <td>商品编号</td>
-                <td>单价</td>
+                <td>商品单价</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addWaresTr()"><h1>+</h1></a></td>
             </tr>
+            <%if(data!=null && data.pros!=null){
+            for(var i=0;i<data.pros.length;i++) {%>
             <tr>
-                <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="proname<%=i%>"  name="proname" type="text" class="input5 input_arr" value="<%=data.pros[i].name%>" onfocus="getWares('<%=i%>')"/></td>
+                <td><input id="proNo<%=i%>" name="proNo" type="text" class="input5 input_arr"  value="<%=data.pros[i].serialNumber%>" readonly="true"  /></td>
+                <td><input id="price<%=i%>" name="price" type="text" class="input5 input_arr" value="<%=data.pros[i].price%>" readonly="true" /></td>
+                <td><input id="proId<%=i%>" name="proId" type="hidden" class="input5 input_arr" value="<%=data.pros[i].id%>"/>
+                    <a style="cursor: pointer" onclick="javaScript:delWaresTr(this)"><h1>-</h1></a></td>
+
             </tr>
+            <%}}%>
         </table>
         <!--可用商品信息 end-->
         <!--可用课程信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">可用课程</span>
         <br>
-        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="courseTable"width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>课程名称</td>
                 <td>课程时间</td>
                 <td>讲师</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addCourseTr()"><h1>+</h1></a></td>
             </tr>
+            <%if(data!=null && data.courses!=null){
+            for(var i=0;i<data.courses.length;i++) {%>
             <tr>
-                <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+
+                <td><input id="courseName<%=i%>" name="courseName" type="text" class="input5 input_arr"  value="<%=data.courses[i].name%>" onfocus="getCourseIfram('<%=i%>')"/></td>
+                <td><input id="courseTimeStart<%=i%>" name="courseTimeStart" type="text" class="input5 input_arr"  value="<%=data.courses[i].courseTimeStart +'~'+data.courses[i].courseTimeEnd%>"  readonly="true"  /></td>
+                <td><input id="courseTeacher<%=i%>" name="courseTeacher" type="text" class="input5 input_arr"  value="<%=data.courses[i].teacherName%>" readonly="true" /></td>
+                <td><input id="courseId<%=i%>" name="courseId" type="hidden" class="input5 input_arr"  value="<%=data.courses[i].id%>"/>
+                    <a style="cursor: pointer" onclick="javaScript:delCourseTr(this)"><h1>-</h1></a></td>
             </tr>
+            <%}}%>
         </table>
         <!--可用课程信息 end-->
         <!--可用会员信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">可用会员</span>
         <br>
-        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table width="40%" id="memberTable" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>会员名</td>
                 <td>电话</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addMemberTr()"><h1>+</h1></a></td>
+
             </tr>
+            <%if(data!=null && data.members!=null){
+            for(var i=0;i<data.members.length;i++) {%>
             <tr>
-                <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="memberName<%=i%>" name="memberName" type="text" class="input5 input_arr" value="<%=data.members[i].memberName%>" onfocus="getmembers('<%=i%>')"/></td>
+                <td><input id="memberTel<%=i%>" name="memberTel" type="text" class="input5 input_arr"  value="<%=data.members[i].tel%>" readonly="true"  /></td>
+                <td><input id="memberId<%=i%>" name="memberId" type="hidden" class="input5 input_arr" value="<%=data.members[i].id%>" />
+                    <a style="cursor: pointer" onclick="javaScript:delMemberTr(this)"><h1>-</h1></a></td>
+
             </tr>
+            <%}}%>
         </table>
         <!--可用会员信息 end-->
         <!--可用服务信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">可用服务</span>
         <br>
-        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table width="40%" id="serviceTable" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
+
                 <td>服务名</td>
                 <td>服务编号</td>
                 <td>服务说明</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addServiceTr()"><h1>+</h1></a></td>
             </tr>
+            <%if(data!=null && data.services!=null){
+            for(var i=0;i<data.services.length;i++) {%>
             <tr>
-                <td>-</td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
-                <td><input id="tel" name="tel" type="text" class="input5" /></td>
+                <td><input id="serviceName<%=i%>"  name="serviceName" type="text" value="<%=data.services[i].name%>" class="input5 input_arr" onfocus="getservices('<%=i%>')"/></td>
+                <td><input id="serviceId<%=i%>" name="serviceId" type="text" class="input5 input_arr" value="<%=data.services[i].id%>" readonly="true"  /></td>
+                <td><input id="serviceContent<%=i%>" name="serviceContent" type="text"  readonly="true" value="<%=data.services[i].content%>"class="input5 input_arr" /></td>
+                <td>   <a style="cursor: pointer" onclick="javaScript:delServiceTr(this)"><h1>-</h1></a></td>
+
             </tr>
+            <%}}%>
         </table>
-        <!--可用服务信息 end-->
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>

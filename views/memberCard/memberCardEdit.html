@@ -164,6 +164,7 @@
             if(type ==1)
             {
                 document.getElementById("topTitle").innerText="编辑充值卡信息";
+                document.getElementById("parameter2").value=document.getElementById("actualAmount").value;
             }
             if(type ==2)
             {
@@ -173,6 +174,7 @@
             {
                 document.getElementById("topTitle").innerText="编辑打折卡信息";
             }
+
         }
     </script>
 </head>
@@ -206,7 +208,7 @@
                         <tr>
                             <td class="regTd_l">会员：</td>
                             <td class="regTd_r">
-                                <input id="memberName" name="memberName" onfocus="getWares()"/>
+                                <input id="memberName" name="memberName"  value="<%=memberCard.memberName%>"  onfocus="getWares()"/>
                                 <input id="memberId" name="memberId" type="hidden" />
                             </td>
                         </tr>
@@ -217,9 +219,11 @@
                                         <td class="regTd_l">卡种：</td>
                                         <td class="regTd_r">
                                             <select name="parameter1" id="parameter1" onchange="changCartType(this.options[this.options.selectedIndex].value)">
-                                                <% for (var i=0;i<data.length;i++) {%>
+                                                <%
+                                                if(data!=null && data!=''){
+                                                for (var i=0;i<data.length;i++) {%>
                                                 <option value="<%=data[i].id%>"><%=data[i].memberCardType%></option>
-                                                <%}%>
+                                                <%}}%>
                                             </select>
                                     </tr>
                                     <tr>

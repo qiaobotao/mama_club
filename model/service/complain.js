@@ -86,7 +86,7 @@ module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeSt
 
 module.exports.fetchSingleComplain =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.name,a.* FROM complain a , serviceMeet b where (a.serviceMeetId=b.id) WHERE a.id = ?';
+    var sql = 'SELECT a.*,b.name  FROM complain a , serviceMeet b where (a.serviceMeetId=b.id) WHERE a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

@@ -162,10 +162,10 @@ module.exports.updateMemberCard = function(id,serialNumber ,dateline  ,memberId 
 module.exports.fetchSingleMembercard =function (id ,type, cb) {
 
 
-    var sql = 'SELECT * FROM memberCard  WHERE id = ?';
+    var sql = 'SELECT a.*, c.`memberName` FROM memberCard a left join member c  on a.`memberId`=c.`id` where   a.id = ?';
     if(type=='1')
     {
-        sql='SELECT * FROM memberCard a, memberCardType b WHERE a.id = ? AND a.parameter1=b.id';
+        sql='select * from (SELECT a.*,  b.`memberCardType`, b.`memberCardAmount`,b.`consumerLimit`,b.`zeroDiscounts`,b.`isManyPeopleUsed`,b.`status`  FROM memberCard a, memberCardType b  WHERE  a.id = ? AND a.parameter1=b.id ) as a left join member c on c.id=a.memberId ';
     }
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
@@ -196,3 +196,24 @@ module.exports.setStatus = function (id, status, cb) {
     });
 }
 
+/**
+ * 设置状态
+ * @param id
+ * @param status
+ */
+module.exports.checkResidue = function (num,type, cb) {
+    var sql = 'SELECT * FROM memberCard  WHERE serialNumber = ? and type=?';
+    db.query(sql, [num,type], function(cbData, err, rows, filelds) {
+
+        if (!err) {
+            if (rows.length != 0) {
+                cb(null, rows.length >= 1 ? true : false);
+            } else {
+                cb(null, false);
+            }
+        } else {
+            cb(err);
+        }
+
+    });
+}

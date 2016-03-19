@@ -45,7 +45,7 @@ module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStar
     var sql_count = 'SELECT count(*) as count FROM classMeet';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseTimeStart,d.teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseTimeStart,c.courseTimeEnd,d.teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -98,6 +98,39 @@ module.exports.delClassMeet= function (id, cb) {
     db.query(sql, [id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 根据报名人数看好是否还可以报名
+ * @param storeroomId
+ * @param waresId
+ * @param num
+ * @param cb
+ */
+module.exports.check = function (courseId,cb) {
+    //根据课程id查询已报名人数
+    var sqlCount = 'SELECT COUNT(1) as count FROM  classMeet  a WHERE a.courseId=?';
+    //根据课程id查询所在教室的人数
+    var sqlTotalCount = 'SELECT memberCount FROM  course  a WHERE a.id=?';
+
+    db.query(sqlCount, [courseId], function (cbData, err, rows, fields) {
+
+        if (!err) {
+            if (rows.length != 0) {
+                var count = rows[0].count;
+                db.query(sqlTotalCount, [courseId], function (cbData, err, rowdata, fields) {
+                    var totalCount = rowdata[0].memberCount;
+                    var temp=totalCount-count;
+                    cb(null, temp > 0 ? true : false);
+                })
+
+            } else {
+                cb(null, false);
+            }
         } else {
             cb(err);
         }

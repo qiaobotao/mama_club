@@ -5,6 +5,10 @@
     <title>预约服务</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -54,7 +58,7 @@
                     <td> &nbsp;客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>" /></td>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                         电话：<input id="phone" name="phone" type="text" class="input5" value="<%=data.phone%>" /></td>
-                    <td> &nbsp;预约时间：<input id="meetTime" name="meetTime" type="text" class="input5" value="<%=data.meetTime%>"/></td>
+                    <td> &nbsp;预约时间：<input id="meetTime" name="meetTime" type="text" class="input5" onclick="laydate()" value="<%=data.meetTime%>"/></td>
                     <td> &nbsp;状态： <select id="serviceType" name="serviceType" >
                         <option value="-1" <%if(data.status == '-1'){%>selected<%}%>>全部</option>
                         <option value="0"   <%if(data.status == '0'){%>selected<%}%>>预约失败</option>

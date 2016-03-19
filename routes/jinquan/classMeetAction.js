@@ -45,10 +45,17 @@ module.exports.add = function (req, res) {
     var weatherLeadBaby = req.body.weatherLeadBaby ? req.body.weatherLeadBaby : '';
     var remark = req.body.remark ? req.body.remark : '';
     var isRegisterSuccess = req.body.isRegisterSuccess ? req.body.isRegisterSuccess : '';
-    var isPhoneConfirm = req.body.isPhoneConfirm ? req.body.isPhoneConfirm : '';
-    var isSmConfirm = req.body.isSmConfirm ? req.body.isSmConfirm : '';
-    var courseConfirm = req.body.courseConfirm ? req.body.courseConfirm : '';
-    var ReasonForNotCome = req.body.ReasonForNotCome ? req.body.ReasonForNotCome : '';
+    var isPhoneConfirm = req.body.isPhoneConfirm ? req.body.isPhoneConfirm : '未确认';
+    var isSmConfirm = req.body.isSmConfirm ? req.body.isSmConfirm : '未确认';
+    var courseConfirm = req.body.courseConfirm ? req.body.courseConfirm : 'no';
+    var ReasonForNotCome = req.body.ReasonForNotCome ? req.body.ReasonForNotCome : '0';
+    service.check(courseId ,function(err, results) {
+        if (!err) {
+            isRegisterSuccess = results;
+        }else{
+            isRegisterSuccess = false;
+        }
+    });
 
 
     service.insertClassMeet(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
@@ -75,7 +82,9 @@ module.exports.doEdit = function (req, res, next) {
     var isSmConfirm = req.body.isSmConfirm ? req.body.isSmConfirm : '';
     var courseConfirm = req.body.courseConfirm ? req.body.courseConfirm : '';
     var ReasonForNotCome = req.body.ReasonForNotCome ? req.body.ReasonForNotCome : '';
-
+   service.check(courseId ,function(err, results) {
+        isRegisterSuccess=results[0];
+    });
 
     service.updateClassMeet(id,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
         isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {

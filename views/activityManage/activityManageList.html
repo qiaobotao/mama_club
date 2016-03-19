@@ -61,12 +61,18 @@
                 <tr>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                         活动名称：<input id="activityName" name="activityName" type="text" class="input5"  value="<%=data.activityName%>"/></td>
-                    <td> &nbsp;活动类型：<input id="activityType" name="activityType" type="text" class="input5"  value="<%=data.activityType%>" /></td>
+                    <td> &nbsp;活动类型：
+                        <select id="activityType" name="activityType"/>
+                        <option value="0" <%if(data.activityType == '0'){%>selected<%}%>>打折活动</option>
+                        <option value="1" <%if(data.activityType == '1'){%>selected<%}%>>收费减免活动</option>
+                        </select>
                     <td> &nbsp;有效时间范围：<input id="effectiveTimeStart" name="effectiveTimeStart" value="<%=data.effectiveTimeStart%>"  onclick="laydate()" /> ~ <input id="effectiveTimeEnd" name="effectiveTimeEnd"  value="<%=data.effectiveTimeEnd%>"  onclick="laydate()" /></td>
-                    <td> &nbsp;状态：<select id="status" name="status">
-                        <option value="0">启用</option>
-                        <option value="1">停用</option>
-                    </select> &nbsp;&nbsp;</td>
+                    <td> &nbsp;状态：
+                        <select id="status" name="status"/>
+                        <option value="0" <%if(data.status == '0'){%>selected<%}%>>启用</option>
+                        <option value="1" <%if(data.status == '1'){%>selected<%}%>>停用</option>
+                        </select>
+                         &nbsp;&nbsp;</td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -86,9 +92,32 @@
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].activityName%></td>
-                <td><%=data.data[i].activityType%></td>
+                <td>
+                    <%
+                    var leixing ="";
+                    if( data.data[i].activityType==0){
+                    leixing="打折活动";
+                    }
+                    else if(data.data[i].activityType==1)
+                    {
+                    leixing="减免收费活动";
+                    }
+                    %>
+                    <%=leixing%> </td>
                 <td><%=data.data[i].effectiveTime%></td>
-                <td><%=data.data[i].status%></td>
+                <td>
+                    <%
+                    var zhuangtai ="";
+                    if( data.data[i].status==0){
+                    zhuangtai="启用";
+                    }
+                    else if(data.data[i].status==1)
+                    {
+                    zhuangtai="停用";
+                    }
+                   %>
+                    <%=zhuangtai%>
+                </td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

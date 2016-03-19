@@ -68,16 +68,28 @@
                 <th>电话</th>
                 <th>课程时间</th>
                 <th>技师</th>
-                <th>状态</th>
+                <th>上课状态</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].memberName%></td>
                 <td><%=data.data[i].tel%></td>
-                <td><%=data.data[i].courseTimeStart%></td>
+                <td><%=data.data[i].courseTimeStart+'~'+data.data[i].courseTimeEnd%></td>
                 <td><%=data.data[i].teacherName%></td>
-                <td><%=data.data[i].courseConfirm%></td>
+                <td>
+                    <%
+                    var courseConfirm ="";
+                    if( data.data[i].courseConfirm=='yes'){
+                    courseConfirm="已上课";
+                    }
+                    else if(data.data[i].courseConfirm=='no')
+                    {
+                    courseConfirm="未上课";
+                    }
+                    %>
+                    <%=courseConfirm%>
+                </td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

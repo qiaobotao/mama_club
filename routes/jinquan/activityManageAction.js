@@ -9,8 +9,6 @@
  */
 
 var service = require('../../model/service/activityManage');
-var courseService = require('../../model/service/course');
-
 module.exports.list = function (req, res) {
     var activityName = req.query.activityName ? req.query.activityName : '';
     var activityType = req.query.activityType ? req.query.activityType : '';
@@ -48,12 +46,15 @@ module.exports.add = function (req, res,next) {
     var activityType = req.body.activityType ? req.body.activityType : '';
     var memberCardTypeArray = req.body.memberCardType ? req.body.memberCardType : '';
     var memberCardType = '';
-    if (memberCardTypeArray.length > 0)
-    {
-        for (x in memberCardTypeArray)
+    if (memberCardTypeArray instanceof Array) {
+        for (var i=0;i<memberCardTypeArray.length;i++)
         {
-            memberCardType += x + ',';
+            memberCardType +=memberCardTypeArray[i]+',';
         }
+        memberCardType =memberCardType.substr(0,memberCardType.length-1);
+    }else{
+        memberCardType=  memberCardTypeArray;
+
     }
     var effectiveTimeStart = req.body.effectiveTimeStart ? req.body.effectiveTimeStart : '';
     var effectiveTimeEnd = req.body.effectiveTimeEnd ? req.body.effectiveTimeEnd : '';
@@ -84,42 +85,54 @@ module.exports.add = function (req, res,next) {
     //可选择的产品
     var proIdArray = req.body.proId ? req.body.proId : '';
     var proIds = '';
-    if (proIdArray.length > 0)
-    {
-        for (x in proIdArray)
+    if (proIdArray instanceof Array) {
+        for (var i=0;i<proIdArray.length;i++)
         {
-            proIds += x + ',';
+            proIds +=proIdArray[i]+',';
         }
+        proIds =proIds.substr(0,proIds.length-1);
+    }else{
+        proIds=  proIdArray;
+
     }
     //可选择的课程
     var courseIdArray = req.body.courseId ? req.body.courseId : '';
     var courseIds = '';
-    if (courseIdArray.length > 0)
-    {
-        for (x in courseIdArray)
+    if (courseIdArray instanceof Array) {
+        for (var i=0;i<courseIdArray.length;i++)
         {
-            courseIds += x + ',';
+            courseIds +=courseIdArray[i]+',';
         }
+        courseIds =courseIds.substr(0,courseIds.length-1);
+
+    }else{
+        courseIds=  courseIdArray;
+
     }
     //可参与活动的会员
     var memberIdArray = req.body.memberId ? req.body.memberId : '';
     var memberIds = '';
-    if (memberIdArray.length > 0)
-    {
-        for (x in memberIdArray)
+    if (memberIdArray instanceof Array) {
+        for (var i=0;i<memberIdArray.length;i++)
         {
-            memberIds += x + ',';
+            memberIds +=memberIdArray[i]+',';
         }
+        memberIds =memberIds.substr(0,memberIds.length-1);
+    }else{
+        memberIds=  memberIdArray;
     }
     //可选择的服务
     var serviceIdArray = req.body.serviceId ? req.body.serviceId : '';
     var serviceIds = '';
-    if (serviceIdArray.length > 0)
-    {
-        for (x in serviceIdArray)
+    if (serviceIdArray instanceof Array) {
+        for (var i=0;i<serviceIdArray.length;i++)
         {
-            serviceIds += x + ',';
+            serviceIds +=serviceIdArray[i]+',';
         }
+        serviceIds =serviceIds.substr(0,serviceIds.length-1);
+    }else{
+        serviceIds=  serviceIdArray;
+
     }
     service.insertActivityManage(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, function (err, results) {
             if (!err) {
@@ -145,57 +158,93 @@ module.exports.doEdit = function (req, res,next) {
     var activityType = req.body.activityType ? req.body.activityType : '';
     var memberCardTypeArray = req.body.memberCardType ? req.body.memberCardType : '';
     var memberCardType = '';
-    if (memberCardTypeArray.length > 0)
-    {
-        for (x in memberCardTypeArray)
+    if (memberCardTypeArray instanceof Array) {
+        for (var i=0;i<memberCardTypeArray.length;i++)
         {
-            memberCardType += x + ',';
+            memberCardType +=memberCardTypeArray[i]+',';
         }
+        memberCardType =memberCardType.substr(0,memberCardType.length-1);
+    }else{
+        memberCardType=  memberCardTypeArray;
+
     }
     var effectiveTimeStart = req.body.effectiveTimeStart ? req.body.effectiveTimeStart : '';
     var effectiveTimeEnd = req.body.effectiveTimeEnd ? req.body.effectiveTimeEnd : '';
     var describe = req.body.describe ? req.body.describe : '';
     var status = req.body.status ? req.body.status : '';
     //折扣信息
+    var arr_activityDynamics = req.body.activityDynamics ? req.body.activityDynamics : '';
+    var arr_totalCount = req.body.totalCount ? req.body.totalCount :'';
+    var arr_usedCount = req.body.usedCount ? req.body.usedCount : '';
+
+    var arr = new Array();
+
+    if (arr_activityDynamics instanceof Array) {
+        for (var i=0;i<arr_activityDynamics.length;i++) {
+            var obj = {};
+            obj.activityDynamics = arr_activityDynamics[i];
+            obj.totalCount = arr_totalCount[i];
+            obj.usedCount = arr_usedCount[i];
+            arr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.activityDynamics = arr_activityDynamics ;
+        obj.totalCount = arr_totalCount ;
+        obj.usedCount = arr_usedCount ;
+        arr.push(obj);
+    }
     //可选择的产品
     var proIdArray = req.body.proId ? req.body.proId : '';
     var proIds = '';
-    if (proIdArray.length > 0)
-    {
-        for (x in proIdArray)
+    if (proIdArray instanceof Array) {
+        for (var i=0;i<proIdArray.length;i++)
         {
-            proIds += x + ',';
+            proIds +=proIdArray[i]+',';
         }
+        proIds =proIds.substr(0,proIds.length-1);
+    }else{
+        proIds=  proIdArray;
+
     }
     //可选择的课程
     var courseIdArray = req.body.courseId ? req.body.courseId : '';
     var courseIds = '';
-    if (courseIdArray.length > 0)
-    {
-        for (x in courseIdArray)
+    if (courseIdArray instanceof Array) {
+        for (var i=0;i<courseIdArray.length;i++)
         {
-            courseIds += x + ',';
+            courseIds +=courseIdArray[i]+',';
         }
+        courseIds =courseIds.substr(0,courseIds.length-1);
+
+    }else{
+        courseIds=  courseIdArray;
+
     }
     //可参与活动的会员
     var memberIdArray = req.body.memberId ? req.body.memberId : '';
     var memberIds = '';
-    if (memberIdArray.length > 0)
-    {
-        for (x in memberIdArray)
+    if (memberIdArray instanceof Array) {
+        for (var i=0;i<memberIdArray.length;i++)
         {
-            memberIds += x + ',';
+            memberIds +=memberIdArray[i]+',';
         }
+        memberIds =memberIds.substr(0,memberIds.length-1);
+    }else{
+        memberIds=  memberIdArray;
     }
     //可选择的服务
     var serviceIdArray = req.body.serviceId ? req.body.serviceId : '';
     var serviceIds = '';
-    if (serviceIdArray.length > 0)
-    {
-        for (x in serviceIdArray)
+    if (serviceIdArray instanceof Array) {
+        for (var i=0;i<serviceIdArray.length;i++)
         {
-            serviceIds += x + ',';
+            serviceIds +=serviceIdArray[i]+',';
         }
+        serviceIds =serviceIds.substr(0,serviceIds.length-1);
+    }else{
+        serviceIds=  serviceIdArray;
+
     }
 
     service.updateActivityManage(id,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,proIds,courseIds,memberIds,serviceIds, function (err, results) {
@@ -219,12 +268,8 @@ module.exports.show = function(req, res, next) {
     var id = req.query.id ? req.query.id : '';
     service.fetchSingleActivityManage(id, function(err, results) {
         if (!err) {
-            var activityManage = results.length == 0 ? null : results[0];
-            var proIds =activityManage.proIds;
-            var courseIds =activityManage.courseIds;
-            var memberIds =activityManage.memberIds;
-            var serviceIds =activityManage.serviceIds;
-            res.render('activityManage/activityManageDetail', {activityManage : activityManage});
+            res.render('activityManage/activityManageDetail', {data : results});
+
         } else {
             next();
         }
@@ -233,11 +278,10 @@ module.exports.show = function(req, res, next) {
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
-
     service.fetchSingleActivityManage(id, function(err, results) {
         if (!err) {
-            var activityManage = results.length == 0 ? null : results[0];
-            res.render('activityManage/activityManageEdit', {activityManage : activityManage});
+            res.render('activityManage/activityManageEdit', {data : results});
+
         } else {
             next();
         }
