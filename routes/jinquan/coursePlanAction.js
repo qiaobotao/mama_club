@@ -15,7 +15,7 @@ module.exports.add = function (req, res, next) {
 
 }
 
-module.exports.add = function (req, res, next) {
+module.exports.edit = function (req, res, next) {
 
     res.render('coursePlan/coursePlanEdit');
 
