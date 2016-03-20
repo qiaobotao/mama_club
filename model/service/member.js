@@ -62,10 +62,11 @@ module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage
     if (tel != '')
         parm += " and a.tel like'%" + tel + "%'";
 
-    var sql_count = 'SELECT count(*) as count FROM member';
+    var sql_count ='SELECT  count(1) as count  FROM member a left join  memberCard b'+ parm +' ORDER BY a.dateline DESC ';
+
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join  memberCard b'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join  memberCard b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -149,7 +150,7 @@ module.exports.fetchAllMemberByCard = function(serialNumber,memberName,tel,curre
 
 module.exports.fetchSingleMember =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.`serialNumber` FROM member a LEFT JOIN memberCard b ON b.`memberId`=a.`id`  WHERE a.id = ?';
+    var sql = 'SELECT a.*,b.serialNumber FROM member a LEFT JOIN memberCard b ON b.memberId=a.id  WHERE a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

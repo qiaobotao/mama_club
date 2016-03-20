@@ -14,12 +14,14 @@ module.exports.list = function (req, res) {
     var courseName = req.query.courseName ? req.query.courseName : '';
     var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllClassMeet(memberName,courseName,courseTimeStart,currentPage, function (err, results) {
         if (!err) {
             results.memberName = memberName;
             results.courseName = courseName;
             results.courseTimeStart = courseTimeStart;
+            results.currentPage=currentPage;
             res.render('classMeet/classMeetList', {data : results});
         } else {
             console.log(err.message);
@@ -52,17 +54,17 @@ module.exports.add = function (req, res) {
     service.check(courseId ,function(err, results) {
         if (!err) {
             isRegisterSuccess = results;
-
+            service.insertClassMeet(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
+                isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {
+                    if (!err) {
+                        res.redirect('/jinquan/class_meet_list');
+                    } else {
+                        next();
+                    }
+                });
         }
     });
-    service.insertClassMeet(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
-        isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {
-            if (!err) {
-                res.redirect('/jinquan/class_meet_list');
-            } else {
-                next();
-            }
-        });
+
 
 
 }

@@ -7,12 +7,14 @@ module.exports.list = function (req, res) {
     var returnVisitDate = req.query.returnVisitDate ? req.query.returnVisitDate : '';
     var returnVisitType = req.query.returnVisitType ? req.query.returnVisitType : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,currentPage, function (err, results) {
         if (!err) {
             results.serviceMeetId = serviceMeetId;
             results.returnVisitDate = returnVisitDate;
             results.returnVisitType = returnVisitType;
+            results.currentPage =currentPage ;
             res.render('returnVisit/returnVisitList', {data : results});
         } else {
             console.log(err.message);
@@ -125,11 +127,14 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
+
     serviceMeetService.getByStatuServiceMeet(tel,name,meetTime,3,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
             results.meetTime = meetTime;
+            results.currentPage = currentPage;
             res.render('returnVisit/serviceMeetSelect', {data : results});
         } else {
             console.log(err.message);

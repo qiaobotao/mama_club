@@ -14,12 +14,15 @@ module.exports.list = function (req, res,next) {
     var memberCardAmount = req.query.memberCardAmount ? req.query.memberCardAmount : '';
     var zeroDiscounts = req.query.zeroDiscounts ? req.query.zeroDiscounts : '';
     var currentPage = req.query.page ? req.query.page : '1';
+    currentPage =currentPage<1?1:currentPage;
+
 
     service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,currentPage, function (err, results) {
         if (!err) {
             results.memberCardType = memberCardType;
             results.memberCardAmount = memberCardAmount;
             results.zeroDiscounts = zeroDiscounts;
+            results.currentPage = currentPage;
             res.render('memberCardType/memberCardTypeList', {data : results});
         } else {
             console.log(err.message);

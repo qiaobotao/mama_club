@@ -19,6 +19,7 @@ module.exports.list = function (req, res) {
     var complainTimeEnd = req.query.complainTimeEnd ? req.query.complainTimeEnd : '';
     var dealPrincipal = req.query.dealPrincipal ? req.query.dealPrincipal : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllComplain(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
         if (!err) {
@@ -27,6 +28,7 @@ module.exports.list = function (req, res) {
             results.complainTimeStart = complainTimeStart;
             results.complainTimeEnd = complainTimeEnd;
             results.dealPrincipal = dealPrincipal;
+            results.currentPage = currentPage;
             res.render('complain/complainList', {data : results});
         } else {
             console.log(err.message);
@@ -135,11 +137,14 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
+
     serviceMeetService.getByStatuServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
             results.meetTime = meetTime;
+            results.currentPage = currentPage;
             res.render('complain/serviceMeetSelect', {data : results});
         } else {
             console.log(err.message);

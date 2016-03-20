@@ -8,8 +8,8 @@ var async = require('async');
 module.exports.insertClassMeet = function(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
                                           isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, cb) {
 
-    var sql = 'INSERT INTO classMeet (memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome) '
-        + ' VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO classMeet (dateline,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome) '
+        + ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
     db.query(sql, [memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
         isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome], function(cbData, err, rows, fields) {
         if (!err) {
@@ -38,14 +38,15 @@ module.exports.updateClassMeet = function(id,memberId,courseId,childMonths,exter
 module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStart,currentPage,cb) {
 
     var parm = " on (a.memberId=b.id and a.courseId=c.id and a.courseId=d.courseId)"
-    parm += " and b.memberName like '%" + memberName + "%'";
+    parm += " where  b.memberName like '%" + memberName + "%'";
     parm += " and c.name like '%" + courseName + "%'";
-    parm += " and c.courseTimeStart like '%" + courseTimeStart + "%'";
+    parm += " and c.courseDate like '%" + courseTimeStart + "%'";
 
-    var sql_count = 'SELECT count(*) as count FROM classMeet';
+    var sql_count = 'SELECT count(1) as  count FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' ORDER BY a.dateline DESC ';
+
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseTimeStart,c.courseTimeEnd,d.teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseDate,c.courseTimeStart,c.courseTimeEnd,d.teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -104,13 +105,7 @@ module.exports.delClassMeet= function (id, cb) {
     });
 }
 
-/**
- * ���ݱ������������Ƿ񻹿��Ա���
- * @param storeroomId
- * @param waresId
- * @param num
- * @param cb
- */
+
 module.exports.check = function (courseId,cb) {
 
     var sqlCount = "SELECT COUNT(1) as count FROM  classMeet  a WHERE a.courseId=?";

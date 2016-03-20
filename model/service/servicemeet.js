@@ -63,7 +63,7 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
     var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM serviceMeet '+parm+'   LIMIT ?,?';
+    var sql_data = 'SELECT * FROM serviceMeet '+parm+'  ORDER BY dateline DESC   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -119,7 +119,7 @@ module.exports.getByStatuServiceMeet = function(tel,name,meetTime,status,current
     var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM serviceMeet '+parm+'   LIMIT ?,?';
+    var sql_data = 'SELECT * FROM serviceMeet '+parm+'  ORDER BY  dateline DESC   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

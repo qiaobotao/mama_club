@@ -24,6 +24,8 @@ module.exports.list = function (req, res,next) {
     var type=  req.query.type ? req.query.type : '1';
     var serialNumber=  req.query.serialNumber ? req.query.serialNumber : '';
     var currentPage = req.query.page ? req.query.page : '1';
+    currentPage =currentPage<1?1:currentPage;
+
     if(type=='1')
     {
         //会员卡类型
@@ -78,6 +80,7 @@ module.exports.list = function (req, res,next) {
                     results.parameter7 = parameter7;
                     results.parameter8 = parameter8;
                     results.parameter9 = parameter9;
+                    results.currentPage = currentPage;
                     res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results});
                 }
                 else {

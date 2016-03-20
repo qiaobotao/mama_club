@@ -8,9 +8,9 @@ var async = require('async');
 module.exports.insertReturnVisit = function(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
                                             isReturnVisit,returnVisitReason, cb) {
 
-    var sql = 'INSERT INTO returnVisit (serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
-        + 'isReturnVisit,returnVisitReason) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    var sql = 'INSERT INTO returnVisit (dateline,serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
+        + 'isReturnVisit,returnVisitReason) VALUES (?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [new Date().getTime(),serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -20,12 +20,12 @@ module.exports.insertReturnVisit = function(serviceMeetId,name,tel,returnVisitDa
     });
 };
 
-module.exports.updateReturnVisit = function(id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+module.exports.updateReturnVisit = function(dateline,id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
                                             isReturnVisit,returnVisitReason, cb) {
 
-    var sql = 'UPDATE returnVisit set returnVisitDate=?,returnVisitType=?,returnVisitResult=?,serviceComment=?,advice=?,'
+    var sql = 'UPDATE returnVisit set dateline=?, returnVisitDate=?,returnVisitType=?,returnVisitResult=?,serviceComment=?,advice=?,'
         + 'isReturnVisit=?,returnVisitReason=? where id=?';
-    db.query(sql, [returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    db.query(sql, [dateline,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -45,10 +45,10 @@ module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,retu
     if (returnVisitType != '')
         parm += " and a.returnVisitType like'%" + returnVisitType + "%'";
 
-    var sql_count = 'SELECT count(*) as count FROM returnVisit';
+    var sql_count = 'SELECT count(1) as count FROM returnVisit a , serviceMeet b , nursService c'+ parm +'  ORDER BY a.dateline DESC   ';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.name,b.tel,c.serviceDate,a.returnVisitType,a.returnVisitResult FROM returnVisit a , serviceMeet b , nursService c'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.name,b.tel,c.serviceDate,a.returnVisitType,a.returnVisitResult,a.returnVisitDate FROM returnVisit a , serviceMeet b , nursService c'+ parm +'  ORDER BY a.dateline DESC  LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -86,7 +86,7 @@ module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,retu
 module.exports.fetchSingleReturnVisit =function (id, cb) {
 
     var sql = 'SELECT a.*,'
-    + 'b.tel,b.name,b.address FROM returnVisit a inner join serviceMeet b on(a.serviceMeetId=b.id) WHERE a.id = ?';
+    + 'b.tel,b.name,b.address FROM returnVisit a inner join serviceMeet b on(a.serviceMeetId=b.id) WHERE a.id = ?  ORDER BY a.dateline DESC ';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

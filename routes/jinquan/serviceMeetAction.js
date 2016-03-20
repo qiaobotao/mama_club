@@ -25,6 +25,7 @@ module.exports.list = function (req, res,next) {
         status='';
     }
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllServiceMeet(tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
@@ -32,6 +33,7 @@ module.exports.list = function (req, res,next) {
             results.name = name;
             results.meetTime = meetTime;
             results.status = status;
+            results.currentPage = currentPage;
             res.render('serviceMeet/serviceMeetList', {data : results});
         } else {
             console.log(err.message);
@@ -212,11 +214,14 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
+
     service.fetchAllServiceMeet(tel,name,meetTime,1,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
             results.meetTime = meetTime;
+            results.currentPage = currentPage;
             res.render('serviceMeet/serviceMeetSelect', {data : results});
         } else {
             console.log(err.message);

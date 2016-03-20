@@ -53,7 +53,7 @@
                 <tr>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>&nbsp;客户名称：<input id="memberName" name="memberName" type="text" class="input5" value="<%=data.memberName%>"/></td>
                     <td>&nbsp;课程名称：<input id="courseName" name="courseName" type="text" class="input5" value="<%=data.courseName%>"/></td>
-                    <td> &nbsp;上课时间：<input id="courseTimeStart" name="courseTimeStart" type="text" class="input5" value="<%=data.courseTimeStart%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
+                    <td> &nbsp;上课时间：<input id="courseTimeStart" name="courseTimeStart" type="text" class="input5" value="<%=data.courseTimeStart%>" onclick="laydate()"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -75,7 +75,7 @@
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].memberName%></td>
                 <td><%=data.data[i].tel%></td>
-                <td><%=data.data[i].courseTimeStart+'~'+data.data[i].courseTimeEnd%></td>
+                <td><%=data.data[i].courseDate%></td>
                 <td><%=data.data[i].teacherName%></td>
                 <td>
                     <%
@@ -102,7 +102,7 @@
             </tr>
             <%}%>
         </table>
-
+        <%- include ../pagination.html -%>
     </div>
 </div>
 

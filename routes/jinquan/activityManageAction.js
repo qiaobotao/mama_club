@@ -16,6 +16,7 @@ module.exports.list = function (req, res) {
     var effectiveTimeEnd = req.query.effectiveTimeEnd ? req.query.effectiveTimeEnd : '';
     var status = req.query.status ? req.query.status : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllActivityManage(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage, function (err, results) {
         if (!err) {
@@ -24,6 +25,7 @@ module.exports.list = function (req, res) {
             results.effectiveTimeStart = effectiveTimeStart;
             results.effectiveTimeEnd = effectiveTimeEnd;
             results.status = status;
+            results.currentPage = currentPage;
             res.render('activityManage/activityManageList', {data : results});
         } else {
             console.log(err.message);

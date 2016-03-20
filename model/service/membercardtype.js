@@ -21,8 +21,8 @@ var async = require('async');
  */
 module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
 
-    var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status) VALUES (?,?,?,?,?,?)';
-    db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status,dateline) VALUES (?,?,?,?,?,?,?)';
+    db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -48,7 +48,7 @@ module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmoun
     var sql_count = 'SELECT count(*) as count FROM memberCardType '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM memberCardType '+parm+'   LIMIT ?,?';
+    var sql_data = 'SELECT * FROM memberCardType '+parm+' ORDER BY  dateline DESC   LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -109,7 +109,7 @@ module.exports.fetchMembercardtype = function(pages, count, cb) {
 
     var start = pages * count;
     var end = start + count;
-    var sql = 'SELECT * FROM memberCardType ORDER BY id DESC LIMIT ?, ?';
+    var sql = 'SELECT * FROM memberCardType ORDER BY  dateline DESC    LIMIT ?, ?';
     db.query(sql, [start, end], function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);

@@ -26,6 +26,7 @@ module.exports.list = function (req, res,next) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
             results.tel = tel;
+            results.currentPage = currentPage;
             res.render('member/memberList', {data : results});
         } else {
             console.log(err.message);
@@ -182,6 +183,7 @@ module.exports.select = function (req, res, next) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
             results.tel = tel;
+            results.currentPage = currentPage;
             res.render('member/memberSelect', {data : results});
         } else {
             next();
@@ -195,12 +197,14 @@ module.exports.selectAll = function (req, res, next) {
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
             results.tel = tel;
+            results.currentPage = currentPage;
             res.render('member/memberSelect', {data : results});
         } else {
             console.log(err.message);

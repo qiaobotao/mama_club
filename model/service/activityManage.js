@@ -12,8 +12,8 @@ var async = require('async');
 
 module.exports.insertActivityManage = function(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, cb) {
 
-    var sql = 'INSERT INTO activityManage(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,`describe`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO activityManage(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,`describe`,`status`,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -69,10 +69,11 @@ module.exports.fetchAllActivityManage = function(activityName,activityType,effec
     if (status != ''&& status != '-1')
         parm += " and status = '" + status + "'";
 
-    var sql_count = 'SELECT count(*) as count FROM activityManage';
+    var sql_count ="SELECT  count(1) as count  FROM activityManage "+ parm +' ORDER BY dateline DESC ';
+
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = "SELECT id,activityName,activityType,memberCardType,CONCAT(effectiveTimeStart,'~',effectiveTimeEnd) AS effectiveTime,`describe`,`status` FROM activityManage "+ parm +' LIMIT ?,?';
+    var sql_data = "SELECT id,activityName,activityType,memberCardType,CONCAT(effectiveTimeStart,'~',effectiveTimeEnd) AS effectiveTime,`describe`,`status` FROM activityManage "+ parm +' ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

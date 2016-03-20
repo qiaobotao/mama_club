@@ -17,12 +17,14 @@ module.exports.list = function (req, res) {
     var principal = req.query.principal ? req.query.principal : '';
     var serviceDate = req.query.serviceDate ? req.query.serviceDate : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
 
     service.fetchAllNursService(name,principal,serviceDate,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
             results.principal = principal;
             results.serviceDate = serviceDate;
+            results.currentPage = currentPage;
             res.render('nursService/nursServiceList', {data : results});
         } else {
             console.log(err.message);

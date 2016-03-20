@@ -73,10 +73,10 @@ module.exports.fetchAllNursService = function(name,principal,serviceDate,current
     if (serviceDate != '')
         parm += " and a.serviceDate like'%" + serviceDate + "%'";
 
-    var sql_count = 'SELECT count(*) as count FROM nursService';
+    var sql_count = 'SELECT  count(1) as count FROM nursService a ,serviceMeet b'+ parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,b.status FROM nursService a ,serviceMeet b'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,b.status FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

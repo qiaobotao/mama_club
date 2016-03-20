@@ -81,22 +81,22 @@
                 <td class="regTd_l">服务单号：</td>
                 <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=complain.serviceMeetId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">会员姓名：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=complain.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name"  readonly="true" name="name" type="text" class="input5" value="<%=complain.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">会员电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=complain.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" readonly="true" type="text" class="input5" value="<%=complain.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">投诉技师：</td>
-                <td class="regTd_r"><input id="complainPrincipal" name="complainPrincipal" type="text" class="input5" value="<%=complain.complainPrincipal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="complainPrincipal" readonly="true" name="complainPrincipal" type="text" class="input5" value="<%=complain.complainPrincipal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">投诉类型：</td>
                 <td class="regTd_r">
                     <select id="complainType" name="complainType">
-                        <option value="0">请选择</option>
-                        <option value="1">发牢骚</option>
-                        <option value="2">退钱</option>
-                        <option value="3">换技师</option>
+                        <option <%if(complain.complainType == '0'){%>selected<%}%> value="0">请选择</option>
+                        <option <%if(complain.complainType == '1'){%>selected<%}%> value="1">发牢骚</option>
+                        <option <%if(complain.complainType == '2'){%>selected<%}%> value="2">退钱</option>
+                        <option <%if(complain.complainType == '3'){%>selected<%}%> value="3">换技师</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">解决技师：</td>

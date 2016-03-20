@@ -56,11 +56,11 @@ module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 
     var end = currentPage * 10;
     if (type=='1')
     {
-        sql_count='SELECT count(*) as count FROM memberCard a   LEFT JOIN memberCardType b  ON a.parameter1= b.id '+parm;
+        sql_count= 'SELECT  count(1) as count  FROM memberCard a  LEFT JOIN memberCardType b ON a.parameter1= b.id '+parm
         sql_data= 'SELECT a.*,b.memberCardType,b.memberCardAmount,b.consumerLimit ,b.zeroDiscounts,b.isManyPeopleUsed FROM memberCard a  LEFT JOIN memberCardType b ON a.parameter1= b.id '+parm;
 
     }
-    sql_data+= '  LIMIT ?,?';
+    sql_data+= '  ORDER BY  a.dateline DESC   LIMIT ?,?';
 
 
     async.series({
@@ -141,7 +141,7 @@ module.exports.fetchMembercard = function(pages, count, cb) {
  */
 module.exports.updateMemberCard = function(id,serialNumber ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,cb) {
 
-    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,memberId  = ?,   dateline  = ?,    type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?;';
+    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,memberId  = ?,   dateline  = ?,    type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?';
     var par = [serialNumber  ,memberId  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
