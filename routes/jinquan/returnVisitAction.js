@@ -125,7 +125,7 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
-    serviceMeetService.fetchAllServiceMeet(tel,name,meetTime,3,currentPage, function (err, results) {
+    serviceMeetService.getByStatuServiceMeet(tel,name,meetTime,3,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;

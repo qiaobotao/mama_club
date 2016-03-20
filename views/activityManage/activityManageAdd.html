@@ -241,6 +241,22 @@
             var deltr = delObj.parentNode.parentNode;
             $('#serviceTable tr:eq('+deltr.rowIndex+')').remove();
         }
+        function changType(type)
+        {
+
+            var table=document.getElementById("complainMX");
+
+                if(type==0)
+                {
+                    $("#complainMX tr")[0].cells[0].innerHTML="打折力度";
+                }
+                else
+                {
+                    $("#complainMX tr")[0].cells[0].innerHTML="优惠力度";
+                }
+
+
+        }
     </script>
 </head>
 
@@ -258,9 +274,9 @@
                 <td class="regTd_l">活动名称：</td>
                 <td class="regTd_r"><input id="activityName" name="activityName" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">活动类型：</td>
-                <td class="regTd_r"><select id="activityType" name="activityType">
+                <td class="regTd_r"><select id="activityType" name="activityType" onchange="changType(this.options[this.options.selectedIndex].value)">
                     <option value="0">打折</option>
-                    <option value="1">收费</option>
+                    <option value="1">收费减免活动</option>
                 </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
@@ -295,7 +311,7 @@
         <br>
         <table id="complainMX" width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>优惠力度</td>
+                <td>打折力度</td>
                 <td>总数量</td>
                 <td>已使用数量</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addComplainMXTr()"><h1>+</h1></a></td>

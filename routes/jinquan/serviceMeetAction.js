@@ -62,7 +62,8 @@ module.exports.add = function (req, res) {
     var address = req.body.address ? req.body.address : '';
     var price = req.body.price ? req.body.price : '';
     var serviceId = req.body.serviceId ? req.body.serviceId : '';
-    service.insertServiceMeet(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
+    var staffId = req.body.staffId ? req.body.staffId : '';
+    service.insertServiceMeet(staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list');
         } else {
@@ -86,8 +87,8 @@ module.exports.doEdit = function (req, res,next) {
     var memberId = req.body.memberId ? req.body.memberId : '';
     var serviceId = req.body.serviceId ? req.body.serviceId : '';
 
-
-    service.updateServiceMeet(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
+    var staffId = req.body.staffId ? req.body.staffId : '';
+    service.updateServiceMeet(staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list');
         } else {

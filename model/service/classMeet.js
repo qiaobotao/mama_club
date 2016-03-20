@@ -105,25 +105,25 @@ module.exports.delClassMeet= function (id, cb) {
 }
 
 /**
- * 根据报名人数看好是否还可以报名
+ * 锟斤拷锟捷憋拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟角否还匡拷锟皆憋拷锟斤拷
  * @param storeroomId
  * @param waresId
  * @param num
  * @param cb
  */
 module.exports.check = function (courseId,cb) {
-    //根据课程id查询已报名人数
-    var sqlCount = 'SELECT COUNT(1) as count FROM  classMeet  a WHERE a.courseId=?';
-    //根据课程id查询所在教室的人数
-    var sqlTotalCount = 'SELECT memberCount FROM  course  a WHERE a.id=?';
 
-    db.query(sqlCount, [courseId], function (cbData, err, rows, fields) {
+    var sqlCount = "SELECT COUNT(1) as count FROM  classMeet  a WHERE a.courseId=?";
+
+    var sqlTotalCount = "SELECT memberCount FROM  course  a WHERE a.id=?";
+
+    db.query(sqlCount, [courseId],  function(cbData, err, rows, fields) {
 
         if (!err) {
             if (rows.length != 0) {
                 var count = rows[0].count;
-                db.query(sqlTotalCount, [courseId], function (cbData, err, rowdata, fields) {
-                    var totalCount = rowdata[0].memberCount;
+                db.query(sqlTotalCount, [courseId], function (cbData, err, rows, fields) {
+                    var totalCount = rows[0].memberCount;
                     var temp=totalCount-count;
                     cb(null, temp > 0 ? true : false);
                 })

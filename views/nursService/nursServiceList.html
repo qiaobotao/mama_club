@@ -53,7 +53,7 @@
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                         客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>  </td>
                     <td> &nbsp;技师名称：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" /> </td>
-                    <td> &nbsp;服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate()" /></td>
+                    <td> &nbsp;护理服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate()" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -110,7 +110,7 @@
                         <tr>
                             <td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
                             <td><div align="center">[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</div></td>
-                            <td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                            <!--<td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->
                         </tr>
                     </table>
                 </td>

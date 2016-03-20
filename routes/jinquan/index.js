@@ -82,6 +82,8 @@ router.all('/staff_preEdit',staffAction.preEdit);
 router.all('/staff_save',staffAction.save);
 router.all('/staff_del',staffAction.del);
 router.all('/staff_select_train',staffAction.selectForTrain);
+router.all('/staff_select_servicemeet',staffAction.selectForServiceMeet);
+
 // 员工培训
 router.all('/staff_train_list',staffTrainAction.list);
 router.all('/staff_train_edit',staffTrainAction.edit);

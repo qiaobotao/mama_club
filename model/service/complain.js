@@ -5,13 +5,13 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertComplain = function(serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
+module.exports.insertComplain = function(staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
 
     var complainTime = new Date();
     complainTime = complainTime.toLocaleDateString();
-    var sql = 'INSERT INTO complain (serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail, complainTime,dateLine) '
-        + ' VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail,complainTime,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO complain (staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail, complainTime,dateLine) '
+        + ' VALUES (?,?,?,?,?,?,?,?)';
+    db.query(sql, [staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail,complainTime,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -20,10 +20,10 @@ module.exports.insertComplain = function(serviceMeetId,name,tel,complainPrincipa
     });
 };
 
-module.exports.updateComplain = function(id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
+module.exports.updateComplain = function(staffId,id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
 
-    var sql = 'UPDATE complain set complainPrincipal=?,complainType=?,dealPrincipal=?,complainDetail=?,dateLine=? where id=?';
-    db.query(sql, [complainPrincipal,complainType,dealPrincipal,complainDetail,new Date().getTime(), id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE complain set staffId=?,complainPrincipal=?,complainType=?,dealPrincipal=?,complainDetail=?,dateLine=? where id=?';
+    db.query(sql, [staffId,complainPrincipal,complainType,dealPrincipal,complainDetail,new Date().getTime(), id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -86,7 +86,7 @@ module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeSt
 
 module.exports.fetchSingleComplain =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.name  FROM complain a , serviceMeet b where (a.serviceMeetId=b.id) WHERE a.id = ?';
+    var sql = 'SELECT a.*,b.name,b.tel  FROM complain a , serviceMeet b where (a.serviceMeetId=b.id)  and a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -108,7 +108,7 @@ module.exports.delComplaint= function (id, cb) {
     });
 }
 /**
- * »ñÈ¡»áºóÈýÌõÔ¤Ô¼·þÎñµ¥Ïà¹ØµÄÍ¶ËßÇé¿ö
+ * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Í¶ï¿½ï¿½ï¿½ï¿½ï¿½
  * @param id
  * @param cb
  */

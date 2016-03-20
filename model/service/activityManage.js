@@ -60,13 +60,13 @@ module.exports.fetchAllActivityManage = function(activityName,activityType,effec
     if (activityName != '')
         parm += " and" +
             " activityName like '%" + activityName + "%'";
-    if (activityType != '')
+    if (activityType != '' && activityType != '-1')
         parm += " and activityType = '" + activityType + "'";
     if (effectiveTimeStart != '')
         parm += " and effectiveTimeStart >= '" + effectiveTimeStart + "'";
     if (effectiveTimeEnd != '')
         parm += " and effectiveTimeEnd <= '" + effectiveTimeEnd + "'";
-    if (status != '')
+    if (status != ''&& status != '-1')
         parm += " and status = '" + status + "'";
 
     var sql_count = 'SELECT count(*) as count FROM activityManage';
@@ -132,36 +132,44 @@ module.exports.fetchSingleActivityManage =function (id, cb) {
                         var courseIds =activityManage.courseIds;
                         var memberIds =activityManage.memberIds;
                         var serviceIds =activityManage.serviceIds;
-                        if(proIds!='')
-                        {
-                            proIds_sql+=" and id in("+proIds+")";
+                        if(proIds!='') {
+                            proIds_sql += " and id in(" + proIds + ")";
+                        }
+                        else{
+                            proIds_sql +=  " and 1!=1"
+                        }
                             db.query(proIds_sql, [], function (cbData, err, rows, fields) {
                                 obj.pros=rows;
-                                if(courseIds!='')
-                                {
-                                    courseIds_sql+=" and a.id in("+courseIds+")";
+                                if(courseIds!='') {
+                                    courseIds_sql += " and a.id in(" + courseIds + ")";
+                                }
+                                else{
+                                    courseIds_sql +=  " and 1!=1"
+                                }
                                     db.query(courseIds_sql, [], function (cbData, err, rows, fields) {
                                         obj.courses = rows;
-                                        if(memberIds!='')
-                                        {
-                                            memberIds_sql+=" and id in("+memberIds+")";
+                                        if(memberIds!="") {
+                                            memberIds_sql += " and id in(" + memberIds + ")";
+                                        }
+                                        else{
+                                            memberIds_sql +=  " and 1!=1"
+                                        }
                                             db.query(memberIds_sql, [], function (cbData, err, rows, fields) {
                                                 obj.members = rows;
-                                                if(serviceIds!='')
-                                                {
-                                                    serviceIds_sql+=" and id in("+serviceIds+")";
+                                                if(serviceIds!='') {
+                                                    serviceIds_sql += " and id in(" + serviceIds + ")";
+                                                }
+                                                else{
+                                                    serviceIds_sql +=  "1!=1"
+                                                }
                                                     db.query(serviceIds_sql, [], function (cbData, err, rows, fields) {
                                                         obj.services = rows;
                                                         cb(null, obj);
                                                     });
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            });
-                        }
 
+                                            });
+                                    });
+                            });
                     } else {
                         cb(err);
                     }
