@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>打卡记录</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+</head>
+<script type="text/javascript">
+
+    function uploadFile () {
+
+        var file = document.getElementById('recordfile').value;
+        if (!file || file.length == 0) {
+            parent.layer.alert('请选择文件',{icon: 2});
+            return;
+        }
+
+        document.getElementById("myform").submit();
+
+    }
+
+</script>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：打卡记录
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <form id="myform" name="myform" method='post' action='/jinquan/punch_import' enctype='multipart/form-data'>
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>文件路径：<input id="recordfile" name="recordfile" type="file" multiple='mutiple' class="input5"/></td>
+                    <td><a href="javascript:uploadFile()" class="bsty0"></a></td>
+                </tr>
+            </table>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
