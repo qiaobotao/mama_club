@@ -3,6 +3,7 @@
  */
 var service = require('../../model/service/sysUser');
 var roleService = require('../../model/service/sysRole');
+var shopService = require('../../model/service/shop');
 
 /**
  * 获取系统用户列表
@@ -36,47 +37,57 @@ module.exports.list = function (req, res) {
  * @param res
  */
 module.exports.edit = function (req, res) {
-    var id = req.query.id ? req.query.id : '';
+    var id = req.query.id ? req.query.id : '';//用户id
     var show = req.query.show ? req.query.show : '';
     var currentPage = req.query.page ? req.query.page : '1';
-    if(id == ''){
-        var sysUser = [];//系统用户
-        roleService.fetchAllSysRole("",currentPage, function (err, results) {
-            if (!err) {
-                results.currentPage = currentPage;
-                results.roleResults = [];
-                res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
-            } else {
-                next();
+    service.fetchSingleSysUser(id, function(err, results) {
+        if (!err) {
+            var sysUser = results.length == 0 ? null : results[0];
+            if(sysUser == null){
+                sysUser = {};
             }
-        });
-    }else{
-        service.fetchSingleSysUser(id, function(err, results) {
-            if (!err) {
-                var sysUser = results.length == 0 ? null : results[0];
-                roleService.fetchAllSysRole("",currentPage, function (err, results) {
-                    if (!err) {
-                        results.currentPage = currentPage;
+            //根据用户id获取
+            roleService.fetchAllRoleByClassroomId("", function (err, results) {
+                if (!err) {
+                    //results.currentPage = currentPage;
+                    var roleData = {};
+                    roleData.data = results;
+                    //获取该用户已绑定的角色
+                    service.getRoleByUserId(id, function (err, roleResults) {
+                        if (!err) {
+                            roleData.roleResults = roleResults;
+                            //获取所有门店
+                            shopService.fetchShops(0,100,function (err, shopResults) {
+                                if (!err) {
+                                    var shopData = {};
+                                    shopData.shopResults = shopResults
+                                    //根据用户id获取所有已关联的门店
+                                    service.getShopByUserId(id,function (err, selectShopResults) {
+                                        if (!err) {
+                                            shopData.selectShopResults = selectShopResults;
+                                            res.render('sysUser/sysUserAdd', {data : roleData,shopData:shopData, sysUser : sysUser,show:show});
+                                        } else {
+                                            next();
+                                        }
+                                    });
+                                } else {
+                                    next();
+                                }
+                            });
 
-                        service.getRoleByUserId(id, function (err, roleResults) {
-                            if (!err) {
-                                results.currentPage = currentPage;
-                                results.roleResults = roleResults;
-                                res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
-                            } else {
-                                next();
-                            }
-                        });
-                    } else {
-                        next();
-                    }
-                });
+                        } else {
+                            next();
+                        }
+                    });
+                } else {
+                    next();
+                }
+            });
 
-            } else {
-                next();
-            }
-        })
-    }
+        } else {
+            next();
+        }
+    })
 }
 /**
  * 保存系统用户
@@ -87,19 +98,39 @@ module.exports.save = function (req, res) {
     var id = req.body.id ? req.body.id : '';
     var userName = req.body.userName ? req.body.userName : '';
     var password = req.body.password ? req.body.password : '';
-    var shopId = req.body.shopId ? req.body.shopId : '';
+    var shopIds = req.body.shopIds ? req.body.shopIds : '';
     var staffId = req.body.staffId ? req.body.staffId : '';
     var roleId = req.body.roleId ? req.body.roleId : '';
 
+    var shopIdsArr = new Array();
+    if (shopIds instanceof Array) {
+        for (var i=0;i<shopIds.length;i++) {
+            var obj = {};
+            obj.shopIds = shopIds[i];
+            shopIdsArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.shopIds = shopIds;
+        shopIdsArr.push(obj);
+    }
+
 
     if(id!=''){//修改
-        service.updateSysUser(id,userName,password,shopId,staffId,function(err, results) {
+        service.updateSysUser(id,userName,password,staffId,function(err, results) {
             if(!err) {
                 service.deleteRoleByUserId(id,function(err, results) {
                     if(!err) {//删除用户——角色关联表成功
                         service.insertSysUserRole(id,roleId,function(err, results) {
                             if(!err) {//添加用户——角色关联表成功
-                                res.redirect('/jinquan/sys_user_list?replytype=update');
+                                service.insertSysUserShop(id,shopIdsArr,function(err, results) {
+                                    if(!err) {//添加用户——角色关联表成功
+                                        res.redirect('/jinquan/sys_user_list?replytype=update');
+                                    } else {
+                                        console.log(err.message);
+                                        res.render('error');
+                                    }
+                                })
                             } else {
                                 console.log(err.message);
                                 res.render('error');

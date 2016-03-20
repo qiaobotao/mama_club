@@ -97,9 +97,9 @@ module.exports.fetchAllSysUser = function(userName,currentPage,cb) {
  * @param name
  * @param cb
  */
-module.exports.updateSysUser = function(id, userName,password,shopId,staffId, cb) {
-    var sql = 'UPDATE sysUser SET userName = ?,password=?,shopId=?,staffId=? WHERE id = ?';
-    var par = [userName,password,shopId,staffId, id];
+module.exports.updateSysUser = function(id, userName,password,staffId, cb) {
+    var sql = 'UPDATE sysUser SET userName = ?,password=?,staffId=? WHERE id = ?';
+    var par = [userName,password,staffId, id];
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -151,6 +151,47 @@ module.exports.insertSysUserRole = function(userId,roleIds, cb) {
 
 
 /**
+ * 增加系统用户与门店关系表
+ * @param userId
+ * @param roleId
+ * @param cb
+ */
+module.exports.insertSysUserShop = function(userId,shopIds, cb) {
+
+    var sql = 'INSERT INTO sysUserShop (userId,shopId,dateline) VALUES (?,?,?)';
+    async.map(shopIds, function(item, callback) {
+        db.query(sql, [userId,item.shopIds,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+};
+
+
+/**
+ * 不分页根据用户id显示获取所有门店
+ * @param userId 用户id
+ * @param cb
+ */
+module.exports.getShopByUserId = function (userId,cb) {
+
+    var sql = 'SELECT * FROM sysUserShop where userId = ?';
+    db.query(sql, [userId],function (cbData, err, rows, fields) {
+        if (!err) {
+            cb (null, rows);
+        } else {
+            cb(err);
+        }
+    });
+
+}
+
+/**
  * 查询用户所有角色
  * @param userId
  * @param cb
@@ -167,15 +208,37 @@ module.exports.getRoleByUserId =function (userId, cb) {
 }
 
 /**
- * 删除用户所有角色
+ * 删除用户所有角色、所关联门店
  * @param id
  * @param cb
  */
 module.exports.deleteRoleByUserId =function (userId, cb) {
-    var sql = 'DELETE from sysUserRole WHERE userId = ?';
-    db.query(sql, [userId],  function(cbData, err, rows, fields) {
+    var delRolesql = 'DELETE from sysUserRole WHERE userId = ?';
+    var delShopsql = 'DELETE from sysUserShop WHERE userId = ?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(delRolesql, [userId], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(delShopsql, [userId], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }

@@ -15,11 +15,11 @@ var async = require('async');
  * @param remark
  * @param cb
  */
-module.exports.insertStaff = function(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, cb) {
+module.exports.insertStaff = function(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks, cb) {
 
-    var sql = 'INSERT INTO staff (serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,dateline,status)' +
+    var sql = 'INSERT INTO staff (serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks,dateline,status)' +
         ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    db.query(sql, [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -119,12 +119,12 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, cb) {
+module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks, cb) {
 
     var sql = 'UPDATE staff SET serialNumber = ?, name = ?, tel = ?, idCard = ?, birthDate = ?, highestEducation = ? , graduationSchool = ? , spouseName = ? ' +
-        ', spouseTel = ? , email = ? , startJobTime = ? , endJobTime = ? , isJob = ? , belongShop = ? , clockCode = ?, remarks = ? WHERE id = ?';
+        ', spouseTel = ? , email = ? , startJobTime = ? , endJobTime = ? , isJob = ? , classroomId = ? , clockCode = ?, remarks = ? WHERE id = ?';
 
-    var par = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks, id];
+    var par = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

@@ -96,7 +96,17 @@
                 <td class="regTd_l">离职时间：</td>
                 <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" value="<%=staff.endJobTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">所属门店：</td>
-                <td class="regTd_r"><input id="belongShop" name="belongShop" type="text" class="input5" value="<%=staff.belongShop%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="classroomId" name="classroomId">
+                        <option value="">请选择</option>
+                        <%
+                            for(var i = 0 ; i< classroomList.length ; i ++){
+                                %><option value="<%=classroomList[i].id%>" <%if(staff.classroomId == classroomList[i].id){%>selected<%}%>><%=classroomList[i].name%></option><%
+                            }
+                        %>
+                    </select>
+                    <span style="color:#FF0000;">*</span>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">打卡机编号：</td>

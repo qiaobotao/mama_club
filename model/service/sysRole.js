@@ -238,3 +238,18 @@ module.exports.fetchSingleSysRole =function (id, cb) {
         }
     });
 }
+/**
+ * 获取根据门店id获取所有角色信息
+ * @param id
+ * @param cb
+ */
+module.exports.fetchAllRoleByClassroomId =function (classroomId, cb) {
+    var sql = 'SELECT * FROM sysRole';
+    db.query(sql, [],  function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}

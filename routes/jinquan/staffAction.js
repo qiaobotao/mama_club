@@ -3,6 +3,7 @@
  */
 
 var service = require('../../model/service/staff');
+var classroomService = require('../../model/service/classroom');
 /**
  * 获取员工列表
  * @param req
@@ -56,12 +57,12 @@ module.exports.save = function (req, res) {
     var startJobTime = req.body.startJobTime ? req.body.startJobTime : '';
     var endJobTime = req.body.endJobTime ? req.body.endJobTime : '';
     var isJob = req.body.isJob ? req.body.isJob : '';
-    var belongShop = req.body.belongShop ? req.body.belongShop : '';
+    var classroomId = req.body.classroomId ? req.body.classroomId : '';
     var clockCode = req.body.clockCode ? req.body.clockCode : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
 
     if(id!=''){//修改
-        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,function(err, results) {
+        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/staff_list');
             } else {
@@ -70,7 +71,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,belongShop,clockCode,remarks,function(err, results) {
+        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/staff_list');
             } else {
@@ -93,7 +94,17 @@ module.exports.preEdit = function(req, res, next) {
     service.fetchSingleStaff(id, function(err, results) {
         if (!err) {
             var staff = results.length == 0 ? null : results[0];
-            res.render('staff/staffAdd', {staff : staff});
+            if(staff == null){
+                staff = {};
+            }
+            classroomService.getAllClassroom(function(err, results) {
+                if (!err) {
+                    var classroomList = results;
+                    res.render('staff/staffAdd', {staff : staff,classroomList:classroomList});
+                } else {
+                    next();
+                }
+            })
         } else {
             next();
         }
