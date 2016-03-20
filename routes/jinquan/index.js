@@ -37,6 +37,7 @@ var sysResourcesAction = require('./sysResourcesAction');//资源管理
 var sysMenuAction = require('./sysMenuAction');//菜单管理
 var sysRoleAction = require('./sysRoleAction');//角色管理
 var sysUserAction = require('./sysUserAction');//系统用户管理
+var punchCardAction = require('./punchCardAction');
 
 var memberCardAction = require('./memberCardAction');//会员卡管理
 //demo演示
@@ -89,6 +90,9 @@ router.all('/staff_train_edit',staffTrainAction.edit);
 router.all('/staff_train_save',staffTrainAction.save);
 
 // 打卡记录
+router.all('/punch_card_list',punchCardAction.list);
+router.all('/punch_pre_import',punchCardAction.preimport);
+router.all('/punch_import',punchCardAction.import);
 // 考勤类别
 router.all('/attendance_type_list',attendanceTypeAction.list);
 router.all('/attendance_type_edit',attendanceTypeAction.edit);
