@@ -2,28 +2,71 @@
  * Created by qiaojoe on 16-3-13.
  */
 
-var service_classroom = require('../../model/service/classroom');
 var service = require('../../model/service/course');
 
 module.exports.list = function (req, res, next) {
+    service.getCoursePlanList(function (err, results) {
+        if (!err) {
+            Date.prototype.pattern=function(fmt) {
+                var o = {
+                    "M+" : this.getMonth()+1, //月份
+                    "d+" : this.getDate(), //日
+                    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+                    "H+" : this.getHours(), //小时
+                    "m+" : this.getMinutes(), //分
+                    "s+" : this.getSeconds(), //秒
+                    "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                    "S" : this.getMilliseconds() //毫秒
+                };
+                var week = {
+                    "0" : "/u65e5",
+                    "1" : "/u4e00",
+                    "2" : "/u4e8c",
+                    "3" : "/u4e09",
+                    "4" : "/u56db",
+                    "5" : "/u4e94",
+                    "6" : "/u516d"
+                };
+                if(/(y+)/.test(fmt)){
+                    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+                }
+                if(/(E+)/.test(fmt)){
+                    fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);
+                }
+                for(var k in o){
+                    if(new RegExp("("+ k +")").test(fmt)){
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                    }
+                }
+                return fmt;
+            }
 
-    // 处理一周内的时间
-    var arr_date = new Array();
-    var date_temp = new Date();
-    var date = new Date(date_temp);
-    for (var i=1;i<8;i++) {
-        date.setDate(date_temp.getDate()+i);
-        var times = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
-        arr_date.push(times);
-    }
-
-
-    res.render('coursePlan/coursePlanList');
+            var date = new Date();
+            date.setDate(1);
+            var firstDate = date.pattern("yyyy-MM-dd");
+            res.render('coursePlan/coursePlanList',{data : results,firstDate:firstDate});
+        } else {
+            res.render('error', {error : err});
+        }
+    });
 }
 
 
 module.exports.add = function (req, res, next) {
 
+    var courseId = req.query.courseId ? req.query.courseId : '';
+    var classRoomId = req.query.classRoomId ? req.query.classRoomId : '';
+    var date = req.query.date ? req.query.date : '';
     res.render('coursePlan/coursePlanAdd');
+
+}
+
+module.exports.edit = function (req, res, next) {
+
+
+    var courseId = req.query.courseId ? req.query.courseId : '';
+    var classRoomId = req.query.classRoomId ? req.query.classRoomId : '';
+    var date = req.query.date ? req.query.date : '';
+    res.render('coursePlan/coursePlanEdit');
 
 }

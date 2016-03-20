@@ -7,12 +7,21 @@
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript">
+
+        var courseId = '';//课程id
+        var classRoomId = '';//教室id
+        var courseArrayDate = '';//排课时间
         $(function (){
-            $("#classForm tr td[class='']").html(function(){  //穿过子元素的时候不会触发
+            var classroomid = document.getElementById('classroomId').value;
+            var date = document.getElementById('date').value;
+
+
+            $("#classForm tr td[class='classDefault']").html(function(){  //穿过子元素的时候不会触发
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击添加</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        var add_url = "/jinquan/course_plan_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        window.location.href=add_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -23,7 +32,8 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        var edit_url = "/jinquan/course_plan_edit?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -34,7 +44,8 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        var add_url = "/jinquan/course_plan_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -45,7 +56,8 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        var edit_url = "/jinquan/course_plan_edit?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -56,7 +68,8 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        window.location.href="/jinquan/course_plan_add";
+                        var edit_url = "/jinquan/course_plan_edit?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
                     $(this).empty();
@@ -64,6 +77,18 @@
             });
         })
 
+        /**
+         * 鼠标移入事件
+         * 当鼠标移入到某单元格时，显示修改或增加
+         * @param id    课程id
+         * @param classroomid    教室id
+         * @param date    日期
+         */
+        function tdOnMouseOver(td,id,classroomid,date){
+            courseId = id;//课程id
+            classRoomId = classroomid;//教室id
+            courseArrayDate = date;//排课时间
+        }
     </script>
 </head>
 
@@ -76,7 +101,7 @@
 </div>
 <div class="center_con">
     <div class="notes">
-        <div class="button2"><button type="button" class="button gray">导出Excel</button></div>
+       <!-- <div class="button2"><button type="button" class="button gray">导出Excel</button></div> -->
         <ul class="noteUi">
             <li><span class="color1"></span>会议</li>
             <li><span class="color2"></span>催乳师专业课程</li>
@@ -108,71 +133,63 @@
                 </tr>
                 </thead>
                 <tbody>
+            <%
 
-                <tr>
-                    <!--<td  rowspan="2"><input name="" type="checkbox" value=""></td>-->
-                    <td rowspan="2">1月1日</td>
-                    <td>302</td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="classViolet">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="classRed">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td >305</td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                </tr>
-                <tr>
-                    <!--<td rowspan="2"><input name="" type="checkbox" value=""></td>-->
-                    <td rowspan="2">1月1日</td>
-                    <td>302</td>
-                    <td class="classBlue"></td>
-                    <td class="classBlue">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="classViolet">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="classRed">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td >305</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="classGreen">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="classRed">&nbsp;</td>
-                    <td class="classRed">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                    <td class="">&nbsp;</td>
-                </tr>
+                for(var i = 1 ; i < 60 ; i ++){
+
+                    for(var j = 0 ; j < data.classRoomData.length ; j ++){//遍历教室
+                        %>
+                    <tr>
+                        <%
+                            if(j == 0){
+                            %>
+                            <input type="hidden" id="date" name="date" value="<%=firstDate%>"/>
+                            <input type="hidden" id="classroomId" name="classroomId" value="123"/>
+                            <td rowspan="<%=data.classRoomData.length%>"><%=firstDate + i%></td>
+                            <%
+                            }
+                        %>
+                        <td><%=data.classRoomData[j].name%></td>
+                        <%
+                        <!--var isHaveDate = '';-->
+                        for(var day = 0 ; day < 12 ; day++){//从8：00~8：30到16：30~17：00，共12个区域，用12表示
+                            var isHaveCourse = '';
+                            for(var k = 0 ; k < data.courseData.length ; k ++){//遍历每个课程
+                                if(i == 3 && data.classRoomData[j].id == data.courseData[k].classroomId){//如果遍历的时间和当前课程日期相同
+                                    isHaveDate = '1';
+                                    if(day >= data.courseData[k].courseTimeStart && day <= data.courseData[k].courseTimeEnd ){
+                                        var tdClass = "classDefault";
+                                        if(data.courseData[k].courseType == 1){
+                                            tdClass = "classBlue";
+                                        }else if(data.courseData[k].courseType == 2){
+                                            tdClass = "classViolet";
+                                        }else if(data.courseData[k].courseType == 3){
+                                            tdClass = "classGreen";
+                                        }else if(data.courseData[k].courseType == 4){
+                                            tdClass = "classRed";
+                                        }
+                                        %><td class="<%=tdClass%>" onMouseOver="tdOnMouseOver(this,'<%=data.courseData[k].id%>','<%=data.classRoomData[j].id%>','<%=i%>')">&nbsp;</td><%
+                                        isHaveCourse = '1';
+                                        break;
+                                    }
+                                }else{
+                                    <!--isHaveCourse = '1';-->
+                                    <!--break;-->
+                                }
+                            }
+                            if(isHaveCourse == ''){
+                                %><td class="classDefault" onMouseOver="tdOnMouseOver(this,'<%=data.classRoomData[j].id%>','<%=data.classRoomData[j].id%>','<%=i%>')">&nbsp;</td><%
+                            <!--break;-->
+                            }
+                        }
+                        %>
+                    </tr>
+                        <%
+                    }
+                }
+
+            %>
+
                 </tbody>
             </table>
         </form>

@@ -13,13 +13,7 @@
             var name = document.getElementById('name').value;
             var serialNumber = document.getElementById('serialNumber').value;
             var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
-        }
-        function preEdit (id) {
-            window.location.href = '/jinquan/staff_preEdit?id='+id;
-        }
-        function del (id) {
-            window.location.href = '/jinquan/staff_del?id='+id;
+            window.location.href = '/jinquan/staff_select_train?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
         }
         //选择该商品
         function select(name,seril){
@@ -36,9 +30,8 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：员工列表
+        当前位置：选择员工
     </div>
-    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
 </div>
 <div class="center_con">
     <div class="butSet">
@@ -57,7 +50,6 @@
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/staff_add" class="bsty0"></a></div>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">

@@ -14,11 +14,13 @@ var async = require('async');
  * @param endDate
  * @param cb
  */
-module.exports.insertAttendanceChange = function(staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,cb) {
+module.exports.insertAttendanceChange = function(staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,cb) {
 
-    var sql = 'INSERT INTO attendanceChange (staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,dateline,status)' +
-        ' VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO attendanceChange (staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,dateline,status)' +
+        ' VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [staffId,attendanceType,new Date(leaveStartDate),new Date(leaveEndDate),new Date(startDate),new Date(endDate),leaveReason,attendanceTypeDetailed,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    //db.query(sql, [staffId,attendanceType,new Date(leaveStartDate).getTime(),new Date(leaveEndDate).getTime(),new Date(startDate).getTime(),new Date(endDate).getTime(),leaveReason,attendanceTypeDetailed,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    //db.query(sql, [staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -68,14 +70,20 @@ module.exports.fetchAttendanceChanges = function(pages, count, cb) {
  * 获取所有考勤变更
  * @param cb
  */
-module.exports.fetchAllAttendanceChange = function(staffName,attendanceType,leaveStartDate,leaveEndDate,currentPage,cb) {
+module.exports.fetchAllAttendanceChange = function(staffName,attendanceType,startDate,endDate,currentPage,cb) {
 
-    var parm = "WHERE attendanceType LIKE '%"+attendanceType+"%' ";
+    var parm = "WHERE attendanceType LIKE '%"+attendanceType+"%' AND b.name LIKE '%"+staffName+"%' ";
+    if(startDate != ''){
+        parm += " AND startDate >= str_to_date('"+startDate+"', '%Y-%m-%d %H:%i:%s')";
+    }
+    if(endDate != ''){
+        parm += " AND endDate <= str_to_date('"+endDate+"', '%Y-%m-%d %H:%i:%s')";
+    }
 
-    var sql_count = 'SELECT count(*) as count FROM attendanceChange '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM attendanceChange a ,staff b  '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM attendanceChange '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.*,b.name as `staffName`,date_format(a.endDate,"%Y-%m-%d %H:%i:%S") as endDate2Str,date_format(a.startDate,"%Y-%m-%d %H:%i:%S") as startDate2Str FROM attendanceChange a ,staff b '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -119,11 +127,11 @@ module.exports.fetchAllAttendanceChange = function(staffName,attendanceType,leav
  * @param endDate
  * @param cb
  */
-module.exports.updateAttendanceChange = function(id, staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,cb) {
+module.exports.updateAttendanceChange = function(id, staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,cb) {
 
-    var sql = 'UPDATE attendanceChange SET staffId = ?, attendanceType = ?, leaveStartDate = ?, leaveEndDate = ?,startDate=?,endDate=?,leaveReason=" WHERE id = ?';
+    var sql = 'UPDATE attendanceChange SET staffId = ?, attendanceType = ?, leaveStartDate = ?, leaveEndDate = ?,startDate=?,endDate=?,leaveReason=?,attendanceTypeDetailed=? WHERE id = ?';
 
-    var par = [staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,id];
+    var par = [staffId,attendanceType,leaveStartDate,leaveEndDate,startDate,endDate,leaveReason,attendanceTypeDetailed,id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
@@ -141,8 +149,7 @@ module.exports.updateAttendanceChange = function(id, staffId,attendanceType,leav
  * @param cb
  */
 module.exports.fetchSingleAttendanceChange =function (id, cb) {
-
-    var sql = 'SELECT * FROM attendanceChange WHERE id = ?';
+    var sql = 'SELECT a.*,b.name as `staffName`,date_format(a.endDate,"%Y-%m-%d %H:%i:%S") as endDate2Str,date_format(a.startDate,"%Y-%m-%d %H:%i:%S") as startDate2Str FROM attendanceChange a ,staff b   WHERE a.id = ? AND b.id = a.staffId';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

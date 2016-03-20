@@ -5,15 +5,19 @@
     <title>考勤变更</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
         function search() {
-            var categoryName = document.getElementById('categoryName').value;
-//            var serialNumber = document.getElementById('serialNumber').value;
-//            var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/attendance_change_list?categoryName='+categoryName;
+            var staffName = $("#staffName").val();
+            var attendanceType = $("#attendanceType").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            window.location.href = '/jinquan/attendance_change_list?staffName='+staffName+'&attendanceType='+attendanceType+'&startDate='+startDate+'&endDate='+endDate;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/attendance_change_edit?id='+id;
@@ -37,9 +41,15 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td>员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="<%=data.staffName%>" /></td>
-                    <td> &nbsp;变更类型：<input name="attendanceType" id="attendanceType" type="text" class="input5" value="<%=data.attendanceType%>"/></td>
-                    <td> &nbsp;请假开始日期：<input name="leaveStartDate" id="leaveStartDate" type="text" class="input5" value="<%=data.leaveStartDate%>"/></td>
-                    <td> &nbsp;请假截止日期：<input name="leaveEndDate" id="leaveEndDate" type="text" class="input5" value="<%=data.leaveEndDate%>" /></td>
+                    <td> &nbsp;变更类型：
+                        <select name="attendanceType" id="attendanceType" >
+                            <option value="">请选择</option>
+                            <option value="jb" <%if(data.attendanceType == 'jb'){%>selected<%}  %>>加班</option>
+                            <option value="qj" <%if(data.attendanceType == 'qj'){%>selected<%}  %>>请假</option>
+                        </select>
+                    </td>
+                    <td> &nbsp;开始日期：<input name="startDate" id="startDate" type="text" class="input5" value="<%=data.startDate%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
+                    <td> &nbsp;截止日期：<input name="endDate" id="endDate" type="text" class="input5" value="<%=data.endDate%>"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -57,14 +67,12 @@
                 <th>操作</th>
             </tr>
 
-
-
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><%=data.data[i].staffId%></td>
-                <td><%=data.data[i].attendanceType%></td>
-                <td><%=data.data[i].leaveStartDate%></td>
-                <td><%=data.data[i].leaveEndDate%></td>
+                <td><%=data.data[i].staffName%></td>
+                <td><%if(data.data[i].attendanceType == 'jb'){%>加班<%}else{%>请假<%}%></td>
+                <td><%=data.data[i].startDate2Str%></td>
+                <td><%=data.data[i].endDate2Str%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
