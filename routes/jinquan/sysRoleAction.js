@@ -52,7 +52,9 @@ module.exports.edit = function (req, res) {
                 resourcesService.fetchSysResourcess(0,200,function(err, results) {
                     if(!err) {
                         var resourcess = results;
-                        res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show,menus:menus,resourcess:resourcess});
+                        var menusByRole = {};
+                        var resourcesByRole = {};
+                        res.render('sysRole/sysRoleAdd', {sysRole : sysRole,show:show,menus:menus,resourcess:resourcess,menusByRole:menusByRole,resourcesByRole:resourcesByRole});
                     } else {
                         console.log(err.message);
                         res.render('error');
