@@ -12,15 +12,12 @@
         var classRoomId = '';//教室id
         var courseArrayDate = '';//排课时间
         $(function (){
-            var classroomid = document.getElementById('classroomId').value;
-            var date = document.getElementById('date').value;
-
 
             $("#classForm tr td[class='classDefault']").html(function(){  //穿过子元素的时候不会触发
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击添加</strong>");
                     $(this).click(function(){
-                        var add_url = "/jinquan/course_plan_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        var add_url = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
                         window.location.href=add_url;
                     });
                 }).mouseleave(function(){
@@ -44,7 +41,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        var add_url = "/jinquan/course_plan_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        var add_url = "/jinquan/course_plan_edit?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
                         window.location.href=edit_url;
                     });
                 }).mouseleave(function(){
@@ -84,10 +81,26 @@
          * @param classroomid    教室id
          * @param date    日期
          */
-        function tdOnMouseOver(td,id,classroomid,date){
+        function tdOnMouseOver(td,id,classroomid,date_index){
             courseId = id;//课程id
             classRoomId = classroomid;//教室id
-            courseArrayDate = date;//排课时间
+            // date_index是索引
+            var myDate = new Date();
+            var year = myDate.getFullYear();
+            var month = myDate.getMonth()+1;
+            if (month<10){
+                month = "0"+month;
+            }
+            var first_date = year +'-'+ month +'-01';
+
+            var temp = new Date(first_date);
+            temp.setDate(temp.getDate() + date_index);
+            var temp_month = temp.getMonth() + 1;
+            if (temp_month<10) {
+                temp_month = '0'+temp_month;
+            }
+            var result = temp.getFullYear()+'-'+temp_month+'-'+temp.getDay();
+            courseArrayDate = result;//排课时间
         }
     </script>
 </head>

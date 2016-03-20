@@ -99,6 +99,122 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
 };
 
 
+module.exports.insertCourse_neixun = function (name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,cb) {
+
+    var insert_sql = "INSERT INTO course (name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,content) VALUES (?,?,?,?,?,?,?,?)";
+
+    db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType,scorse,content],function(cbData, err, rows, fields) {
+
+        if (!err) {
+
+            var insertid = rows.insertId;
+            var insert_user = 'INSERT INTO courseUser(courseId,userId) VALUES(?,?)';
+            async.map(arr_staff, function(item, callback) {
+
+                db.query(insert_user, [insertid,item.userid], function (cbData, err, rows, fields) {
+                    if (!err) {
+                        callback(null, rows);
+                    } else {
+                        callback(err);
+                    }
+                });
+            }, function(err,results) {
+                cb(err, results);
+            });
+
+        } else {
+            cb(err);
+        }
+    });
+}
+
+module.exports.insertCourse_zhuanye = function (name,classroomid,courseDate,startTime,endTime,courseType,arr_teacher,cb) {
+
+    var insert_sql = 'INSERT INTO course(name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType) VALUES (?,?,?,?,?,?)';
+    db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType],function(cbData, err, rows, fields) {
+
+        if (!err) {
+
+            var insertid = rows.insertId;
+            var insert_teacher = 'INSERT INTO courseTeacher(courseId,teacherName,type,startTime,endTime,content) VALUES(?,?,?,?,?,?)';
+            async.map(arr_teacher, function(item, callback) {
+
+                db.query(insert_teacher, [insertid,item.teacherName,item.type,item.startTime,item.endTime,item.content], function (cbData, err, rows, fields) {
+                    if (!err) {
+                        callback(null, rows);
+                    } else {
+                        callback(err);
+                    }
+                });
+            }, function(err,results) {
+                cb(err, results);
+            });
+
+        } else {
+            cb(err);
+        }
+
+    });
+}
+
+module.exports.insertCourse_fumu = function(classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_fumu,cb) {
+    var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,price,content) VALUES (?,?,?,?,?,?,?,?)';
+    db.query(insert_sql,[classroomid,courseDate,startTime,endTime,courseType,count,price,content],function(cbData, err, rows, fields) {
+
+        if (!err) {
+
+            var insertid = rows.insertId;
+            var insert_teacher = 'INSERT INTO courseTeacher(courseId,teacherName,type,startTime,endTime,content) VALUES(?,?,?,?,?,?)';
+            async.map(arr_teacher, function(item, callback) {
+
+                db.query(insert_teacher, [insertid,item.teacherName,item.type,item.startTime,item.endTime,item.content], function (cbData, err, rows, fields) {
+                    if (!err) {
+                        callback(null, rows);
+                    } else {
+                        callback(err);
+                    }
+                });
+            }, function(err,results) {
+                cb(err, results);
+            });
+
+        } else {
+            cb(err);
+        }
+
+    });
+}
+
+
+module.exports.insertCourse_huiyi = function(classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_fumu,cb) {
+
+    var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,content) VALUES (?,?,?,?,?,?)';
+    db.query(insert_sql,[classroomid,courseDate,startTime,endTime,courseType,content],function(cbData, err, rows, fields) {
+
+        if (!err) {
+
+            var insertid = rows.insertId;
+            var insert_user = 'INSERT INTO courseUser(courseId,userId) VALUES(?,?)';
+            async.map(arr_fumu, function(item, callback) {
+
+                db.query(insert_user, [insertid,item.userid], function (cbData, err, rows, fields) {
+                    if (!err) {
+                        callback(null, rows);
+                    } else {
+                        callback(err);
+                    }
+                });
+            }, function(err,results) {
+                cb(err, results);
+            });
+
+        } else {
+            cb(err);
+        }
+
+    });
+}
+
 
 /**
  * 获取所在月第一天至下月最后一天的排课信息

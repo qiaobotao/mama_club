@@ -52,12 +52,35 @@ module.exports.list = function (req, res, next) {
 }
 
 
-module.exports.add = function (req, res, next) {
+module.exports.preadd = function (req, res, next) {
 
     var courseId = req.query.courseId ? req.query.courseId : '';
     var classRoomId = req.query.classRoomId ? req.query.classRoomId : '';
     var date = req.query.date ? req.query.date : '';
-    res.render('coursePlan/coursePlanAdd');
+
+    var obj = {};
+    obj.courseId = courseId;
+    obj.classRoomId = classRoomId;
+    obj.date = date;
+
+    res.render('coursePlan/coursePlanAdd', {result : obj});
+
+}
+
+module.exports.add = function (req, res, next) {
+
+    var classroomid = req.query.classroomid ? req.query.classroomid : '';
+    var courseId = req.query.courseId ? req.query.courseId : '';
+    var date = req.query.date ? req.query.date : '';
+
+    var type = req.query.courseType ? requ.query.courseType : '';
+
+    // 内训
+    if (type == 1) {
+
+
+    }
+
 
 }
 

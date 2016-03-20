@@ -68,8 +68,9 @@ router.all('/classroom_browse',classroomAction.detail);
 
 // 排课情况
 router.all('/course_plan',coursePlanAction.list);
-router.all('/course_plan_add',coursePlanAction.add);
+router.all('/course_plan_pre_add',coursePlanAction.preadd);
 router.all('/course_plan_edit',coursePlanAction.edit);
+router.all('/course_plan_add',coursePlanAction.add);
 
 // 课程查询
 router.all('/course_list',courseAction.list);
