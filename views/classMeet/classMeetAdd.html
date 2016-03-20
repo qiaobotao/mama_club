@@ -89,6 +89,31 @@
 //            }
             document.getElementById("myform").submit();
         }
+        // 验证库存量
+        function checkIsSelectCourse () {
+
+            var memberId = $("#memberId").val();
+            if (memberId == '') {
+                alert('请选择会员！');
+                return;
+            }
+            var courseId = $("#courseId").val();
+            if (courseId == '') {
+                alert('请选择报名课程！');
+                return;
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/jinquan/checkIsSelectCourse",
+                data: {'courseId':$("#courseId").val(),'memberId':$("#memberId").val() },
+                success: function (result) {
+                    if(result.flag){
+                        parent.layer.alert('此课程已修过，请重新选择课程！',{icon: 2});
+                    }
+                }
+            });
+        }
     </script>
 </head>
 
@@ -109,7 +134,7 @@
                     <input id="memberId" name="memberId" type="hidden" />
                 </td>
                 <td  class="regTd_l">课程名称：</td>
-                <td class="regTd_r"><input id="courseName" name="courseName" type="text" class="input5" onfocus="getCourseIfram()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                <td class="regTd_r"><input id="courseName"   name="courseName" type="text" class="input5" onfocus="getCourseIfram()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                     <input id="courseId" name="courseId" type="hidden" class="input5" /></td>
             </tr>
             <tr>
@@ -120,7 +145,7 @@
             </tr>
             <tr>
                 <td class="regTd_l">宝宝月龄/预产期：</td>
-                <td class="regTd_r"><input id="childMonths" name="childMonths" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childMonths" onfocus="checkIsSelectCourse()" name="childMonths" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">除宝宝外人数：</td>
                 <td class="regTd_r"><input id="externPersons" name="externPersons" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>

@@ -166,6 +166,7 @@ router.all('/class_meet_show',classMeetAction.show);
 router.all('/class_meet_preEdit',classMeetAction.preEdit);
 router.all('/class_meet_doEdit',classMeetAction.doEdit);
 router.all('/class_meet_del',classMeetAction.del);
+router.all('/checkIsSelectCourse',classMeetAction.checkIsSelectCourse);
 
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);

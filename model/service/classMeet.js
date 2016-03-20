@@ -10,7 +10,7 @@ module.exports.insertClassMeet = function(memberId,courseId,childMonths,externPe
 
     var sql = 'INSERT INTO classMeet (dateline,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome) '
         + ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
+    db.query(sql, [new Date().getTime(),memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
         isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -126,6 +126,20 @@ module.exports.check = function (courseId,cb) {
             } else {
                 cb(null, false);
             }
+        } else {
+            cb(err);
+        }
+    });
+}
+
+
+module.exports.checkIsSelectCourse= function (memberId,courseId,cb) {
+
+    var sql = 'select count(1) as count from classMeet WHERE memberId = ? and courseId=? and isRegisterSuccess=true';
+    db.query(sql, [memberId,courseId], function(cbData, err, rows, fields) {
+        if (!err) {
+            var count = rows[0].count;
+            cb(null,  count > 0 ? true : false);
         } else {
             cb(err);
         }
