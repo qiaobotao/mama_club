@@ -13,13 +13,15 @@ module.exports.list = function (req, res, next) {
     var date = req.query.date ? req.query.date : '';  // 服务分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.list(name,date,currentPage, function(err, results) {
 
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
             results.date = date;
-            res.render('punchCard/punchCardList', {data : results});
+            res.render('punchCard/punchCardList', {data : results,replytype : replytype});
         } else {
             next();
         }
@@ -28,7 +30,9 @@ module.exports.list = function (req, res, next) {
 
 module.exports.preimport = function (req, res, next) {
 
-    res.render('punchCard/punchCardImport');
+    var type = req.query.replytype ? req.query.replytype : '';
+
+    res.render('punchCard/punchCardImport', {replytype : type});
 
 }
 
@@ -36,16 +40,24 @@ module.exports.import = function (req, res, next) {
 
     var form = new multiparty.Form({uploadDir: './public/files/'});
     form.parse(req, function(err, fields, files) {
-        var filesTmp = JSON.stringify(files, null, 2);
-        if (err) {
+        if (!err) {
+            var inputFile = files.recordfile[0];
+            var uploadedPath = inputFile.path;
+            var obj = xlsx.parse(uploadedPath);
+            if (obj.length == 0) {  // xls 格式的数据解析后会是 []
+                res.redirect('/jinquan/punch_pre_import?replytype=errorformat');
+            } else {
+                service.insertExcelData(obj[0].data, function(err, results) {
+                    if (!err) {
+                        res.redirect('/jinquan/punch_card_list?replytype=success');
+                    } else {
+                        res.redirect('/jinquan/punch_pre_import?replytype=error');
+                    }
+                });
+            }
+        } else {
             console.log('parse error: ' + err);
             next();
-        } else {
-            console.log('parse files: ' + filesTmp);
-
-            //var obj = xlsx.parse(filename);
-            //console.log(JSON.stringify(obj));
         }
-
     });
 }

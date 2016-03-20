@@ -11,11 +11,23 @@
 </head>
 <script type="text/javascript">
 
+    var replytype = '<%=replytype%>';
+    if (replytype == 'errorformat') {
+        parent.layer.msg('请转成xlsx格式再上传');
+    } else if (replytype == 'error') {
+        parent.layer.msg('导入失败');
+    }
+
     function uploadFile () {
 
         var file = document.getElementById('recordfile').value;
         if (!file || file.length == 0) {
             parent.layer.alert('请选择文件',{icon: 2});
+            return;
+        }
+        var reg=/[^\.](\.xlsx)$/i;
+        if (!reg.test(file)) {
+            parent.layer.alert('文件格式不对，请转成xlsx格式再上传',{icon: 2});
             return;
         }
 
