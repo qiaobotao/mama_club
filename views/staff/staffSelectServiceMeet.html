@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>员工列表</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function search() {
+            var name = document.getElementById('name').value;
+            var serialNumber = document.getElementById('serialNumber').value;
+            var tel = document.getElementById('tel').value;
+            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/staff_preEdit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/staff_del?id='+id;
+        }
+        //选择该商品
+        function select(name,seril){
+            var index = document.getElementById("index").value;
+            if(index=='complainAdd')
+            {
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId').value=seril;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('dealPrincipal').value=name;
+            }
+            else{
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index).value=seril;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('principal'+index).value=name;
+            }
+
+
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：员工列表
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <input id="index" name="index" type="hidden" value="<%=index%>"/>
+                        <input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                    </td>
+                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
+                    <td> &nbsp;员工编号：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>"/></td>
+                    <td> &nbsp;电话：<input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="but_0"><a href="/jinquan/staff_add" class="bsty0"></a></div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>名称</th>
+                <th>员工编号</th>
+                <th>电话</th>
+                <th>所属门店</th>
+                <th>邮箱</th>
+                <th>操作</th>
+            </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].serialNumber%></td>
+                <td><%=data.data[i].tel%></td>
+                <td><%=data.data[i].belongShop%></td>
+                <td><%=data.data[i].email%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>')">选择员工</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
+        </table>
+
+        <%- include ../pagination.html -%>
+    </div>
+</div>
+
+</body>
+</html>
