@@ -135,3 +135,23 @@ module.exports.del = function (req, res, next) {
     });
 
 }
+
+/**
+ * 根据会员编码和课程id判断是否可选
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.checkIsSelectCourse = function (req, res, next) {
+
+    var memberId = req.body.memberId ? req.body.memberId : '';
+    var courseId = req.body.courseId ? req.body.courseId : '';
+
+    service.checkIsSelectCourse(memberId,courseId,function (err, flag) {
+        if (!err) {
+            res.json({flag : flag});
+        } else {
+            next();
+        }
+    });
+}
