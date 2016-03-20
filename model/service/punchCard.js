@@ -52,3 +52,39 @@ module.exports.list = function(name,date,currentPage,cb) {
         }
     });
 }
+
+
+
+module.exports.insertExcelData = function (arr, cb) {
+
+    if (arr.length == 0) {
+       return;
+    }
+    // 第一行是表头
+    var arr_res = new Array();
+    for (var i=1;i<arr.length;i++) {
+        var obj = {};
+        obj.department = arr[i][0];
+        obj.name = arr[i][1];
+        obj.recordNumber = arr[i][2];
+        obj.date = arr[i][3];
+        obj.macid = arr[i][4];
+        obj.serialNumber = arr[i][5];
+        obj.compareType = arr[i][6];
+        obj.cardNumber = arr[i][7];
+        arr_res.push(obj);
+    }
+    var sql = 'INSERT INTO punchCardRecord (department,name,recordNumber,date,macid,serialNumber,compareType,cardNumber,shopId) VALUES (?,?,?,?,?,?,?,?,?)';
+    async.map(arr_res, function(item, callback) {
+
+        db.query(sql, [item.department,item.name,item.recordNumber,item.date,item.macid,item.serialNumber,item.compareType,item.cardNumber,''], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+}

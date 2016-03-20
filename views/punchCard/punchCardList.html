@@ -11,6 +11,11 @@
 </head>
 <script type="text/javascript">
 
+    var replytype = '<%=replytype%>';
+    if (replytype == 'success') {
+        parent.layer.msg('导入成功');
+    }
+
     function search () {
         var name = document.getElementById('name').value;
         var date = document.getElementById('date').value;
@@ -19,7 +24,7 @@
 
     function pageturning (selectPage) {
         var name = document.getElementById('name').value;
-        var cid = document.getElementById('id').value;
+        var date = document.getElementById('date').value;
         window.location.href = '/jinquan/punch_card_list?page='+selectPage+'&name='+name+'&date='+date;
     }
 </script>
@@ -36,7 +41,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>服务名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
+                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
                     <td>日期：<input id="date" name="date" type="text" class="input5" value="<%=data.date%>"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
@@ -48,6 +53,7 @@
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
+                <th>部门</th>
                 <th>姓名</th>
                 <th>登记号</th>
                 <th>时间</th>
@@ -55,10 +61,11 @@
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].department%></td>
                 <td><%=data.data[i].name%></td>
-                <td><%=data.data[i].name%></td>
-                <td><%=data.data[i].name%></td>
-                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].recordNumber%></td>
+                <td><%=data.data[i].date%></td>
+                <td><%=data.data[i].compareType%></td>
             </tr>
             <%}%>
         </table>
