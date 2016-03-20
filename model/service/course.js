@@ -99,6 +99,47 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
 };
 
 
+
+/**
+ * 获取所在月第一天至下月最后一天的排课信息
+ * @param cb
+ */
+module.exports.getCoursePlanList = function (cb) {
+
+    var courseSql = 'SELECT a.id,a.courseDate,a.name,a.classroomId,a.courseTimeStart,a.courseTimeEnd,a.courseType ';
+    courseSql += 'FROM course a inner join classroom b on (a.classroomId=b.id)';
+    courseSql += 'where str_to_date(a.courseDate, "%Y-%m-%d") >= DATE_ADD(curdate(),interval -day(curdate())+1 day)';
+    courseSql += 'and str_to_date(a.courseDate, "%Y-%m-%d") <= last_day(date_add(curdate(),interval 1 month))';
+    var classRoomSql = 'SELECT * from classroom t where t.`status` = 1';
+    async.series({
+        courseData : function(callback){
+            db.query(courseSql, [],function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback (null, rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        classRoomData : function(callback){
+            db.query(classRoomSql, [], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+
 /**
  * 返回par后的日期
  * 返回格式 是数组 [2016-1-1,2016-1-2,...]
@@ -203,3 +244,4 @@ function compareTime (startTime, endTime) {
         return false;
     }
 }
+
