@@ -44,6 +44,7 @@ module.exports.edit = function (req, res) {
         roleService.fetchAllSysRole("",currentPage, function (err, results) {
             if (!err) {
                 results.currentPage = currentPage;
+                results.roleResults = [];
                 res.render('sysUser/sysUserAdd', {data : results, sysUser : sysUser,show:show});
             } else {
                 next();

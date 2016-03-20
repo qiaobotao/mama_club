@@ -15,7 +15,7 @@
         function submitForm(){
             var serviceMeetId = document.getElementById("serviceMeetId").value;
             if (!serviceMeetId || name.serviceMeetId == 0) {
-                alert('服务单号不能为空');
+                parent.layer.alert('服务单号不能为空',{icon: 2});
                 return;
             }
 //            var buyer = document.getElementById("buyer").value;
@@ -23,6 +23,21 @@
 //                parent.layer.alert('采购人不能为空',{icon: 2});
 //                return;
 //            }
+            // 判断该表单中 是否有相同的 商品
+            var arr_proId = document.getElementsByName('proId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+
             var arr_proname = document.getElementsByName('proname');
             for (var i=0;i<arr_proname.length;i++) {
                 if(arr_proname[i].value == '') {

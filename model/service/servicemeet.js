@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
+module.exports.insertServiceMeet = function(staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO serviceMeet (staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -30,10 +30,10 @@ module.exports.insertServiceMeet = function(tel,name,age,principal,meetTime,prob
         }
     });
 };
-module.exports.updateServiceMeet = function(id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
+module.exports.updateServiceMeet = function(staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
 
-    var sql = 'UPDATE   serviceMeet SET  tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
-    db.query(sql, [tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE   serviceMeet SET staffId=?, tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
+    db.query(sql, [staffId,tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -54,9 +54,68 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
 
     var myDate = new Date();
     var parm = "where tel like '%" + tel + "%' and name like '%" + name
-        + "%' and meetTime like '%" + meetTime + "%' and status like '%" + status + "%'";
+        + "%' and meetTime like '%" + meetTime + "%'" ;
 
+    if(status!="")
+    {
+        parm+=" and status = " + status ;
+    }
+    var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT * FROM serviceMeet '+parm+'   LIMIT ?,?';
 
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+};
+/**
+ * 回访和处理回访选择是用到的方法
+ * @param tel
+ * @param name
+ * @param meetTime
+ * @param status
+ * @param currentPage
+ * @param cb
+ */
+module.exports.getByStatuServiceMeet = function(tel,name,meetTime,status,currentPage,cb) {
+
+    var myDate = new Date();
+    var parm = "where tel like '%" + tel + "%' and name like '%" + name
+        + "%' and meetTime like '%" + meetTime + "%'" ;
+
+    if(status!="")
+    {
+        parm+=" and status >= " + status ;
+    }
     var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;

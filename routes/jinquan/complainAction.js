@@ -52,8 +52,8 @@ module.exports.add = function (req, res, next) {
     var complainType = req.body.complainType ? req.body.complainType : '';
     var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
     var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
-
-    service.insertComplain(serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
+    var staffId = req.body.staffId ? req.body.staffId : '';
+    service.insertComplain(staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
             if (!err) {
                 if (!err) {
                     //修改服务单状态 4，已做回访
@@ -82,8 +82,8 @@ module.exports.doEdit = function (req, res, next) {
     var complainType = req.body.complainType ? req.body.complainType : '';
     var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
     var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
-
-    service.updateComplain(id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
+    var staffId = req.body.staffId ? req.body.staffId : '';
+    service.updateComplain(staffId,id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/complain_list');
         } else {
@@ -135,7 +135,7 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
-    serviceMeetService.fetchAllServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
+    serviceMeetService.getByStatuServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;

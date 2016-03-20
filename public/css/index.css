@@ -251,6 +251,7 @@ table {
     border-radius: 0 0 6px 0;
 }
 .bordered tr td{ color:#333;}
+.classDefault{ background: #ffffff;}
 .classBlue{ background:#7097ee;}
 .classViolet{ background:#ba7bcc;}
 .classGreen{ background:#70c370;}

@@ -241,10 +241,26 @@
             var deltr = delObj.parentNode.parentNode;
             $('#serviceTable tr:eq('+deltr.rowIndex+')').remove();
         }
+        function changType(type)
+        {
+
+            var table=document.getElementById("complainMX");
+
+            if(type==0)
+            {
+                $("#complainMX tr")[0].cells[0].innerHTML="打折力度";
+            }
+            else
+            {
+                $("#complainMX tr")[0].cells[0].innerHTML="优惠力度";
+            }
+
+
+        }
     </script>
 </head>
 
-<body>
+<body onload="changType(<%=data.activityManage.activityType%>)">
 <div class="r_top">
     <div class="weizhi">
         当前位置：活动详情页

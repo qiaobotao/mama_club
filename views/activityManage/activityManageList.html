@@ -63,12 +63,14 @@
                         活动名称：<input id="activityName" name="activityName" type="text" class="input5"  value="<%=data.activityName%>"/></td>
                     <td> &nbsp;活动类型：
                         <select id="activityType" name="activityType"/>
+                        <option value="-1" <%if(data.activityType == '-1'){%>selected<%}%>>请选择</option>
                         <option value="0" <%if(data.activityType == '0'){%>selected<%}%>>打折活动</option>
                         <option value="1" <%if(data.activityType == '1'){%>selected<%}%>>收费减免活动</option>
                         </select>
                     <td> &nbsp;有效时间范围：<input id="effectiveTimeStart" name="effectiveTimeStart" value="<%=data.effectiveTimeStart%>"  onclick="laydate()" /> ~ <input id="effectiveTimeEnd" name="effectiveTimeEnd"  value="<%=data.effectiveTimeEnd%>"  onclick="laydate()" /></td>
                     <td> &nbsp;状态：
                         <select id="status" name="status"/>
+                        <option value="-1" <%if(data.status == '-1'){%>selected<%}%>>请选择</option>
                         <option value="0" <%if(data.status == '0'){%>selected<%}%>>启用</option>
                         <option value="1" <%if(data.status == '1'){%>selected<%}%>>停用</option>
                         </select>

@@ -44,7 +44,7 @@ module.exports.add = function (req, res) {
     var externPersons = req.body.externPersons ? req.body.externPersons : '';
     var weatherLeadBaby = req.body.weatherLeadBaby ? req.body.weatherLeadBaby : '';
     var remark = req.body.remark ? req.body.remark : '';
-    var isRegisterSuccess = req.body.isRegisterSuccess ? req.body.isRegisterSuccess : '';
+    var isRegisterSuccess = req.body.isRegisterSuccess ? req.body.isRegisterSuccess : 'true';
     var isPhoneConfirm = req.body.isPhoneConfirm ? req.body.isPhoneConfirm : '未确认';
     var isSmConfirm = req.body.isSmConfirm ? req.body.isSmConfirm : '未确认';
     var courseConfirm = req.body.courseConfirm ? req.body.courseConfirm : 'no';
@@ -52,20 +52,19 @@ module.exports.add = function (req, res) {
     service.check(courseId ,function(err, results) {
         if (!err) {
             isRegisterSuccess = results;
-        }else{
-            isRegisterSuccess = false;
+
         }
     });
-
-
     service.insertClassMeet(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
         isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {
-        if (!err) {
-            res.redirect('/jinquan/class_meet_list');
-        } else {
-            next();
-        }
-    });
+            if (!err) {
+                res.redirect('/jinquan/class_meet_list');
+            } else {
+                next();
+            }
+        });
+
+
 }
 
 

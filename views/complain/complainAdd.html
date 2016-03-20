@@ -65,6 +65,21 @@
 
             document.getElementById("myform").submit();
         }
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_servicemeet?index='+'complainAdd', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
     </script>
 </head>
 
@@ -101,7 +116,9 @@
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">解决技师：</td>
-                <td class="regTd_r"><input id="dealPrincipal" name="dealPrincipal" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="staffId" name="staffId" type="hidden"   class="input5" />
+                    <input id="dealPrincipal" name="dealPrincipal" onfocus="getmembers()" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">投诉详情：</td>

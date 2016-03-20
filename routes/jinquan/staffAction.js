@@ -140,3 +140,24 @@ module.exports.selectForTrain = function (req, res, next) {
     });
 
 }
+module.exports.selectForServiceMeet = function (req, res, next) {
+
+    var currentPage = req.query.page ? req.query.page : '1';
+    var name = req.query.name ? req.query.name : '';
+    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var tel = req.query.tel ? req.query.tel : '';
+    var index = req.query.index ? req.query.index : '';
+
+    service.fetchAllStaff(name,serialNumber,tel,currentPage, function (err, results) {
+        if (!err) {
+            results.currentPage = currentPage;
+            results.name = name;
+            results.serialNumber = serialNumber;
+            results.tel = tel;
+            res.render('staff/staffSelectServiceMeet', {data : results,index:index});
+        } else {
+            next();
+        }
+    });
+
+}
