@@ -248,6 +248,7 @@ module.exports.getCoursePlanList = function (cb) {
         }
     },function(err, results) {
         if (!err) {
+            results.dataArr = getLateDays(60);
             cb (null, results);
         } else {
             cb(err);
@@ -270,10 +271,19 @@ function getLateDays (par) {
 
     var arr_date = new Array();
     var date_temp = new Date();
+    date_temp.setDate(1);
     var date = new Date(date_temp);
-    for (var i=1;i<par;i++) {
+    for (var i=0;i<par;i++) {
         date.setDate(date_temp.getDate()+i);
-        var times = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        if(date.getMonth()+1 < 10){
+            month = "0"+(date.getMonth()+1);
+        }
+        if(date.getDate() < 10){
+            day = "0"+(date.getDate());
+        }
+        var times = date.getFullYear()+"-"+month+"-"+day;
         arr_date.push(times);
     }
 
