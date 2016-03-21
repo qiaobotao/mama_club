@@ -122,6 +122,56 @@
             var deltr = delObj.parentNode.parentNode;
             $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
         }
+        $(document).ready(function() {
+
+
+            var motherReasons ='<%=nursService.motherReason%>';
+            var temps = motherReasons.split(',');
+            var check = document.getElementsByName("motherReason");
+
+            for (var i = 0; i < temps.length; i++) {
+                for (var j = 0; j < check.length; j++) {
+                    if (temps[i] == check[j].value) {
+                        check[j].checked = true;
+                    }
+                }
+            }
+
+            var otherReasons ='<%=nursService.otherReason%>';
+            var temps1 = otherReasons.split(',');
+            var check1 = document.getElementsByName("otherReason");
+
+            for (var i = 0; i < temps1.length; i++) {
+                for (var j = 0; j < check1.length; j++) {
+                    if (temps1[i] == check1[j].value) {
+                        check1[j].checked = true;
+                    }
+                }
+            }
+
+            var childReassons ='<%=nursService.childReason%>';
+            var temps2 = childReassons.split(',');
+            var check2 = document.getElementsByName("childReason");
+
+            for (var i = 0; i < temps2.length; i++) {
+                for (var j = 0; j < check2.length; j++) {
+                    if (temps2[i] == check2[j].value) {
+                        check2[j].checked = true;
+                    }
+                }
+            }
+            var diagnosises ='<%=nursService.diagnosis%>';
+            var temps3 = diagnosises.split(',');
+            var check3 = document.getElementsByName("diagnosis");
+
+            for (var i = 0; i < temps3.length; i++) {
+                for (var j = 0; j < check3.length; j++) {
+                    if (temps3[i] == check3[j].value) {
+                        check3[j].checked = true;
+                    }
+                }
+            }
+        })
     </script>
 </head>
 

@@ -241,26 +241,33 @@
             var deltr = delObj.parentNode.parentNode;
             $('#serviceTable tr:eq('+deltr.rowIndex+')').remove();
         }
-        function changType(type)
-        {
+        $(document).ready(function() {
 
-            var table=document.getElementById("complainMX");
-
-            if(type==0)
-            {
-                $("#complainMX tr")[0].cells[0].innerHTML="打折力度";
+            var table = document.getElementById("complainMX");
+            var type ='<%=data.activityManage.activityType%>';
+            if (type == 0) {
+                $("#complainMX tr")[0].cells[0].innerHTML = "打折力度";
             }
-            else
-            {
-                $("#complainMX tr")[0].cells[0].innerHTML="优惠力度";
+            else {
+                $("#complainMX tr")[0].cells[0].innerHTML = "优惠力度";
             }
 
+            var memberCardTypes ='<%=data.activityManage.memberCardType%>';
+            var temps = memberCardTypes.split(',');
+            var check = document.getElementsByName("memberCardType");
 
-        }
+            for (var i = 0; i < temps.length; i++) {
+                for (var j = 0; j < check.length; j++) {
+                    if (temps[i] == check[j].value) {
+                        check[j].checked = true;
+                    }
+                }
+            }
+        })
     </script>
 </head>
 
-<body onload="changType(<%=data.activityManage.activityType%>)">
+<body >
 <div class="r_top">
     <div class="weizhi">
         当前位置：活动详情页

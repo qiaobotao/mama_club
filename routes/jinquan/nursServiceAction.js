@@ -81,31 +81,57 @@ module.exports.add = function (req, res) {
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
     var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
     var diagnosis="" ;
-    for(var i=0;i<diagnosisTemp.length;i++){
-        diagnosis+=diagnosisTemp[i]+",";
+    if (diagnosisTemp instanceof Array) {
+        for (var i=0;i<diagnosisTemp.length;i++)
+        {
+            diagnosis +=diagnosisTemp[i]+',';
+        }
+        diagnosis =diagnosis.substr(0,diagnosis.length-1);
+    }else{
+        diagnosis=  diagnosisTemp;
+
     }
-    diagnosis= diagnosis.substr(0,diagnosis.length-1);
+
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
     var childReasonTemp = req.body.childReason ? req.body.childReason : '';
     var childReason ="" ;
-    for(var i=0;i<childReasonTemp.length;i++){
-        childReason+=childReasonTemp[i]+",";
+    if (childReasonTemp instanceof Array) {
+        for (var i=0;i<childReasonTemp.length;i++)
+        {
+            childReason +=childReasonTemp[i]+',';
+        }
+        childReason =childReason.substr(0,childReason.length-1);
+    }else{
+        childReason=  childReasonTemp;
+
     }
-    childReason= childReason.substr(0,childReason.length-1);
+
     var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
     var motherReasonTemp = req.body.motherReason ? req.body.motherReason : '';
     var motherReason ="" ;
-    for(var i=0;i<motherReasonTemp.length;i++){
-        motherReason+=motherReasonTemp[i]+",";
+    if (motherReasonTemp instanceof Array) {
+        for (var i=0;i<motherReasonTemp.length;i++)
+        {
+            motherReason +=motherReasonTemp[i]+',';
+        }
+        motherReason =motherReason.substr(0,motherReason.length-1);
+    }else{
+        motherReason=  motherReasonTemp;
+
     }
-    motherReason= motherReason.substr(0,motherReason.length-1);
     var leaveAdvise = req.body.leaveAdvise ? req.body.leaveAdvise : '';
     var otherReasonTemp = req.body.otherReason ? req.body.otherReason : '';
     var otherReason="" ;
-    for(var i=0;i<otherReasonTemp.length;i++){
-        otherReason+=otherReasonTemp[i]+",";
+    if (otherReasonTemp instanceof Array) {
+        for (var i=0;i<otherReasonTemp.length;i++)
+        {
+            otherReason +=otherReasonTemp[i]+',';
+        }
+        otherReason =otherReason.substr(0,otherReason.length-1);
+    }else{
+        otherReason=  otherReasonTemp;
+
     }
-    otherReason= otherReason.substr(0,otherReason.length-1);
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
@@ -242,36 +268,61 @@ module.exports.doEdit = function (req, res) {
     var isCarefulNurse = req.body.isCarefulNurse ? req.body.isCarefulNurse : '';
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
     var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
-    var diagnosis ="" ;
-    for(var i=0;i<diagnosisTemp.length;i++){
-        diagnosis+=diagnosisTemp[i]+",";
+    var diagnosis="" ;
+    if (diagnosisTemp instanceof Array) {
+        for (var i=0;i<diagnosisTemp.length;i++)
+        {
+            diagnosis +=diagnosisTemp[i]+',';
+        }
+        diagnosis =diagnosis.substr(0,diagnosis.length-1);
+    }else{
+        diagnosis=  diagnosisTemp;
+
     }
-    diagnosis= diagnosis.substr(0,diagnosis.length-1);
+
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
     var childReasonTemp = req.body.childReason ? req.body.childReason : '';
     var childReason ="" ;
-    for(var i=0;i<childReasonTemp.length;i++){
-        childReason+=childReasonTemp[i]+",";
+    if (childReasonTemp instanceof Array) {
+        for (var i=0;i<childReasonTemp.length;i++)
+        {
+            childReason +=childReasonTemp[i]+',';
+        }
+        childReason =childReason.substr(0,childReason.length-1);
+    }else{
+        childReason=  childReasonTemp;
+
     }
-    childReason= childReason.substr(0,childReason.length-1);
+
     var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
     var motherReasonTemp = req.body.motherReason ? req.body.motherReason : '';
     var motherReason ="" ;
-    for(var i=0;i<motherReasonTemp.length;i++){
-        motherReason+=motherReasonTemp[i]+",";
+    if (motherReasonTemp instanceof Array) {
+        for (var i=0;i<motherReasonTemp.length;i++)
+        {
+            motherReason +=motherReasonTemp[i]+',';
+        }
+        motherReason =motherReason.substr(0,motherReason.length-1);
+    }else{
+        motherReason=  motherReasonTemp;
+
     }
-    motherReason= motherReason.substr(0,motherReason.length-1);
     var leaveAdvise = req.body.leaveAdvise ? req.body.leaveAdvise : '';
     var otherReasonTemp = req.body.otherReason ? req.body.otherReason : '';
-    var otherReason ="" ;
-    for(var i=0;i<otherReasonTemp.length;i++){
-        otherReason+=otherReasonTemp[i]+",";
+    var otherReason="" ;
+    if (otherReasonTemp instanceof Array) {
+        for (var i=0;i<otherReasonTemp.length;i++)
+        {
+            otherReason +=otherReasonTemp[i]+',';
+        }
+        otherReason =otherReason.substr(0,otherReason.length-1);
+    }else{
+        otherReason=  otherReasonTemp;
+
     }
-    otherReason= otherReason.substr(0,otherReason.length-1);
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
-    var outLogId= req.body.outLogId ? req.body.outLogId : '';
 
     // 获取
     var oper = req.body.principalId ? req.body.principalId : '';
