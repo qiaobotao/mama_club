@@ -20,6 +20,7 @@ var attendanceTypeAction = require('./attendanceTypeAction');//考勤类型
 var attendanceChangeAction = require('./attendanceChangeAction');//考勤变更
 var attendanceSearchAction = require('./attendanceSearchAction');//考勤变更
 var performanceSearchAction = require('./performanceSearchAction');//考勤变更
+var staffLevelAction = require('./staffLevelAction');//员工等级管理
 var memberCardTypeAction = require('./memberCardTypeAction');//会员卡类型
 var activityManageAction = require('./activityManageAction');//活动管理
 var memberAction = require('./memberAction');//会员管理
@@ -39,7 +40,7 @@ var sysResourcesAction = require('./sysResourcesAction');//资源管理
 var sysMenuAction = require('./sysMenuAction');//菜单管理
 var sysRoleAction = require('./sysRoleAction');//角色管理
 var sysUserAction = require('./sysUserAction');//系统用户管理
-var staffLevelAction = require('./staffLevelAction');//员工等级管理
+var noticeAction = require('./noticeAction');//公告管理
 var punchCardAction = require('./punchCardAction');
 
 var memberCardAction = require('./memberCardAction');//会员卡管理
@@ -114,6 +115,11 @@ router.all('/attendance_search_list',attendanceSearchAction.list);
 // 绩效查询
 router.all('/performance_search_list',performanceSearchAction.list);
 // 绩效考勤
+// 员工等级
+router.all('/staff_level_list',staffLevelAction.list);
+router.all('/staff_level_edit',staffLevelAction.preEdit);
+router.all('/staff_level_save',staffLevelAction.save);
+router.all('/staff_level_del',staffLevelAction.delStaffLevel);
 
 /*********************会员管理****************************/
 // 会员卡类型
@@ -302,11 +308,11 @@ router.all('/sys_user_save', sysUserAction.save);
 router.all('/sys_user_del', sysUserAction.del);
 // 个人设置
 router.all('/sys_user_set',sysUserAction.set);
-//员工等级
-router.all('/staff_level_list',staffLevelAction.list);
-router.all('/staff_level_edit',staffLevelAction.preEdit);
-router.all('/staff_level_save',staffLevelAction.save);
-router.all('/staff_level_del',staffLevelAction.delStaffLevel);
+// 公告管理
+router.all('/notice_list',noticeAction.list);
+router.all('/notice_edit',noticeAction.preEdit);
+router.all('/notice_save',noticeAction.save);
+router.all('/notice_del',noticeAction.del);
 
 
 //demo演示
