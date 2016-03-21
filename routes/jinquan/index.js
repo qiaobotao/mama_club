@@ -18,6 +18,7 @@ var staffAction = require('./staffAction');//员工管理
 var staffTrainAction = require('./staffTrainAction');//员工培训
 var attendanceTypeAction = require('./attendanceTypeAction');//考勤类型
 var attendanceChangeAction = require('./attendanceChangeAction');//考勤变更
+var attendanceSearchAction = require('./attendanceSearchAction');//考勤变更
 var memberCardTypeAction = require('./memberCardTypeAction');//会员卡类型
 var activityManageAction = require('./activityManageAction');//活动管理
 var memberAction = require('./memberAction');//会员管理
@@ -107,6 +108,7 @@ router.all('/attendance_change_edit',attendanceChangeAction.edit);
 router.all('/attendance_change_save',attendanceChangeAction.save);
 router.all('/attendance_change_del',attendanceChangeAction.del);
 // 查询考勤
+router.all('/attendance_search_list',attendanceSearchAction.list);
 // 绩效查询
 // 绩效考勤
 

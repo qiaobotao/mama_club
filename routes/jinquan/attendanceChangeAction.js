@@ -15,7 +15,6 @@ module.exports.list = function (req, res) {
     var attendanceType = req.query.attendanceType ? req.query.attendanceType : '';//变更类型
     var startDate = req.query.startDate ? req.query.startDate : '';//请假开始日期
     var endDate = req.query.endDate ? req.query.endDate : '';//请假截止日期
-
     service.fetchAllAttendanceChange(staffName,attendanceType,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
             results.staffName = staffName;

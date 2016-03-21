@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>查询考勤</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function search() {
+            var staffName = $("#staffName").val();
+            var attendanceType = $("#attendanceType").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            window.location.href = '/jinquan/attendance_change_list?staffName='+staffName+'&attendanceType='+attendanceType+'&startDate='+startDate+'&endDate='+endDate;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/attendance_change_edit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/attendance_change_del?id='+id;
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：考勤变更列表
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="" /></td>
+                    <td> &nbsp;开始日期：<input name="startDate" id="startDate" type="text" class="input5" value="" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
+                    <td> &nbsp;截止日期：<input name="endDate" id="endDate" type="text" class="input5" value=""  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="but_0"><a href="/jinquan/attendance_change_edit" class="bsty0"></a></div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>时间</th>
+                <th>员工</th>
+                <th>上班打卡</th>
+                <th>下班打卡</th>
+                <th>考勤情况</th>
+                <th>加班(请假)时长</th>
+                <th>备注</th>
+            </tr>
+
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].day%></td>
+                <td><%=data.data[i].staffName%></td>
+                <td><%=data.data[i].punchCardDate%></td>
+                <td><%=data.data[i].punchCardDate%></td>
+                <td>
+                    <%
+                    if(data.data[i].attendanceType == 'jb'){
+                        %>加班<%
+                    }else{
+                        %>请假<%
+                    }
+                    %>
+                </td>
+                <td><%=data.data[i].attendanceTime%></td>
+                <td><%=data.data[i].attendanceReason%></td>
+            </tr>
+            <%}%>
+        </table>
+
+        <%- include ../pagination.html -%>
+    </div>
+</div>
+
+</body>
+</html>
