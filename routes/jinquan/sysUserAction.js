@@ -147,12 +147,26 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertSysUser(userName,password,shopId,staffId,function(err, results) {
+        service.insertSysUser(userName,password,staffId,function(err, results) {
             if(!err) {
-                //员工时，不需要员工id
-                service.insertSysUserRole(results.insertId,roleId,function(err, results) {
-                    if(!err) {//添加用户——角色关联表成功
-                        res.redirect('/jinquan/sys_user_list?replytype=add');
+                id = results.insertId;
+                service.deleteRoleByUserId(id,function(err, results) {
+                    if(!err) {//删除用户——角色关联表成功
+                        service.insertSysUserRole(id,roleId,function(err, results) {
+                            if(!err) {//添加用户——角色关联表成功
+                                service.insertSysUserShop(id,shopIdsArr,function(err, results) {
+                                    if(!err) {//添加用户——角色关联表成功
+                                        res.redirect('/jinquan/sys_user_list?replytype=update');
+                                    } else {
+                                        console.log(err.message);
+                                        res.render('error');
+                                    }
+                                })
+                            } else {
+                                console.log(err.message);
+                                res.render('error');
+                            }
+                        })
                     } else {
                         console.log(err.message);
                         res.render('error');

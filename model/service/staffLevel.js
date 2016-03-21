@@ -133,16 +133,12 @@ module.exports.fetchSingleStaffLevel =function (id, cb) {
 
 /**
  * 分页员工等级信息
- * @param pages
- * @param count
  * @param cb
  */
-module.exports.fetchStaffLevels = function(pages, count, cb) {
+module.exports.fetchStaffLevels = function(cb) {
 
-    var start = pages * count;
-    var end = start + count;
-    var sql = 'SELECT * FROM staffLevel ORDER BY dateline DESC LIMIT ?, ?';
-    db.query(sql, [start, end], function (cbData, err, rows, fields) {
+    var sql = 'SELECT * FROM staffLevel ORDER BY dateline DESC ';
+    db.query(sql, [], function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

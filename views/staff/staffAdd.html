@@ -111,7 +111,20 @@
             <tr>
                 <td class="regTd_l">打卡机编号：</td>
                 <td class="regTd_r"><input id="clockCode" name="clockCode" type="text" class="input5" value="<%=staff.clockCode%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">备注：</td>
+                <td class="regTd_l">员工等级：</td>
+                <td class="regTd_r">
+                    <select id="staffLevel" name="staffLevel">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < staffLevelList.length ; i++){
+                            %><option value="<%=staffLevelList[i].id%>" <%if(staff.staffLevel == staffLevelList[i].id){%>selected<%}%>><%=staffLevelList[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l" rowspan="2">备注：</td>
                 <td class="regTd_r"><input id="remarks" name="remarks" type="text" class="input5" value="<%=staff.remarks%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>

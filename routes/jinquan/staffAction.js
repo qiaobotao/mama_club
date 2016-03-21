@@ -4,6 +4,7 @@
 
 var service = require('../../model/service/staff');
 var classroomService = require('../../model/service/classroom');
+var staffLevelService = require('../../model/service/staffLevel');
 /**
  * 获取员工列表
  * @param req
@@ -60,9 +61,10 @@ module.exports.save = function (req, res) {
     var shopId = req.body.shopId ? req.body.shopId : '';
     var clockCode = req.body.clockCode ? req.body.clockCode : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
+    var staffLevel = req.body.staffLevel ? req.body.staffLevel : '';
 
     if(id!=''){//修改
-        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,function(err, results) {
+        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/staff_list');
             } else {
@@ -71,7 +73,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,function(err, results) {
+        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/staff_list');
             } else {
@@ -100,7 +102,14 @@ module.exports.preEdit = function(req, res, next) {
             classroomService.getAllClassroom(function(err, results) {
                 if (!err) {
                     var classroomList = results;
-                    res.render('staff/staffAdd', {staff : staff,classroomList:classroomList});
+                    staffLevelService.fetchStaffLevels(function(err, results) {
+                        if (!err) {
+                            var staffLevelList = results;
+                            res.render('staff/staffAdd', {staff : staff,classroomList:classroomList,staffLevelList:staffLevelList});
+                        } else {
+                            next();
+                        }
+                    })
                 } else {
                     next();
                 }
