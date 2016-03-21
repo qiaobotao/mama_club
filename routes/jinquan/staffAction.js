@@ -57,12 +57,12 @@ module.exports.save = function (req, res) {
     var startJobTime = req.body.startJobTime ? req.body.startJobTime : '';
     var endJobTime = req.body.endJobTime ? req.body.endJobTime : '';
     var isJob = req.body.isJob ? req.body.isJob : '';
-    var classroomId = req.body.classroomId ? req.body.classroomId : '';
+    var shopId = req.body.shopId ? req.body.shopId : '';
     var clockCode = req.body.clockCode ? req.body.clockCode : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
 
     if(id!=''){//修改
-        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks,function(err, results) {
+        service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/staff_list');
             } else {
@@ -71,7 +71,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks,function(err, results) {
+        service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/staff_list');
             } else {

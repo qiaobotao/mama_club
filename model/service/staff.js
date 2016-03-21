@@ -119,12 +119,12 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks, cb) {
+module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks, cb) {
 
     var sql = 'UPDATE staff SET serialNumber = ?, name = ?, tel = ?, idCard = ?, birthDate = ?, highestEducation = ? , graduationSchool = ? , spouseName = ? ' +
-        ', spouseTel = ? , email = ? , startJobTime = ? , endJobTime = ? , isJob = ? , classroomId = ? , clockCode = ?, remarks = ? WHERE id = ?';
+        ', spouseTel = ? , email = ? , startJobTime = ? , endJobTime = ? , isJob = ? , shopId = ? , clockCode = ?, remarks = ? WHERE id = ?';
 
-    var par = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,classroomId,clockCode,remarks, id];
+    var par = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

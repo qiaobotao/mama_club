@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>员工列表</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+
+        var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
+
+        function search() {
+            var name = document.getElementById('name').value;
+            window.location.href = '/jinquan/staff_level_list?name='+name;
+        }
+        function preEdit (id) {
+            window.location.href = '/jinquan/staff_level_edit?id='+id;
+        }
+        function del (id) {
+            window.location.href = '/jinquan/staff_level_del?id='+id;
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：员工等级
+    </div>
+    <div class="zhuxiao"><a href="#" class="zx_sty"></a></div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
+                    <td>等级名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="but_0"><a href="/jinquan/staff_level_edit" class="bsty0"></a></div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>等级名称</th>
+                <th>升级实操数</th>
+                <th>升级内训积分</th>
+                <th>升级考勤天数</th>
+                <th>操作</th>
+            </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].serverNum%></td>
+                <td><%=data.data[i].attendanceNum%></td>
+                <td><%=data.data[i].trainNum%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
+        </table>
+
+        <%- include ../pagination.html -%>
+    </div>
+</div>
+
+</body>
+</html>

@@ -13,10 +13,10 @@ var async = require('async');
  * @param staffId
  * @param cb
  */
-module.exports.insertSysUser = function(userName,password,shopId,staffId, cb) {
+module.exports.insertSysUser = function(userName,password,staffId, cb) {
 
-    var sql = 'INSERT INTO sysUser (userName,password,shopId,staffId,activity,dateline) VALUES (?,?,?,?,?,?)';
-    db.query(sql, [userName,password,shopId,staffId,'1',new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO sysUser (userName,password,staffId,activity,dateline) VALUES (?,?,?,?,?)';
+    db.query(sql, [userName,password,staffId,'1',new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
