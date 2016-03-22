@@ -17,7 +17,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击添加</strong>");
                     $(this).click(function(){
-                        var add_url = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate;
+                        var add_url = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate+'&type=1';
                         window.location.href=add_url;
                     });
                 }).mouseleave(function(){

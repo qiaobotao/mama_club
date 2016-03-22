@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加课程</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+
+
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        var classroomid = '<%=result.classRoomId%>';
+        var courseId = '<%=result.courseId%>';
+        var date = '<%=result.date%>';
+
+        function changeFrom(doc) { // 1.内训 2.专业课 3.父母课 4.会议
+            var type = doc.value;
+            if (type == 1) {
+                window.location.href = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classroomid+'&date='+date+"&type=1";
+            } else if (type == 2) {
+                window.location.href = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classroomid+'&date='+date+"&type=2";
+            } else if (type == 3) {
+                window.location.href = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classroomid+'&date='+date+"&type=3";
+            } else if (type == 4) {
+                window.location.href = "/jinquan/course_plan_pre_add?courseId="+courseId+"&classRoomId="+classroomid+'&date='+date+"&type=4";
+            }
+        }
+
+
+        function submitForm () {
+
+
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：系统排课
+    </div>
+</div>
+<div class="center_con">
+
+    <div class="tabCon">
+        <div class="nx1">
+            <select id="courseType" name="courseType" onchange="changeFrom(this)">
+                <option value="1" selected>内训</option>
+                <option value="2">专业课</option>
+                <option value="3">父母课</option>
+                <option value="4">会议</option>
+            </select>
+            <hr class="lineSty" />
+        </div>
+        <div id="neixun">
+            <form id="neixunFrom"  method="post" >
+
+                <div class="nx1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
+                        <tr>
+                            <td width="10%">课程名称：</td>
+                            <td width="40%"><input id="course" name="course" type="text" class="input6"  /></td>
+                            <td width="10%">授课教师：</td>
+                            <td width="40%"><input id="techer" name="techer" type="text" class="input6"  /></td>
+                        </tr>
+                        <tr>
+                            <td>授课讲师：</td>
+                            <td><input id="doctor" name="doctor" type="text" class="input6" /></td>
+                        </tr>
+                    </table>
+                    <hr class="lineSty" />
+                </div>
+                <div class="nx1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bordered">
+                        <thead>
+                        <tr>
+
+                            <th>8:00~8:30</th>
+                            <th>8:30~9:00</th>
+                            <th>9:30~10:00</th>
+                            <th>10:00~10:30</th>
+                            <th>10:30~11:00</th>
+                            <th>11:30~12:00</th>
+                            <th>14:00~14:30</th>
+                            <th>14:30~15:00</th>
+                            <th>15:00~15:30</th>
+                            <th>15:30~16:00</th>
+                            <th>16:00~16:30</th>
+                            <th>16:30~17:00</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="classBlue">&nbsp;</td>
+                            <td class="classBlue">&nbsp;</td>
+                            <td class="" >&nbsp;</td>
+                            <td class="">&nbsp;</td>
+                            <td class="classViolet">&nbsp;</td>
+                            <td class="">&nbsp;</td>
+                            <td class="classGreen">&nbsp;</td>
+                            <td class="classGreen">&nbsp;</td>
+                            <td class="classRed">&nbsp;</td>
+                            <td class="">&nbsp;</td>
+                            <td class="">&nbsp;</td>
+                            <td class="">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr class="lineSty" />
+                </div>
+                <div class="nx1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"   >
+                        <tr>
+                            <td width="10%">选择授课时间段：</td>
+                            <td width="40%">
+                                <select id="startTime" name="startTime" class="select2" style="width:100px;">
+                                    <option value="1">8:00</option>
+                                    <option value="2">8:30</option>
+                                    <option value="3">9:00</option>
+                                </select> --
+                                <select id="endTime" name="endTime" class="select2" style="width:100px;">
+                                    <option value="2">8:30</option>
+                                </select>
+
+                            </td>
+                            <td width="10%">课程满分：</td>
+                            <td width="40%"><input id="score" name="score" type="text" class="input6"  /></td>
+                        </tr>
+                        <tr>
+                            <td width="10%" valign="top">培训内容：</td>
+                            <td colspan="3">
+                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1">
+                     </textarea>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <hr class="lineSty" />
+                </div>
+                <div class="nx1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="bordered borderedblue">
+                        <thead>
+                        <tr>
+                            <th width="24%">员工名称</th>
+                            <th width="44%">员工级别</th>
+                            <th width="32%">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>王小二</td>
+                            <td>顶级</td>
+                            <td><a href="#" class="addyg">添加</a><a href="#" class="deleteyg">删除</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr class="lineSty" />
+                </div>
+
+            </form>
+        </div>
+        <div class="nx1" style="text-align:center; margin-top:55px;">
+            <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button"  value="取消" class="button gray">取消</button>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

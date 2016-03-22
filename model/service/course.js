@@ -494,6 +494,38 @@ module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDat
 }
 
 
+module.exports.getPlan = function (classroomId,courseDate,cb) {
+
+    var sql = 'SELECT courseType,courseTimeStart,courseTimeEnd FROM course WHERE classroomId =? AND courseDate = ?';
+
+    db.query(sql,[classroomId,courseDate],function(cbData, err, rows, fields) {
+
+        if (!err) {
+
+            cb(null,rows);
+        } else {
+           cb(err);
+        }
+    });
+}
+
+module.exports.delCourse = function (courseId,cb) {
+
+    // 删除课表，先删除主表，然后从表每个表都删除一次
+    var del = 'DELETE FROM course WHERE id = ?';
+    var del_u = 'DELETE FROM courseUser WHERE couresId = ?';
+    var del_t = 'DELETE FROM courseTeacher WHERE courseId = ?';
+    db.query(del,[courseId], function(cbData, err, rows, fields) {
+
+        if (!err) {
+            db.query(del_u,[courseId],function(cbData, err, rows, fields){});
+            db.query(del_t,[courseId],function(cbData, err, rows, fields){});
+            cb(null,null);
+        } else {
+            cb(err);
+        }
+    });
+}
 /**
  * 获取所在月第一天至下月最后一天的排课信息
  * @param cb

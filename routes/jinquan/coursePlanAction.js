@@ -17,17 +17,32 @@ module.exports.list = function (req, res, next) {
 
 module.exports.preadd = function (req, res, next) {
 
+    var type = req.query.type ? req.query.type : '';
+
     var courseId = req.query.courseId ? req.query.courseId : '';
     var classRoomId = req.query.classRoomId ? req.query.classRoomId : '';
     var date = req.query.date ? req.query.date : '';
-
     var obj = {};
     obj.courseId = courseId;
     obj.classRoomId = classRoomId;
     obj.date = date;
+    service.getPlan(classRoomId,date,function (err, results) {
+        if (!err) {
+            obj.coursePlan = results;
+            if (type == 1) {
+                res.render('coursePlan/coursePlanAdd_neixun', {result : obj});
+            } else if (type == 2) {
+                res.render('coursePlan/coursePlanAdd_zhuanye', {result : obj});
+            } else if (type == 3) {
+                res.render('coursePlan/coursePlanAdd_fumu', {result : obj});
+            } else if (type == 4) {
+                res.render('coursePlan/coursePlanAdd_huiyi', {result : obj});
+            }
 
-    res.render('coursePlan/coursePlanAdd', {result : obj});
-
+        } else {
+            next();
+        }
+    });
 }
 
 module.exports.add = function (req, res, next) {
