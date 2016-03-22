@@ -245,3 +245,27 @@ module.exports.deleteRoleByUserId =function (userId, cb) {
         }
     });
 }
+
+
+/**
+ * 根据门店名称、用户名找到用户信息
+ * @param shop
+ * @param checkUser
+ * @param cb
+ */
+module.exports.checkUser = function (shop,checkUser,cb) {
+
+    var sql = 'SELECT u.`password` FROM sysUser u,staff st,shop sp ' +
+        'WHERE sp.id = st.shopId ' +
+        'AND u.staffId = st.id ' +
+        'AND u.userName = ? ' +
+        'AND sp.`name` = ?';
+    db.query(sql, [checkUser,shop],function (cbData, err, rows, fields) {
+        if (!err) {
+            cb (null, rows);
+        } else {
+            cb(err);
+        }
+    });
+
+}

@@ -12,6 +12,9 @@ var shopService = require('../../model/service/shop');
  */
 module.exports.list = function (req, res) {
 
+    var shop = req.query.shop ? req.query.shop : '';
+    var account = req.query.account ? req.query.account : '';
+    var password = req.query.password ? req.query.password : '';
     var currentPage = req.query.page ? req.query.page : '1';
     var userName = req.query.userName ? req.query.userName : '';
 
