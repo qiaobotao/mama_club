@@ -255,7 +255,7 @@ module.exports.deleteRoleByUserId =function (userId, cb) {
  */
 module.exports.checkUser = function (shop,checkUser,cb) {
 
-    var sql = 'SELECT u.`password` FROM sysUser u,staff st,shop sp ' +
+    var sql = 'SELECT u.`password`,st.name as `userName`,sp.name as `shopName`,u.id FROM sysUser u,staff st,shop sp ' +
         'WHERE sp.id = st.shopId ' +
         'AND u.staffId = st.id ' +
         'AND u.userName = ? ' +
@@ -268,4 +268,44 @@ module.exports.checkUser = function (shop,checkUser,cb) {
         }
     });
 
+}
+
+/**
+ * 根据用户id获取用户所有菜单集合及功能按钮集合
+ * @param uId
+ * @param cb
+ */
+module.exports.getMenuAndResourcesByUserId = function(uId,cb) {
+
+    var menusSql = "SELECT * from sysMenu m where m.id in (SELECT rm.menuId from sysUserRole r,sysRoleMenu rm where r.roleId = rm.roleId and r.userId = ?) ";
+
+    var resourcesSql = 'SELECT * from sysResources m where m.id in (SELECT rm.resourcesId from sysUserRole r,sysRoleResources rm where r.roleId = rm.roleId and r.userId = ?)';
+
+    async.series({
+        menusData : function(callback){
+            db.query(resourcesSql, [uId], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        resourcesData : function(callback){
+            db.query(resourcesSql, [uId], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
 }

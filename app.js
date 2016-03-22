@@ -51,48 +51,41 @@ app.use(function(req, res, next){
             sysUserService.checkUser(shop,account, function (err, results) {
                 if (!err) {
                     if(results.length > 0){
-                        var pwd = results[0];
-                        if(pwd.password == password){
-                            res.redirect('/jinquan');
+                        var resUser = results[0];
+                        if(resUser.password == password){
+                            //查询出用户相关权限，并一起放入到用户所在session中
+                            sysUserService.getMenuAndResourcesByUserId(resUser.id,function(err,menuAndResources){
+                                if(!err){
+                                    //记录用户信息：用户id、用户所在门店、用户名称
+                                    var user = {};
+                                    user.id = resUser.id;//用户id
+                                    user.name = resUser.userName;//用户名称
+                                    user.shopName = resUser.shopName;//所在门店
+                                    user.menus = menuAndResources.menusData;//拥有菜单
+                                    user.resourcesData = menuAndResources.resourcesData;//拥有资源
+                                    req.session.user = user;
+                                    res.redirect('/jinquan');
+                                }else{
+                                    res.redirect("/");
+                                }
+                            })
                         }else{
-                            res.redirect('/login');
+                            res.redirect('/');
                         }
                     }else{
-                        res.redirect('/login');
+                        res.redirect('/');
                     }
                 } else {
                     next();
                 }
             });
-            //next();
-            //res.redirect('/jinquan');
-        }else if (path == '/jinquan') {
-
-           var shop = req.body.shop ? req.body.shop : '';
-           var account = req.body.account ? req.body.account : '';
-           var password = req.body.password ? req.body.password : '';
-           //sysUserService.checkUser(shop,account, function (err, results) {
-           //    if (!err) {
-           //        if(results.length > 0){
-           //            var pwd = results[0];
-           //            if(pwd.password == password){
-           //                next();
-           //            }else{
-           //                res.redirect('login');
-           //            }
-           //        }else{
-           //            res.redirect('login');
-           //        }
-           //    } else {
-           //        next();
-           //    }
-           //});
+        }else if (path == '/login') {//跳转到登陆页面不需要验证权限
            next();
        } else {
-           if (req.session.user) {
+           if (req.session.user) {//验证是否有用户信息，如果没有跳转到登陆页面
                 next();
            } else {
-               res.render('login');
+               res.redirect('/');
            }
        }
     } else {
