@@ -12,6 +12,9 @@ var wechatId = require('./routes/getOpenId');
 var session = require('express-session');
 
 var jinquan = require('./routes/jinquan');
+//验证用户登录server
+var sysUserService = require('./model/service/sysUser');
+
 var app = express();
 
 // view engine setup
@@ -39,7 +42,51 @@ app.use(function(req, res, next){
     var path = req.url;
 
     if (path != '/') {
-       if (path == '/jinquan') {
+
+        if (path == '/jinquan_login') {
+
+            var shop = req.body.shop ? req.body.shop : '';
+            var account = req.body.account ? req.body.account : '';
+            var password = req.body.password ? req.body.password : '';
+            sysUserService.checkUser(shop,account, function (err, results) {
+                if (!err) {
+                    if(results.length > 0){
+                        var pwd = results[0];
+                        if(pwd.password == password){
+                            res.redirect('/jinquan');
+                        }else{
+                            res.redirect('/login');
+                        }
+                    }else{
+                        res.redirect('/login');
+                    }
+                } else {
+                    next();
+                }
+            });
+            //next();
+            //res.redirect('/jinquan');
+        }else if (path == '/jinquan') {
+
+           var shop = req.body.shop ? req.body.shop : '';
+           var account = req.body.account ? req.body.account : '';
+           var password = req.body.password ? req.body.password : '';
+           //sysUserService.checkUser(shop,account, function (err, results) {
+           //    if (!err) {
+           //        if(results.length > 0){
+           //            var pwd = results[0];
+           //            if(pwd.password == password){
+           //                next();
+           //            }else{
+           //                res.redirect('login');
+           //            }
+           //        }else{
+           //            res.redirect('login');
+           //        }
+           //    } else {
+           //        next();
+           //    }
+           //});
            next();
        } else {
            if (req.session.user) {
