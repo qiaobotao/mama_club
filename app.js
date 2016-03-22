@@ -59,7 +59,7 @@ app.use(function(req, res, next){
                                     //记录用户信息：用户id、用户所在门店、用户名称
                                     var user = {};
                                     user.id = resUser.id;//用户id
-                                    user.name = resUser.userName;//用户名称
+                                    user.userName = resUser.userName;//用户名称
                                     user.shopName = resUser.shopName;//所在门店
                                     user.menus = menuAndResources.menusData;//拥有菜单
                                     user.resourcesData = menuAndResources.resourcesData;//拥有资源
@@ -70,10 +70,10 @@ app.use(function(req, res, next){
                                 }
                             })
                         }else{
-                            res.redirect('/');
+                            res.redirect("/");
                         }
                     }else{
-                        res.redirect('/');
+                        res.redirect("/");
                     }
                 } else {
                     next();
@@ -85,10 +85,11 @@ app.use(function(req, res, next){
            if (req.session.user) {//验证是否有用户信息，如果没有跳转到登陆页面
                 next();
            } else {
-               res.redirect('/');
+               res.redirect("/");
            }
        }
     } else {
+        req.session.user = null;
         next();
     }
 });

@@ -15,7 +15,7 @@ module.exports.index = function (req, res) {
 
     //req.session.user = user;
 
-    res.render('welcome/index');
+    res.render('welcome/index',{userName : req.session.user.userName });
 
 }
 
