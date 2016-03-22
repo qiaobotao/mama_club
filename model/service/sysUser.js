@@ -13,10 +13,10 @@ var async = require('async');
  * @param staffId
  * @param cb
  */
-module.exports.insertSysUser = function(userName,password,staffId, cb) {
+module.exports.insertSysUser = function(userName,password,staffId,activity, cb) {
 
     var sql = 'INSERT INTO sysUser (userName,password,staffId,activity,dateline) VALUES (?,?,?,?,?)';
-    db.query(sql, [userName,password,staffId,'1',new Date().getTime()], function(cbData, err, rows, fields) {
+    db.query(sql, [userName,password,staffId,activity,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -51,12 +51,12 @@ module.exports.delSysUser= function (id, cb) {
  */
 module.exports.fetchAllSysUser = function(userName,currentPage,cb) {
 
-    var parm = "WHERE userName LIKE '%"+userName+"%' ";
+    var parm = "WHERE a.userName LIKE '%"+userName+"%' ";
 
-    var sql_count = 'SELECT count(*) as count FROM sysUser '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM sysUser a '+parm+'  ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM sysUser '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'select a.id,a.userName,a.activity,st.name as `staffName`,s.name as `shopName` FROM sysUser a, shop s ,staff st '+parm+' AND st.shopId = s.id and a.staffId = st.id ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -97,9 +97,9 @@ module.exports.fetchAllSysUser = function(userName,currentPage,cb) {
  * @param name
  * @param cb
  */
-module.exports.updateSysUser = function(id, userName,password,staffId, cb) {
-    var sql = 'UPDATE sysUser SET userName = ?,password=?,staffId=? WHERE id = ?';
-    var par = [userName,password,staffId, id];
+module.exports.updateSysUser = function(id, userName,password,staffId, activity,cb) {
+    var sql = 'UPDATE sysUser SET userName = ?,password=?,staffId=?,activity=? WHERE id = ?';
+    var par = [userName,password,staffId,activity, id];
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -116,7 +116,8 @@ module.exports.updateSysUser = function(id, userName,password,staffId, cb) {
  * @param cb
  */
 module.exports.fetchSingleSysUser =function (id, cb) {
-    var sql = 'SELECT * FROM sysUser WHERE id = ?';
+    var sql = 'SELECT a.*,s.id as `shopId`,s.name as `shopName`,st.id as `staffId`,st.name as `staffName` FROM sysUser a, shop s ,staff st ' +
+        ' WHERE st.shopId = s.id AND a.staffId = st.id AND a.id = ? ';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);

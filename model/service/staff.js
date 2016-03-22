@@ -71,12 +71,12 @@ module.exports.fetchStaffs = function(pages, count, cb) {
  */
 module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
 
-    var parm = "WHERE name LIKE '%"+name+"%' AND serialNumber LIKE '%"+serialNumber+"%' AND tel LIKE '%"+tel+"%' ";
+    var parm = "WHERE a.name LIKE '%"+name+"%' AND a.serialNumber LIKE '%"+serialNumber+"%' AND a.tel LIKE '%"+tel+"%' ";
 
-    var sql_count = 'SELECT count(*) as count FROM staff '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM staff a '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM staff '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.*,s.name as `shopName`,s.id as `shopId` FROM staff a,shop s '+parm+' AND a.shopId = s.id ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

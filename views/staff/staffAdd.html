@@ -11,7 +11,6 @@
     <script type="text/javascript">
         function submitForm(){
             var name = document.getElementById("name").value;
-            alert(name);
             if (!name || name.length == 0) {
                 alert('门店名称不能为空');
                 return;
@@ -100,8 +99,8 @@
                     <select id="shopId" name="shopId">
                         <option value="">请选择</option>
                         <%
-                            for(var i = 0 ; i< classroomList.length ; i ++){
-                                %><option value="<%=classroomList[i].id%>" <%if(staff.shopId == classroomList[i].id){%>selected<%}%>><%=classroomList[i].name%></option><%
+                            for(var i = 0 ; i< shopList.length ; i ++){
+                                %><option value="<%=shopList[i].id%>" <%if(staff.shopId == shopList[i].id){%>selected<%}%>><%=shopList[i].name%></option><%
                             }
                         %>
                     </select>

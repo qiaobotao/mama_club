@@ -16,10 +16,17 @@
             window.location.href = '/jinquan/staff_select_train?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
         }
         //选择该商品
-        function select(name,seril){
+        function select(name,seril,shopName,shopId){
             var index = document.getElementById("index").value;
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName'+index).value=name;
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index).value=seril;
+            //如果父页面有门店id、门店名称对象，则为其赋值
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopName'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopName'+index).value=shopName;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopId'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopId'+index).value=shopId;
+            }
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
 
@@ -66,12 +73,12 @@
                 <td><%=data.data[i].name%></td>
                 <td><%=data.data[i].serialNumber%></td>
                 <td><%=data.data[i].tel%></td>
-                <td><%=data.data[i].belongShop%></td>
+                <td><%=data.data[i].shopName%></td>
                 <td><%=data.data[i].email%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>')">选择员工</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>','<%=data.data[i].shopName%>','<%=data.data[i].shopId%>')">选择员工</a>]</div></td>
                         </tr>
                     </table>
                 </td>

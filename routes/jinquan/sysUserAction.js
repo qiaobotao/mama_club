@@ -101,6 +101,7 @@ module.exports.save = function (req, res) {
     var shopIds = req.body.shopIds ? req.body.shopIds : '';
     var staffId = req.body.staffId ? req.body.staffId : '';
     var roleId = req.body.roleId ? req.body.roleId : '';
+    var activity = req.body.activity ? req.body.activity : '';
 
     var shopIdsArr = new Array();
     if (shopIds instanceof Array) {
@@ -117,7 +118,7 @@ module.exports.save = function (req, res) {
 
 
     if(id!=''){//修改
-        service.updateSysUser(id,userName,password,staffId,function(err, results) {
+        service.updateSysUser(id,userName,password,staffId,activity,function(err, results) {
             if(!err) {
                 service.deleteRoleByUserId(id,function(err, results) {
                     if(!err) {//删除用户——角色关联表成功
@@ -147,7 +148,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertSysUser(userName,password,staffId,function(err, results) {
+        service.insertSysUser(userName,password,staffId,activity,function(err, results) {
             if(!err) {
                 id = results.insertId;
                 service.deleteRoleByUserId(id,function(err, results) {

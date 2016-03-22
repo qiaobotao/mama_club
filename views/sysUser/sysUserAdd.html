@@ -18,38 +18,30 @@
             }
             document.getElementById("myform").submit();
         }
-        $(document).ready(function(){
-            var oDiv = document.getElementById("tab");
-            var oLi = oDiv.getElementsByTagName("div")[0].getElementsByTagName("li");
-            var aCon = oDiv.getElementsByTagName("div")[1].getElementsByTagName("div");
-            var timer = null;
-            for (var i = 0; i < oLi.length; i++) {
-                oLi[i].index = i;
-                oLi[i].onmouseover = function() {
-                    show(this.index);
+        //员工的选择
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
                 }
+            });
+        }
+        function setTab(name,cursel,n){
+            for(i=1;i<=n;i++){
+                var menu=document.getElementById(name+i);
+                var con=document.getElementById("con_"+name+"_"+i);
+                menu.className=i==cursel?"hover":"";
+                con.style.display=i==cursel?"block":"none";
             }
-            function show(a) {
-                index = a;
-                var alpha = 0;
-                for (var j = 0; j < oLi.length; j++) {
-                    oLi[j].className = "";
-                    aCon[j].className = "";
-                    aCon[j].style.opacity = 0;
-                    aCon[j].style.filter = "alpha(opacity=0)";
-                }
-                oLi[index].className = "cur";
-                clearInterval(timer);
-                timer = setInterval(function() {
-                            alpha += 2;
-                            alpha > 100 && (alpha = 100);
-                            aCon[index].style.opacity = alpha / 100;
-                            aCon[index].style.filter = "alpha(opacity=" + alpha + ")";
-                            alpha == 100 && clearInterval(timer);
-                        },
-                        5)
-            }
-        })
+        }
     </script>
 </head>
 
@@ -73,82 +65,98 @@
                 <td class="regTd_r"><input id="password" name="password" type="text" class="input5" value="<%=sysUser.password%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
+                <td class="regTd_l">选择员工：</td>
+                <td class="regTd_r">
+                    <input id="staffId" name="staffId" type="hidden" value="<%=sysUser.staffId%>"/>
+                    <input id="staffName" name="staffName" type="text" class="input5" value="<%=sysUser.staffName%>" onfocus="getmembers('')" />
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">所属门店：</td>
-                <td class="regTd_r"><input  type="text" class="input5" readonly value="<%=sysUser.shopId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">员工id：</td>
-                <td class="regTd_r"><input id="staffId" name="staffId" type="text" class="input5" value="<%=sysUser.staffId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input type="hidden" id="shopId" name="shopId" value="<%=sysUser.shopId%>" />
+                    <input type="text" id="shopName" name="shopName" class="input5" readonly value="<%=sysUser.shopName%>" />
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">是否启用：</td>
+                <td class="regTd_r">
+                    <select id="activity" name="activity">
+                        <option value="Y" <%if(sysUser.activity == 'Y'){%>selected<%}%>>启用</option>
+                        <option value="N" <%if(sysUser.activity == 'N'){%>selected<%}%>>停用</option>
+                    </select>
             </tr>
         </table>
-        <!-- 代码 begin -->
-        <div id="tab" >
-            <div class="tabList">
-                <ul>
-                    <li class="cur">关联角色</li>
-                    <li>关联机构</li>
-                </ul>
-            </div>
-            <div class="tabCon">
-                <div class="cur">
-                    <!--角色信息 start-->
-                    <table id="roleTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
-                        <tr bgcolor="lightblue">
-                            <td width="5%"><input type="checkbox"/></td>
-                            <td width="10%">角色名称</td>
-                            <td width="70%">角色描述</td>
-                        </tr>
-                        <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
-                        <% for (var i=0;i<data.data.length;i++) {%>
-                        <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                            <%
-                            var selectCheck = '';
-                            for (var j=0;j<data.roleResults.length;j++) {
-                            if(data.roleResults[j].roleId == data.data[i].id){
-                            selectCheck = 'checked';
-                            break;
-                            }
-                            %>
-                            <%}%>
-                            <td><input type="checkbox" name="roleId" value="<%=data.data[i].id%>" <%=selectCheck%>/></td>
-                            <td><%=data.data[i].name%></td>
-                            <td><%=data.data[i].describe%></td>
-                        </tr>
-                        <%}%>
-                    </table>
-                    <!--角色信息 end-->
 
+                <div class="main">
+                    <ul>
+                        <li id="two1" onclick="setTab('two',1,2)" class="hover">选择角色</li>
+                        <li id="two2" onclick="setTab('two',2,2)">关联门店</li>
+                    </ul>
+                    <div class="mainbox">
+                        <div class="subbox" id="con_two_1">
+                            <!--角色信息 start-->
+                            <table id="roleTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                                <tr bgcolor="lightblue">
+                                    <td width="5%"><input type="checkbox"/></td>
+                                    <td width="10%">角色名称</td>
+                                    <td width="70%">角色描述</td>
+                                </tr>
+                                <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
+                                <% for (var i=0;i<data.data.length;i++) {%>
+                                <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                                    <%
+                                    var selectCheck = '';
+                                    for (var j=0;j<data.roleResults.length;j++) {
+                                    if(data.roleResults[j].roleId == data.data[i].id){
+                                    selectCheck = 'checked';
+                                    break;
+                                    }
+                                    %>
+                                    <%}%>
+                                    <td><input type="checkbox" name="roleId" value="<%=data.data[i].id%>" <%=selectCheck%>/></td>
+                                    <td><%=data.data[i].name%></td>
+                                    <td><%=data.data[i].describe%></td>
+                                </tr>
+                                <%}%>
+                            </table>
+                            <!--角色信息 end-->
+                        </div>
+                        <div class="subbox" style="display:none;" id="con_two_2">
+
+                            <!--门店信息 start-->
+                            <table id="shopTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                                <tr bgcolor="lightblue">
+                                    <td width="5%"><input type="checkbox"/></td>
+                                    <td width="10%">门店名称</td>
+                                    <td width="70%">门店地址</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" name="shopIds"/></td>
+                                </tr>
+                                <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
+                                <% for (var i=0;i<shopData.shopResults.length;i++) {%>
+                                <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                                    <%
+                                    var selectCheck = '';
+                                    for (var j=0;j<shopData.selectShopResults.length;j++) {
+                                    if(shopData.shopResults[i].id == shopData.selectShopResults[j].shopId){
+                                    selectCheck = 'checked';
+                                    break;
+                                    }
+                                    %>
+                                    <%}%>
+                                    <td><input type="checkbox" name="shopIds" value="<%=shopData.shopResults[i].id%>" <%=selectCheck%>/></td>
+                                    <td><%=shopData.shopResults[i].name%></td>
+                                    <td><%=shopData.shopResults[i].address%></td>
+                                </tr>
+                                <%}%>
+                            </table>
+                            <!--门店信息 end-->
+                        </div>
+                        <div class="subbox" style="display:none;" id="con_two_3">娱乐新闻2</div>
+                        <div class="subbox" style="display:none;" id="con_two_4">军事新闻2</div>
+                    </div>
                 </div>
-                <div>
-
-                    <!--门店信息 start-->
-                    <table id="roleTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
-                        <tr bgcolor="lightblue">
-                            <td width="5%"><input type="checkbox"/></td>
-                            <td width="10%">门店名称</td>
-                            <td width="70%">门店地址</td>
-                        </tr>
-                        <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
-                        <% for (var i=0;i<shopData.shopResults.length;i++) {%>
-                        <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                            <%
-                            var selectCheck = '';
-                            for (var j=0;j<shopData.selectShopResults.length;j++) {
-                            if(shopData.shopResults[i].id == shopData.selectShopResults[j].shopId){
-                            selectCheck = 'checked';
-                            break;
-                            }
-                            %>
-                            <%}%>
-                            <td><input type="checkbox" name="shopIds" value="<%=shopData.shopResults[i].id%>" <%=selectCheck%>/></td>
-                            <td><%=shopData.shopResults[i].name%></td>
-                            <td><%=shopData.shopResults[i].address%></td>
-                        </tr>
-                        <%}%>
-                    </table>
-                    <!--门店信息 end-->
-                </div>
-            </div>
-        </div>
-
     </form>
     <br/><br/><br/><br/><br/><br/>
     <br/><br/><br/><br/><br/><br/>

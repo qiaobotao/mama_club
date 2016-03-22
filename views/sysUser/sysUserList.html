@@ -61,20 +61,18 @@
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
-                <th>登陆名</th>
-                <th>密码</th>
+                <th>员工名称</th>
                 <th>所属门店</th>
-                <th>员工id</th>
+                <th>登陆名</th>
                 <th>是否启用</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].staffName%></td>
+                <td><%=data.data[i].shopName%></td>
                 <td><%=data.data[i].userName%></td>
-                <td><%=data.data[i].password%></td>
-                <td><%=data.data[i].shopId%></td>
-                <td><%=data.data[i].staffId%></td>
-                <td><%=data.data[i].activity%></td>
+                <td><%if(data.data[i].activity=='Y'){%>启用<%}else{%>停用<%}%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

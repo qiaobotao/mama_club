@@ -435,3 +435,14 @@ ul,li{list-style:none;}
     opacity:1;
     filter:alpha(opacity=100);
 }
+
+/**********系统用户中角色与关联门店样式***********/
+
+*{margin:0; padding:0;}
+ul,li{ list-style:none;}
+.main{ width:80%; border:1px solid #ccc; float:left;font-size:12px;}
+.main ul{ float:left; height:28px; line-height:28px; border-bottom:1px solid #ccc;width:100%;}
+.main ul li{ float:left; width:80px; text-align:center; border-right:1px solid #ccc; }
+.main ul li.hover{ color:red; font-weight:900;}
+.mainbox{float:left;width:100%;}
+.subbox{ padding:20px;}

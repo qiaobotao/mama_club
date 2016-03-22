@@ -3,7 +3,7 @@
  */
 
 var service = require('../../model/service/staff');
-var classroomService = require('../../model/service/classroom');
+var shopService = require('../../model/service/shop');
 var staffLevelService = require('../../model/service/staffLevel');
 /**
  * 获取员工列表
@@ -99,13 +99,13 @@ module.exports.preEdit = function(req, res, next) {
             if(staff == null){
                 staff = {};
             }
-            classroomService.getAllClassroom(function(err, results) {
+            shopService.fetchShops(0,20,function(err, results) {
                 if (!err) {
-                    var classroomList = results;
+                    var shopList = results;
                     staffLevelService.fetchStaffLevels(function(err, results) {
                         if (!err) {
                             var staffLevelList = results;
-                            res.render('staff/staffAdd', {staff : staff,classroomList:classroomList,staffLevelList:staffLevelList});
+                            res.render('staff/staffAdd', {staff : staff,shopList:shopList,staffLevelList:staffLevelList});
                         } else {
                             next();
                         }
@@ -139,6 +139,12 @@ module.exports.del = function (req, res, next) {
 
 }
 
+/**
+ * 弹出层，选择用户时，使用
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.selectForTrain = function (req, res, next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
