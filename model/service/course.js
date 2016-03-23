@@ -98,6 +98,68 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
     });
 };
 
+/**
+ * 课程查询，分页显示
+ * @param classroomId
+ * @param courseType
+ * @param date
+ * @param currentPage
+ * @param cb
+ */
+module.exports.getCourseList = function (classroom,courseType,date,currentPage,cb) {
+
+    var par = "WHERE r.name LIKE '%"+classroom+"%' ";
+    if (courseType != '') {
+        par = par + ' AND courseType='+courseType;
+    }
+
+    if (date != '') {
+        par = par + " AND courseDate = '"+date+"'";
+    }
+
+    var sql_count = 'SELECT count(*) as count FROM course c, classroom r '+par+' AND c.classroomId = r.id  ORDER BY c.dateline DESC';
+
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+
+    var sql_data = 'SELECT c.id, c.name AS courseName, c.courseType, c.courseDate, r.name AS classroomName FROM course c, classroom r '+par+' AND c.classroomId = r.id ORDER BY c.dateline DESC LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+
+
+
+}
+
 
 module.exports.insertCourse_neixun = function (name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,teacher,cb) {
 
@@ -110,6 +172,7 @@ module.exports.insertCourse_neixun = function (name,classroomid,courseDate,start
             var insertid = rows.insertId;
             var insert_teacher = 'INSERT INTO courseTeacher (courseId,teacherId) VALUES (?,?)';
             var insert_user = 'INSERT INTO courseUser(courseId,userId) VALUES(?,?)';
+            var insert_staffTran = 'INSERT INTO staffTrain(courseId,staffId,dateline,status) VALUES (?,?,?,?)';
             db.query(insert_teacher,[insertid,teacher],function(cbData, err, rows, fields){
                 if(!err) {
                     async.map(arr_staff, function(item, callback) {
@@ -122,7 +185,22 @@ module.exports.insertCourse_neixun = function (name,classroomid,courseDate,start
                             }
                         });
                     }, function(err,results) {
-                        cb(err, results);
+                         if(!err) {
+                             async.map(arr_staff, function(item, callback) {
+
+                                 db.query(insert_staffTran, [insertid,item.staffId,new Date().getTime(),'N'], function (cbData, err, rows, fields) {
+                                     if (!err) {
+                                         callback(null, rows);
+                                     } else {
+                                         callback(err);
+                                     }
+                                 });
+                             }, function(err,results) {
+                                 cb(err, results);
+                             });
+                         } else {
+                            cb(err);
+                         }
                     });
                 } else {
                     cb(err);
@@ -473,7 +551,9 @@ module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDat
         if (!err) {
             var del_sql = 'DELETE FROM courseUser WHERE courseId = ?';
             var insert_sql = 'INSERT INTO courseUser(courseId,userId) VALUES(?,?)';
-
+            // 还需要向staffTrain插入数据
+            var del_staffTran = 'DELETE FROM staffTrain WHERE courseId = ?';
+            var insert_staffTran = 'INSERT INTO staffTrain(courseId,staffId,dateline,status) VALUES (?,?,?,?)';
             db.query(del_sql,[courseId], function(cbData, err, rows, fields) {
 
                 if (!err) {
@@ -487,7 +567,31 @@ module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDat
                             }
                         });
                     }, function(err,results) {
-                        cb(err, results);
+
+                        if(!err) {
+                            db.query(del_staffTran,[courseId],function(cbData, err, rows, fields) {
+
+                                if (!err) {
+
+                                    async.map(arr_staff, function(item, callback) {
+
+                                        db.query(insert_staffTran, [courseId,item.userid,new Date().getTime(),'N'], function (cbData, err, rows, fields) {
+                                            if (!err) {
+                                                callback(null, rows);
+                                            } else {
+                                                callback(err);
+                                            }
+                                        });
+                                    }, function(err,results) {
+                                        cb(err, results);
+                                    });
+                                } else {
+                                    cb(err);
+                                }
+                            });
+                        } else {
+                            cb(err);
+                        }
                     });
                 } else {
                     cb(err);
@@ -521,11 +625,13 @@ module.exports.delCourse = function (courseId,cb) {
     var del = 'DELETE FROM course WHERE id = ?';
     var del_u = 'DELETE FROM courseUser WHERE couresId = ?';
     var del_t = 'DELETE FROM courseTeacher WHERE courseId = ?';
+    var del_train = 'DELETE FROM staffTrain WHERE courseId = ?';
     db.query(del,[courseId], function(cbData, err, rows, fields) {
 
         if (!err) {
             db.query(del_u,[courseId],function(cbData, err, rows, fields){});
             db.query(del_t,[courseId],function(cbData, err, rows, fields){});
+            db.query(del_train,[courseId],function(cbData, err, rows, fields){});
             cb(null,null);
         } else {
             cb(err);

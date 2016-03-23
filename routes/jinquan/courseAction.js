@@ -8,8 +8,25 @@
  */
 var service = require('../../model/service/course');
 
-module.exports.list = function (req, res) {
-    res.render('course/courseList');
+module.exports.list = function (req, res,next) {
+
+    var currentPage = req.query.page ? req.query.page : '1';
+    var classroom = req.query.classroom ? req.query.classroom : '';
+    var courseType = req.query.courseType ? req.query.courseType : '';
+    var date = req.query.date ? req.query.date : '';
+
+    service.getCourseList(classroom,courseType,date,currentPage,function(err, results){
+        if (!err){
+            results.currentPage = currentPage;
+            results.classroom = classroom;
+            results.courseType = courseType;
+            results.date = date;
+            res.render('course/courseList',{data : results});
+
+        } else {
+            next();
+        }
+    });
 }
 /**
  * 增加教室
@@ -51,5 +68,13 @@ module.exports.selectForActivity = function (req, res, next) {
             next();
         }
     });
+
+}
+
+module.exports.detail = function (req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';
+
+
 
 }

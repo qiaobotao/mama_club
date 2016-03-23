@@ -5,10 +5,30 @@
     <title>课程查询</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
 </head>
+
+<script type="text/javascript">
+
+    function search () {
+        var classroom = document.getElementById('classroom').value;
+        var courseType = document.getElementById('courseType').value;
+        var date = document.getElementById('date').value;
+        window.location.href = '/jinquan/course_list?classroom='+classroom+'&courseType='+courseType+'&date='+date;
+    }
+
+    function pageturning (selectPage) {
+        var classroom = document.getElementById('classroom').value;
+        var courseType = document.getElementById('courseType').value;
+        var date = document.getElementById('date').value;
+        window.location.href = '/jinquan/course_list?page='+selectPage+'&classroom='+classroom+'&courseType='+courseType+'&date='+date;
+    }
+</script>
 
 <body>
 <div class="r_top">
@@ -21,10 +41,16 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>教室名称：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;课程分类：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;上课时间：<input name="" type="text" class="input5" /></td>
-                    <td><a href="#" class="chaxun"></a></td>
+                    <td>教室名称：<input id="classroom"  name="classroom" type="text" class="input5" value="<%=data.classroom%>"/></td>
+                    <td> &nbsp;课程分类：<select id="courseType" name="courseType">
+                        <option value=""></option>
+                        <option value="1" <%if(data.courseType== 1){%>selected <%}%>>内训</option>
+                        <option value="2" <%if(data.courseType== 2){%>selected <%}%>>专业课</option>
+                        <option value="3" <%if(data.courseType== 3){%>selected <%}%>>父母课</option>
+                        <option value="4" <%if(data.courseType== 4){%>selected <%}%>>会议</option>
+                    </select></td>
+                    <td> &nbsp;上课时间：<input id="date" name="date" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.date%>"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -40,11 +66,44 @@
                 <th>课程时间</th>
                 <th>操作</th>
             </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].courseName%></td>
+                <%
+                    if(data.data[i].courseType == 1){
+                    %><td>内训</td><%
+                    }
+                %>
+                <%
+                if(data.data[i].courseType == 2){
+                %><td>专业课</td><%
+                }
+                %>
+                <%
+                if(data.data[i].courseType == 3){
+                %><td>父母课</td><%
+                }
+                %>
+                <%
+                if(data.data[i].courseType == 4){
+                %><td>会议</td><%
+                }
+                %>
+
+                <td><%=data.data[i].classroomName%></td>
+                <td><%=data.data[i].courseDate%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/course_detail?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
         </table>
 
-        <div class="black2">
-            <span class="disabled">&lt; </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2">
-            &gt; </a></div>
+        <%- include ../pagination.html -%>
     </div>
 </div>
 
