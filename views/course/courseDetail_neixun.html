@@ -40,10 +40,9 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td width="10%">课程名称：</td>
-                            <td width="40%"><input id="course" name="course" type="text" class="input6"  /></td>
+                            <td width="40%"><input id="course" name="course" type="text" class="input6"  value="<%=data.course.name%>"/></td>
                             <td width="10%">授课教师：</td>
-                            <input id="teacherid" name="teacherid" type="hidden"  />
-                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6"/></td>
+                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6" value="<%=data.teacher%>"/></td>
                         </tr>
                     </table>
                     <hr class="lineSty" />
@@ -65,12 +64,12 @@
 
                             </td>
                             <td width="10%">课程满分：</td>
-                            <td width="40%"><input id="score" name="score" type="text" class="input6"  /></td>
+                            <td width="40%"><input id="score" name="score" type="text" class="input6" value="<%=data.course.scorse%>" /></td>
                         </tr>
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
                             <td colspan="3">
-                                <textarea id="content" name="content" cols="102" rows="3" class="textarea1"></textarea>
+                                <textarea id="content" name="content" cols="102" rows="3" class="textarea1"><%=data.course.content%></textarea>
                             </td>
                         </tr>
 
@@ -81,7 +80,7 @@
                 <!--员工信息 start-->
                 <span style="float: left; font-weight:bold;width: 100px;"><h3>员工信息</h3></span>
                 <br>
-                <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                <table id="waresTable" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
                     <tr bgcolor="lightblue">
 
                         <td>员工名称</td>
@@ -89,7 +88,16 @@
                         <td>电话</td>
                         <td>邮箱</td>
                     </tr>
+                    <%for(var i=0;i<data.users.length;i++) {%>
+                    <tr id="qqq">
+                        <td><input   name="proname" type="text" class="input5 input_arr" value="<%=data.users[i].name%>" readonly="true" /></td>
+                        <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.users[i].staffLevel%>" readonly="true"/></td>
+                        <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.users[i].tel%>" readonly="true"/></td>
+                        <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.users[i].email%>" readonly="true"/></td>
+                    </tr>
+                    <%}%>
                 </table>
+
 
             </form>
         </div>

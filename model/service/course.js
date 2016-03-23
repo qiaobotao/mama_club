@@ -215,7 +215,8 @@ module.exports.insertCourse_neixun = function (name,classroomid,courseDate,start
 module.exports.browse_neixun = function (courseId, cb) {
 
     var main_sql = 'SELECT * FROM course WHERE id = ?';
-    var sql = 'SELECT s.name,s.staffLevel FROM courseUser c,staff s WHERE c.userId = s.id AND  c.courseId = ?';
+    var sql_staff = 'SELECT s.name,s.staffLevel,s.tel,email FROM courseUser c,staff s WHERE c.userId = s.id AND  c.courseId = ?';
+    var sql_teacher = 'SELECT s.name FROM courseTeacher c,staff s WHERE c.teacherId = s.id AND  c.courseId = ?';
 
     db.query(main_sql,[courseId],function (cbData, err, rows, fields) {
 
@@ -225,12 +226,23 @@ module.exports.browse_neixun = function (courseId, cb) {
                 var obj = {};
                 var course = rows[0];
                 obj.course = course;
-                db.query(sql,[courseId],function(cbData, err, rows, fields) {
+                db.query(sql_staff,[courseId],function(cbData, err, rows, fields) {
 
                     if (!err) {
                         var users = rows;
                         obj.users = users;
-                        cb(null,obj);
+                        db.query(sql_teacher,[courseId],function(cbData, err, rows, fields) {
+                             if (!err) {
+                                 if (rows.length != 0) {
+                                     obj.teacher = rows[0].name;
+                                 } else {
+                                     obj.teacher = '';
+                                 }
+                                 cb(null,obj);
+                             } else {
+                                 cb(err);
+                             }
+                        });
                     } else {
                         cb(err);
                     }
