@@ -16,6 +16,28 @@
         var courseId = '<%=result.courseId%>';
         var date = '<%=result.date%>';
 
+
+
+        var iframIndex ;
+        function getWares(index){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择员工',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+
         function changeFrom(doc) { // 1.内训 2.专业课 3.父母课 4.会议
             var type = doc.value;
             if (type == 1) {
@@ -32,7 +54,88 @@
 
         function submitForm () {
 
+            var type = document.getElementById('courseType').value;
 
+            var course = document.getElementById('course').value;
+            if (!course || course.length == 0) {
+                parent.layer.alert('课程名称不能为空',{icon: 2});
+                return;
+            }
+            var teacher = document.getElementById('teacher').value;
+            if (!teacher || teacher.length == 0) {
+                parent.layer.alert('教师名称不能为空',{icon: 2});
+                return;
+            }
+            var startTime = document.getElementById('startTime').value;
+            var endTime = document.getElementById('endTime').value;
+            if (startTime>=endTime) {
+                parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
+                return;
+            }
+
+            var score = document.getElementById('score').value;
+            if (!score || score.length == 0) {
+                parent.layer.alert('分数不能为空',{icon: 2});
+                return;
+            }
+            var content = document.getElementById('content').value;
+            if (!content || content.length == 0) {
+                parent.layer.alert('培训内容不能为空',{icon: 2});
+                return;
+            }
+            if(!document.getElementsByName('staffId')[0]){
+                parent.layer.alert('请点击加号选择培训员工',{icon: 2});
+                return;
+            }
+            // 判断该表单中 是否有相同的 人员
+            var arr_proId = document.getElementsByName('staffId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('员工中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+            document.getElementById('neixunFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
+            document.getElementById('neixunFrom').submit();
+
+        }
+
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//员工名称
+            var cell2=row.insertCell(1);//员工级别
+            var cell3=row.insertCell(2);//电话
+            var cell4=row.insertCell(3);//邮箱
+            var cell5=row.insertCell(4);//删除本行
+            var cell6=row.insertCell(5);//员工id
+            cell1.innerHTML = '<input id="staffName'+waresIndex+'"  name="staffName" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell2.innerHTML='<input id="staffLevel'+waresIndex+'" name="staffLevel" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="tel'+waresIndex+'" name="tel" type="text" class="input5 input_arr" readonly="true"/>';
+            cell4.innerHTML='<input id="email'+waresIndex+'" name="email" type="text" class="input5 input_arr" readonly="true"/>';
+            cell6.innerHTML='<input id="staffId'+waresIndex+'" name="staffId" type="hidden" class="input5 input_arr" />';
+            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
+        function cancel() {
+            window.location.href='/jinquan/course_plan';
         }
 
     </script>
@@ -65,11 +168,8 @@
                             <td width="10%">课程名称：</td>
                             <td width="40%"><input id="course" name="course" type="text" class="input6"  /></td>
                             <td width="10%">授课教师：</td>
-                            <td width="40%"><input id="techer" name="techer" type="text" class="input6"  /></td>
-                        </tr>
-                        <tr>
-                            <td>授课讲师：</td>
-                            <td><input id="doctor" name="doctor" type="text" class="input6" /></td>
+                            <input id="teacherid" name="teacherid" type="hidden"  />
+                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6"  onfocus="getWares('')"/></td>
                         </tr>
                     </table>
                     <hr class="lineSty" />
@@ -133,39 +233,33 @@
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
                             <td colspan="3">
-                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1">
-                     </textarea>
+                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1"></textarea>
                             </td>
                         </tr>
 
                     </table>
                     <hr class="lineSty" />
                 </div>
-                <div class="nx1">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="bordered borderedblue">
-                        <thead>
-                        <tr>
-                            <th width="24%">员工名称</th>
-                            <th width="44%">员工级别</th>
-                            <th width="32%">操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>王小二</td>
-                            <td>顶级</td>
-                            <td><a href="#" class="addyg">添加</a><a href="#" class="deleteyg">删除</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <hr class="lineSty" />
-                </div>
+
+                <!--员工信息 start-->
+                <span style="float: left; font-weight:bold;width: 100px;"><h3>员工信息</h3></span>
+                <br>
+                <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                    <tr bgcolor="lightblue">
+
+                        <td>员工名称</td>
+                        <td>员工级别</td>
+                        <td>电话</td>
+                        <td>邮箱</td>
+                        <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+                    </tr>
+                </table>
 
             </form>
         </div>
         <div class="nx1" style="text-align:center; margin-top:55px;">
             <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button"  value="取消" class="button gray">取消</button>
+            <button type="button"  value="取消" class="button gray" onclick="cancel()">取消</button>
 
         </div>
     </div>

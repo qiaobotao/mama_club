@@ -99,29 +99,35 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
 };
 
 
-module.exports.insertCourse_neixun = function (name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,cb) {
+module.exports.insertCourse_neixun = function (name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,teacher,cb) {
 
-    var insert_sql = "INSERT INTO course (name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,content) VALUES (?,?,?,?,?,?,?,?)";
+    var insert_sql = "INSERT INTO course (name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,content,dateline) VALUES (?,?,?,?,?,?,?,?,?)";
 
-    db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType,scorse,content],function(cbData, err, rows, fields) {
+    db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,new Date().getTime()],function(cbData, err, rows, fields) {
 
         if (!err) {
 
             var insertid = rows.insertId;
+            var insert_teacher = 'INSERT INTO courseTeacher (courseId,teacherId) VALUES (?,?)';
             var insert_user = 'INSERT INTO courseUser(courseId,userId) VALUES(?,?)';
-            async.map(arr_staff, function(item, callback) {
+            db.query(insert_teacher,[insertid,teacher],function(cbData, err, rows, fields){
+                if(!err) {
+                    async.map(arr_staff, function(item, callback) {
 
-                db.query(insert_user, [insertid,item.userid], function (cbData, err, rows, fields) {
-                    if (!err) {
-                        callback(null, rows);
-                    } else {
-                        callback(err);
-                    }
-                });
-            }, function(err,results) {
-                cb(err, results);
+                        db.query(insert_user, [insertid,item.staffId], function (cbData, err, rows, fields) {
+                            if (!err) {
+                                callback(null, rows);
+                            } else {
+                                callback(err);
+                            }
+                        });
+                    }, function(err,results) {
+                        cb(err, results);
+                    });
+                } else {
+                    cb(err);
+                }
             });
-
         } else {
             cb(err);
         }

@@ -63,9 +63,9 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td>预计人数：</td>
-                            <td><input type="text" class="input6" disabled  placeholder="xxxxxx"/></td>
+                            <td><input id="count" name="count" type="text" class="input6" /></td>
                             <td>课程费用：</td>
-                            <td><input type="text" class="input6" /></td>
+                            <td><input id="price" name="price" type="text" class="input6" /></td>
                         </tr>
                     </table>
                     <hr class="lineSty" />
@@ -109,43 +109,19 @@
                     <hr class="lineSty" />
                 </div>
 
-                <div class="nx1">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="bordered borderedblue">
-                        <thead>
-                        <tr>
-                            <th width="10%">讲师</th>
-                            <th width="10%">作用</th>
-                            <th width="10%">开始时间</th>
-                            <th width="10%">截止时间</th>
-                            <th width="32%">课程内容</th>
-                            <th width="28%">操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>王小二</td>
-                            <td>顶级</td>
-                            <td>王小二</td>
-                            <td>王小二</td>
-                            <td>王小二</td>
-                            <td><a href="#" class="addyg">添加</a><a href="#" class="deleteyg">删除</a></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <hr class="lineSty" />
-                </div>
+
 
                 <div class="nx1">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"   >
                         <tr>
                             <td width="10%">选择授课时间段：</td>
                             <td width="40%">
-                                <select name="" class="select2" style="width:100px;">
+                                <select id="startTime" name="startTime" class="select2" style="width:100px;">
                                     <option>8:00</option>
                                     <option>8:30</option>
                                     <option>9:00</option>
                                 </select> --
-                                <select name="" class="select2" style="width:100px;">
+                                <select id="endTime" name="endTime" class="select2" style="width:100px;">
                                     <option>8:30</option>
                                 </select>
 
@@ -154,13 +130,38 @@
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
                             <td colspan="3">
-                	 <textarea name="" cols="102" rows="3" class="textarea1">
+                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1">
                      </textarea>
                             </td>
                         </tr>
 
                     </table>
                     <hr class="lineSty" />
+                    <div class="nx1">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="bordered borderedblue">
+                            <thead>
+                            <tr>
+                                <th width="10%">讲师</th>
+                                <th width="10%">作用</th>
+                                <th width="10%">开始时间</th>
+                                <th width="10%">截止时间</th>
+                                <th width="32%">课程内容</th>
+                                <th width="28%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>王小二</td>
+                                <td>顶级</td>
+                                <td>王小二</td>
+                                <td>王小二</td>
+                                <td>王小二</td>
+                                <td><a href="#" class="addyg">添加</a><a href="#" class="deleteyg">删除</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <hr class="lineSty" />
+                    </div>
                 </div>
 
 

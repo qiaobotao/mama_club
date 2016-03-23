@@ -16,9 +16,15 @@
             window.location.href = '/jinquan/staff_select_train?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
         }
         //选择该商品
-        function select(name,seril,shopName,shopId){
+        function select(name,seril,shopName,shopId,tel,email,staffLevel){
             var index = document.getElementById("index").value;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index).value=seril;
+            if(index == '') {
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacherid').value = seril;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacher').value=name;
+            }
+            if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index)) {
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index).value=seril;
+            }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName'+index)){
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName'+index).value=name;
             }
@@ -31,6 +37,15 @@
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('principal'+index)){
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('principal'+index).value=name;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffLevel'+index)) {
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffLevel'+index).value= staffLevel;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel'+index)) {
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel'+index).value= tel;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('email'+index)) {
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('email'+index).value= email;
             }
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
@@ -83,7 +98,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>','<%=data.data[i].shopName%>','<%=data.data[i].shopId%>')">选择员工</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>','<%=data.data[i].shopName%>','<%=data.data[i].shopId%>','<%=data.data[i].tel%>','<%=data.data[i].email%>','<%=data.data[i].levelName%>')">选择员工</a>]</div></td>
                         </tr>
                     </table>
                 </td>
