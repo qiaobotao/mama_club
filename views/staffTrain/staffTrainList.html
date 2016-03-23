@@ -5,6 +5,7 @@
     <title>员工培训</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -74,7 +75,7 @@
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].name%></td>
-                <td><%=data.data[i].courseTimeStart %>~<%=data.data[i].courseTimeEnd %></td>
+                <td><%=courseDate[data.data[i].courseTimeStart] %> ~<%=courseDate[data.data[i].courseTimeEnd] %></td>
                 <td><%=data.data[i].teacherName%></td>
                 <td><%=data.data[i].roomName%></td>
                 <td>
