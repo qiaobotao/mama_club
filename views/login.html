@@ -3,20 +3,36 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>金泉会所</title>
-<link href="../css/global.css" rel="stylesheet" type="text/css" />
-<link href="../css/login.css" rel="stylesheet" type="text/css" />
+    <link href="../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../css/login.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
 <script type="text/javascript" src="../js/pptBox.js"></script>
     <script type="text/javascript">
-        parent.layer.msg('');
+        document.onkeydown=function(event){
+            e = event ? event :(window.event ? window.event : null);
+            if(e.keyCode==13){
+                submitForm();
+            }
+        }
+
         function submitForm(){
+
+            var shop = document.getElementById('shop').value;
+            if (!shop || shop.length == 0) {
+                parent.layer.alert('门店不能为空',{icon: 2});
+                return;
+            }
+
             var account = document.getElementById("account").value;
             if (!account || account.length == 0) {
-                alert('账号不能为空');
+                parent.layer.alert('账号不能为空',{icon: 2});
                 return;
             }
             var password = document.getElementById("password").value;
             if (!password || password.length == 0) {
-                alert('密码不能为空');
+                parent.layer.alert('密码不能为空',{icon: 2});
                 return;
             }
             document.getElementById("myform").submit();
