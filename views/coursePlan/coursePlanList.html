@@ -85,22 +85,23 @@
             courseId = id;//课程id
             classRoomId = classroomid;//教室id
             // date_index是索引
-            var myDate = new Date();
-            var year = myDate.getFullYear();
-            var month = myDate.getMonth()+1;
-            if (month<10){
-                month = "0"+month;
-            }
-            var first_date = year +'-'+ month +'-01';
-
-            var temp = new Date(first_date);
-            temp.setDate(temp.getDate() + date_index);
-            var temp_month = temp.getMonth() + 1;
-            if (temp_month<10) {
-                temp_month = '0'+temp_month;
-            }
-            var result = temp.getFullYear()+'-'+temp_month+'-'+temp.getDay();
-            courseArrayDate = result;//排课时间
+//            var myDate = new Date();
+//            var year = myDate.getFullYear();
+//            var month = myDate.getMonth()+1;
+//            if (month<10){
+//                month = "0"+month;
+//            }
+//            var first_date = year +'-'+ month +'-01';
+//
+//            var temp = new Date(first_date);
+//            temp.setDate(temp.getDate() + date_index);
+//            var temp_month = temp.getMonth() + 1;
+//            if (temp_month<10) {
+//                temp_month = '0'+temp_month;
+//            }
+//            var result = temp.getFullYear()+'-'+temp_month+'-'+temp.getDay();
+            courseArrayDate = date_index;//排课时间
+//            courseArrayDate = result;//排课时间
         }
     </script>
 </head>
@@ -177,14 +178,14 @@
                                         }else if(data.courseData[k].courseType == 4){
                                             tdClass = "classRed";
                                         }
-                                        %><td class="<%=tdClass%>" onMouseOver="tdOnMouseOver(this,'<%=data.courseData[k].id%>','<%=data.classRoomData[j].id%>','<%=i%>')">&nbsp;</td><%
+                                        %><td class="<%=tdClass%>" onMouseOver="tdOnMouseOver(this,'<%=data.courseData[k].id%>','<%=data.classRoomData[j].id%>','<%=data.dataArr[i]%>')">&nbsp;</td><%
                                         isHaveCourse = '1';
                                         break;
                                     }
                                 }
                             }
                             if(isHaveCourse == ''){
-                                %><td class="classDefault" onMouseOver="tdOnMouseOver(this,'<%=data.classRoomData[j].id%>','<%=data.classRoomData[j].id%>','<%=i%>')">&nbsp;</td><%
+                                %><td class="classDefault" onMouseOver="tdOnMouseOver(this,'','<%=data.classRoomData[j].id%>','<%=data.dataArr[i]%>')">&nbsp;</td><%
                             }
                         }
                         %>
