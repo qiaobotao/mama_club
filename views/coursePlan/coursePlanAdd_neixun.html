@@ -16,6 +16,8 @@
         var courseId = '<%=result.courseId%>';
         var date = '<%=result.date%>';
 
+        // 控制选择的时间段
+        var arr_selectedTime = '<%=result.coursePlan%>';
 
 
         var iframIndex ;
@@ -73,6 +75,8 @@
                 return;
             }
 
+
+
             var score = document.getElementById('score').value;
             if (!score || score.length == 0) {
                 parent.layer.alert('分数不能为空',{icon: 2});
@@ -101,6 +105,7 @@
                     return;
                 }
             }
+
             document.getElementById('neixunFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
             document.getElementById('neixunFrom').submit();
 
@@ -204,7 +209,7 @@
                                 var isHaveCourse = '';
                                 var tdClass = "classDefault";
                                 for(var i = 0 ; i < result.coursePlan.length ; i ++){
-                                    if(j >=  result.coursePlan[i].courseTimeStart && j <=  result.coursePlan[i].courseTimeEnd ){
+                                    if(j >=  result.coursePlan[i].courseTimeStart && j <  result.coursePlan[i].courseTimeEnd ){
                                         if(result.coursePlan[i].courseType == 1){
                                             tdClass = "classBlue";
                                         }else if(result.coursePlan[i].courseType == 2){
