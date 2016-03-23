@@ -89,7 +89,7 @@ app.use(function(req, res, next){
            if (req.session.user) {//验证是否有用户信息，如果没有跳转到登陆页面
                 next();
            } else {
-               res.redirect('/',{msg:''});
+               res.redirect("/");
            }
        }
     } else {
