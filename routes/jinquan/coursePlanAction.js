@@ -33,7 +33,6 @@ module.exports.preadd = function (req, res, next) {
     service.getPlan(classRoomId,date,function (err, results) {
         if (!err) {
             obj.coursePlan = results;
-            console.log(obj);
             if (type == 1) {
                 res.render('coursePlan/coursePlanAdd_neixun', {result : obj});
             } else if (type == 2) {
@@ -119,10 +118,23 @@ module.exports.add = function (req, res, next) {
 
 module.exports.edit = function (req, res, next) {
 
-
     var courseId = req.query.courseId ? req.query.courseId : '';
     var classRoomId = req.query.classRoomId ? req.query.classRoomId : '';
     var date = req.query.date ? req.query.date : '';
-    res.render('coursePlan/coursePlanEdit');
+    var courseType = req.query.type ? req.query.type : '';
 
+    if (courseType == 1) { // 内训
+
+        service.browse_neixun(courseId,function (err, results) {
+            if (!err) {
+                results.classRoomId = classRoomId;
+                results.courseId = courseId;
+                results.date = date;
+                res.render('coursePlan/coursePlanEdit',{result : results});
+
+            } else {
+                next();
+            }
+        });
+    }
 }

@@ -239,28 +239,28 @@
                         <tr>
                             <%
                             for(var j = 0; j < 16 ; j ++){
-                                var isHaveCourse = '';
-                                var tdClass = "classDefault";
-                                for(var i = 0 ; i < result.coursePlan.length ; i ++){
-                                    if(j >=  result.coursePlan[i].courseTimeStart && j <  result.coursePlan[i].courseTimeEnd ){
-                                        if(result.coursePlan[i].courseType == 1){
-                                            tdClass = "classBlue";
-                                        }else if(result.coursePlan[i].courseType == 2){
-                                            tdClass = "classViolet";
-                                        }else if(result.coursePlan[i].courseType == 3){
-                                            tdClass = "classGreen";
-                                        }else if(result.coursePlan[i].courseType == 4){
-                                            tdClass = "classRed";
-                                        }
-                                        %><td class="<%=tdClass%>">&nbsp;</td><%
-                                        isHaveCourse = '1';
-                                        break;
-                                    }
-                                }
+                            var isHaveCourse = '';
+                            var tdClass = "classDefault";
+                            for(var i = 0 ; i < result.coursePlan.length ; i ++){
+                            if(j >=  result.coursePlan[i].courseTimeStart && j <  result.coursePlan[i].courseTimeEnd ){
+                            if(result.coursePlan[i].courseType == 1){
+                            tdClass = "classBlue";
+                            }else if(result.coursePlan[i].courseType == 2){
+                            tdClass = "classViolet";
+                            }else if(result.coursePlan[i].courseType == 3){
+                            tdClass = "classGreen";
+                            }else if(result.coursePlan[i].courseType == 4){
+                            tdClass = "classRed";
+                            }
+                            %><td class="<%=tdClass%>">&nbsp;</td><%
+                            isHaveCourse = '1';
+                            break;
+                            }
+                            }
 
-                                if(isHaveCourse == ''){
-                                    %><td class="<%=tdClass%>">&nbsp;</td><%
-                                }
+                            if(isHaveCourse == ''){
+                            %><td class="<%=tdClass%>">&nbsp;</td><%
+                            }
                             }
                             %>
                             <!--
@@ -335,7 +335,7 @@
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
                             <td colspan="3">
-                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1"></textarea>
+                                <textarea id="content" name="content" cols="102" rows="3" class="textarea1"></textarea>
                             </td>
                         </tr>
 
