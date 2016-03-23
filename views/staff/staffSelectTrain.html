@@ -18,14 +18,19 @@
         //选择该商品
         function select(name,seril,shopName,shopId){
             var index = document.getElementById("index").value;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName'+index).value=name;
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index).value=seril;
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName'+index).value=name;
+            }
             //如果父页面有门店id、门店名称对象，则为其赋值
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopName'+index)){
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopName'+index).value=shopName;
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopId'+index)){
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('shopId'+index).value=shopId;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('principal'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('principal'+index).value=name;
             }
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
