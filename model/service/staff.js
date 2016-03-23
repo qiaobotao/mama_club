@@ -76,7 +76,10 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
     var sql_count = 'SELECT count(*) as count FROM staff a '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.*,s.name as `shopName`,s.id as `shopId` FROM staff a,shop s '+parm+' AND a.shopId = s.id ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.*,s.name as `shopName`,s.id as `shopId`,sl.`name` as `levelName`  FROM staff a,shop s ,staffLevel sl '+parm+' ' +
+        'AND a.shopId = s.id ' +
+        'AND sl.id = a.staffLevel' +
+        ' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
