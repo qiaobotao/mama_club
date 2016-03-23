@@ -12,13 +12,13 @@ var async = require('async');
  */
 module.exports.fetchAllStaffTrain = function(courseName,teacherName,classroomName,currentPage,cb) {
 
-    var parm = " WHERE r.name LIKE '%"+courseName+"%' AND c.teacherName LIKE '%"+teacherName+"%' AND room.name LIKE '%"+classroomName+"%' ";
+    var parm = " WHERE r.name LIKE '%"+courseName+"%' AND st.`name` LIKE '%"+teacherName+"%' AND room.name LIKE '%"+classroomName+"%' ";
 
-    var sql_count = 'SELECT count(*) as count FROM course AS r ,courseTeacher AS c ,classroom room '+parm+' AND r.id = c.courseId AND r.classroomId = room.id ORDER BY r.dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM course AS r ,courseTeacher AS c ,classroom room ,staff st '+parm+' AND r.id = c.courseId AND r.classroomId = room.id AND st.id = c.teacherId ORDER BY r.dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT r.id as `id`,r.name as `name`,c.teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName ' +
-        ' FROM course AS r,courseTeacher AS c,classroom room '+parm+' AND courseType = 1 AND r.id = c.courseId AND r.classroomId = room.id ORDER BY r.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT r.id as `id`,r.name as `name`,st.`name` as teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName ' +
+        ' FROM course AS r,courseTeacher AS c,classroom room ,staff st '+parm+' AND courseType = 1 AND r.id = c.courseId AND r.classroomId = room.id AND st.id = c.teacherId ORDER BY r.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -58,8 +58,14 @@ module.exports.fetchAllStaffTrain = function(courseName,teacherName,classroomNam
  * @param cb
  */
 module.exports.fetchSingleStaffTrain =function (id, cb) {
-    var sqlCourseData = 'SELECT r.id,r.name,c.teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName , r.scorse,r.content ' +
-        ' FROM course AS r,courseTeacher AS c,classroom room WHERE r.id = ? AND courseType = 1 AND r.id = c.courseId AND r.classroomId = room.id ORDER BY r.dateline DESC ';
+    var sqlCourseData = 'SELECT r.id,r.name,st.`name` as teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName , r.scorse,r.content ' +
+        ' FROM course AS r,courseTeacher AS c,classroom room,staff st ' +
+        ' WHERE r.id = ? ' +
+        ' AND courseType = 1 ' +
+        ' AND r.id = c.courseId ' +
+        ' AND r.classroomId = room.id ' +
+        ' AND st.id = c.teacherId ' +
+        ' ORDER BY r.dateline DESC ';
     var sqlStaffTrain = 'select sf.*,s.name as staffName from staffTrain sf,staff s where courseId = ? and s.id = sf.staffId';
     async.series({
         courseData : function(callback){
