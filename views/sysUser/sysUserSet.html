@@ -1,10 +1,288 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>个人设置</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="../../../css/zTreeStyle/demo.css" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../js/zTree/jquery.ztree.core.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../js/zTree/jquery.ztree.excheck.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../../js/layer/layer.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        var replytype = '<%=replytype%>';
+        if (replytype == 'OK') {
+            parent.layer.msg('设置成功');
+        }
+        var setting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeClick: beforeClick,
+                onClick: onClick
+            }
+        };
+
+        var index = 0;
+        var zNodes = [];
+        //为菜单下拉框增加树形结构
+        $(document).ready(function(){
+            var fatherMenus = '<%=fatherMenus%>';
+            var fatherMenus = '<%-JSON.stringify(fatherMenus)%>';
+            fatherMenus = JSON.parse(fatherMenus);
+            var childMenus = '<%=childMenus%>';
+            var childMenus = '<%-JSON.stringify(childMenus)%>';
+            childMenus = JSON.parse(childMenus);
+            /*
+                1、循环子菜单：遍历子菜单，找到有子菜单的父菜单
+                2、循环父菜单：遍历父菜单，拼装到ZTree中
+                3、循环子菜单：遍历子菜单，拼装到ZTree中
+             */
+            for(var j = 0 ; j < fatherMenus.length ; j ++){
+                var nodesObj = {};
+                nodesObj.id = fatherMenus[j].id;
+                nodesObj.pId = fatherMenus[j].parentId;
+                nodesObj.name = fatherMenus[j].textCh;
+                zNodes[index]= nodesObj;
+                index++;
+                for(var k = j ; k < childMenus.length ; k ++){
+                    if(childMenus[k].parentId == fatherMenus[j].id){
+                        if(childMenus[k].id == '<%=shortcutMenuId1%>'){
+                            var menuIdObj = $("#menuId1");
+                            menuIdObj.attr("value", childMenus[k].id);
+                            var menuNameObj = $("#menuName1");
+                            menuNameObj.attr("value", childMenus[k].textCh);
+                        }else if(childMenus[k].id == '<%=shortcutMenuId2%>'){
+                            var menuIdObj = $("#menuId2");
+                            menuIdObj.attr("value", childMenus[k].id);
+                            var menuNameObj = $("#menuName2");
+                            menuNameObj.attr("value", childMenus[k].textCh);
+                        }else if(childMenus[k].id == '<%=shortcutMenuId3%>'){
+                            var menuIdObj = $("#menuId3");
+                            menuIdObj.attr("value", childMenus[k].id);
+                            var menuNameObj = $("#menuName3");
+                            menuNameObj.attr("value", childMenus[k].textCh);
+                        }else if(childMenus[k].id == '<%=shortcutMenuId4%>'){
+                            var menuIdObj = $("#menuId4");
+                            menuIdObj.attr("value", childMenus[k].id);
+                            var menuNameObj = $("#menuName4");
+                            menuNameObj.attr("value", childMenus[k].textCh);
+                        }
+                        var nodesObj = {};
+                        nodesObj.id = childMenus[k].id;
+                        nodesObj.pId = childMenus[k].parentId;
+                        nodesObj.name = childMenus[k].textCh;
+                        zNodes[index]= nodesObj;
+                        index++;
+                    }
+                }
+            }
+            $.fn.zTree.init($("#treeDemo1"), setting, zNodes);
+            $.fn.zTree.init($("#treeDemo2"), setting, zNodes);
+            $.fn.zTree.init($("#treeDemo3"), setting, zNodes);
+            $.fn.zTree.init($("#treeDemo4"), setting, zNodes);
+        });
+
+        //选中某节点
+        function onClick(e, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"+menuIndex),
+                    nodes = zTree.getSelectedNodes(),
+                    v = "",mId = "";
+            nodes.sort(function compare(a,b){return a.id-b.id;});
+            for (var i=0, l=nodes.length; i<l; i++) {
+                v += nodes[i].name + ",";
+                mId += nodes[i].id + ",";
+            }
+            if (v.length > 0 ) v = v.substring(0, v.length-1);
+            if (mId.length > 0 ) mId = mId.substring(0, mId.length-1);
+            var menuIdObj = $("#menuId"+menuIndex);
+            menuIdObj.attr("value", mId);
+            var menuNameObj = $("#menuName"+menuIndex);
+            menuNameObj.attr("value", v);
+        }
+
+        //点击后回调函数
+        function beforeClick(treeId, treeNode) {
+            var check = (treeNode && !treeNode.isParent);
+            if (!check) {
+                parent.layer.msg("只能选择子菜单");
+                return check;
+            }else{
+                hideMenu();
+                return check;
+            }
+        }
+
+        function submitForm(){
+//            var userName = document.getElementById("userName").value;
+//            if (!userName || userName.length == 0) {
+//                alert('登陆名不能为空');
+//                return;
+//            }
+            document.getElementById("myform").submit();
+        }
+        //员工的选择
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //菜单切换
+        function setTab(name,cursel,n){
+            for(i=1;i<=n;i++){
+                var menu=document.getElementById(name+i);
+                var con=document.getElementById("con_"+name+"_"+i);
+                menu.className=i==cursel?"hover":"";
+                con.style.display=i==cursel?"block":"none";
+            }
+        }
+        var menuIndex = '1';
+        //显示下拉菜单
+        function showMenu(i) {
+            menuIndex = i;
+            var cityObj = $("#menuName"+menuIndex);
+            var cityOffset = $("#menuName"+menuIndex).offset();
+            $("#menuContent"+menuIndex).css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+
+            $("body").bind("mousedown", onBodyDown);
+        }
+        //隐藏下拉菜单
+        function hideMenu() {
+            $("#menuContent"+menuIndex).fadeOut("fast");
+            $("body").unbind("mousedown", onBodyDown);
+        }
+        function onBodyDown(event) {
+            if (!(event.target.id == "menuBtn"+menuIndex || event.target.id == "menuContent"+menuIndex || $(event.target).parents("#menuContent"+menuIndex).length>0)) {
+                hideMenu();
+            }
+        }
+
+    </script>
 </head>
+
 <body>
-    设置用户信息
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：个人设置
+    </div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/sys_user_set_save">
+        <div class="main">
+            <ul style="float:left; height:28px; line-height:28px; border-bottom:1px solid #ccc;width:100%;">
+                <li id="two1" onclick="setTab('two',1,2)" class="hover" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">修改密码</li>
+                <li id="two2" onclick="setTab('two',2,2)" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">设置快捷键</li>
+            </ul>
+            <div class="mainbox">
+                <div class="subbox" id="con_two_1">
+                    <!--修改密码 start-->
+                    <table id="roleTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td class="regTd_l">原密码：</td>
+                            <td class="regTd_r">
+                                <input id="oldpwd" name="oldpwd" type="password" class="input5" value="" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">新密码：</td>
+                            <td class="regTd_r">
+                                <input id="newpwd" name="newpwd" type="password" class="input5" value="" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">再次输入：</td>
+                            <td class="regTd_r">
+                                <input id="newpwd2" name="newpwd2" type="password" class="input5" value="" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <!--修改密码 end-->
+                </div>
+                <div class="subbox1" style="display:none;" id="con_two_2">
+
+                    <!--设置快捷键 start-->
+                    <table id="shopTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td class="regTd_l">快捷菜单1：</td>
+                            <td class="regTd_r">
+                                <input id="menuId1" name="menuId1" type="hidden" />
+                                <input id="menuName1" name="menuName1" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                                <a id="menuBtn1" href="#" onclick="showMenu(1); return false;">选择</a>
+                                <div id="menuContent1" class="menuContent" style="display:none; position: absolute;">
+                                    <ul id="treeDemo1" class="ztree" style="margin-top:0; width:160px;"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">快捷菜单2：</td>
+                            <td class="regTd_r">
+                                <input id="menuId2" name="menuId2" type="hidden" />
+                                <input id="menuName2" name="menuName2" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                                <a id="menuBtn2" href="#" onclick="showMenu(2); return false;">选择</a>
+                                <div id="menuContent2" class="menuContent" style="display:none; position: absolute;">
+                                    <ul id="treeDemo2" class="ztree" style="margin-top:0; width:160px;"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">快捷菜单3：</td>
+                            <td class="regTd_r">
+                                <input id="menuId3" name="menuId3" type="hidden" />
+                                <input id="menuName3" name="menuName3" type="text" class="input5"  />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                                <a id="menuBtn3" href="#" onclick="showMenu(3); return false;">选择</a>
+                                <div id="menuContent3" class="menuContent" style="display:none; position: absolute;">
+                                    <ul id="treeDemo3" class="ztree" style="margin-top:0; width:160px;"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="regTd_l">快捷菜单4：</td>
+                            <td class="regTd_r">
+                                <input id="menuId4" name="menuId4" type="hidden" />
+                                <input id="menuName4" name="menuName4" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                                <a id="menuBtn4" href="#" onclick="showMenu(4); return false;">选择</a>
+                                <div id="menuContent4" class="menuContent" style="display:none; position: absolute;">
+                                    <ul id="treeDemo4" class="ztree" style="margin-top:0; width:160px;"></ul>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <!--设置快捷键信息 end-->
+                </div>
+            </div>
+        </div>
+    </form>
+    <br/><br/><br/><br/><br/><br/>
+    <br/><br/><br/><br/><br/><br/>
+    <br/><br/><br/><br/><br/><br/>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href=/jinquan/sys_user_list class="close"></a></div>
+    </div>
+
+
+</div>
 </body>
 </html>

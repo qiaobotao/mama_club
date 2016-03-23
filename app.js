@@ -61,6 +61,10 @@ app.use(function(req, res, next){
                                     user.id = resUser.id;//用户id
                                     user.userName = resUser.userName;//用户名称
                                     user.shopName = resUser.shopName;//所在门店
+                                    user.shortcutMenuId1 = resUser.shortcutMenuId1;//快捷菜单1
+                                    user.shortcutMenuId2 = resUser.shortcutMenuId2;//快捷菜单2
+                                    user.shortcutMenuId3 = resUser.shortcutMenuId3;//快捷菜单3
+                                    user.shortcutMenuId4 = resUser.shortcutMenuId4;//快捷菜单4
                                     user.menus = menuAndResources.menusData;//拥有菜单
                                     user.resourcesData = menuAndResources.resourcesData;//拥有资源
                                     req.session.user = user;
@@ -85,7 +89,7 @@ app.use(function(req, res, next){
            if (req.session.user) {//验证是否有用户信息，如果没有跳转到登陆页面
                 next();
            } else {
-               res.redirect("/");
+               res.redirect('/',{msg:''});
            }
        }
     } else {

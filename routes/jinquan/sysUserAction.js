@@ -4,6 +4,7 @@
 var service = require('../../model/service/sysUser');
 var roleService = require('../../model/service/sysRole');
 var shopService = require('../../model/service/shop');
+var menuService = require('../../model/service/sysMenu');
 
 /**
  * 获取系统用户列表
@@ -205,10 +206,79 @@ module.exports.del = function (req, res, next) {
 }
 
 /**
- * 设置系统用户属性
+ * 跳转到个人设置界面
  * @param req
  * @param res
  */
 module.exports.set = function (req, res) {
-    res.render('sysUser/sysUserSet');
+    var replytype = req.query.replytype ? req.query.replytype : '';
+    //获取登陆用户的菜单信息
+    menuService.findSysMenusByUserId(req.session.user.id,function(err, results) {
+        if(!err) {
+            var childMenus = results.childMenus;
+            var fatherMenus = results.fatherMenus;
+            res.render('sysUser/sysUserSet', {
+                    fatherMenus : fatherMenus,
+                    childMenus:childMenus,
+                    replytype:replytype,
+                    shortcutMenuId1:req.session.user.shortcutMenuId1,
+                    shortcutMenuId2:req.session.user.shortcutMenuId2,
+                    shortcutMenuId3:req.session.user.shortcutMenuId3,
+                    shortcutMenuId4:req.session.user.shortcutMenuId4});
+        } else {
+            console.log(err.message);
+            res.render('error');
+        }
+    })
+}
+
+/**
+ * 保存个人设置信息
+ * @param req
+ * @param res
+ */
+module.exports.updateSetBySysUser = function (req, res) {
+    var id = req.session.user.id;
+    var oldpwd = req.body.oldpwd ? req.body.oldpwd :'';
+    var newpwd = req.body.newpwd ? req.body.newpwd :'';
+    var newpwd2 = req.body.newpwd2 ? req.body.newpwd2 :'';
+    var shortcutMenuId1 = req.body.menuId1 ? req.body.menuId1 :'';
+    var shortcutMenuId2 = req.body.menuId2 ? req.body.menuId2 :'';
+    var shortcutMenuId3 = req.body.menuId3 ? req.body.menuId3 :'';
+    var shortcutMenuId4 = req.body.menuId4 ? req.body.menuId4 :'';
+
+
+    //设置快捷键
+    service.updateshortcutMenuIdBySysUser(id,shortcutMenuId1,shortcutMenuId2,shortcutMenuId3,shortcutMenuId4,function(err, results) {
+        if(!err) {//设置快捷键成功
+            var user = req.session.user ;
+            user.shortcutMenuId1 = shortcutMenuId1;//快捷菜单1
+            user.shortcutMenuId2 = shortcutMenuId2;//快捷菜单2
+            user.shortcutMenuId3 = shortcutMenuId3;//快捷菜单3
+            user.shortcutMenuId4 = shortcutMenuId4;//快捷菜单4
+            req.session.user = user;
+
+            if(newpwd == '' || oldpwd == '' || newpwd2 == ''){//不需要修改密码
+                //res.redirect('/jinquan/sys_user_set',{replytype:'OK'});
+                res.redirect('/jinquan/sys_user_set?replytype=OK');
+                return;
+            }
+            //修改密码
+            service.updatePsdBySysUser(id,oldpwd,newpwd,function(err, results) {
+                if(!err) {//设置密码成功后，继续跳转到设置页面，并提示成功
+                    if(results.changedRows == 0){
+                        res.redirect('/jinquan/sys_user_set?replytype=原密码错误');
+                    }else{
+                        res.redirect('/jinquan/sys_user_set?replytype=OK');
+                    }
+                } else {
+                    console.log(err.message);
+                    res.render('error');
+                }
+            })
+        } else {
+            console.log(err.message);
+            res.render('error');
+        }
+    })
 }
