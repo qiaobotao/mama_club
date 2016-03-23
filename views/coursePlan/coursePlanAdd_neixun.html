@@ -17,7 +17,8 @@
         var date = '<%=result.date%>';
 
         // 控制选择的时间段
-        var arr_selectedTime = '<%=result.coursePlan%>';
+        var arr_selectedTime = '<%-JSON.stringify(result.coursePlan)%>';
+        arr_selectedTime = JSON.parse(arr_selectedTime);
 
 
         var iframIndex ;
@@ -70,6 +71,34 @@
             }
             var startTime = document.getElementById('startTime').value;
             var endTime = document.getElementById('endTime').value;
+            if(startTime >= endTime){
+                parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+            }
+            for(var i = 0 ; i < arr_selectedTime.length; i ++){
+                console.log(arr_selectedTime[i].courseTimeStart+'==='+startTime+"--"+arr_selectedTime[i].courseTimeEnd +"~"+ endTime);
+                if((arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd <= startTime)
+                        || (arr_selectedTime[i].courseTimeEnd >= endTime && arr_selectedTime[i].courseTimeEnd <= endTime)){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart > startTime && arr_selectedTime[i].courseTimeEnd <= startTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart < endTime && arr_selectedTime[i].courseTimeEnd > endTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd < endTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart < startTime && arr_selectedTime[i].courseTimeEnd > startTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+            }
+            return;
             if (startTime>=endTime) {
                 parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
                 return;
