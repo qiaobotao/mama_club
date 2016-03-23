@@ -26,7 +26,7 @@ module.exports.list = function (req, res, next) {
             results.name = shopname;
             results.principal = principal;
             results.number = number;
-            res.render('shop/shopList', {data : results, replytype : replytype});
+            res.render('shop/shoplist', {data : results, replytype : replytype});
         } else {
             next();
         }

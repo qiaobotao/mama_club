@@ -1,6 +1,6 @@
 var service = require('../../model/service/nursservice');
 var storeroomOutService = require('../../model/service/storeroomOut');
-var serviceMeetService = require('../../model/service/serviceMeet');
+var serviceMeetService = require('../../model/service/servicemeet');
 
 /**
  * Created by kuanchang on 16/1/18.
