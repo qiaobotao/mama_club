@@ -74,6 +74,17 @@ module.exports.selectForActivity = function (req, res, next) {
 module.exports.detail = function (req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var type = req.query.type ? req.query.type : '';
+    if (type == 1) {
+        service.browse_neixun(id,function(err, results){
+            if (!err) {
+                res.render('course/courseDetail_neixun', {data : results});
+            } else {
+                next();
+            }
+        });
+    }
+
 
 
 
