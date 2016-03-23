@@ -109,6 +109,43 @@ module.exports.updateSysUser = function(id, userName,password,staffId, activity,
     });
 
 }
+/**
+ * 修改系统用户的个人密码
+ * @param id
+ * @param password
+ * @param cb
+ */
+module.exports.updatePsdBySysUser = function(id,oldpwd,password,cb) {
+    var sql = 'UPDATE sysUser SET password=? WHERE id = ? and password = ?';
+    var par = [password, id,oldpwd];
+    db.query(sql, par, function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+/**
+ * 修改系统用户的个人快捷菜单
+ * @param id
+ * @param shortcutMenuId1
+ * @param shortcutMenuId2
+ * @param shortcutMenuId3
+ * @param shortcutMenuId4
+ * @param cb
+ */
+module.exports.updateshortcutMenuIdBySysUser = function(id,shortcutMenuId1,shortcutMenuId2,shortcutMenuId3,shortcutMenuId4,cb) {
+    var sql = 'UPDATE sysUser SET shortcutMenuId1=?,shortcutMenuId2=?,shortcutMenuId3=?,shortcutMenuId4=? WHERE id = ?';
+    var par = [shortcutMenuId1,shortcutMenuId2,shortcutMenuId3,shortcutMenuId4, id];
+    db.query(sql, par, function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
 
 /**
  * 获取系统用户详情
@@ -255,7 +292,7 @@ module.exports.deleteRoleByUserId =function (userId, cb) {
  */
 module.exports.checkUser = function (shop,checkUser,cb) {
 
-    var sql = 'SELECT u.`password`,st.name as `userName`,sp.name as `shopName`,u.id FROM sysUser u,staff st,shop sp ' +
+    var sql = 'SELECT u.`password`,st.name as `userName`,sp.name as `shopName`,u.id,u.shortcutMenuId1,u.shortcutMenuId2,u.shortcutMenuId3,u.shortcutMenuId4 FROM sysUser u,staff st,shop sp ' +
         'WHERE sp.id = st.shopId ' +
         'AND u.staffId = st.id ' +
         'AND u.userName = ? ' +

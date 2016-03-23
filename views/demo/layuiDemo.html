@@ -42,6 +42,13 @@
                 time: 2000
             });
         }
+        function loading(){
+            //loading层
+            var index = parent.layer.load(1, {
+                shade: [0.1,'#FFF000'], //0.1透明度的白色背景
+                time: 2000//显示时间
+            });
+        }
 
     </script>
 </head>
@@ -92,6 +99,7 @@
                 <button id="tipId_2" onclick="showTip(2)">提示信息(️️->)</button>
                 <button id="tipId_3" onclick="showTip(3)">提示信息(⬇️️)</button>
                 <button id="tipId_4" onclick="showTip(4)">提示信息(<-)</button>
+                <button  onclick="loading()">加载loading</button>
             </td>
             <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
         </tr>

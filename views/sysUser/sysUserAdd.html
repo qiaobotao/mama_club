@@ -87,16 +87,16 @@
         </table>
 
                 <div class="main">
-                    <ul>
-                        <li id="two1" onclick="setTab('two',1,2)" class="hover">选择角色</li>
-                        <li id="two2" onclick="setTab('two',2,2)">关联门店</li>
+                    <ul style="float:left; height:28px; line-height:28px; border-bottom:1px solid #ccc;width:100%;">
+                        <li id="two1" onclick="setTab('two',1,2)" class="hover" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">选择角色</li>
+                        <li id="two2" onclick="setTab('two',2,2)" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">关联门店</li>
                     </ul>
                     <div class="mainbox">
                         <div class="subbox" id="con_two_1">
                             <!--角色信息 start-->
                             <table id="roleTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                                 <tr bgcolor="lightblue">
-                                    <td width="5%"><input type="checkbox"/></td>
+                                    <td width="5%">请选择</td>
                                     <td width="10%">角色名称</td>
                                     <td width="70%">角色描述</td>
                                 </tr>
@@ -125,12 +125,9 @@
                             <!--门店信息 start-->
                             <table id="shopTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                                 <tr bgcolor="lightblue">
-                                    <td width="5%"><input type="checkbox"/></td>
+                                    <td width="5%">请选择</td>
                                     <td width="10%">门店名称</td>
                                     <td width="70%">门店地址</td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" name="shopIds"/></td>
                                 </tr>
                                 <!-- 遍历所有角色，然后对已经选择的角色默认选中处理-->
                                 <% for (var i=0;i<shopData.shopResults.length;i++) {%>
@@ -152,8 +149,6 @@
                             </table>
                             <!--门店信息 end-->
                         </div>
-                        <div class="subbox" style="display:none;" id="con_two_3">娱乐新闻2</div>
-                        <div class="subbox" style="display:none;" id="con_two_4">军事新闻2</div>
                     </div>
                 </div>
     </form>

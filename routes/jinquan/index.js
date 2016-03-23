@@ -309,6 +309,7 @@ router.all('/sys_user_save', sysUserAction.save);
 router.all('/sys_user_del', sysUserAction.del);
 // 个人设置
 router.all('/sys_user_set',sysUserAction.set);
+router.all('/sys_user_set_save',sysUserAction.updateSetBySysUser);
 // 公告管理
 router.all('/notice_list',noticeAction.list);
 router.all('/notice_edit',noticeAction.preEdit);

@@ -91,7 +91,6 @@ module.exports.fetchAllSysMenu = function(textCh,currentPage,cb) {
         },
         data : function(callback){
             db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
-
                 if (!err) {
                     callback(null,rows);
                 } else {
@@ -158,7 +157,7 @@ module.exports.fetchSingleSysMenu =function (id, cb) {
  */
 module.exports.findAllParentSysMenu =function (cb) {
 
-    var sql = 'SELECT * FROM sysMenu where parentId = 0';
+    var sql = 'SELECT * FROM sysMenu where parentId = 0 order by orderId';
     db.query(sql, [],  function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -166,4 +165,52 @@ module.exports.findAllParentSysMenu =function (cb) {
             cb(err);
         }
     });
+}
+
+/**
+ * 获取根据用户id获取该用户有权限的菜单
+ * @param id
+ * @param cb
+ */
+module.exports.findSysMenusByUserId =function (uid,cb) {
+    var childMenusSql = 'SELECT sm.* FROM sysMenu sm, sysRoleMenu rm,sysUserRole ur ' +
+        'where sm.id = rm.menuId ' +
+        'and rm.roleId = ur.roleId ' +
+        'and ur.userId = ?';
+
+    var fatherMenusSql = 'select * from sysMenu smp WHERE smp.id in ( ' +
+        'SELECT sm.parentId FROM sysMenu sm, sysRoleMenu rm,sysUserRole ur ' +
+        'where sm.id = rm.menuId ' +
+        'and rm.roleId = ur.roleId ' +
+        'and ur.userId = ? )';
+
+    async.series({
+        fatherMenus : function(callback){
+            db.query(fatherMenusSql, [uid], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        childMenus : function(callback){
+            db.query(childMenusSql, [uid], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+
 }
