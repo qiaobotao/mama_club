@@ -127,11 +127,20 @@ module.exports.edit = function (req, res, next) {
 
         service.browse_neixun(courseId,function (err, results) {
             if (!err) {
-                results.classRoomId = classRoomId;
-                results.courseId = courseId;
-                results.date = date;
-                res.render('coursePlan/coursePlanEdit',{result : results});
 
+                service.getPlan(classRoomId,date,function(err, plans) {
+
+                    if (!err) {
+                        results.coursePlan = plans;
+                        results.classRoomId = classRoomId;
+                        results.courseId = courseId;
+                        results.date = date;
+                        console.log(results);
+                        res.render('coursePlan/coursePlanEdit_neixun',{result : results});
+                    } else {
+                       next();
+                    }
+                });
             } else {
                 next();
             }

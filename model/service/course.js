@@ -215,8 +215,8 @@ module.exports.insertCourse_neixun = function (name,classroomid,courseDate,start
 module.exports.browse_neixun = function (courseId, cb) {
 
     var main_sql = 'SELECT * FROM course WHERE id = ?';
-    var sql_staff = 'SELECT s.name,s.staffLevel,s.tel,email FROM courseUser c,staff s WHERE c.userId = s.id AND  c.courseId = ?';
-    var sql_teacher = 'SELECT s.name FROM courseTeacher c,staff s WHERE c.teacherId = s.id AND  c.courseId = ?';
+    var sql_staff = 'SELECT s.id AS userId, s.name,s.staffLevel,s.tel,email FROM courseUser c,staff s WHERE c.userId = s.id AND  c.courseId = ?';
+    var sql_teacher = 'SELECT s.id AS teacherId, s.name FROM courseTeacher c,staff s WHERE c.teacherId = s.id AND  c.courseId = ?';
 
     db.query(main_sql,[courseId],function (cbData, err, rows, fields) {
 
@@ -235,6 +235,7 @@ module.exports.browse_neixun = function (courseId, cb) {
                              if (!err) {
                                  if (rows.length != 0) {
                                      obj.teacher = rows[0].name;
+                                     obj.teacherId = rows[0].teacherId;
                                  } else {
                                      obj.teacher = '';
                                  }

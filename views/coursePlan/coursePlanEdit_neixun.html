@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加课程</title>
+    <title>修改课程</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -191,9 +191,6 @@
         <div class="nx1">
             <select id="courseType" name="courseType" onchange="changeFrom(this)">
                 <option value="1" selected>内训</option>
-                <option value="2">专业课</option>
-                <option value="3">父母课</option>
-                <option value="4">会议</option>
             </select>
             <hr class="lineSty" />
         </div>
@@ -204,10 +201,10 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td width="10%">课程名称：</td>
-                            <td width="40%"><input id="course" name="course" type="text" class="input6"  /></td>
+                            <td width="40%"><input id="course" name="course" type="text" class="input6"  value="<%=result.course.name%>"/></td>
                             <td width="10%">授课教师：</td>
-                            <input id="teacherid" name="teacherid" type="hidden"  />
-                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6"  onfocus="getWares('')"/></td>
+                            <input id="teacherid" name="teacherid" type="hidden"  value="<%=result.teacherId%>"/>
+                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6" value="<%=result.teacher%>"  onfocus="getWares('')"/></td>
                         </tr>
                     </table>
                     <hr class="lineSty" />
@@ -330,12 +327,12 @@
 
                             </td>
                             <td width="10%">课程满分：</td>
-                            <td width="40%"><input id="score" name="score" type="text" class="input6"  /></td>
+                            <td width="40%"><input id="score" name="score" type="text" class="input6"  value="<%=result.course.scorse%>" /></td>
                         </tr>
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
                             <td colspan="3">
-                                <textarea id="content" name="content" cols="102" rows="3" class="textarea1"></textarea>
+                                <textarea id="content" name="content" cols="102" rows="3" class="textarea1"><%=result.course.content%></textarea>
                             </td>
                         </tr>
 
@@ -355,6 +352,16 @@
                         <td>邮箱</td>
                         <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
                     </tr>
+                    <%for(var i=0;i<result.users.length;i++) {%>
+                    <tr>
+                        <input id="staffName'+i+'"  name="staffName" type="text" class="input5 input_arr" value="<%=result.users.name%>"  />
+                        <input id="staffLevel'+i+'" name="staffLevel" type="text" class="input5 input_arr" value="<%=result.users.staffLevel%>" />
+                        <input id="tel'+i+'" name="tel" type="text" class="input5 input_arr" value="<%=result.users.tel%>" />
+                        <input id="email'+i+'" name="email" type="text" class="input5 input_arr" value="<%=result.users.email%>" />
+                        <input id="staffId'+i+'" name="staffId" type="hidden" class="input5 input_arr" value="<%=result.users.userId%>"/>
+                        <a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>
+                    </tr>
+                    <%}%>
                 </table>
 
             </form>
