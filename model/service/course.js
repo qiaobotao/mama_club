@@ -50,7 +50,7 @@ module.exports.selectAllCourse = function(currentPage,cb) {
 
 module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb) {
 
-    var parm = ' where  a.classroomId=b.id  and c.courseId=a.id';
+    var parm = ' where  a.classroomId=b.id  and c.courseId=a.id and f.id=c.teacherId';
     if(courseType!='')
     {
         parm+='  and  a.courseType ='+courseType ;
@@ -59,11 +59,12 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
     {
         parm+= ' and a.id in('+courseIds+')';
     }
-    var sql_count = 'SELECT count(*) as count FROM course where courseType='+courseType;
+    var sql_count = 'SELECT count(*) as count FROM course a ,classroom b, courseTeacher c, staff f '+ parm;
+
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
     var sql_data = "SELECT a.id,a.name,a.classroomId,a.courseDate,concat(a.courseTimeStart,'~',a.courseTimeEnd) as courseTime,a.courseType,"
-        +' a.content,a.memberCount,a.price, b.name as classroomName, c.teacherName as teacherName FROM course a ,classroom b, courseTeacher c'+ parm +' LIMIT ?,?';
+        +' a.content,a.memberCount,a.price, b.name as classroomName, f.name as teacherName FROM course a ,classroom b, courseTeacher c, staff f '+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

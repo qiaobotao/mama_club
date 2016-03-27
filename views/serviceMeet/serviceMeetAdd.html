@@ -243,10 +243,9 @@
             <tr>
                 <td class="regTd_l">年龄：</td>
                 <td class="regTd_r"><input id="age" name="age" type="text"  readonly="true" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">技师：</td>
-                <td class="regTd_r">
-                    <input id="staffId" name="staffId" type="hidden"   class="input5" />
-                    <input id="principal" name="principal" type="text" class="input5" onfocus="getmembers()" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">报价：</td>
+                <td class="regTd_r"><input id="price" name="price" type="text" class="input5"    />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+
             </tr>
             <tr>
                 <td class="regTd_l">预约时间：</td>
@@ -267,14 +266,25 @@
                 <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">报价：</td>
-                <td class="regTd_r"><input id="price" name="price" type="text" class="input5"    />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
+
                 <td class="regTd_l">请选择服务项目：</td>
                 <td class="regTd_r">
                     <input id="serviceName" name="serviceName" type="text" class="input5" onfocus="getServices()"/>
                     <input id="serviceId" name="serviceId" type="hidden" class="input5" /> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">是否指定技术:</td>
+                <td class="regTd_r">
+                    <select id="specified" name="specified" class="input5" >
+                        <option value="0">未指定</option>
+                        <option value="1">指定</option>
+                    </select>
+                </td>
+                <td class="regTd_l">
+                    技师：</td>  <td class="regTd_r"><input id="staffId" name="staffId" type="hidden"   class="input5" />
+                <input id="principal" name="principal" type="text" class="input5" onfocus="getmembers()" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+
+
             </tr>
             <!-- 预约情况 -->
             <tr>

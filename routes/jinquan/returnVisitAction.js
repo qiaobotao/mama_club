@@ -7,13 +7,15 @@ module.exports.list = function (req, res) {
     var returnVisitDate = req.query.returnVisitDate ? req.query.returnVisitDate : '';
     var returnVisitType = req.query.returnVisitType ? req.query.returnVisitType : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    var status = req.query.status ? req.query.status : '';
     currentPage =currentPage<1?1:currentPage;
 
-    service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,currentPage, function (err, results) {
+    service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
         if (!err) {
             results.serviceMeetId = serviceMeetId;
             results.returnVisitDate = returnVisitDate;
             results.returnVisitType = returnVisitType;
+            results.status = status;
             results.currentPage =currentPage ;
             res.render('returnVisit/returnVisitList', {data : results});
         } else {
@@ -38,8 +40,8 @@ module.exports.add = function (req, res) {
     var advice = req.body.advice ? req.body.advice : '';
     var isReturnVisit = req.body.isReturnVisit ? req.body.isReturnVisit : '';
     var returnVisitReason = req.body.returnVisitReason ? req.body.returnVisitReason : '';
-
-    service.insertReturnVisit(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    var status = req.body.status ? req.body.status : '0';
+    service.insertReturnVisit(status,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
                 if (!err) {
                     //修改服务单状态 4，已做回访
@@ -68,8 +70,10 @@ module.exports.doEdit = function (req, res) {
     var advice = req.body.advice ? req.body.advice : '';
     var isReturnVisit = req.body.isReturnVisit ? req.body.isReturnVisit : '';
     var returnVisitReason = req.body.returnVisitReason ? req.body.returnVisitReason : '';
+    var dateline = req.body.dateline ? req.body.dateline :new Date().getTime();
+    var status = req.body.status ? req.body.status : '';
 
-    service.updateReturnVisit(id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    service.updateReturnVisit(status,dateline,id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/return_visit_list');

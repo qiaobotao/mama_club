@@ -13,14 +13,16 @@
             var serviceMeetId = document.getElementById('serviceMeetId').value;
             var returnVisitDate = document.getElementById('returnVisitDate').value;
             var returnVisitType = document.getElementById('returnVisitType').value;
+            var status = document.getElementById('status').value;
             var selectPage = document.getElementById('page').value;
-            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType ;
+            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType +'&status='+status;
         }
         function pageturning (selectPage) {
             var serviceMeetId = document.getElementById('serviceMeetId').value;
             var returnVisitDate = document.getElementById('returnVisitDate').value;
             var returnVisitType = document.getElementById('returnVisitType').value;
-            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType ;
+            var status = document.getElementById('status').value;
+            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType+'&status='+status ;
         }
         function show (id) {
             window.location.href = '/jinquan/return_visit_show?id='+id;
@@ -50,7 +52,15 @@
                         服务单编号：<input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=data.serviceMeetId%>"/></td>
                     <td> &nbsp;回访时间：<input id="returnVisitDate" name="returnVisitDate" type="text" class="input5" value="<%=data.returnVisitDate%>"/></td>
                     <td> &nbsp;回访方式：<input id="returnVisitType" name="returnVisitType" type="text" class="input5" value="<%=data.returnVisitType%>"/> </td>
-                    <td><a href="javascript:search()" class="chaxun"></a></td>
+
+                    <td> &nbsp;回访状态：<select id="status" name="status" class="input5">
+                        <option <%if(data.status == '-1'){%>selected<%}%> value="-1">全部</option>
+                        <option <%if(data.status == '0'){%>selected<%}%> value="0">未回访</option>
+                        <option <%if(data.status == '1'){%>selected<%}%> value="1">已回访</option>
+                        <option <%if(data.status == '2'){%>selected<%}%> value="2">不必回访</option>
+                        <option <%if(data.status == '3'){%>selected<%}%> value="3">回访未果</option>
+                    </select>
+                    </td><td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
@@ -66,6 +76,7 @@
                 <th>回访方式</th>
                 <th>回访时间</th>
                 <th>回访结果</th>
+                <th>状态</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
@@ -76,6 +87,25 @@
                 <td><%=data.data[i].returnVisitType%></td>
                 <td><%=data.data[i].returnVisitDate%></td>
                 <td><%=data.data[i].returnVisitResult%></td>
+                <td>  <%
+                    var zhuangtai ="";
+                    if(data.data[i].status==0 || data.data[i].status==null){
+                    zhuangtai="未回访";
+                    }
+                    else if(data.data[i].status==1)
+                    {
+                    zhuangtai="已回访";
+                    }
+                    else if(data.data[i].status==2)
+                    {
+                    zhuangtai="不必回访";
+                    }
+                    else if(data.data[i].status==3)
+                    {
+                    zhuangtai="回访未果";
+                    }
+
+                    %><%=zhuangtai%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

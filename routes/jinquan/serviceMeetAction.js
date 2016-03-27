@@ -65,7 +65,9 @@ module.exports.add = function (req, res) {
     var price = req.body.price ? req.body.price : '';
     var serviceId = req.body.serviceId ? req.body.serviceId : '';
     var staffId = req.body.staffId ? req.body.staffId : '';
-    service.insertServiceMeet(staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
+    var specified = req.body.specified ? req.body.specified : '';
+
+    service.insertServiceMeet(specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list');
         } else {
@@ -90,7 +92,9 @@ module.exports.doEdit = function (req, res,next) {
     var serviceId = req.body.serviceId ? req.body.serviceId : '';
 
     var staffId = req.body.staffId ? req.body.staffId : '';
-    service.updateServiceMeet(staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
+
+    var specified = req.body.specified ? req.body.specified : '';
+    service.updateServiceMeet(specified,staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list');
         } else {
@@ -134,6 +138,10 @@ module.exports.show = function(req, res, next) {
                                 });
                             })
                         });
+                    }
+                    else{
+                        res.render('servicemeet/serviceMeetDetail', {service_meet : service_meet,datas:null});
+
                     }
                 }else{
                     next();

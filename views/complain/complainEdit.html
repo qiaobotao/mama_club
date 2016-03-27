@@ -37,7 +37,7 @@
             }
             var dealPrincipal = document.getElementById("dealPrincipal").value;
             if (!dealPrincipal || dealPrincipal.length == 0) {
-                alert('解决技师不能为空');
+                alert('解决人不能为空');
                 return;
             }
             var complainDetail = document.getElementById("complainDetail").value;
@@ -98,7 +98,7 @@
                         <option <%if(complain.complainType == '3'){%>selected<%}%> value="3">换技师</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">解决技师：</td>
+                <td class="regTd_l">解决人：</td>
                 <td class="regTd_r">
                     <input id="staffId" name="staffId" type="hidden"  value="<%=complain.staffId%>"   class="input5" />
                     <input id="dealPrincipal" name="dealPrincipal" onfocus="getmembers()" type="text" class="input5" value="<%=complain.dealPrincipal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
