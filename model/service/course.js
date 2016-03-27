@@ -323,7 +323,7 @@ module.exports.browse_zhuanye = function (courseId,cb) {
 
 module.exports.insertCourse_fumu = function(classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_fumu,cb) {
     var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,memberCount,price,content) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(insert_sql,[classroomid,courseDate,startTime,endTime,courseType,count,price,content],function(cbData, err, rows, fields) {
+    db.query(insert_sql,[classroomId,courseDate,startTime,endTime,courseType,count,price,content],function(cbData, err, rows, fields) {
 
         if (!err) {
 
@@ -384,7 +384,7 @@ module.exports.browse_fumu = function (courseId,cb) {
 module.exports.insertCourse_huiyi = function(classroomId,courseDate,startTime,endTime,courseType,content,arr_huiyi,cb) {
 
     var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,content) VALUES (?,?,?,?,?,?)';
-    db.query(insert_sql,[classroomid,courseDate,startTime,endTime,courseType,content],function(cbData, err, rows, fields) {
+    db.query(insert_sql,[classroomId,courseDate,startTime,endTime,courseType,content],function(cbData, err, rows, fields) {
 
         if (!err) {
 
@@ -392,7 +392,7 @@ module.exports.insertCourse_huiyi = function(classroomId,courseDate,startTime,en
             var insert_user = 'INSERT INTO courseUser(courseId,userId) VALUES(?,?)';
             async.map(arr_huiyi, function(item, callback) {
 
-                db.query(insert_user, [insertid,item.userid], function (cbData, err, rows, fields) {
+                db.query(insert_user, [insertid,item.staffId], function (cbData, err, rows, fields) {
                     if (!err) {
                         callback(null, rows);
                     } else {

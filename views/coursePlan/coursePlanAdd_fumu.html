@@ -61,9 +61,16 @@
 
             var type = document.getElementById('courseType').value;
 
-            var course = document.getElementById('course').value;
-            if (!course || course.length == 0) {
-                parent.layer.alert('课程名称不能为空',{icon: 2});
+
+            var count = document.getElementById('count').value;
+            if (!count || count.length == 0) {
+                parent.layer.alert('数量不能为空',{icon: 2});
+                return;
+            }
+
+            var price = document.getElementById('price').value;
+            if (!price || price.length == 0) {
+                parent.layer.alert('价钱不能为空',{icon: 2});
                 return;
             }
 
@@ -102,12 +109,6 @@
             }
 
 
-
-            var score = document.getElementById('score').value;
-            if (!score || score.length == 0) {
-                parent.layer.alert('分数不能为空',{icon: 2});
-                return;
-            }
             var content = document.getElementById('content').value;
             if (!content || content.length == 0) {
                 parent.layer.alert('培训内容不能为空',{icon: 2});
@@ -335,8 +336,7 @@
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
                             <td colspan="3">
-                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1">
-                     </textarea>
+                	 <textarea id="content" name="content" cols="102" rows="3" class="textarea1"></textarea>
                             </td>
                         </tr>
 
