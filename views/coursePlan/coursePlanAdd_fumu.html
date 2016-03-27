@@ -16,6 +16,32 @@
         var courseId = '<%=result.courseId%>';
         var date = '<%=result.date%>';
 
+
+        // 控制选择的时间段
+        var arr_selectedTime = '<%-JSON.stringify(result.coursePlan)%>';
+        arr_selectedTime = JSON.parse(arr_selectedTime);
+
+
+        var iframIndex ;
+        function getWares(index){
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择员工',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index='+index, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+
         function changeFrom(doc) { // 1.内训 2.专业课 3.父母课 4.会议
             var type = doc.value;
             if (type == 1) {
@@ -33,9 +59,124 @@
 
         function submitForm () {
 
+            var type = document.getElementById('courseType').value;
 
+            var course = document.getElementById('course').value;
+            if (!course || course.length == 0) {
+                parent.layer.alert('课程名称不能为空',{icon: 2});
+                return;
+            }
+
+            var startTime = document.getElementById('startTime').value;
+            var endTime = document.getElementById('endTime').value;
+            if(startTime >= endTime){
+                parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+            }
+            for(var i = 0 ; i < arr_selectedTime.length; i ++){
+                console.log(arr_selectedTime[i].courseTimeStart+'==='+startTime+"--"+arr_selectedTime[i].courseTimeEnd +"~"+ endTime);
+                if((arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd <= startTime)
+                        || (arr_selectedTime[i].courseTimeEnd >= endTime && arr_selectedTime[i].courseTimeEnd <= endTime)){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart > startTime && arr_selectedTime[i].courseTimeEnd <= startTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart < endTime && arr_selectedTime[i].courseTimeEnd > endTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd < endTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+                if(arr_selectedTime[i].courseTimeStart < startTime && arr_selectedTime[i].courseTimeEnd > startTime){
+                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                    return;
+                }
+            }
+            if (startTime>=endTime) {
+                parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
+                return;
+            }
+
+
+
+            var score = document.getElementById('score').value;
+            if (!score || score.length == 0) {
+                parent.layer.alert('分数不能为空',{icon: 2});
+                return;
+            }
+            var content = document.getElementById('content').value;
+            if (!content || content.length == 0) {
+                parent.layer.alert('培训内容不能为空',{icon: 2});
+                return;
+            }
+            if(!document.getElementsByName('staffId')[0]){
+                parent.layer.alert('请点击加号选择培训员工',{icon: 2});
+                return;
+            }
+            // 判断该表单中 是否有相同的 人员
+            var arr_proId = document.getElementsByName('staffId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('员工中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+            //loading层
+            var index = parent.layer.load(1, {
+                shade: [0.1,'#FFF000'], //0.1透明度的白色背景
+                time: 2000//显示时间
+            });
+
+            document.getElementById('fumukeFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
+            document.getElementById('fumukeFrom').submit();
 
         }
+
+
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//讲师姓名
+            var cell2=row.insertCell(1);//作用
+            var cell3=row.insertCell(2);//开始时间
+            var cell4=row.insertCell(3);//截止时间
+            var cell5=row.insertCell(4);//课程内容
+            var cell7=row.insertCell(5);//删除本行
+            var cell6=row.insertCell(6);//员工id
+            cell1.innerHTML = '<input id="staffName'+waresIndex+'"  name="staffName" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell2.innerHTML='<input id="func'+waresIndex+'" name="func" type="text" class="input5 input_arr" />';
+            cell3.innerHTML='<input id="startTime'+waresIndex+'" name="teacStartTime" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input id="endTime'+waresIndex+'" name="teacEndTime" type="text" class="input5 input_arr" />';
+            cell5.innerHTML='<input id="content'+waresIndex+'" name="courseContent" type="text" class="input5 input_arr" />';
+            cell6.innerHTML='<input id="staffId'+waresIndex+'" name="staffId" type="hidden" class="input5 input_arr" />';
+            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
+        function cancel() {
+            window.location.href='/jinquan/course_plan';
+        }
+
     </script>
 </head>
 
@@ -77,9 +218,11 @@
 
                             <th>8:00~8:30</th>
                             <th>8:30~9:00</th>
+                            <th>9:00~9:30</th>
                             <th>9:30~10:00</th>
                             <th>10:00~10:30</th>
                             <th>10:30~11:00</th>
+                            <th>11:00~11:30</th>
                             <th>11:30~12:00</th>
                             <th>14:00~14:30</th>
                             <th>14:30~15:00</th>
@@ -87,10 +230,39 @@
                             <th>15:30~16:00</th>
                             <th>16:00~16:30</th>
                             <th>16:30~17:00</th>
+                            <th>17:00~17:30</th>
+                            <th>17:30~18:00</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
+                            <%
+                            for(var j = 0; j < 16 ; j ++){
+                            var isHaveCourse = '';
+                            var tdClass = "classDefault";
+                            for(var i = 0 ; i < result.coursePlan.length ; i ++){
+                            if(j >=  result.coursePlan[i].courseTimeStart && j <  result.coursePlan[i].courseTimeEnd ){
+                            if(result.coursePlan[i].courseType == 1){
+                            tdClass = "classBlue";
+                            }else if(result.coursePlan[i].courseType == 2){
+                            tdClass = "classViolet";
+                            }else if(result.coursePlan[i].courseType == 3){
+                            tdClass = "classGreen";
+                            }else if(result.coursePlan[i].courseType == 4){
+                            tdClass = "classRed";
+                            }
+                            %><td class="<%=tdClass%>">&nbsp;</td><%
+                            isHaveCourse = '1';
+                            break;
+                            }
+                            }
+
+                            if(isHaveCourse == ''){
+                            %><td class="<%=tdClass%>">&nbsp;</td><%
+                            }
+                            }
+                            %>
+                            <!--
                             <td class="classBlue">&nbsp;</td>
                             <td class="classBlue">&nbsp;</td>
                             <td class="" >&nbsp;</td>
@@ -103,6 +275,7 @@
                             <td class="">&nbsp;</td>
                             <td class="">&nbsp;</td>
                             <td class="">&nbsp;</td>
+                            -->
                         </tr>
                         </tbody>
                     </table>
@@ -117,12 +290,44 @@
                             <td width="10%">选择授课时间段：</td>
                             <td width="40%">
                                 <select id="startTime" name="startTime" class="select2" style="width:100px;">
-                                    <option>8:00</option>
-                                    <option>8:30</option>
-                                    <option>9:00</option>
+                                    <option value="0">8:00</option>
+                                    <option value="1">8:30</option>
+                                    <option value="2">9:00</option>
+                                    <option value="3">9:30</option>
+                                    <option value="4">10:00</option>
+                                    <option value="5">10:30</option>
+                                    <option value="6">11:00</option>
+                                    <option value="7">11:30</option>
+                                    <option value="8">12:00</option>
+                                    <option value="9">14:00</option>
+                                    <option value="10">14:30</option>
+                                    <option value="11">15:00</option>
+                                    <option value="12">15:30</option>
+                                    <option value="13">16:00</option>
+                                    <option value="14">16:30</option>
+                                    <option value="15">17:00</option>
+                                    <option value="16">17:30</option>
+                                    <option value="17">18:00</option>
                                 </select> --
                                 <select id="endTime" name="endTime" class="select2" style="width:100px;">
-                                    <option>8:30</option>
+                                    <option value="0">8:00</option>
+                                    <option value="1">8:30</option>
+                                    <option value="2">9:00</option>
+                                    <option value="3">9:30</option>
+                                    <option value="4">10:00</option>
+                                    <option value="5">10:30</option>
+                                    <option value="6">11:00</option>
+                                    <option value="7">11:30</option>
+                                    <option value="8">12:00</option>
+                                    <option value="9">14:00</option>
+                                    <option value="10">14:30</option>
+                                    <option value="11">15:00</option>
+                                    <option value="12">15:30</option>
+                                    <option value="13">16:00</option>
+                                    <option value="14">16:30</option>
+                                    <option value="15">17:00</option>
+                                    <option value="16">17:30</option>
+                                    <option value="17">18:00</option>
                                 </select>
 
                             </td>
@@ -137,31 +342,20 @@
 
                     </table>
                     <hr class="lineSty" />
-                    <div class="nx1">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0"  class="bordered borderedblue">
-                            <thead>
-                            <tr>
-                                <th width="10%">讲师</th>
-                                <th width="10%">作用</th>
-                                <th width="10%">开始时间</th>
-                                <th width="10%">截止时间</th>
-                                <th width="32%">课程内容</th>
-                                <th width="28%">操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>王小二</td>
-                                <td>顶级</td>
-                                <td>王小二</td>
-                                <td>王小二</td>
-                                <td>王小二</td>
-                                <td><a href="#" class="addyg">添加</a><a href="#" class="deleteyg">删除</a></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <hr class="lineSty" />
-                    </div>
+                    <!--员工信息 start-->
+                    <span style="float: left; font-weight:bold;width: 100px;"><h3>讲师信息</h3></span>
+                    <br>
+                    <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                        <tr bgcolor="lightblue">
+
+                            <td>讲师姓名</td>
+                            <td>作用</td>
+                            <td>开始时间</td>
+                            <td>截止时间</td>
+                            <td>内容</td>
+                            <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+                        </tr>
+                    </table>
                 </div>
 
 
@@ -170,7 +364,7 @@
         </div>
         <div class="nx1" style="text-align:center; margin-top:55px;">
             <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button"  value="取消" class="button gray">取消</button>
+            <button type="button"  value="取消" class="button gray" onclick="cancel()" >取消</button>
 
         </div>
     </div>
