@@ -37,16 +37,16 @@ module.exports.updateClassMeet = function(id,memberId,courseId,childMonths,exter
 
 module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStart,currentPage,cb) {
 
-    var parm = " on (a.memberId=b.id and a.courseId=c.id and a.courseId=d.courseId)"
+    var parm = " on (a.memberId=b.id and a.courseId=c.id and a.courseId=d.courseId  AND f.id=d.teacherId)"
     parm += " where  b.memberName like '%" + memberName + "%'";
     parm += " and c.name like '%" + courseName + "%'";
     parm += " and c.courseDate like '%" + courseTimeStart + "%'";
 
-    var sql_count = 'SELECT count(1) as  count FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' ORDER BY a.dateline DESC ';
+    var sql_count = 'SELECT count(1) as  count FROM classMeet a inner join member b inner join course c inner join courseTeacher d  INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC ';
 
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseDate,c.courseTimeStart,c.courseTimeEnd,d.teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d '+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseDate,c.courseTimeStart,c.courseTimeEnd,f.name as teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d   INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

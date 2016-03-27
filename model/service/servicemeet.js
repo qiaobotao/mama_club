@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertServiceMeet = function(staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
+module.exports.insertServiceMeet = function(specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO serviceMeet (specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -30,10 +30,10 @@ module.exports.insertServiceMeet = function(staffId,tel,name,age,principal,meetT
         }
     });
 };
-module.exports.updateServiceMeet = function(staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
+module.exports.updateServiceMeet = function(specified,staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
 
-    var sql = 'UPDATE   serviceMeet SET staffId=?, tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
-    db.query(sql, [staffId,tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE   serviceMeet SET specified=? staffId=?, tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
+    db.query(sql, [specified,staffId,tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

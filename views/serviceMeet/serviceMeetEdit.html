@@ -277,6 +277,15 @@
                 <td class="regTd_r"><input id="address" name="address" type="text" class="input5"  value="<%=service_meet.address%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
+                <td class="regTd_l">是否指定技师：</td>
+                <td class="regTd_r">
+
+                    <select id="specified" name="specified" >
+
+                        <option value="1" <%if(service_meet.specified == '0'){%>selected<%}%>>未指定</option>
+                        <option value="2" <%if(service_meet.specified == '1'){%>selected<%}%>>指定</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">报价：</td>
                 <td class="regTd_r"><input id="price" name="price" type="text" class="input5"  value="<%=service_meet.price%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>

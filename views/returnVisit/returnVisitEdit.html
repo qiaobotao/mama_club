@@ -126,6 +126,17 @@
                 <td class="regTd_l">回访原因：</td>
                 <td class="regTd_r"><input id="returnVisitReason" name="returnVisitReason" type="text" class="input5" value="<%=returnVisit.returnVisitReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
+            <tr>
+                <td class="regTd_l"  >状态：</td>
+                <td class="regTd_r"  >
+                    <select id="status" name="status" class="input5">
+                        <option <%if(returnVisit.status == '0'){%>selected<%}%> value="0">未回访</option>
+                        <option <%if(returnVisit.status == '1'){%>selected<%}%> value="1">已回访</option>
+                        <option <%if(returnVisit.status == '2'){%>selected<%}%> value="2">不必回访</option>
+                        <option <%if(returnVisit.status == '3'){%>selected<%}%> value="3">回访未果</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
         </table>
     </form>
     <div class="reg_but">
