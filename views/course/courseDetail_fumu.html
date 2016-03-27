@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>添加课程</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+
+
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+
+        function cancel() {
+            window.location.href='/jinquan/course_list';
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：系统排课
+    </div>
+</div>
+<div class="center_con">
+
+    <div class="tabCon">
+        <div class="nx1">
+            <select id="courseType" name="courseType">
+                <option value="3" selected>父母课</option>
+            </select>
+            <hr class="lineSty" />
+        </div>
+        <div id="fumuke">
+            <form id="fumukeFrom" method="post" >
+                <div class="nx1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
+                        <tr>
+                            <td>预计人数：</td>
+                            <td><input id="count" name="count" type="text" class="input6" value="<%=data.course.memberCount%>"/></td>
+                            <td>课程费用：</td>
+                            <td><input id="price" name="price" type="text" class="input6" value="<%=data.course.price%>"/></td>
+                        </tr>
+                    </table>
+                    <hr class="lineSty" />
+                </div>
+                <div class="nx1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"   >
+                        <tr>
+                            <td width="10%">选择授课时间段：</td>
+                            <td width="40%">
+                                <select id="startTime" name="startTime" class="select2" style="width:100px;">
+                                    <option value="0" <%if(data.course.courseTimeStart == 0){%>selected<%}%>>8:00</option>
+                                    <option value="1" <%if(data.course.courseTimeStart == 1){%>selected<%}%>>8:30</option>
+                                    <option value="2" <%if(data.course.courseTimeStart == 2){%>selected<%}%>>9:00</option>
+                                    <option value="3" <%if(data.course.courseTimeStart == 3){%>selected<%}%>>9:30</option>
+                                    <option value="4" <%if(data.course.courseTimeStart == 4){%>selected<%}%>>10:00</option>
+                                    <option value="5" <%if(data.course.courseTimeStart == 5){%>selected<%}%>>10:30</option>
+                                    <option value="6" <%if(data.course.courseTimeStart == 6){%>selected<%}%>>11:00</option>
+                                    <option value="7" <%if(data.course.courseTimeStart == 7){%>selected<%}%>>11:30</option>
+                                    <option value="8" <%if(data.course.courseTimeStart == 8){%>selected<%}%>>12:00</option>
+                                    <option value="9" <%if(data.course.courseTimeStart == 9){%>selected<%}%>>14:00</option>
+                                    <option value="10" <%if(data.course.courseTimeStart == 10){%>selected<%}%>>14:30</option>
+                                    <option value="11" <%if(data.course.courseTimeStart == 11){%>selected<%}%>>15:00</option>
+                                    <option value="12" <%if(data.course.courseTimeStart == 12){%>selected<%}%>>15:30</option>
+                                    <option value="13" <%if(data.course.courseTimeStart == 13){%>selected<%}%>>16:00</option>
+                                    <option value="14" <%if(data.course.courseTimeStart == 14){%>selected<%}%>>16:30</option>
+                                    <option value="15" <%if(data.course.courseTimeStart == 15){%>selected<%}%>>17:00</option>
+                                    <option value="16" <%if(data.course.courseTimeStart == 16){%>selected<%}%>>17:30</option>
+                                    <option value="17" <%if(data.course.courseTimeStart == 17){%>selected<%}%>>18:00</option>
+                                </select> --
+                                <select id="endTime" name="endTime" class="select2" style="width:100px;">
+                                    <option value="0" <%if(data.course.courseTimeEnd == 0){%>selected<%}%>>8:00</option>
+                                    <option value="1" <%if(data.course.courseTimeEnd == 1){%>selected<%}%>>8:30</option>
+                                    <option value="2" <%if(data.course.courseTimeEnd == 2){%>selected<%}%>>9:00</option>
+                                    <option value="3" <%if(data.course.courseTimeEnd == 3){%>selected<%}%>>9:30</option>
+                                    <option value="4" <%if(data.course.courseTimeEnd == 4){%>selected<%}%>>10:00</option>
+                                    <option value="5" <%if(data.course.courseTimeEnd == 5){%>selected<%}%>>10:30</option>
+                                    <option value="6" <%if(data.course.courseTimeEnd == 6){%>selected<%}%>>11:00</option>
+                                    <option value="7" <%if(data.course.courseTimeEnd == 7){%>selected<%}%>>11:30</option>
+                                    <option value="8" <%if(data.course.courseTimeEnd == 8){%>selected<%}%>>12:00</option>
+                                    <option value="9" <%if(data.course.courseTimeEnd == 9){%>selected<%}%>>14:00</option>
+                                    <option value="10" <%if(data.course.courseTimeEnd == 10){%>selected<%}%>>14:30</option>
+                                    <option value="11" <%if(data.course.courseTimeEnd == 11){%>selected<%}%>>15:00</option>
+                                    <option value="12" <%if(data.course.courseTimeEnd == 12){%>selected<%}%>>15:30</option>
+                                    <option value="13" <%if(data.course.courseTimeEnd == 13){%>selected<%}%>>16:00</option>
+                                    <option value="14" <%if(data.course.courseTimeEnd == 14){%>selected<%}%>>16:30</option>
+                                    <option value="15" <%if(data.course.courseTimeEnd == 15){%>selected<%}%>>17:00</option>
+                                    <option value="16" <%if(data.course.courseTimeEnd == 16){%>selected<%}%>>17:30</option>
+                                    <option value="17" <%if(data.course.courseTimeEnd == 17){%>selected<%}%>>18:00</option>
+                                </select>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="10%" valign="top">培训内容：</td>
+                            <td colspan="3">
+                                <textarea id="content" name="content" cols="102" rows="3" class="textarea1"><%=data.course.content%></textarea>
+                            </td>
+                        </tr>
+
+                    </table>
+                    <hr class="lineSty" />
+                    <!--员工信息 start-->
+                    <span style="float: left; font-weight:bold;width: 100px;"><h3>讲师信息</h3></span>
+                    <br>
+                    <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                        <tr bgcolor="lightblue">
+
+                            <td>讲师姓名</td>
+                            <td>作用</td>
+                            <td>开始时间</td>
+                            <td>截止时间</td>
+                            <td>内容</td>
+                        </tr>
+                        <%for(var i=0;i<data.teachers.length;i++) {%>
+                        <tr id="qqq">
+                            <td><input   name="proname" type="text" class="input5 input_arr" value="<%=data.teachers[i].name%>" readonly="true" /></td>
+                            <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.teachers[i].type%>" readonly="true"/></td>
+                            <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.teachers[i].startTime%>" readonly="true"/></td>
+                            <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.teachers[i].endTime%>" readonly="true"/></td>
+                            <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.teachers[i].content%>" readonly="true"/></td>
+                        </tr>
+                        <%}%>
+                    </table>
+                </div>
+
+
+            </form>
+
+        </div>
+        <div class="nx1" style="text-align:center; margin-top:55px;">
+            <button type="button"  value="取消" class="button gray" onclick="cancel()" >取消</button>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

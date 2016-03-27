@@ -83,9 +83,36 @@ module.exports.detail = function (req, res, next) {
                 next();
             }
         });
+    } else if (type ==2) { // 专业
+
+       service.browse_zhuanye(id,function(err, results) {
+
+           if (!err) {
+               res.render('course/courseDetail_zhuanye', {data : results});
+
+           } else {
+               next();
+           }
+       });
+
+    } else if (type ==3) {  // 父母
+
+        service.browse_fumu(id,function(err, results) {
+            if (!err) {
+                res.render('course/courseDetail_fumu', {data : results});
+            }  else {
+                next();
+            }
+
+        });
+
+    } else if (type ==4) { // 会议
+        service.browse_huiyi(id,function(err, results) {
+            if (!err) {
+                res.render('course/courseDetail_huiyi', {data : results});
+            } else {
+                next();
+            }
+        });
     }
-
-
-
-
 }
