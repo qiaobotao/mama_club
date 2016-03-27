@@ -52,7 +52,6 @@ module.exports.preadd = function (req, res, next) {
 module.exports.add = function (req, res, next) {
 
     var classroomid = req.query.classroomid ? req.query.classroomid : '';
-    var courseId = req.query.courseId ? req.query.courseId : '';
     var date = req.query.date ? req.query.date : '';
 
     var type = req.query.type ? req.query.type : '';
@@ -94,7 +93,43 @@ module.exports.add = function (req, res, next) {
         var course = req.body.course ? req.body.course : '';
         var startTime = req.body.startTime ? req.body.startTime : '';
         var endTime = req.body.endTime ? req.body.endTime : '';
+        var score = req.body.score ? req.body.score : '';
+        var content = req.body.content ? req.body.content : '';
         // 重复项
+
+        var arr_staffId = req.body.staffId ? req.body.staffId : '';
+        var arr_func = req.body.func ? req.body.func : '';
+        var arr_teacStartTime = req.body.teacStartTime ? req.body.teacStartTime :'';
+        var arr_teacEndTime = req.body.teacEndTime ? req.body.teacEndTime : '';
+        var arr_courseContent = req.body.courseContent ? req.body.courseContent : '';
+
+        var arr = new Array();
+        if (arr_staffId instanceof Array) {
+            for (var i=0;i<arr_staffId.length;i++) {
+                var obj = {};
+                obj.staffId = arr_staffId[i];
+                obj.func =  arr_func[i];
+                obj.teacStartTime = arr_teacStartTime[i];
+                obj.teacEndTime = arr_teacEndTime[i];
+                obj.courseContent = arr_courseContent[i];
+                arr.push(obj);
+            }
+        } else {
+            var obj = {};
+            obj.staffId = arr_staffId;
+            obj.func = arr_func;
+            obj.teacStartTime = arr_teacStartTime;
+            obj.teacEndTime = arr_teacEndTime;
+            obj.courseContent = arr_courseContent;
+            arr.push(obj);
+        }
+        service.insertCourse_zhuanye(course,classroomid,date,startTime,endTime,type,score,content,arr,function (err, results) {
+            if (!err) {
+                res.redirect('/jinquan/course_plan?replytype=add');
+            } else {
+                next();
+            }
+        });
 
     } else if (type == 3) { // 父母课
 
@@ -104,6 +139,42 @@ module.exports.add = function (req, res, next) {
         var endTime = req.body.endTime ? req.body.endTime : '';
         var content = req.body.content ? req.body.content : '';
 
+        // 重复项
+
+        var arr_staffId = req.body.staffId ? req.body.staffId : '';
+        var arr_func = req.body.func ? req.body.func : '';
+        var arr_teacStartTime = req.body.teacStartTime ? req.body.teacStartTime :'';
+        var arr_teacEndTime = req.body.teacEndTime ? req.body.teacEndTime : '';
+        var arr_courseContent = req.body.courseContent ? req.body.courseContent : '';
+
+        var arr = new Array();
+        if (arr_staffId instanceof Array) {
+            for (var i=0;i<arr_staffId.length;i++) {
+                var obj = {};
+                obj.staffId = arr_staffId[i];
+                obj.func =  arr_func[i];
+                obj.teacStartTime = arr_teacStartTime[i];
+                obj.teacEndTime = arr_teacEndTime[i];
+                obj.courseContent = arr_courseContent[i];
+                arr.push(obj);
+            }
+        } else {
+            var obj = {};
+            obj.staffId = arr_staffId;
+            obj.func = arr_func;
+            obj.teacStartTime = arr_teacStartTime;
+            obj.teacEndTime = arr_teacEndTime;
+            obj.courseContent = arr_courseContent;
+            arr.push(obj);
+        }
+        service.insertCourse_fumu(classroomid,date,startTime,endTime,type,count,price,content,arr,function(err, results) {
+            if (!err) {
+                res.redirect('/jinquan/course_plan?replytype=add');
+            } else {
+                next();
+            }
+        });
+
 
     } else { // 会议
 
@@ -111,6 +182,29 @@ module.exports.add = function (req, res, next) {
         var endTime = req.body.endTime ? req.body.endTime : '';
         var content = req.body.content ? req.body.content : '';
 
+        //重复项
+        var arr_staffId = req.body.staffId ? req.body.staffId : '';
+        // 处理数据
+        var arr = new Array();
+        if (arr_staffId instanceof Array) {
+            for (var i=0;i<arr_staffId.length;i++) {
+                var obj = {};
+                obj.staffId = arr_staffId[i];
+                arr.push(obj);
+            }
+        } else {
+            var obj = {};
+            obj.staffId = arr_staffId;
+            arr.push(obj);
+        }
+        service.insertCourse_huiyi(classroomid,date,startTime,endTime,type,content,arr,function(err, results){
+
+            if (!err) {
+                res.redirect('/jinquan/course_plan?replytype=add');
+            } else {
+                next();
+            }
+        });
     }
 
 
@@ -135,7 +229,6 @@ module.exports.edit = function (req, res, next) {
                         results.classRoomId = classRoomId;
                         results.courseId = courseId;
                         results.date = date;
-                        console.log(results);
                         res.render('coursePlan/coursePlanEdit_neixun',{result : results});
                     } else {
                        next();

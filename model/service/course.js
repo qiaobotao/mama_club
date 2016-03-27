@@ -260,18 +260,18 @@ module.exports.browse_neixun = function (courseId, cb) {
 
 }
 
-module.exports.insertCourse_zhuanye = function (name,classroomid,courseDate,startTime,endTime,courseType,arr_teacher,cb) {
+module.exports.insertCourse_zhuanye = function (name,classroomid,courseDate,startTime,endTime,courseType,score,content,arr_teacher,cb) {
 
-    var insert_sql = 'INSERT INTO course(name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType) VALUES (?,?,?,?,?,?)';
-    db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType],function(cbData, err, rows, fields) {
+    var insert_sql = 'INSERT INTO course(name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,content) VALUES (?,?,?,?,?,?,?,?)';
+    db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType,score,content],function(cbData, err, rows, fields) {
 
         if (!err) {
 
             var insertid = rows.insertId;
-            var insert_teacher = 'INSERT INTO courseTeacher(courseId,teacherName,type,startTime,endTime,content) VALUES(?,?,?,?,?,?)';
+            var insert_teacher = 'INSERT INTO courseTeacher(courseId,teacherId,type,startTime,endTime,content) VALUES(?,?,?,?,?,?)';
             async.map(arr_teacher, function(item, callback) {
 
-                db.query(insert_teacher, [insertid,item.teacherName,item.type,item.startTime,item.endTime,item.content], function (cbData, err, rows, fields) {
+                db.query(insert_teacher, [insertid,item.staffId,item.func,item.teacStartTime,item.teacEndTime,item.courseContent], function (cbData, err, rows, fields) {
                     if (!err) {
                         callback(null, rows);
                     } else {
@@ -283,6 +283,7 @@ module.exports.insertCourse_zhuanye = function (name,classroomid,courseDate,star
             });
 
         } else {
+            console.log(err);
             cb(err);
         }
 
@@ -328,10 +329,10 @@ module.exports.insertCourse_fumu = function(classroomId,courseDate,startTime,end
         if (!err) {
 
             var insertid = rows.insertId;
-            var insert_teacher = 'INSERT INTO courseTeacher(courseId,teacherName,type,startTime,endTime,content) VALUES(?,?,?,?,?,?)';
+            var insert_teacher = 'INSERT INTO courseTeacher(courseId,teacherId,type,startTime,endTime,content) VALUES(?,?,?,?,?,?)';
             async.map(arr_fumu, function(item, callback) {
 
-                db.query(insert_teacher, [insertid,item.teacherName,item.type,item.startTime,item.endTime,item.content], function (cbData, err, rows, fields) {
+                db.query(insert_teacher, [insertid,item.staffId,item.func,item.teacStartTime,item.teacEndTime,item.courseContent], function (cbData, err, rows, fields) {
                     if (!err) {
                         callback(null, rows);
                     } else {
@@ -381,7 +382,7 @@ module.exports.browse_fumu = function (courseId,cb) {
     });
 }
 
-module.exports.insertCourse_huiyi = function(classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_huiyi,cb) {
+module.exports.insertCourse_huiyi = function(classroomId,courseDate,startTime,endTime,courseType,content,arr_huiyi,cb) {
 
     var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,content) VALUES (?,?,?,?,?,?)';
     db.query(insert_sql,[classroomid,courseDate,startTime,endTime,courseType,content],function(cbData, err, rows, fields) {
