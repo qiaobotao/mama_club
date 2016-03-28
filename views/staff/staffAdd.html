@@ -5,6 +5,9 @@
     <title>添加员工</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -39,6 +42,79 @@
              */
             document.getElementById("myform").submit();
         }
+
+        //当前孩子显示位置
+        var childIndex = 0;
+        //table中增加需要添加的行信息
+        function addChildTr(){
+            var tableId = 'childrenTableId';
+            //获取表格对象
+            var table=document.getElementById("childrenTableId");
+            //获取当前行数
+            childIndex = $("#childrenTableId tr").length;
+            var row=table.insertRow(childIndex);
+            var cell1=row.insertCell(0);//孩子名称
+            var cell2=row.insertCell(1);//孩子生日
+            var cell3=row.insertCell(2);//性别
+            var cell4=row.insertCell(3);//排行
+            var cell5=row.insertCell(4);//删除本行
+            cell1.innerHTML = '<td><input name="childrenName"'+childIndex+' type="text" class="input5" /></td>';
+            cell2.innerHTML='<td><input name="childrenBirth"'+childIndex+' type="text" class="input5" readonly onclick="laydate()"/></td>';
+            cell3.innerHTML='<td><select name="childrenSex"'+childIndex+'><option value="男">男</option><option value="女">女</option></select></td>';
+            cell4.innerHTML='<td><input name="childrenRank"'+childIndex+' type="text" class="input5" /></td>';
+            cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(1,this)"><h1>-</h1></a></td>';
+        }
+        //当前合同显示位置
+        var contractIndex = 0;
+        //table中增加需要添加的行信息
+        function addContractTr(){
+            //获取表格对象
+            var table=document.getElementById("contractTableId");
+            //获取当前行数
+            contractIndex = $("#contractTableId tr").length;
+//            alert("contractIndex="+contractIndex);
+            var row=table.insertRow(contractIndex);
+            var cell1=row.insertCell(0);//开始时间
+            var cell2=row.insertCell(1);//截止时间
+            var cell3=row.insertCell(2);//说明
+            var cell5=row.insertCell(3);//删除本行
+            cell1.innerHTML = '<td><input id="contractStartDate"'+contractIndex+' name="contractStartDate" type="text" class="input5" /></td>';
+            cell2.innerHTML='<td><input id="contractEndDate"'+contractIndex+' name="contractEndDate" type="text" class="input5" /></td>';
+            cell3.innerHTML='<td><input id="contractRemarks"'+contractIndex+' name="contractRemarks" type="text" class="input5" /></td>';
+            cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(2,this)"><h1>-</h1></a></td>';
+        }
+        //当前职业资质显示位置
+        var qualificationsIndex = 0;
+        //table中增加需要添加的行信息
+        function addQualificationsTr(){
+            //获取表格对象
+            var table=document.getElementById("qualificationsTableId");
+            //获取当前行数
+            qualificationsIndex = $("#qualificationsTableId tr").length;
+//            alert("qualificationsIndex="+qualificationsIndex);
+            var row=table.insertRow(qualificationsIndex);
+            var cell1=row.insertCell(0);//职业资质
+            var cell2=row.insertCell(1);//说明
+            var cell3=row.insertCell(2);//上传图片
+            var cell4=row.insertCell(3);//删除本行
+            cell1.innerHTML = '<td><input id="vocationalQualifications" name="vocationalQualifications" type="text" class="input5" /></td>';
+            cell2.innerHTML='<td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" class="input5" /></td>';
+            cell3.innerHTML='<td><input id="qualificationsImage" name="qualificationsImage" type="text" class="input5" /></td>';
+            cell4.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>';
+        }
+        //table中删除选中的行数据
+        function delTr(tableId,delObj){
+            var deltr = delObj.parentNode.parentNode;
+            if(tableId == 1){//员工
+                $('#childrenTableId tr:eq('+deltr.rowIndex+')').remove();
+            }
+            if(tableId == 2){//合同
+                $('#contractTableId tr:eq('+deltr.rowIndex+')').remove();
+            }
+            if(tableId == 3){//职业资格
+                $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').remove();
+            }
+        }
     </script>
 </head>
 
@@ -68,7 +144,7 @@
             </tr>
             <tr>
                 <td class="regTd_l">出生日期：</td>
-                <td class="regTd_r"><input id="birthDate" name="birthDate" type="text" class="input5" value="<%=staff.birthDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="birthDate" name="birthDate" type="text" class="input5" value="<%=staff.birthDate%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">最高学历：</td>
                 <td class="regTd_r"><input id="highestEducation" name="highestEducation" type="text" class="input5" value="<%=staff.highestEducation%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -86,13 +162,13 @@
             </tr>
             <tr>
                 <td class="regTd_l">入职时间：</td>
-                <td class="regTd_r"><input id="startJobTime" name="startJobTime" type="text" class="input5" value="<%=staff.startJobTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="startJobTime" name="startJobTime" type="text" class="input5" value="<%=staff.startJobTime%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否在职：</td>
                 <td class="regTd_r"><input id="isJob" name="isJob" type="text" class="input5" value="<%=staff.isJob%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">离职时间：</td>
-                <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" value="<%=staff.endJobTime%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" value="<%=staff.endJobTime%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">所属门店：</td>
                 <td class="regTd_r">
                     <select id="shopId" name="shopId">
@@ -129,54 +205,58 @@
         <!--子女信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">子女信息</span>
         <br>
-        <table width="80%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="childrenTableId" width="80%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>子女姓名</td>
                 <td>出生日期</td>
                 <td>性别</td>
                 <td>排行</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addChildTr()"><h1>+</h1></a></td>
             </tr>
             <tr>
-                <td>-</td>
-                <td><input id="childrenName" name="childrenName" type="text" class="input5" /></td>
-                <td><input id="childrenBirth" name="childrenBirth" type="text" class="input5" /></td>
-                <td><input id="childrenSex" name="childrenSex" type="text" class="input5" /></td>
-                <td><input id="childrenRank" name="childrenRank" type="text" class="input5" /></td>
+                <td><input name="childrenName" type="text" class="input5" /></td>
+                <td><input name="childrenBirth" type="text" class="input5" readonly onclick="laydate()"/></td>
+                <td>
+                    <select name="childrenSex"><option value="男">男</option><option value="女">女</option></select>
+                </td>
+                <td><input name="childrenRank" type="text" class="input5" /></td>
+                <td><a style="cursor: pointer" onclick="javaScript:delTr(1,this)"><h1>-</h1></a></td>
             </tr>
         </table>
         <!--子女信息 end-->
         <!--合同信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">合同信息</span>
         <br>
-        <table width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="contractTableId" width="40%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>开始时间</td>
                 <td>截止时间</td>
                 <td>说明</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addContractTr()"><h1>+</h1></a></td>
             </tr>
             <tr>
-                <td>-</td>
                 <td><input id="contractStartDate" name="contractStartDate" type="text" class="input5" /></td>
                 <td><input id="contractEndDate" name="contractEndDate" type="text" class="input5" /></td>
                 <td><input id="contractRemarks" name="contractRemarks" type="text" class="input5" /></td>
+                <td><a style="cursor: pointer" onclick="javaScript:delTr(2,this)"><h1>-</h1></a></td>
             </tr>
         </table>
         <!--合同信息 end-->
         <!--职业资质信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">职业资质信息</span>
         <br>
-        <table width="60%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="qualificationsTableId" width="60%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>+</td>
                 <td>职业资质</td>
+                <td>资质描述</td>
                 <td>上传图片</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addQualificationsTr()"><h1>+</h1></a></td>
             </tr>
             <tr>
-                <td>-</td>
                 <td><input id="vocationalQualifications" name="vocationalQualifications" type="text" class="input5" /></td>
+                <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" class="input5" /></td>
                 <td><input id="qualificationsImage" name="qualificationsImage" type="text" class="input5" /></td>
+                <td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>
             </tr>
         </table>
         <!--职业资质信息 end-->
