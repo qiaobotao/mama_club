@@ -58,10 +58,10 @@
             var cell3=row.insertCell(2);//性别
             var cell4=row.insertCell(3);//排行
             var cell5=row.insertCell(4);//删除本行
-            cell1.innerHTML = '<td><input name="childrenName"'+childIndex+' type="text" class="input5" /></td>';
-            cell2.innerHTML='<td><input name="childrenBirth"'+childIndex+' type="text" class="input5" readonly onclick="laydate()"/></td>';
-            cell3.innerHTML='<td><select name="childrenSex"'+childIndex+'><option value="男">男</option><option value="女">女</option></select></td>';
-            cell4.innerHTML='<td><input name="childrenRank"'+childIndex+' type="text" class="input5" /></td>';
+            cell1.innerHTML = '<td><input name="childrenName" type="text" class="input5" /></td>';
+            cell2.innerHTML='<td><input name="childrenBirth" type="text" class="input5" readonly onclick="laydate()"/></td>';
+            cell3.innerHTML='<td><select name="childrenSex"><option value="男">男</option><option value="女">女</option></select></td>';
+            cell4.innerHTML='<td><input name="childrenRank" type="text" class="input5" /></td>';
             cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(1,this)"><h1>-</h1></a></td>';
         }
         //当前合同显示位置
@@ -78,9 +78,9 @@
             var cell2=row.insertCell(1);//截止时间
             var cell3=row.insertCell(2);//说明
             var cell5=row.insertCell(3);//删除本行
-            cell1.innerHTML = '<td><input id="contractStartDate"'+contractIndex+' name="contractStartDate" type="text" class="input5" /></td>';
-            cell2.innerHTML='<td><input id="contractEndDate"'+contractIndex+' name="contractEndDate" type="text" class="input5" /></td>';
-            cell3.innerHTML='<td><input id="contractRemarks"'+contractIndex+' name="contractRemarks" type="text" class="input5" /></td>';
+            cell1.innerHTML = '<td><input name="contractStartDate" type="text" class="input5" readonly onclick="laydate()" /></td>';
+            cell2.innerHTML='<td><input name="contractEndDate" type="text" class="input5" readonly onclick="laydate()" /></td>';
+            cell3.innerHTML='<td><input name="contractRemarks" type="text" class="input5" /></td>';
             cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(2,this)"><h1>-</h1></a></td>';
         }
         //当前职业资质显示位置
@@ -94,12 +94,14 @@
 //            alert("qualificationsIndex="+qualificationsIndex);
             var row=table.insertRow(qualificationsIndex);
             var cell1=row.insertCell(0);//职业资质
-            var cell2=row.insertCell(1);//说明
-            var cell3=row.insertCell(2);//上传图片
-            var cell4=row.insertCell(3);//删除本行
-            cell1.innerHTML = '<td><input id="vocationalQualifications" name="vocationalQualifications" type="text" class="input5" /></td>';
-            cell2.innerHTML='<td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" class="input5" /></td>';
-            cell3.innerHTML='<td><input id="qualificationsImage" name="qualificationsImage" type="text" class="input5" /></td>';
+            var cell2=row.insertCell(1);//获取证书时间
+            var cell3=row.insertCell(2);//说明
+            var cell4=row.insertCell(3);//上传图片
+            var cell4=row.insertCell(4);//删除本行
+            cell1.innerHTML = '<td><input name="vocationalQualifications" type="text" class="input5" /></td>';
+            cell2.innerHTML='<td><input name="qualificationsTime" type="text" class="input5"  readonly onclick="laydate()"/></td>';
+            cell2.innerHTML='<td><input name="qualificationsDescribe" type="text" class="input5" /></td>';
+            cell3.innerHTML='<td><input name="qualificationsImage" type="text" class="input5" /></td>';
             cell4.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>';
         }
         //table中删除选中的行数据
@@ -213,15 +215,21 @@
                 <td>排行</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addChildTr()"><h1>+</h1></a></td>
             </tr>
+            <%
+            for(var i = 0 ; i< children.length ; i ++){
+            %>
             <tr>
-                <td><input name="childrenName" type="text" class="input5" /></td>
-                <td><input name="childrenBirth" type="text" class="input5" readonly onclick="laydate()"/></td>
+                <td><input name="childrenName" type="text" class="input5" value="<%=children[i].childrenName%>"/></td>
+                <td><input name="childrenBirth" type="text" class="input5" value="<%=children[i].childrenBirth%>" readonly onclick="laydate()"/></td>
                 <td>
-                    <select name="childrenSex"><option value="男">男</option><option value="女">女</option></select>
+                    <select name="childrenSex"><option value="男" <%if(children[i].childrenSex == '男'){%>selected<%}%>>男</option><option value="女" <%if(children[i].childrenSex == '女'){%>selected<%}%>>女</option></select>
                 </td>
-                <td><input name="childrenRank" type="text" class="input5" /></td>
+                <td><input name="childrenRank" type="text" class="input5" value="<%=children[i].childrenRank%>" /></td>
                 <td><a style="cursor: pointer" onclick="javaScript:delTr(1,this)"><h1>-</h1></a></td>
             </tr>
+            <%
+            }
+            %>
         </table>
         <!--子女信息 end-->
         <!--合同信息 start-->
@@ -234,12 +242,18 @@
                 <td>说明</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addContractTr()"><h1>+</h1></a></td>
             </tr>
+            <%
+            for(var i = 0 ; i< contracts.length ; i ++){
+            %>
             <tr>
-                <td><input id="contractStartDate" name="contractStartDate" type="text" class="input5" /></td>
-                <td><input id="contractEndDate" name="contractEndDate" type="text" class="input5" /></td>
-                <td><input id="contractRemarks" name="contractRemarks" type="text" class="input5" /></td>
+                <td><input id="contractStartDate" name="contractStartDate" type="text" class="input5" value="<%=contracts[i].contractStartDate%>" readonly onclick="laydate()" /></td>
+                <td><input id="contractEndDate" name="contractEndDate" type="text" class="input5"  value="<%=contracts[i].contractEndDate%>" readonly onclick="laydate()"/></td>
+                <td><input id="contractRemarks" name="contractRemarks" type="text" class="input5" value="<%=contracts[i].contractRemarks%>" /></td>
                 <td><a style="cursor: pointer" onclick="javaScript:delTr(2,this)"><h1>-</h1></a></td>
             </tr>
+            <%
+            }
+            %>
         </table>
         <!--合同信息 end-->
         <!--职业资质信息 start-->
@@ -248,16 +262,24 @@
         <table id="qualificationsTableId" width="60%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
                 <td>职业资质</td>
+                <td>获取时间</td>
                 <td>资质描述</td>
                 <td>上传图片</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addQualificationsTr()"><h1>+</h1></a></td>
             </tr>
+            <%
+            for(var i = 0 ; i< certificates.length ; i ++){
+            %>
             <tr>
-                <td><input id="vocationalQualifications" name="vocationalQualifications" type="text" class="input5" /></td>
-                <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" class="input5" /></td>
-                <td><input id="qualificationsImage" name="qualificationsImage" type="text" class="input5" /></td>
+                <td><input id="vocationalQualifications" name="vocationalQualifications" value="<%=certificates[i].vocationalQualifications%>" type="text" class="input5" /></td>
+                <td><input id="qualificationsTime" name="qualificationsTime" type="text" value="<%=certificates[i].qualificationsTime%>" class="input5"  readonly onclick="laydate()"/></td>
+                <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" value="<%=certificates[i].qualificationsDescribe%>" class="input5" /></td>
+                <td><input id="qualificationsImage" name="qualificationsImage" type="text" value="<%=certificates[i].qualificationsImage%>" class="input5" /></td>
                 <td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>
             </tr>
+            <%
+            }
+            %>
         </table>
         <!--职业资质信息 end-->
     </form>

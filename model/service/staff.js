@@ -116,6 +116,10 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
 
 /**
  * 修改员工
+ * 1、修改员工基本信息
+ * 2、删除员工子女信息
+ * 3、删除合同信息
+ * 4、删除职业资格信息
  * @param id
  * @param name
  * @param address
@@ -124,14 +128,60 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
  */
 module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel, cb) {
 
-    var sql = 'UPDATE staff SET serialNumber = ?, name = ?, tel = ?, idCard = ?, birthDate = ?, highestEducation = ? , graduationSchool = ? , spouseName = ? ' +
+    var updateStaffSql = 'UPDATE staff SET serialNumber = ?, name = ?, tel = ?, idCard = ?, birthDate = ?, highestEducation = ? , graduationSchool = ? , spouseName = ? ' +
         ', spouseTel = ? , email = ? , startJobTime = ? , endJobTime = ? , isJob = ? , shopId = ? , clockCode = ?, remarks = ?,staffLevel=? WHERE id = ?';
 
-    var par = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel, id];
+    var updateStaffPar = [serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel, id];
+    //删除员工与之对应的子女信息
+    var delChildSql = 'delete from staffChildren WHERE staffId = ?';
+    var deleteChildPar = [id];
+    //删除员工与之对应的合同信息
+    var deleteContractSql = 'delete from staffContract WHERE staffId = ?';
+    var deleteContractPar = [id];
+    //删除员工与之对应的职业资格信息
+    var deleteCertificateSql = 'delete from staffCertificate WHERE staffId = ?';
+    var deleteCertificatePar = [id];
+    async.series({
+        updateStaff : function(callback){
+            db.query(updateStaffSql, updateStaffPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delChildren : function(callback){
+            db.query(delChildSql, deleteChildPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delContract : function(callback){
+            db.query(deleteContractSql, deleteContractPar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delCertificate : function(callback){
+            db.query(deleteCertificateSql, deleteCertificatePar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
-    db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
@@ -145,15 +195,113 @@ module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate
  * @param cb
  */
 module.exports.fetchSingleStaff =function (id, cb) {
-
-    var sql = 'SELECT * FROM staff WHERE id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    //员工基本信息
+    var staffSql = 'SELECT * FROM staff WHERE id = ?';
+    //员工子女信息
+    var childrenSql = 'SELECT * FROM staffChildren WHERE staffId = ?';
+    //员工合同信息
+    var contractSql = 'SELECT * FROM staffContract WHERE staffId = ?';
+    //员工职业资格信息
+    var certificateSql = 'SELECT * FROM staffCertificate WHERE staffId = ?';
+    async.series({
+        staff : function(callback){
+            db.query(staffSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        children : function(callback){
+            db.query(childrenSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        contracts : function(callback){
+            db.query(contractSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        certificates : function(callback){
+            db.query(certificateSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+
+
 }
 
+
+/**
+ * 添加员工与子女、合同、职业资格等信息
+ * @param id
+ * @param childrenArr
+ * @param contractArr
+ * @param qualificationsArr
+ * @param cb
+ */
+module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualificationsArr,cb) {
+    //添加员工孩子信息
+    var addChildrenSql = 'insert into staffChildren(staffId,childrenName,childrenBirth,childrenSex,childrenRank,dateline) VALUES (?,?,?,?,?,?)';
+    //添加员工合同信息
+    var addContractSql = 'insert into staffContract(staffId,contractStartDate,contractEndDate,contractRemarks,dateline) VALUES (?,?,?,?,?)';
+    //添加员工职业资格信息
+    var addCertificateSql = 'insert into staffCertificate(staffId,vocationalQualifications,qualificationsImage,qualificationsDescribe,qualificationsTime,dateline) VALUES (?,?,?,?,?,?)';
+    //批量添加员工的孩子信息
+    async.map(childrenArr, function(item, callback) {
+        db.query(addChildrenSql, [id,item.childrenName,item.childrenBirth,item.childrenSex,item.childrenRank,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        //callback(err, results);
+    });
+    //批量添加员工的合同信息
+    async.map(contractArr, function(item, callback) {
+        db.query(addContractSql, [id,item.contractStartDate,item.contractEndDate,item.contractRemarks,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        //cb(err, results);
+    });
+    //批量添加员工的职业资格信息
+    async.map(qualificationsArr, function(item, callback) {
+        db.query(addCertificateSql, [id,item.vocationalQualifications,item.qualificationsImage,item.qualificationsDescribe,item.qualificationsTime,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+}

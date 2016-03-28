@@ -16,6 +16,8 @@ module.exports.list = function (req, res) {
     var name = req.query.name ? req.query.name : '';
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var tel = req.query.tel ? req.query.tel : '';
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
 
     service.fetchAllStaff(name,serialNumber,tel,currentPage, function (err, results) {
         if (!err) {
@@ -23,7 +25,7 @@ module.exports.list = function (req, res) {
             results.name = name;
             results.serialNumber = serialNumber;
             results.tel = tel;
-            res.render('staff/staffList', {data : results});
+            res.render('staff/staffList', {data : results, replytype : replytype});
         } else {
             next();
         }
@@ -63,10 +65,90 @@ module.exports.save = function (req, res) {
     var remarks = req.body.remarks ? req.body.remarks : '';
     var staffLevel = req.body.staffLevel ? req.body.staffLevel : '';
 
+    //员工子女信息
+    var childrenName = req.body.childrenName ? req.body.childrenName : '';
+    var childrenBirth = req.body.childrenBirth ? req.body.childrenBirth : '';
+    var childrenSex = req.body.childrenSex ? req.body.childrenSex : '';
+    var childrenRank = req.body.childrenRank ? req.body.childrenRank : '';
+    // 处理子女集合数据
+    var childrenArr = new Array();
+    if (childrenName instanceof Array) {
+        for (var i = 0; i < childrenName.length; i++) {
+            var obj = {};
+            obj.childrenName = childrenName[i];
+            obj.childrenBirth = childrenBirth[i];
+            obj.childrenSex = childrenSex[i];
+            obj.childrenRank = childrenRank[i];
+            childrenArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.childrenName = childrenName;
+        obj.childrenBirth = childrenBirth;
+        obj.childrenSex = childrenSex;
+        obj.childrenRank = childrenRank;
+        childrenArr.push(obj);
+    }
+
+    //员工合同信息
+    var contractStartDate = req.body.contractStartDate ? req.body.contractStartDate : '';
+    var contractEndDate = req.body.contractEndDate ? req.body.contractEndDate : '';
+    var contractRemarks = req.body.contractRemarks ? req.body.contractRemarks : '';
+    var contractArr = new Array();
+    if (contractStartDate instanceof Array) {
+        for (var i = 0; i < contractStartDate.length; i++) {
+            var obj = {};
+            obj.contractStartDate = contractStartDate[i];
+            obj.contractEndDate = contractEndDate[i];
+            obj.contractRemarks = contractRemarks[i];
+            contractArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.contractStartDate = contractStartDate;
+        obj.contractEndDate = contractEndDate;
+        obj.contractRemarks = contractRemarks;
+        contractArr.push(obj);
+    }
+    //员工职业资格信息
+    var vocationalQualifications = req.body.vocationalQualifications ? req.body.vocationalQualifications : '';
+    var qualificationsTime = req.body.qualificationsTime ? req.body.qualificationsTime : '';
+    var qualificationsDescribe = req.body.qualificationsDescribe ? req.body.qualificationsDescribe : '';
+    var qualificationsImage = req.body.qualificationsImage ? req.body.qualificationsImage : '';
+    var qualificationsArr = new Array();
+    if (vocationalQualifications instanceof Array) {
+        for (var i = 0; i < vocationalQualifications.length; i++) {
+            var obj = {};
+            obj.vocationalQualifications = vocationalQualifications[i];
+            obj.qualificationsTime = qualificationsTime[i];
+            obj.qualificationsDescribe = qualificationsDescribe[i];
+            obj.qualificationsImage = qualificationsImage[i];
+            qualificationsArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.vocationalQualifications = vocationalQualifications;
+        obj.qualificationsTime = qualificationsTime;
+        obj.qualificationsDescribe = qualificationsDescribe;
+        obj.qualificationsImage = qualificationsImage;
+        qualificationsArr.push(obj);
+    }
+
+
     if(id!=''){//修改
+        //updateStaff：先update员工基本信息、删除对应的员工、合同、职业资格信息
         service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/staff_list');
+                //添加子女信息
+                service.addStaffOhter(id,childrenArr,contractArr,qualificationsArr,function(err, results) {
+                    if(!err) {
+                        //添加子女信息
+                        res.redirect('/jinquan/staff_list?replytype=update');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');
@@ -75,7 +157,16 @@ module.exports.save = function (req, res) {
     }else{//添加
         service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/staff_list');
+                //添加子女信息
+                service.addStaffOhter(id,childrenArr,contractArr,qualificationsArr,function(err, results) {
+                    if(!err) {
+                        //添加子女信息
+                        res.redirect('/jinquan/staff_list?replytype=add');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');
@@ -95,17 +186,23 @@ module.exports.preEdit = function(req, res, next) {
 
     service.fetchSingleStaff(id, function(err, results) {
         if (!err) {
-            var staff = results.length == 0 ? null : results[0];
+            var staff = {};
+            if(results['staff'] != null){
+                staff = results['staff'][0];
+            }
             if(staff == null){
                 staff = {};
             }
+            var children = results['children'];
+            var contracts = results['contracts'];
+            var certificates = results['certificates'];
             shopService.fetchShops(0,20,function(err, results) {
                 if (!err) {
                     var shopList = results;
                     staffLevelService.fetchStaffLevels(function(err, results) {
                         if (!err) {
                             var staffLevelList = results;
-                            res.render('staff/staffAdd', {staff : staff,shopList:shopList,staffLevelList:staffLevelList});
+                            res.render('staff/staffAdd', {staff : staff,shopList:shopList,staffLevelList:staffLevelList,children:children,contracts:contracts,certificates:certificates});
                         } else {
                             next();
                         }
@@ -131,7 +228,7 @@ module.exports.del = function (req, res, next) {
 
     service.delStaff(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/staff_list');
+            res.redirect('/jinquan/staff_list?replytype=del');
         } else {
             next();
         }
