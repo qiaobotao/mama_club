@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>修改课程</title>
+    <title>编辑课程</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -41,8 +41,6 @@
             });
         }
 
-
-
         function submitForm () {
 
             var type = document.getElementById('courseType').value;
@@ -52,11 +50,7 @@
                 parent.layer.alert('课程名称不能为空',{icon: 2});
                 return;
             }
-            var teacher = document.getElementById('teacher').value;
-            if (!teacher || teacher.length == 0) {
-                parent.layer.alert('教师名称不能为空',{icon: 2});
-                return;
-            }
+
             var startTime = document.getElementById('startTime').value;
             var endTime = document.getElementById('endTime').value;
             if(startTime >= endTime){
@@ -127,8 +121,8 @@
                 time: 2000//显示时间
             });
 
-            document.getElementById('neixunFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
-            document.getElementById('neixunFrom').submit();
+            document.getElementById('zhuanyekeFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
+            document.getElementById('zhuanyekeFrom').submit();
 
         }
 
@@ -141,18 +135,20 @@
             //获取当前行数
             waresIndex = $("#waresTable tr").length;
             var row=table.insertRow(waresIndex);
-            var cell1=row.insertCell(0);//员工名称
-            var cell2=row.insertCell(1);//员工级别
-            var cell3=row.insertCell(2);//电话
-            var cell4=row.insertCell(3);//邮箱
-            var cell5=row.insertCell(4);//删除本行
-            var cell6=row.insertCell(5);//员工id
+            var cell1=row.insertCell(0);//讲师姓名
+            var cell2=row.insertCell(1);//作用
+            var cell3=row.insertCell(2);//开始时间
+            var cell4=row.insertCell(3);//截止时间
+            var cell5=row.insertCell(4);//课程内容
+            var cell7=row.insertCell(5);//删除本行
+            var cell6=row.insertCell(6);//员工id
             cell1.innerHTML = '<input id="staffName'+waresIndex+'"  name="staffName" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
-            cell2.innerHTML='<input id="staffLevel'+waresIndex+'" name="staffLevel" type="text" class="input5 input_arr" readonly="true"/>';
-            cell3.innerHTML='<input id="tel'+waresIndex+'" name="tel" type="text" class="input5 input_arr" readonly="true"/>';
-            cell4.innerHTML='<input id="email'+waresIndex+'" name="email" type="text" class="input5 input_arr" readonly="true"/>';
+            cell2.innerHTML='<input id="func'+waresIndex+'" name="func" type="text" class="input5 input_arr" />';
+            cell3.innerHTML='<input id="startTime'+waresIndex+'" name="teacStartTime" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input id="endTime'+waresIndex+'" name="teacEndTime" type="text" class="input5 input_arr" />';
+            cell5.innerHTML='<input id="content'+waresIndex+'" name="courseContent" type="text" class="input5 input_arr" />';
             cell6.innerHTML='<input id="staffId'+waresIndex+'" name="staffId" type="hidden" class="input5 input_arr" />';
-            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
         }
         //table中删除选中的行数据
         function delTr(delObj){
@@ -177,22 +173,20 @@
 
     <div class="tabCon">
         <div class="nx1">
-            <select id="courseType" name="courseType" >
-                <option value="1" selected>内训</option>
+            <select id="courseType" name="courseType">
+                <option value="2" selected>专业课</option>
             </select>
             <hr class="lineSty" />
         </div>
-        <div id="neixun">
-            <form id="neixunFrom"  method="post" >
-
+        <div id="zhuanyeke">
+            <form id="zhuanyekeFrom" method="post" >
                 <div class="nx1">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
+                    <table width="30%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td width="10%">课程名称：</td>
-                            <td width="40%"><input id="course" name="course" type="text" class="input6"  value="<%=result.course.name%>"/></td>
-                            <td width="10%">授课教师：</td>
-                            <input id="teacherid" name="teacherid" type="hidden"  value="<%=result.teacherId%>"/>
-                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6" value="<%=result.teacher%>"  onfocus="getWares('')"/></td>
+                        </tr>
+                        <tr>
+                            <td width="40%"><input id="course" name="course" type="text" class="input6" value="<%=result.course.name%>" /></td>
                         </tr>
                     </table>
                     <hr class="lineSty" />
@@ -267,6 +261,7 @@
                     </table>
                     <hr class="lineSty" />
                 </div>
+
                 <div class="nx1">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"   >
                         <tr>
@@ -315,7 +310,7 @@
 
                             </td>
                             <td width="10%">课程满分：</td>
-                            <td width="40%"><input id="score" name="score" type="text" class="input6"  value="<%=result.course.scorse%>" /></td>
+                            <td width="40%"><input id="score" name="score" type="text" class="input6"  value="<%=result.course.scorse%>"/></td>
                         </tr>
                         <tr>
                             <td width="10%" valign="top">培训内容：</td>
@@ -329,24 +324,26 @@
                 </div>
 
                 <!--员工信息 start-->
-                <span style="float: left; font-weight:bold;width: 100px;"><h3>员工信息</h3></span>
+                <span style="float: left; font-weight:bold;width: 100px;"><h3>讲师信息</h3></span>
                 <br>
                 <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
                     <tr bgcolor="lightblue">
 
-                        <td>员工名称</td>
-                        <td>员工级别</td>
-                        <td>电话</td>
-                        <td>邮箱</td>
+                        <td>讲师姓名</td>
+                        <td>作用</td>
+                        <td>开始时间</td>
+                        <td>截止时间</td>
+                        <td>内容</td>
                         <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
                     </tr>
-                    <%for(var i=0;i<result.users.length;i++) {%>
-                    <tr>
-                        <td><input id="staffName<%=i%>"  name="staffName" type="text" class="input5 input_arr" value="<%=result.users[i].name%>"  /></td>
-                        <td><input id="staffLevel<%=i%>" name="staffLevel" type="text" class="input5 input_arr" value="<%=result.users[i].staffLevel%>" /></td>
-                        <td><input id="tel<%=i%>" name="tel" type="text" class="input5 input_arr" value="<%=result.users[i].tel%>" /></td>
-                        <td><input id="email<%=i%>" name="email" type="text" class="input5 input_arr" value="<%=result.users[i].email%>" /></td>
-                        <td><input id="staffId<%=i%>" name="staffId" type="hidden" class="input5 input_arr" value="<%=result.users[i].userId%>"/></td>
+                    <%for(var i=0;i<result.teachers.length;i++) {%>
+                    <tr id="qqq">
+                        <td><input id="staffName<%=i%>"  name="staffName" type="text" class="input5 input_arr" value="<%=result.teachers[i].name%>" /></td>
+                        <td><input id="func<%=i%>"  name="func" type="text" class="input5 input_arr" value="<%=result.teachers[i].type%>" /></td>
+                        <td><input id="startTime<%=i%>"  name="teacStartTime" type="text" class="input5 input_arr" value="<%=result.teachers[i].startTime%>" /></td>
+                        <td><input id="endTime<%=i%>" name="teacEndTime" type="text" class="input5 input_arr" value="<%=result.teachers[i].endTime%>" /></td>
+                        <td><input id="content<%=i%>" name="courseContent" type="text" class="input5 input_arr" value="<%=result.teachers[i].content%>" /></td>
+                        <input id="staffId<%=i%>" name="staffId" type="hidden" class="input5 input_arr" value="<%=result.teachers[i].userId%>"/>
                         <td><a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a></td>
                     </tr>
                     <%}%>
@@ -356,7 +353,7 @@
         </div>
         <div class="nx1" style="text-align:center; margin-top:55px;">
             <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button"  value="取消" class="button gray" onclick="cancel()">取消</button>
+            <button type="button"  value="取消" class="button gray" onclick="cancel()" >取消</button>
 
         </div>
     </div>

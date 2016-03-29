@@ -49,7 +49,7 @@
                 $(this).mouseenter(function(){
                     $(this).append("<strong>点击修改</strong>");
                     $(this).click(function(){
-                        var add_url = "/jinquan/course_plan_edit?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate+'&type='+courseType;
+                        var edit_url = "/jinquan/course_plan_edit?courseId="+courseId+"&classRoomId="+classRoomId+'&date='+courseArrayDate+'&type='+courseType;
                         window.location.href=edit_url;
                     });
                 }).mouseleave(function(){

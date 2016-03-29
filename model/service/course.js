@@ -293,7 +293,7 @@ module.exports.insertCourse_zhuanye = function (name,classroomid,courseDate,star
 module.exports.browse_zhuanye = function (courseId,cb) {
 
     var main_sql = 'SELECT * FROM course WHERE id = ?';
-    var sql = 'SELECT s.name,c.type,c.startTime,c.endTime,c.content FROM courseTeacher c,staff s  WHERE courseId = ? AND s.id=c.teacherId';
+    var sql = 'SELECT s.id AS  userId,s.name,c.type,c.startTime,c.endTime,c.content FROM courseTeacher c,staff s  WHERE courseId = ? AND s.id=c.teacherId';
 
     db.query(main_sql,[courseId],function (cbData, err, rows, fields) {
 
@@ -353,7 +353,7 @@ module.exports.insertCourse_fumu = function(classroomId,courseDate,startTime,end
 module.exports.browse_fumu = function (courseId,cb) {
 
     var main_sql = 'SELECT * FROM course WHERE id = ?';
-    var sql = 'SELECT s.name,c.type,c.startTime,c.endTime,c.content FROM courseTeacher c,staff s  WHERE courseId = ? AND s.id=c.teacherId';
+    var sql = 'SELECT s.id AS userId, s.name,c.type,c.startTime,c.endTime,c.content FROM courseTeacher c,staff s  WHERE courseId = ? AND s.id=c.teacherId';
 
     db.query(main_sql,[courseId],function (cbData, err, rows, fields) {
 

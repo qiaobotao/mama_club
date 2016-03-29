@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>修改课程</title>
+    <title>添加课程</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -41,22 +41,9 @@
             });
         }
 
-
-
         function submitForm () {
-
             var type = document.getElementById('courseType').value;
 
-            var course = document.getElementById('course').value;
-            if (!course || course.length == 0) {
-                parent.layer.alert('课程名称不能为空',{icon: 2});
-                return;
-            }
-            var teacher = document.getElementById('teacher').value;
-            if (!teacher || teacher.length == 0) {
-                parent.layer.alert('教师名称不能为空',{icon: 2});
-                return;
-            }
             var startTime = document.getElementById('startTime').value;
             var endTime = document.getElementById('endTime').value;
             if(startTime >= endTime){
@@ -91,16 +78,9 @@
                 return;
             }
 
-
-
-            var score = document.getElementById('score').value;
-            if (!score || score.length == 0) {
-                parent.layer.alert('分数不能为空',{icon: 2});
-                return;
-            }
             var content = document.getElementById('content').value;
             if (!content || content.length == 0) {
-                parent.layer.alert('培训内容不能为空',{icon: 2});
+                parent.layer.alert('会议内容不能为空',{icon: 2});
                 return;
             }
             if(!document.getElementsByName('staffId')[0]){
@@ -127,8 +107,9 @@
                 time: 2000//显示时间
             });
 
-            document.getElementById('neixunFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
-            document.getElementById('neixunFrom').submit();
+            document.getElementById('huiyiFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
+            document.getElementById('huiyiFrom').submit();
+
 
         }
 
@@ -177,26 +158,15 @@
 
     <div class="tabCon">
         <div class="nx1">
-            <select id="courseType" name="courseType" >
-                <option value="1" selected>内训</option>
+            <select id="courseType" name="courseType">
+                <option value="4" selected>会议</option>
             </select>
             <hr class="lineSty" />
         </div>
-        <div id="neixun">
-            <form id="neixunFrom"  method="post" >
+        <div id="huiyi">
 
-                <div class="nx1">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
-                        <tr>
-                            <td width="10%">课程名称：</td>
-                            <td width="40%"><input id="course" name="course" type="text" class="input6"  value="<%=result.course.name%>"/></td>
-                            <td width="10%">授课教师：</td>
-                            <input id="teacherid" name="teacherid" type="hidden"  value="<%=result.teacherId%>"/>
-                            <td width="40%"><input id="teacher" name="teacher" type="text" class="input6" value="<%=result.teacher%>"  onfocus="getWares('')"/></td>
-                        </tr>
-                    </table>
-                    <hr class="lineSty" />
-                </div>
+            <form id="huiyiFrom" method="post" >
+
                 <div class="nx1">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bordered">
                         <thead>
@@ -314,11 +284,10 @@
                                 </select>
 
                             </td>
-                            <td width="10%">课程满分：</td>
-                            <td width="40%"><input id="score" name="score" type="text" class="input6"  value="<%=result.course.scorse%>" /></td>
+
                         </tr>
                         <tr>
-                            <td width="10%" valign="top">培训内容：</td>
+                            <td width="10%" valign="top">会议内容：</td>
                             <td colspan="3">
                                 <textarea id="content" name="content" cols="102" rows="3" class="textarea1"><%=result.course.content%></textarea>
                             </td>
@@ -327,7 +296,6 @@
                     </table>
                     <hr class="lineSty" />
                 </div>
-
                 <!--员工信息 start-->
                 <span style="float: left; font-weight:bold;width: 100px;"><h3>员工信息</h3></span>
                 <br>
@@ -351,15 +319,16 @@
                     </tr>
                     <%}%>
                 </table>
-
-            </form>
         </div>
-        <div class="nx1" style="text-align:center; margin-top:55px;">
-            <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="button"  value="取消" class="button gray" onclick="cancel()">取消</button>
 
-        </div>
+        </form>
     </div>
+    <div class="nx1" style="text-align:center; margin-top:55px;">
+        <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="button"  value="取消" class="button gray" onclick="cancel()">取消</button>
+
+    </div>
+</div>
 </div>
 
 </body>

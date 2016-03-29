@@ -219,19 +219,80 @@ module.exports.edit = function (req, res, next) {
 
     if (courseType == 1) { // 内训
 
-        service.browse_neixun(courseId,function (err, results) {
+        service.browse_neixun(courseId, function (err, results) {
             if (!err) {
 
-                service.getPlan(classRoomId,date,function(err, plans) {
+                service.getPlan(classRoomId, date, function (err, plans) {
 
                     if (!err) {
                         results.coursePlan = plans;
                         results.classRoomId = classRoomId;
                         results.courseId = courseId;
                         results.date = date;
-                        res.render('coursePlan/coursePlanEdit_neixun',{result : results});
+                        res.render('coursePlan/coursePlanEdit_neixun', {result: results});
                     } else {
-                       next();
+                        next();
+                    }
+                });
+            } else {
+                next();
+            }
+        });
+    } else if (courseType == 2) {  // 专业
+
+        service.browse_zhuanye(courseId, function (err, results){
+
+            if (!err) {
+                service.getPlan(classRoomId,date, function (err, plans) {
+                    if (!err) {
+                        results.coursePlan = plans;
+                        results.classRoomId = classRoomId;
+                        results.courseId = courseId;
+                        results.date = date;
+                        res.render('coursePlan/coursePlanEdit_zhuanye', {result: results});
+                    } else {
+                        next();
+                    }
+                });
+            } else {
+                next();
+            }
+        });
+    } else if (courseType == 3) {  // 父母课
+
+        service.browse_fumu(courseId, function (err, results){
+
+            if (!err) {
+                service.getPlan(classRoomId,date, function (err, plans) {
+                    if (!err) {
+                        results.coursePlan = plans;
+                        results.classRoomId = classRoomId;
+                        results.courseId = courseId;
+                        results.date = date;
+                        res.render('coursePlan/coursePlanEdit_fumu', {result: results});
+                    } else {
+                        next();
+                    }
+                });
+            } else {
+                next();
+            }
+        });
+
+    } else { // 会议
+
+        service.browse_huiyi(courseId, function (err, results){
+
+            if (!err) {
+                service.getPlan(classRoomId,date, function (err, plans) {
+                    if (!err) {
+                        results.coursePlan = plans;
+                        results.classRoomId = classRoomId;
+                        results.courseId = courseId;
+                        results.date = date;
+                        res.render('coursePlan/coursePlanEdit_huiyi', {result: results});
+                    } else {
+                        next();
                     }
                 });
             } else {
