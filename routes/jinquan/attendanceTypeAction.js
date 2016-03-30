@@ -32,14 +32,16 @@ module.exports.list = function (req, res) {
  */
 module.exports.edit = function (req, res) {
     var id = req.query.id ? req.query.id : '';
+    var workDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
     if(id == ''){
         var attendanceType = [];
-        res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType});
+        res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType,workDate:workDate,attendanceTypeMx:[]});
     }else{
         service.fetchSingleAttendanceType(id, function(err, results) {
             if (!err) {
-                var attendanceType = results.length == 0 ? null : results[0];
-                res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType});
+                var attendanceType = results.single != null ? results.single[0] : {};
+                var attendanceTypeMx = results.singleMx;
+                res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType,workDate:workDate,attendanceTypeMx:attendanceTypeMx});
             } else {
                 next();
             }
@@ -52,25 +54,62 @@ module.exports.edit = function (req, res) {
  * @param res
  */
 module.exports.save = function (req, res) {
+    //主表信息
     var id = req.body.id ? req.body.id : '';
     var categoryName = req.body.categoryName ? req.body.categoryName : '';
-    var jobTime = req.body.jobTime ? req.body.jobTime : '';
+    var status = req.body.status ? req.body.status : '';
+    var describe = req.body.describe ? req.body.describe : '';
+    //子表信息
+    var jobStatus = req.body.jobStatus ? req.body.jobStatus : '';
     var startDate = req.body.startDate ? req.body.startDate : '';
     var endDate = req.body.endDate ? req.body.endDate : '';
-
+    var weekNum = req.body.weekNum ? req.body.weekNum : '';
+    // 处理考勤子表集合数据
+    var attendanceArr = new Array();
+    if (jobStatus instanceof Array) {
+        for (var i = 0; i < jobStatus.length; i++) {
+            var obj = {};
+            obj.jobStatus = jobStatus[i];
+            obj.startDate = startDate[i];
+            obj.endDate = endDate[i];
+            obj.weekNum = weekNum[i];
+            attendanceArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.jobStatus = jobStatus;
+        obj.startDate = startDate;
+        obj.endDate = endDate;
+        obj.weekNum = weekNum;
+        attendanceArr.push(obj);
+    }
     if(id!=''){//修改
-        service.updateAttendanceType(id,categoryName,jobTime,startDate,endDate,function(err, results) {
+        service.updateAttendanceType(id,categoryName,status,describe,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/attendance_type_list');
+                service.addAttendanceMx(id,attendanceArr,function(err, results) {
+                    if(!err) {
+                        res.redirect('/jinquan/attendance_type_list');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');
             }
         })
     }else{//添加
-        service.insertAttendanceType(categoryName,jobTime,startDate,endDate,function(err, results) {
+        service.insertAttendanceType(categoryName,status,describe,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/attendance_type_list');
+                service.addAttendanceMx(results.insertId,attendanceArr,function(err, results) {
+                    if(!err) {
+                        res.redirect('/jinquan/attendance_type_list');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(1123);
                 console.log(err.message);

@@ -5,11 +5,22 @@
     <title>编辑考勤类别</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
         function submitForm(){
+            var obj = $("select[name='jobStatus']");
+            console.info(obj);
+            $.each(obj,function(i, n){
+                console.info();
+                if(obj[i].selectedIndex == 0){
+                    parent.layer.msg("请为星期"+(i+1)+" 设置工作状态。");
+                    return false;
+                }
+            });
             /*
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
@@ -54,27 +65,124 @@
             <tr>
                 <td class="regTd_l">考勤名称：</td>
                 <td class="regTd_r">
-                    <input id="categoryName" name="categoryName" type="text" class="input5" value="<%=attendanceType.categoryName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                     <input id="id" name="id" type="hidden" value="<%=attendanceType.id%>"/>
+                    <input id="categoryName" name="categoryName" type="text" class="input5" value="<%=attendanceType.categoryName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
-                <td  class="regTd_l">工作小时数：</td>
-                <td class="regTd_r"><input id="jobTime" name="jobTime" type="text" class="input5" value="<%=attendanceType.jobTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">状态：</td>
+                <td class="regTd_r">
+                    <select name="status">
+                        <option value="Y">启用</option>
+                        <option value="N">停用</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
             </tr>
             <tr>
-                <td class="regTd_l">开始时间：</td>
-                <td class="regTd_r"><input id="startDate" name="startDate" type="text" class="input5" value="<%=attendanceType.startDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">截止时间：</td>
-                <td class="regTd_r"><input id="endDate" name="endDate" type="text" class="input5" value="<%=attendanceType.endDate%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">描述：</td>
+                <td class="regTd_r" colspan="3">
+                    <input name="describe" type="text" style="width: 60%;" class="input5" value="<%=attendanceType.describe%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
             </tr>
         </table>
-        <!--参与员工 end-->
+        <!--考勤周期 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">考勤周期内情况</span>
+        <br>
+        <table id="childrenTableId" width="60%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>星期</td>
+                <td>工作状态</td>
+                <td>上班时间</td>
+                <td>下班时间</td>
+                <td>工作小时数量</td>
+            </tr>
+            <%
+            if(attendanceTypeMx.length != 0){//有考勤记录，显示考勤记录
+                for(var i = 0 ; i < attendanceTypeMx.length ; i ++){
+                    %>
+                    <tr>
+                        <td>
+                            星期<%=(attendanceTypeMx[i].weekNum+1)%>
+                            <input type="hidden" name="weekNum" value="<%=attendanceTypeMx[i].weekNum%>"/>
+                        </td>
+                        <td>
+                            <select name="jobStatus">
+                                <option value="">请选择</option>
+                                <option value="Y" <%if(attendanceTypeMx[i].jobStatus == 'Y'){%>selected<%}%>>工作</option>
+                                <option value="N" <%if(attendanceTypeMx[i].jobStatus == 'N'){%>selected<%}%>>休息</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="startDate">
+                                <option value="">请选择</option>
+                                <%
+                                for(var workIndex = 0 ; workIndex < workDate.length ; workIndex ++){
+                                %><option value="<%=workIndex%>" <%if(attendanceTypeMx[i].startDate == workIndex){%>selected<%}%>><%=workDate[workIndex]%></option> <%
+                                }
+                                %>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="endDate">
+                                <option value="">请选择</option>
+                                <%
+                                for(var workIndex = 0 ; workIndex < workDate.length ; workIndex ++){
+                                %><option value="<%=workIndex%>" <%if(attendanceTypeMx[i].endDate == workIndex){%>selected<%}%>><%=workDate[workIndex]%></option> <%
+                                }
+                                %>
+                            </select>
+                        </td>
+                        <td><%=(attendanceTypeMx[i].endDate - attendanceTypeMx[i].startDate)*0.5%>小时</td>
+                    </tr>
+                    <%
+                }
+            }else{
+            for(var i = 0 ; i < 7 ; i ++){
+            %>
+            <tr>
+                <td>
+                    星期<%=(i+1)%>
+                    <input type="hidden" name="weekNum" value="<%=i%>"/>
+                </td>
+                <td>
+                    <select name="jobStatus">
+                        <option value="">请选择</option>
+                        <option value="Y">工作</option>
+                        <option value="N">休息</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="startDate">
+                        <option value="">请选择</option>
+                        <%
+                        for(var workIndex = 0 ; workIndex < workDate.length ; workIndex ++){
+                        %><option value="<%=workIndex%>"><%=workDate[workIndex]%></option> <%
+                        }
+                        %>
+                    </select>
+                </td>
+                <td>
+                    <select name="endDate">
+                        <option value="">请选择</option>
+                        <%
+                        for(var workIndex = 0 ; workIndex < workDate.length ; workIndex ++){
+                        %><option value="<%=workIndex%>"><%=workDate[workIndex]%></option> <%
+                        }
+                        %>
+                    </select>
+                </td>
+                <td>3.5小时</td>
+            </tr>
+            <%
+            }
+            }
+            %>
+        </table>
+        <!--考勤周期 end-->
     </form>
     <div class="reg_but">
         <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
         <div class="rb_l"><a href=/jinquan/attendance_type_list class="close"></a></div>
     </div>
-
-
 </div>
 </body>
 </html>

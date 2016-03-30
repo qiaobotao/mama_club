@@ -14,11 +14,11 @@ var async = require('async');
  * @param endDate
  * @param cb
  */
-module.exports.insertAttendanceType = function(categoryName,jobTime,startDate,endDate,cb) {
+module.exports.insertAttendanceType = function(categoryName,status,describe,cb) {
 
-    var sql = 'INSERT INTO attendanceCategory (categoryName,jobTime,startDate,endDate,dateline,status)' +
-        ' VALUES (?,?,?,?,?,?)';
-    db.query(sql, [categoryName,jobTime,startDate,endDate,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO attendanceCategory (categoryName,`status`,`describe`,dateline)' +
+        ' VALUES (?,?,?,?)';
+    db.query(sql, [categoryName,status,describe,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -119,15 +119,35 @@ module.exports.fetchAllAttendanceType = function(categoryName,currentPage,cb) {
  * @param endDate
  * @param cb
  */
-module.exports.updateAttendanceType = function(id, categoryName,jobTime,startDate,endDate, cb) {
+module.exports.updateAttendanceType = function(id, categoryName,status,describe, cb) {
+    //修改考勤主表sql
+    var updateSql = 'UPDATE attendanceCategory SET categoryName = ?, `status` = ?, `describe` = ? WHERE id = ?';
+    var updatePar = [categoryName,status,describe, id];
+    //删除考勤子表sql
+    var delMxSql = 'delete from attendanceCategoryMX WHERE attendanceCategoryId = ?';
+    async.series({
+        update : function(callback){
+            db.query(updateSql, updatePar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delMx : function(callback){
+            db.query(delMxSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
-    var sql = 'UPDATE attendanceCategory SET categoryName = ?, jobTime = ?, startDate = ?, endDate = ? WHERE id = ?';
-
-    var par = [categoryName,jobTime,startDate,endDate, id];
-
-    db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
@@ -142,14 +162,56 @@ module.exports.updateAttendanceType = function(id, categoryName,jobTime,startDat
  */
 module.exports.fetchSingleAttendanceType =function (id, cb) {
 
-    var sql = 'SELECT * FROM attendanceCategory WHERE id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    var singleSql = 'SELECT * FROM attendanceCategory WHERE id = ?';
+    var singleMxSql = 'SELECT * FROM attendanceCategoryMX WHERE attendanceCategoryId = ? order by weekNum';
 
+    async.series({
+        single : function(callback){
+            db.query(singleSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        singleMx : function(callback){
+            db.query(singleMxSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
 }
 
+/**
+ * 添加考勤类型子表信息
+ * @param id
+ * @param attendanceArr
+ * @param cb
+ */
+module.exports.addAttendanceMx = function(id,attendanceArr,cb) {
+    //添加考勤类型子表信息
+    var addChildrenSql = 'insert into attendanceCategoryMX(attendanceCategoryId,jobStatus,startDate,endDate,weekNum) VALUES (?,?,?,?,?)';
+    //批量添加考勤类型子表信息
+    async.map(attendanceArr, function(item, callback) {
+        db.query(addChildrenSql, [id,item.jobStatus,item.startDate,item.endDate,item.weekNum], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+}

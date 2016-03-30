@@ -36,8 +36,7 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td>类别名称：<input name="categoryName" id="categoryName" type="text" class="input5" value="<%=data.categoryName%>" /></td>
-                    <td> &nbsp;开始时间：<input name="" type="text" class="input5" /></td>
-                    <td> &nbsp;截止时间：<input name="" type="text" class="input5" /></td>
+                    <td> &nbsp;描述：<input name="" type="text" class="input5" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -49,9 +48,8 @@
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
                 <th>类别名称</th>
-                <th>开始时间</th>
-                <th>截止时间</th>
-                <th>工作小时数</th>
+                <th>描述</th>
+                <th>状态</th>
                 <th>操作</th>
             </tr>
 
@@ -60,9 +58,8 @@
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].categoryName%></td>
-                <td><%=data.data[i].startDate%></td>
-                <td><%=data.data[i].endDate%></td>
-                <td><%=data.data[i].jobTime%></td>
+                <td><%=data.data[i].describe%></td>
+                <td><%if(data.data[i].status == 'Y'){%>启用<%}else{%>停用<%}%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
