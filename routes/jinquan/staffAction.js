@@ -158,7 +158,7 @@ module.exports.save = function (req, res) {
         service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 //添加子女信息
-                service.addStaffOhter(id,childrenArr,contractArr,qualificationsArr,function(err, results) {
+                service.addStaffOhter(results.insertId,childrenArr,contractArr,qualificationsArr,function(err, results) {
                     if(!err) {
                         //添加子女信息
                         res.redirect('/jinquan/staff_list?replytype=add');
