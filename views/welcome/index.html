@@ -11,6 +11,23 @@
 </head>
 
 
+<script type="text/javascript">
+
+    var menus = '<%-JSON.stringify(user.menus)%>';
+    menus = JSON.parse(menus);
+
+    $(document).ready(function(){
+        var mm = '';
+        for(var i = 0 ; i < menus.length ; i ++){
+            if('<%=user.shortcutMenuId1 %>'==menus[i].id ||
+                    '<%=user.shortcutMenuId2 %>'==menus[i].id ||
+                    '<%=user.shortcutMenuId3 %>'==menus[i].id ||
+                    '<%=user.shortcutMenuId4 %>'==menus[i].id){
+                $("#shortcutTdId").append("<a href='"+menus[i].url+"' target='mainFrame'>"+menus[i].textCh+"</a> &nbsp; &nbsp;");
+            }
+        }
+    });
+</script>
 <body>
 <frameset rows="81,*,29" cols="*" framespacing="0" frameborder="no" border="0">
     <div id="top">
@@ -20,8 +37,10 @@
                 <td >
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
+                            <td id="shortcutTdId">
+                            </td>
                             <td class="top_c" style="text-align:right">
-                                欢迎  <%=userName%>  使用金泉平台！
+                                欢迎  <%=user.userName%>  使用金泉平台！
                                 <div class="zhuxiao"><a href="/" class="zx_sty"></a></div>
                             </td>
                         </tr>

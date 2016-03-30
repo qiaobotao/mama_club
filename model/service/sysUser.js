@@ -320,7 +320,7 @@ module.exports.getMenuAndResourcesByUserId = function(uId,cb) {
 
     async.series({
         menusData : function(callback){
-            db.query(resourcesSql, [uId], function (cbData, err, rows, fields) {
+            db.query(menusSql, [uId], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {
