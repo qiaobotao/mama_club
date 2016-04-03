@@ -2,9 +2,10 @@
  * Created by kuanchang on 16/1/12.
  */
 
-var service = require('../../model/service/staff');
-var shopService = require('../../model/service/shop');
-var staffLevelService = require('../../model/service/staffLevel');
+var service = require('../../model/service/staff');//员工Server
+var shopService = require('../../model/service/shop');//门店Server
+var staffLevelService = require('../../model/service/staffLevel');//员工等级Server
+var attendanceTypeService = require('../../model/service/attendanceType');//考勤类型Server
 /**
  * 获取员工列表
  * @param req
@@ -134,13 +135,39 @@ module.exports.save = function (req, res) {
         qualificationsArr.push(obj);
     }
 
+    //  考勤周期信息
+    var attendanceId = req.body.attendanceId ? req.body.attendanceId : '';//考勤类型表id
+    var attendanceStartDate = req.body.attendanceStartDate ? req.body.attendanceStartDate : '';//考勤周期开始时间
+    var attendanceEndDate = req.body.attendanceEndDate ? req.body.attendanceEndDate : '';//考勤周期截止时间
+    var attendanceRank = req.body.attendanceRank ? req.body.attendanceRank : '';//考勤周期备注
+
+
+    var attendancesArr = new Array();
+    if (vocationalQualifications instanceof Array) {
+        for (var i = 0; i < attendanceId.length; i++) {
+            var obj = {};
+            obj.attendanceId = attendanceId[i];
+            obj.attendanceStartDate = attendanceStartDate[i];
+            obj.attendanceEndDate = attendanceEndDate[i];
+            obj.attendanceRank = attendanceRank[i];
+            attendancesArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.attendanceId = attendanceId;
+        obj.attendanceStartDate = attendanceStartDate;
+        obj.attendanceEndDate = attendanceEndDate;
+        obj.attendanceRank = attendanceRank;
+        attendancesArr.push(obj);
+    }
+
 
     if(id!=''){//修改
         //updateStaff：先update员工基本信息、删除对应的员工、合同、职业资格信息
         service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 //添加子女信息
-                service.addStaffOhter(id,childrenArr,contractArr,qualificationsArr,function(err, results) {
+                service.addStaffOhter(id,childrenArr,contractArr,qualificationsArr,attendancesArr,function(err, results) {
                     if(!err) {
                         //添加子女信息
                         res.redirect('/jinquan/staff_list?replytype=update');
@@ -158,7 +185,7 @@ module.exports.save = function (req, res) {
         service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 //添加子女信息
-                service.addStaffOhter(results.insertId,childrenArr,contractArr,qualificationsArr,function(err, results) {
+                service.addStaffOhter(results.insertId,childrenArr,contractArr,qualificationsArr,attendancesArr,function(err, results) {
                     if(!err) {
                         //添加子女信息
                         res.redirect('/jinquan/staff_list?replytype=add');
@@ -183,7 +210,7 @@ module.exports.save = function (req, res) {
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
-
+    //根据员工id获取员工详情信息
     service.fetchSingleStaff(id, function(err, results) {
         if (!err) {
             var staff = {};
@@ -196,13 +223,33 @@ module.exports.preEdit = function(req, res, next) {
             var children = results['children'];
             var contracts = results['contracts'];
             var certificates = results['certificates'];
+            var attendanceTypes = results['attendanceTypes'];
+            //获取所有门店信息
             shopService.fetchShops(0,20,function(err, results) {
                 if (!err) {
                     var shopList = results;
+                    //获取所有员工等级
                     staffLevelService.fetchStaffLevels(function(err, results) {
                         if (!err) {
                             var staffLevelList = results;
-                            res.render('staff/staffAdd', {staff : staff,shopList:shopList,staffLevelList:staffLevelList,children:children,contracts:contracts,certificates:certificates});
+                            //获取员工考勤
+                            attendanceTypeService.fetchAttendanceTypes(0,50,function(err, results) {
+                                if (!err) {
+                                    var attendanceList = results;
+                                    res.render('staff/staffAdd', {
+                                        staff : staff,//员工信息
+                                        shopList:shopList,//门店集合
+                                        staffLevelList:staffLevelList,//员工等级集合
+                                        children:children,//员工子女集合
+                                        contracts:contracts,//员工合同集合
+                                        attendanceTypes:attendanceTypes,//员工考勤类型集合（记录该员工历史考勤及未来考勤情况）
+                                        certificates:certificates,//员工职业资格集合
+                                        attendanceList:attendanceList//考勤类型集合
+                                    });
+                                } else {
+                                    next();
+                                }
+                            })
                         } else {
                             next();
                         }

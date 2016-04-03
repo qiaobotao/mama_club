@@ -141,6 +141,9 @@ module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate
     //删除员工与之对应的职业资格信息
     var deleteCertificateSql = 'delete from staffCertificate WHERE staffId = ?';
     var deleteCertificatePar = [id];
+    //删除员工与之对应的考勤周期信息
+    var deleteAttendanceSql = 'delete from staffAttendance WHERE staffId = ?';
+    var deleteAttendancePar = [id];
     async.series({
         updateStaff : function(callback){
             db.query(updateStaffSql, updateStaffPar, function (cbData, err, rows, fields) {
@@ -177,6 +180,15 @@ module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate
                     callback(err);
                 }
             });
+        },
+        delAttendance : function(callback){
+            db.query(deleteAttendanceSql, deleteAttendancePar, function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
         }
     },function(err, results) {
 
@@ -202,7 +214,9 @@ module.exports.fetchSingleStaff =function (id, cb) {
     //员工合同信息
     var contractSql = 'SELECT * FROM staffContract WHERE staffId = ?';
     //员工职业资格信息
-    var certificateSql = 'SELECT * FROM staffCertificate WHERE staffId = ?';
+    var certificateSql = 'SELECT * FROM staffCertificate WHERE staffId = ?'
+    //员工考勤类型信息
+    var attendanceTypeSql = 'SELECT * FROM staffAttendance WHERE staffId = ?';
     async.series({
         staff : function(callback){
             db.query(staffSql, [id], function (cbData, err, rows, fields) {
@@ -239,6 +253,15 @@ module.exports.fetchSingleStaff =function (id, cb) {
                     callback(err);
                 }
             });
+        },
+        attendanceTypes : function(callback){
+            db.query(attendanceTypeSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
         }
     },function(err, results) {
 
@@ -261,13 +284,15 @@ module.exports.fetchSingleStaff =function (id, cb) {
  * @param qualificationsArr
  * @param cb
  */
-module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualificationsArr,cb) {
+module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualificationsArr,attendancesArr,cb) {
     //添加员工孩子信息
     var addChildrenSql = 'insert into staffChildren(staffId,childrenName,childrenBirth,childrenSex,childrenRank,dateline) VALUES (?,?,?,?,?,?)';
     //添加员工合同信息
     var addContractSql = 'insert into staffContract(staffId,contractStartDate,contractEndDate,contractRemarks,dateline) VALUES (?,?,?,?,?)';
     //添加员工职业资格信息
     var addCertificateSql = 'insert into staffCertificate(staffId,vocationalQualifications,qualificationsImage,qualificationsDescribe,qualificationsTime,dateline) VALUES (?,?,?,?,?,?)';
+    //添加员工考勤周期信息
+    var addAttendanceSql = 'insert into staffAttendance(staffId,attendanceId,attendanceStartDate,attendanceEndDate,attendanceRank,dateline) VALUES (?,?,?,?,?,?)';
     //批量添加员工的孩子信息
     async.map(childrenArr, function(item, callback) {
         db.query(addChildrenSql, [id,item.childrenName,item.childrenBirth,item.childrenSex,item.childrenRank,new Date().getTime()], function (cbData, err, rows, fields) {
@@ -283,6 +308,18 @@ module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualification
     //批量添加员工的合同信息
     async.map(contractArr, function(item, callback) {
         db.query(addContractSql, [id,item.contractStartDate,item.contractEndDate,item.contractRemarks,new Date().getTime()], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        //cb(err, results);
+    });
+    //批量添加考勤周期信息
+    async.map(attendancesArr, function(item, callback) {
+        db.query(addAttendanceSql, [id,item.attendanceId,item.attendanceStartDate,item.attendanceEndDate,item.attendanceRank,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {

@@ -45,7 +45,7 @@
 
         //当前孩子显示位置
         var childIndex = 0;
-        //table中增加需要添加的行信息
+        //table中增加需要添加的行信息（子女）
         function addChildTr(){
             var tableId = 'childrenTableId';
             //获取表格对象
@@ -66,7 +66,7 @@
         }
         //当前合同显示位置
         var contractIndex = 0;
-        //table中增加需要添加的行信息
+        //table中增加需要添加的行信息（合同）
         function addContractTr(){
             //获取表格对象
             var table=document.getElementById("contractTableId");
@@ -85,7 +85,7 @@
         }
         //当前职业资质显示位置
         var qualificationsIndex = 0;
-        //table中增加需要添加的行信息
+        //table中增加需要添加的行信息（职业资格）
         function addQualificationsTr(){
             //获取表格对象
             var table=document.getElementById("qualificationsTableId");
@@ -104,6 +104,34 @@
             cell3.innerHTML='<td><input name="qualificationsImage" type="text" class="input5" /></td>';
             cell4.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>';
         }
+        //table中增加需要添加的行信息（考勤周期）
+        function addAttendanceTypesTr(){
+            var attendanceList = '<%-JSON.stringify(attendanceList)%>';
+            attendanceList = JSON.parse(attendanceList);
+
+            var selectAttendanceType = "";
+            for(var j = 0 ; j < attendanceList.length ; j ++){
+                selectAttendanceType += "<option value='"+attendanceList[j].id+"'>"+attendanceList[j].categoryName+"</option>";
+            }
+
+            //获取表格对象
+            var table=document.getElementById("attendanceTypesTableId");
+            //获取当前行数
+            var attendanceTypesIndex = $("#attendanceTypesTableId tr").length;
+            var row=table.insertRow(attendanceTypesIndex);
+            var cell1=row.insertCell(0);//考勤名称
+            var cell2=row.insertCell(1);//开始时间
+            var cell3=row.insertCell(2);//截止时间
+            var cell4=row.insertCell(3);//状态
+            var cell5=row.insertCell(4);//备注
+            var cell6=row.insertCell(5);//删除本行
+            cell1.innerHTML = '<td><select name="attendanceId">'+selectAttendanceType+'</select></td>';
+            cell2.innerHTML='<td><input name="attendanceStartDate" type="text" class="input5" readonly onclick="laydate()"/></td>';
+            cell3.innerHTML='<td><input name="attendanceEndDate" type="text" class="input5" readonly onclick="laydate()"/></td>';
+            cell4.innerHTML='<td>未启用</td>';
+            cell5.innerHTML='<td><input name="attendanceRank" type="text" class="input5"/></td>';
+            cell6.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(4,this)"><h1>-</h1></a></td>';
+        }
         //table中删除选中的行数据
         function delTr(tableId,delObj){
             var deltr = delObj.parentNode.parentNode;
@@ -115,6 +143,9 @@
             }
             if(tableId == 3){//职业资格
                 $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').remove();
+            }
+            if(tableId == 4){//考勤周期
+                $('#attendanceTypesTableId tr:eq('+deltr.rowIndex+')').remove();
             }
         }
     </script>
@@ -200,10 +231,57 @@
                 </td>
             </tr>
             <tr>
-                <td class="regTd_l" rowspan="2">备注：</td>
+                <td class="regTd_l" >备注：</td>
                 <td class="regTd_r"><input id="remarks" name="remarks" type="text" class="input5" value="<%=staff.remarks%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
+        <!-- 考勤周期信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;">考勤周期信息</span>
+        <br>
+        <table id="attendanceTypesTableId" width="80%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>考勤名称</td>
+                <td>开始时间</td>
+                <td>截止时间</td>
+                <td>状态</td>
+                <td>备注</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addAttendanceTypesTr()"><h1>+</h1></a></td>
+            </tr>
+            <%
+            for(var i = 0 ; i< attendanceTypes.length ; i ++){
+            %>
+            <tr>
+                <td>
+                    <%
+                    for(var j = 0 ; j < attendanceList.length ; j ++){
+                        if(attendanceList[j].id == attendanceTypes[i].attendanceId){
+                            %><%=attendanceList[j].categoryName%><%
+                            break;
+                        }
+                    }
+                    %>
+                    <input name="attendanceId" type="hidden" value="<%=attendanceTypes[i].attendanceId%>"/>
+                </td>
+                <td><input name="attendanceStartDate" type="text" class="input5" value="<%=attendanceTypes[i].attendanceStartDate%>" readonly onclick="laydate()"/></td>
+                <td><input name="attendanceEndDate" type="text" class="input5" value="<%=attendanceTypes[i].attendanceEndDate%>" readonly onclick="laydate()"/></td>
+                <td>
+                    <%
+                    //如果当前考勤周期开始时间 < 当前时间：已执行
+                    //如果当前考勤周期开始时间 > 当前时间 并且 截止时间 < 当前时间：正在执行
+                    //如果当前考勤周期截止时间 < 当前时间：未执行
+                    if(1==1){
+                        %>未执行<%
+                    }
+                    %>
+                </td>
+                <td><input name="attendanceRank" type="text" class="input5" value="<%=attendanceTypes[i].attendanceRank%>" /></td>
+                <td><a style="cursor: pointer" onclick="javaScript:delTr(4,this)"><h1>-</h1></a></td>
+            </tr>
+            <%
+            }
+            %>
+        </table>
+        <!-- 考勤周期信息 end-->
         <!--子女信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;">子女信息</span>
         <br>
