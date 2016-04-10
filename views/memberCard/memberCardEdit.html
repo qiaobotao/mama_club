@@ -208,7 +208,7 @@
                             <td class="regTd_l">会员：</td>
                             <td class="regTd_r">
                                 <input id="memberName" name="memberName"  value="<%=memberCard.memberName%>"  onfocus="getWares()"/>
-                                <input id="memberId" name="memberId" type="hidden" />
+                                <input id="memberId" name="memberId" type="hidden" value="<%=memberCard.memberId%>" />
                             </td>
                         </tr>
                         <tr>
@@ -221,7 +221,7 @@
                                                 <%
                                                 if(data!=null && data!=''){
                                                 for (var i=0;i<data.length;i++) {%>
-                                                <option value="<%=data[i].id%>"><%=data[i].memberCardType%></option>
+                                                <option value="<%=data[i].id%>"  <%if(data[i].id == memberCard.parameter1){%>selected<%}%> ><%=data[i].memberCardType%></option>
                                                 <%}}%>
                                             </select>
                                     </tr>

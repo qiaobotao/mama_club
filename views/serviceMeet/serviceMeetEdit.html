@@ -68,6 +68,8 @@
         }
         function renderTables(datas)
         {
+            if(datas!=null){
+
 
             var  serviceMeets =datas.serviceMeets;
             //获取表格对象
@@ -75,6 +77,8 @@
             //获取当前行数
             serviceMeetsIndex = $("#serviceMeets tr").length;
             $("#serviceMeets  tr:not(:first)").empty("");
+            if(serviceMeets!=null)
+            {
             for(var i=0;i<serviceMeets.length;i++)
             {
                 var row=serviceMeetsTable.insertRow(serviceMeetsIndex);
@@ -112,11 +116,15 @@
                 cell4.innerHTML =zhuangtai;
                 serviceMeetsIndex++;
             }
+            }
             //获取表格对象
             var nursServicesTable=document.getElementById("nursServices");
             var  nursServices =datas.nursServices;
             nursServicesIndex = $("#nursServices tr").length;
             $("#nursServices  tr:not(:first)").empty("");
+            if(nursServices!=null)
+            {
+
             for(var i=0;i<nursServices.length;i++)
             {
                 var row=nursServicesTable.insertRow(nursServicesIndex);
@@ -130,23 +138,30 @@
                 cell4.innerHTML =nursServices[i].serviceType;
                 nursServicesIndex++;
             }
+
+            }
             //获取表格对象
             var complainsTable=document.getElementById("complains");
             var  complains =datas.complains;
             complainsIndex = $("#complains tr").length;
             $("#complains  tr:not(:first)").empty("");
-            for(var i=0;i<complains.length;i++)
+            if(complains!=null)
             {
-                var row=complainsTable.insertRow(complainsIndex);
-                var cell1=row.insertCell(0);//预约时间
-                var cell2=row.insertCell(1);//预约技师
-                var cell3=row.insertCell(2);//如约、爽约
-                var cell4=row.insertCell(3);//如约、爽约
-                cell1.innerHTML =complains[i].serviceName;
-                cell2.innerHTML =complains[i].complainTime;
-                cell3.innerHTML =complains[i].dealPrincipal;
-                cell4.innerHTML =complains[i].complainDetail;
-                complainsIndex++;
+
+                for(var i=0;i<complains.length;i++)
+                {
+                    var row=complainsTable.insertRow(complainsIndex);
+                    var cell1=row.insertCell(0);//预约时间
+                    var cell2=row.insertCell(1);//预约技师
+                    var cell3=row.insertCell(2);//如约、爽约
+                    var cell4=row.insertCell(3);//如约、爽约
+                    cell1.innerHTML =complains[i].serviceName;
+                    cell2.innerHTML =complains[i].complainTime;
+                    cell3.innerHTML =complains[i].dealPrincipal;
+                    cell4.innerHTML =complains[i].complainDetail;
+                    complainsIndex++;
+                }
+            }
             }
         }
         function submitForm(){

@@ -134,7 +134,7 @@ module.exports.show = function(req, res, next) {
                                 result.nursServices=nursServices;
                                 complain.getTop3Complain(serviceMeetIds,function(err, complains) {
                                     result.complains=complains;
-                                    var datas = JSON.stringify(result)
+                                    var datas = JSON.stringify(result);
                                     res.render('servicemeet/serviceMeetDetail', {service_meet : service_meet,datas:datas});
                                 });
                             })
@@ -189,6 +189,9 @@ module.exports.preEdit = function(req, res, next) {
                                 });
                             })
                         });
+                    }
+                    else{
+                        res.render('servicemeet/serviceMeetEdit', {service_meet : service_meet,datas:null});
                     }
                 }else{
                     next();

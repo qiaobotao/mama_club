@@ -165,7 +165,7 @@ module.exports.fetchSingleMembercard =function (id ,type, cb) {
     var sql = 'SELECT a.*, c.`memberName` FROM memberCard a left join member c  on a.`memberId`=c.`id` where   a.id = ?';
     if(type=='1')
     {
-        sql='select * from (SELECT a.*,  b.`memberCardType`, b.`memberCardAmount`,b.`consumerLimit`,b.`zeroDiscounts`,b.`isManyPeopleUsed`,b.`status`  FROM memberCard a, memberCardType b  WHERE  a.id = ? AND a.parameter1=b.id ) as a left join member c on c.id=a.memberId ';
+        sql='select   a.* , c.`memberName`,c.`id` AS memberId from (SELECT a.*,  b.`memberCardType`, b.`memberCardAmount`,b.`consumerLimit`,b.`zeroDiscounts`,b.`isManyPeopleUsed`,b.`status`  FROM memberCard a, memberCardType b  WHERE  a.id = ? AND a.parameter1=b.id ) as a left join member c on c.id=a.memberId ';
     }
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 

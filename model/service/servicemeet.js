@@ -21,7 +21,7 @@ var async = require('async');
  */
 module.exports.insertServiceMeet = function(specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO serviceMeet (specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     db.query(sql, [specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
