@@ -19,8 +19,10 @@
         function select(name,seril,shopName,shopId,tel,email,staffLevel){
             var index = document.getElementById("index").value;
             if(index == '') {
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacherid').value = seril;
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacher').value=name;
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacherid')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacherid').value = seril;
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('teacher').value=name;
+                }
             }
             if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index)) {
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId'+index).value=seril;
