@@ -12,10 +12,6 @@
 
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript">
-        var classroomid = '<%=result.classRoomId%>';
-        var courseId = '<%=result.courseId%>';
-        var date = '<%=result.date%>';
-
 
         // 控制选择的时间段
         var arr_selectedTime = '<%-JSON.stringify(result.coursePlan)%>';
@@ -45,6 +41,7 @@
 
         function submitForm () {
 
+            var courseId = document.getElementById('courseId').value;
             var type = document.getElementById('courseType').value;
 
 
@@ -124,7 +121,7 @@
                 time: 2000//显示时间
             });
 
-            document.getElementById('fumukeFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
+            document.getElementById('fumukeFrom').action="/jinquan/course_plan_update?type="+type+"&courseId="+courseId;
             document.getElementById('fumukeFrom').submit();
 
         }
@@ -188,6 +185,7 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td>预计人数：</td>
+                            <input id="courseId" name="courseId" type="hidden" value="<%=result.course.id%>" />
                             <td><input id="count" name="count" type="text" class="input6" value="<%=result.course.memberCount%>" /></td>
                             <td>课程费用：</td>
                             <td><input id="price" name="price" type="text" class="input6" value="<%=result.course.price%>"/></td>

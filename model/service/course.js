@@ -445,10 +445,10 @@ module.exports.browse_huiyi = function (courseId, cb) {
 
 }
 
-module.exports.editCourse_huiyi = function (courseId,classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_huiyi,cb) {
-    var update_sql = 'UPDATE course SET classroomId=?,courseDate=?,courseTimeStart=?,courseTimeEnd=?,courseType=?,content=? WHERE id= ?';
+module.exports.editCourse_huiyi = function (courseId,startTime,endTime,content,arr_huiyi,cb) {
+    var update_sql = 'UPDATE course SET courseTimeStart=?,courseTimeEnd=?,content=? WHERE id= ?';
 
-    db.query(update_sql, [classroomId,courseDate,startTime,endTime,courseType,count,price,content,courseId], function (cbData, err, rows, fields) {
+    db.query(update_sql, [startTime,endTime,content,courseId], function (cbData, err, rows, fields) {
 
         if (!err) {
             var del_sql = 'DELETE FROM courseUser WHERE courseId = ?';
@@ -485,9 +485,9 @@ module.exports.editCourse_huiyi = function (courseId,classroomId,courseDate,star
 
 }
 
-module.exports.editCourse_fumu = function (courseId,classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_fumu,cb) {
-    var update_sql = 'UPDATE course SET classroomId=?,courseDate=?,courseTimeStart=?,courseTimeEnd=?,courseType=?,memberCount=?,price=?,content=? WHERE id=?';
-    db.query(update_sql, [classroomId,courseDate,startTime,endTime,courseType,count,price,content,courseId], function (cbData, err, rows, fields) {
+module.exports.editCourse_fumu = function (courseId,count,price,startTime,endTime,content,arr_fumu,cb) {
+    var update_sql = 'UPDATE course SET courseTimeStart=?,courseTimeEnd=?,memberCount=?,price=?,content=? WHERE id=?';
+    db.query(update_sql, [startTime,endTime,count,price,content,courseId], function (cbData, err, rows, fields) {
 
         if (!err) {
             var del_sql = 'DELETE FROM courseTeacher WHERE courseId = ?';
@@ -523,9 +523,9 @@ module.exports.editCourse_fumu = function (courseId,classroomId,courseDate,start
 
 }
 
-module.exports.editCourse_zhuanye = function (courseId,name,classroomid,courseDate,startTime,endTime,courseType,arr_teacher,cb) {
-    var update_sql = 'UPDATE course SET name=?,classroomId=?,courseDate=?,courseTimeStart=?,courseTimeEnd=?,courseType=? WHERE id= ?';
-    db.query(update_sql, [name,classroomid,courseDate,startTime,endTime,courseType,courseId], function(cbData, err, rows, fields) {
+module.exports.editCourse_zhuanye = function (courseId,course,startTime,endTime,score,content,arr,cb) {
+    var update_sql = 'UPDATE course SET name=?,courseTimeStart=?,courseTimeEnd=?,content=? WHERE id= ?';
+    db.query(update_sql, [course,startTime,endTime,content,courseId], function(cbData, err, rows, fields) {
 
         if (!err) {
             var del_sql = 'DELETE FROM courseTeacher WHERE courseId = ?';
@@ -535,7 +535,7 @@ module.exports.editCourse_zhuanye = function (courseId,name,classroomid,courseDa
 
                 if (!err) {
 
-                    async.map(arr_teacher, function(item, callback) {
+                    async.map(arr, function(item, callback) {
 
                         db.query(insert_teacher, [courseId,item.teacherName,item.type,item.startTime,item.endTime,item.content], function (cbData, err, rows, fields) {
                             if (!err) {
@@ -559,7 +559,7 @@ module.exports.editCourse_zhuanye = function (courseId,name,classroomid,courseDa
     });
 }
 
-module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,cb) {
+module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,teacherid,cb) {
     var update_sql = 'UPDATE course SET name = ?,classroomId=?,courseDate=?,courseTimeStart=?,courseTimeEnd=?,courseType=?,scorse=?,content=? WHERE id = ?';
     db.query(update_sql, [name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,courseId], function (cbData, err, rows, fields) {
 
@@ -569,28 +569,25 @@ module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDat
             // 还需要向staffTrain插入数据
             var del_staffTran = 'DELETE FROM staffTrain WHERE courseId = ?';
             var insert_staffTran = 'INSERT INTO staffTrain(courseId,staffId,dateline,status) VALUES (?,?,?,?)';
-            db.query(del_sql,[courseId], function(cbData, err, rows, fields) {
+            // 教师表
+            var del_teacher
+            var del_SQL = 'DELETE FROM courseTeacher WHERE courseId = ?';
+            var insert_SQL = 'INSERT INTO courseTeacher (courseId, teacherId) VALUES (?,?)';
+
+            db.query(del_SQL, [courseId], function(cbData, err, rows, fields) {
 
                 if (!err) {
-                    async.map(arr_staff, function(item, callback) {
 
-                        db.query(insert_sql, [courseId,item.userid], function (cbData, err, rows, fields) {
-                            if (!err) {
-                                callback(null, rows);
-                            } else {
-                                callback(err);
-                            }
-                        });
-                    }, function(err,results) {
+                    db.query(insert_SQL, [courseId,teacherid], function (cbData, err, rows, fields) {
 
-                        if(!err) {
-                            db.query(del_staffTran,[courseId],function(cbData, err, rows, fields) {
+                        if (!err) {
+
+                            db.query(del_sql,[courseId], function(cbData, err, rows, fields) {
 
                                 if (!err) {
-
                                     async.map(arr_staff, function(item, callback) {
 
-                                        db.query(insert_staffTran, [courseId,item.userid,new Date().getTime(),'N'], function (cbData, err, rows, fields) {
+                                        db.query(insert_sql, [courseId,item.userid], function (cbData, err, rows, fields) {
                                             if (!err) {
                                                 callback(null, rows);
                                             } else {
@@ -598,20 +595,48 @@ module.exports.editCourse_neixun = function (courseId,name,classroomid,courseDat
                                             }
                                         });
                                     }, function(err,results) {
-                                        cb(err, results);
+
+                                        if(!err) {
+                                            db.query(del_staffTran,[courseId],function(cbData, err, rows, fields) {
+
+                                                if (!err) {
+
+                                                    async.map(arr_staff, function(item, callback) {
+
+                                                        db.query(insert_staffTran, [courseId,item.userid,new Date().getTime(),'N'], function (cbData, err, rows, fields) {
+                                                            if (!err) {
+                                                                callback(null, rows);
+                                                            } else {
+                                                                callback(err);
+                                                            }
+                                                        });
+                                                    }, function(err,results) {
+                                                        cb(err, results);
+                                                    });
+                                                } else {
+                                                    cb(err);
+                                                }
+                                            });
+                                        } else {
+                                            cb(err);
+                                        }
                                     });
                                 } else {
                                     cb(err);
                                 }
                             });
+
+
                         } else {
-                            cb(err);
+                           cb(err);
                         }
                     });
                 } else {
                     cb(err);
                 }
             });
+
+
         } else {
             cb(err);
         }

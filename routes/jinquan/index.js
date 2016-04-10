@@ -75,6 +75,7 @@ router.all('/course_plan',coursePlanAction.list);
 router.all('/course_plan_pre_add',coursePlanAction.preadd);
 router.all('/course_plan_edit',coursePlanAction.edit);
 router.all('/course_plan_add',coursePlanAction.add);
+router.all('/course_plan_update',coursePlanAction.update);
 
 // 课程查询
 router.all('/course_list',courseAction.list);
