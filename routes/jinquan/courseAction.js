@@ -15,13 +15,16 @@ module.exports.list = function (req, res,next) {
     var courseType = req.query.courseType ? req.query.courseType : '';
     var date = req.query.date ? req.query.date : '';
 
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+
     service.getCourseList(classroom,courseType,date,currentPage,function(err, results){
         if (!err){
             results.currentPage = currentPage;
             results.classroom = classroom;
             results.courseType = courseType;
             results.date = date;
-            res.render('course/courseList',{data : results});
+            res.render('course/courseList',{data : results,replytype : replytype});
 
         } else {
             next();
@@ -115,4 +118,22 @@ module.exports.detail = function (req, res, next) {
             }
         });
     }
+}
+
+module.exports.del = function (req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';
+    var type = req.query.type ? req.query.type : '';
+
+    service.delCourse(id,type,function(err, result){
+
+        if (!err) {
+            res.redirect('/jinquan/course_list?replytype='+result);
+
+        } else {
+            console.log(err);
+            next();
+        }
+
+    });
 }

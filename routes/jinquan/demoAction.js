@@ -7,5 +7,15 @@
  * @param res
  */
 module.exports.layui = function (req, res) {
+
+    var time = '2016-04-10'.replace(/-/g,'/');
+    console.log(time);
+    var time2 = new Date(time).getTime();
+
+    console.log(time2);
+
+    console.log(new Date().getTime());
+
+
     res.render('demo/layuiDemo');
 }

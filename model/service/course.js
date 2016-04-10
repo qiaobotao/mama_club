@@ -668,20 +668,80 @@ module.exports.getPlan = function (classroomId,courseDate,cb) {
     });
 }
 
-module.exports.delCourse = function (courseId,cb) {
+module.exports.delCourse = function (courseId,type,cb) {
 
     // 删除课表，先删除主表，然后从表每个表都删除一次
     var del = 'DELETE FROM course WHERE id = ?';
     var del_u = 'DELETE FROM courseUser WHERE couresId = ?';
     var del_t = 'DELETE FROM courseTeacher WHERE courseId = ?';
     var del_train = 'DELETE FROM staffTrain WHERE courseId = ?';
-    db.query(del,[courseId], function(cbData, err, rows, fields) {
+
+    /**四种会议过了时间都不能删除，但是父母课如果有预约的人员了 就不能删除了**/
+    var cb_type = 0;
+
+    var get_course = 'SELECT * FROM course WHERE id = ?';
+    db.query(get_course, [courseId],function (cbData, err, rows, fields) {
 
         if (!err) {
-            db.query(del_u,[courseId],function(cbData, err, rows, fields){});
-            db.query(del_t,[courseId],function(cbData, err, rows, fields){});
-            db.query(del_train,[courseId],function(cbData, err, rows, fields){});
-            cb(null,null);
+
+            if (rows.length != 0) {
+
+                var date = rows[0].courseDate;
+                var pre_date = date.replace(/-/g,'/');
+                var stmt_date = new Date(pre_date).getTime(); // 课程时间时间戳
+                var now_date = new Date().getTime(); // 当前时间时间戳
+                if (now_date >= stmt_date) { // 当前时间大于课程时间 ，不能删除课程
+                    cb_type = 1; // 时间过期，不能删除
+                    cb (null,cb_type);
+                } else {
+                    if (type != 3) { // 不是父母课，直接删除
+
+                        db.query(del,[courseId], function(cbData, err, rows, fields) {
+
+                            if (!err) {
+                                db.query(del_u,[courseId],function(cbData, err, rows, fields){});
+                                db.query(del_t,[courseId],function(cbData, err, rows, fields){});
+                                db.query(del_train,[courseId],function(cbData, err, rows, fields){});
+                                cb(null,cb_type);
+                            } else {
+                                cb(err);
+                            }
+                        });
+
+                    } else { // 父母课，如果有人预约不能删除
+
+                        var get_meet = 'SELECT  * FROM classMeet WHERE courseId = ?';
+
+                        db.query(get_meet, [courseId], function(cbData, err, rows, fields) {
+
+                            if (!err) {
+
+                                if (rows.length != 0) {  // 有人预约，不能删除
+                                    cb_type = 2;
+                                    cb(null,cb_type);
+                                } else {
+                                    db.query(del,[courseId], function(cbData, err, rows, fields) {
+
+                                        if (!err) {
+                                            db.query(del_u,[courseId],function(cbData, err, rows, fields){});
+                                            db.query(del_t,[courseId],function(cbData, err, rows, fields){});
+                                            db.query(del_train,[courseId],function(cbData, err, rows, fields){});
+                                            cb(null,cb_type);
+                                        } else {
+                                            cb(err);
+                                        }
+                                    });
+                                }
+                            } else {
+                                cb(err);
+                            }
+                        });
+                    }
+                }
+
+            } else {
+                cb(null,cb_type);
+            }
         } else {
             cb(err);
         }

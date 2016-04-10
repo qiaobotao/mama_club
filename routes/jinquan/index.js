@@ -83,6 +83,7 @@ router.all('/course_add',courseAction.add);
 router.all('/course_select',courseAction.select);
 router.all('/course_select_activity',courseAction.selectForActivity);
 router.all('/course_detail',courseAction.detail);
+router.all('/course_del', courseAction.del);
 /*********************员工管理****************************/
 // 员工列表
 router.all('/staff_list',staffAction.list);
