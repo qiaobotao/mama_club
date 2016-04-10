@@ -312,12 +312,10 @@ module.exports.update = function (req, res, next) {
 
         var course = req.body.course ? req.body.course : '';
         var teacherid = req.body.teacherid ? req.body.teacherid : '';
-        var classroomid = req.body.classroomid ? req.body.classroomid : '';
         var startTime = req.body.startTime ? req.body.startTime : '';
         var endTime = req.body.endTime ? req.body.endTime : '';
         var score = req.body.score ? req.body.score : '';
         var content = req.body.content ? req.body.content : '';
-        var courseDate = req.body.courseDate ? req.body.courseDate : '';
 
         //重复项
         var arr_staffId = req.body.staffId ? req.body.staffId : '';
@@ -334,7 +332,7 @@ module.exports.update = function (req, res, next) {
             obj.staffId = arr_staffId;
             arr.push(obj);
         }
-        service.editCourse_neixun(courseId,course,classroomid,courseDate,startTime,endTime,type,score,content,arr,teacherid,function(err, results) {
+        service.editCourse_neixun(courseId,course,startTime,endTime,score,content,arr,teacherid,function(err, results) {
 
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=update');
@@ -382,6 +380,7 @@ module.exports.update = function (req, res, next) {
            if (!err) {
                res.redirect('/jinquan/course_plan?replytype=update');
            } else {
+               console.log(err);
                next();
            }
        });

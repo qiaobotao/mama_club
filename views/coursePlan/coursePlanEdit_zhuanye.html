@@ -41,7 +41,7 @@
         function submitForm () {
 
             var type = document.getElementById('courseType').value;
-
+            var courseId = document.getElementById('courseId').value;
             var course = document.getElementById('course').value;
             if (!course || course.length == 0) {
                 parent.layer.alert('课程名称不能为空',{icon: 2});
@@ -53,36 +53,6 @@
             if(startTime >= endTime){
                 parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
             }
-            for(var i = 0 ; i < arr_selectedTime.length; i ++){
-                console.log(arr_selectedTime[i].courseTimeStart+'==='+startTime+"--"+arr_selectedTime[i].courseTimeEnd +"~"+ endTime);
-                if((arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd <= startTime)
-                        || (arr_selectedTime[i].courseTimeEnd >= endTime && arr_selectedTime[i].courseTimeEnd <= endTime)){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart > startTime && arr_selectedTime[i].courseTimeEnd <= startTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart < endTime && arr_selectedTime[i].courseTimeEnd > endTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd < endTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart < startTime && arr_selectedTime[i].courseTimeEnd > startTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-            }
-            if (startTime>=endTime) {
-                parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
-                return;
-            }
-
-
 
             var score = document.getElementById('score').value;
             if (!score || score.length == 0) {
@@ -183,9 +153,7 @@
                             <td width="10%">课程名称：</td>
                         </tr>
                         <tr>
-                            <input id="classroomid" name="classroomid" type="hidden" value="result.course.classroomId"/>
                             <input id="courseId" name="courseId" type="hidden" value="<%=result.course.id%>" />
-                            <input id="courseDate" name="courseDate" type="hidden" value="<%=result.course.courseDate%>">
                             <td width="40%"><input id="course" name="course" type="text" class="input6" value="<%=result.course.name%>" /></td>
                         </tr>
                     </table>
