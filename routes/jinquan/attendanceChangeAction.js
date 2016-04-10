@@ -15,13 +15,15 @@ module.exports.list = function (req, res) {
     var attendanceType = req.query.attendanceType ? req.query.attendanceType : '';//变更类型
     var startDate = req.query.startDate ? req.query.startDate : '';//请假开始日期
     var endDate = req.query.endDate ? req.query.endDate : '';//请假截止日期
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllAttendanceChange(staffName,attendanceType,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
             results.staffName = staffName;
             results.attendanceType = attendanceType;
             results.startDate = startDate;
             results.endDate = endDate;
-            res.render('attendanceChange/attendanceChangeList', {data : results});
+            res.render('attendanceChange/attendanceChangeList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error');

@@ -18,14 +18,15 @@ module.exports.list = function (req, res) {
     var serviceDate = req.query.serviceDate ? req.query.serviceDate : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
-
+// 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllNursService(name,principal,serviceDate,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
             results.principal = principal;
             results.serviceDate = serviceDate;
             results.currentPage = currentPage;
-            res.render('nursService/nursServiceList', {data : results});
+            res.render('nursService/nursServiceList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -228,7 +229,7 @@ module.exports.add = function (req, res) {
                     //修改服务单状态 2，如约
                     serviceMeetService.setStatus(serviceMeetId,2,function (err, results)
                         {
-                            res.redirect('/jinquan/nurs_service_list');
+                            res.redirect('/jinquan/nurs_service_list?replytype=add');
                         }
                     );
                 } else {
@@ -382,7 +383,7 @@ module.exports.doEdit = function (req, res) {
                                     diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
                                     isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
                                         if (!err) {
-                                            res.redirect('/jinquan/nurs_service_list');
+                                            res.redirect('/jinquan/nurs_service_list?replytype=update');
                                         } else {
                                             next();
                                         }
@@ -413,7 +414,7 @@ module.exports.doEdit = function (req, res) {
             diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
             isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
                 if (!err) {
-                    res.redirect('/jinquan/nurs_service_list');
+                    res.redirect('/jinquan/nurs_service_list?replytype=update');
                 } else {
                     next();
                 }
@@ -483,7 +484,7 @@ module.exports.del = function (req, res, next) {
 
     service.delNursService(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/nurs_service_list');
+            res.redirect('/jinquan/nurs_service_list?replytype=del');
         } else {
             next();
         }

@@ -10,6 +10,14 @@
     </style>
 
     <script type="text/javascript">
+	var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
         function search () {
             var selectPage = document.getElementById('page').value;
             var memberCardType = document.getElementById('memberCardType').value;

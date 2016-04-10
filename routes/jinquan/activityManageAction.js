@@ -17,7 +17,8 @@ module.exports.list = function (req, res) {
     var status = req.query.status ? req.query.status : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
-
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllActivityManage(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage, function (err, results) {
         if (!err) {
             results.activityName = activityName;
@@ -26,7 +27,7 @@ module.exports.list = function (req, res) {
             results.effectiveTimeEnd = effectiveTimeEnd;
             results.status = status;
             results.currentPage = currentPage;
-            res.render('activityManage/activityManageList', {data : results});
+            res.render('activityManage/activityManageList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -254,7 +255,7 @@ module.exports.doEdit = function (req, res,next) {
             service.delActivityManageMX(id);
             service.insertActivityMX(id,arr,function (err, results) {
                 if (!err) {
-                    res.redirect('/jinquan/activity_manage_list?replytype=Edit');
+                    res.redirect('/jinquan/activity_manage_list?replytype=update');
                 } else {
                     service.delActivityManage(activityId);
                     next();
@@ -295,7 +296,7 @@ module.exports.del = function (req, res, next) {
 
     service.delActivityManage(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/activity_manage_list');
+            res.redirect('/jinquan/activity_manage_list?replytype=del');
         } else {
             next();
         }

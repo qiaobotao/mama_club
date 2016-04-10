@@ -9,6 +9,14 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+	var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
         function search () {
             var serviceMeetId = document.getElementById('serviceMeetId').value;
             var returnVisitDate = document.getElementById('returnVisitDate').value;
@@ -65,7 +73,7 @@
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/return_visit_goAdd" class="bsty0"></a></div>
+       <!-- <div class="but_0"><a href="/jinquan/return_visit_goAdd" class="bsty0"></a></div>-->
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">

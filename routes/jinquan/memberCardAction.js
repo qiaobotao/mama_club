@@ -25,7 +25,8 @@ module.exports.list = function (req, res,next) {
     var serialNumber=  req.query.serialNumber ? req.query.serialNumber : '';
     var currentPage = req.query.page ? req.query.page : '1';
     currentPage =currentPage<1?1:currentPage;
-
+// 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     if(type=='1')
     {
         //会员卡类型
@@ -81,7 +82,7 @@ module.exports.list = function (req, res,next) {
                     results.parameter8 = parameter8;
                     results.parameter9 = parameter9;
                     results.currentPage = currentPage;
-                    res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results});
+                    res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results, replytype : replytype});
                 }
                 else {
                     next();
@@ -192,7 +193,7 @@ module.exports.addOrEdit = function (req, res,next) {
         var dateline= new Date().getTime();
         service.insertMemberCard( serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_card_list');
+                res.redirect('/jinquan/member_card_list?replytype=add');
             } else {
                 next();
             }
@@ -203,7 +204,7 @@ module.exports.addOrEdit = function (req, res,next) {
         var dateline= new Date().getTime();
         service.updateMemberCard(id,serialNumber ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_card_list');
+                res.redirect('/jinquan/member_card_list?replytype=update');
             } else {
                 next();
             }
@@ -222,7 +223,7 @@ module.exports.del = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
         service.delMembercard(id, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_card_list');
+                res.redirect('/jinquan/member_card_list?replytype=del');
             } else {
                 next();
             }

@@ -11,7 +11,7 @@ module.exports.selectAllCourse = function(currentPage,cb) {
     var sql_count = 'SELECT count(*) as count FROM course';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = "SELECT a.id,a.name,a.classroomId,a.courseDate,concat(a.courseTimeStart,'~',a.courseTimeEnd) as courseTime,a.courseType,"
+    var sql_data = "SELECT a.id,a.name,a.classroomId,a.courseDate,a.courseTimeStart,a.courseTimeEnd ,a.courseType,"
         +' a.content,a.memberCount,a.price, b.name as classroomName FROM course a inner join classroom b'+ parm +' LIMIT ?,?';
 
     async.series({

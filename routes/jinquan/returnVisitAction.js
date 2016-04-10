@@ -9,7 +9,8 @@ module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : 1;
     var status = req.query.status ? req.query.status : '';
     currentPage =currentPage<1?1:currentPage;
-
+// 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
         if (!err) {
             results.serviceMeetId = serviceMeetId;
@@ -17,7 +18,7 @@ module.exports.list = function (req, res) {
             results.returnVisitType = returnVisitType;
             results.status = status;
             results.currentPage =currentPage ;
-            res.render('returnVisit/returnVisitList', {data : results});
+            res.render('returnVisit/returnVisitList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -47,7 +48,7 @@ module.exports.add = function (req, res) {
                     //修改服务单状态 4，已做回访
                     serviceMeetService.setStatus(serviceMeetId,4,function (err, results)
                         {
-                            res.redirect('/jinquan/return_visit_list');
+                            res.redirect('/jinquan/return_visit_list?replytype=add');
                         }
                     );
                 } else {
@@ -76,7 +77,7 @@ module.exports.doEdit = function (req, res) {
     service.updateReturnVisit(status,dateline,id,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/return_visit_list');
+                res.redirect('/jinquan/return_visit_list?replytype=update');
             } else {
                 next();
             }
@@ -114,7 +115,7 @@ module.exports.del = function (req, res, next) {
 
     service.delReturnVisit(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/return_visit_list');
+            res.redirect('/jinquan/return_visit_list?replytype=del');
         } else {
             next();
         }

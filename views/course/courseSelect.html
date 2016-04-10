@@ -49,7 +49,7 @@
             <td><%=data.data[i].name%></td>
             <td><%=data.data[i].classroomName%></td>
             <td><%=data.data[i].courseDate%></td>
-            <td><%=data.data[i].courseTime%></td>
+            <td><%=courseDate[data.data[i].courseTimeStart] %> ~<%=courseDate[data.data[i].courseTimeEnd] %></td>
             <td><%=data.data[i].courseType%></td>
             <td><%=data.data[i].content%></td>
             <td><%=data.data[i].memberCount%></td>
@@ -57,7 +57,7 @@
             <td>
                 <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                     <tr>
-                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>','<%=data.data[i].courseTime%>','<%=data.data[i].price%>')">选择课程</a>]</div></td>
+                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].id%>','<%=courseDate[data.data[i].courseTimeStart] %> ~<%=courseDate[data.data[i].courseTimeEnd] %>','<%=data.data[i].price%>')">选择课程</a>]</div></td>
                     </tr>
                 </table>
             </td>

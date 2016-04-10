@@ -164,7 +164,10 @@
         }
         function changType(type)
         {
-
+            for(i=1;i<=3;i++){
+                var menu=document.getElementById('two'+i);
+                menu.className=i==type?"hover":"";
+            }
             for (var i=1 ;i <= 3;i++)
             {
                 var divId='type'+i;
@@ -191,14 +194,16 @@
         当前位置：新增会员卡
     </div>
 </div>
-<div  class="center_con">
-    <table  width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td class="regTd_l">
-             <div class="rb_l"><a href="javascript:changType('1');"    >充值卡</a></div><div class="rb_l"><a href="javascript:changType('2');"    >服务次卡</a></div><div class="rb_l"><a href="javascript:changType('3');" >打折卡</a></div>
 
-            </td>
-        </tr>
+<div  class="center_con">
+    <div class="main">
+     <ul style="float:left; height:28px; line-height:28px; border-bottom:1px solid #ccc;width:100%;">
+                    <li id="two1" onclick="javascript:changType('1');" class="hover" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">充值卡</li>
+                    <li id="two2" onclick="javascript:changType('2');" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">服务次卡</li>
+                    <li id="two3" onclick="javascript:changType('3');" style="cursor:pointer;float:left; width:80px; text-align:center; border-right:1px solid #ccc;list-style:none;">打折卡</li>
+
+     </ul>
+        <table  width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="regTd_l">
 
@@ -294,7 +299,8 @@
                         </tr>
 
                     </table>
-                </form>
+
+                  </form>
                 <div class="reg_but">
                     <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
                     <div class="rb_l"><a href="/jinquan/member_card_list" class="close"></a></div>
@@ -302,5 +308,6 @@
             </td>
         </tr>
     </table>
-</div>
+    </div>
+ </div>
 </body>

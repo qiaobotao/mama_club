@@ -15,14 +15,15 @@ module.exports.list = function (req, res) {
     var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
-
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllClassMeet(memberName,courseName,courseTimeStart,currentPage, function (err, results) {
         if (!err) {
             results.memberName = memberName;
             results.courseName = courseName;
             results.courseTimeStart = courseTimeStart;
             results.currentPage=currentPage;
-            res.render('classMeet/classMeetList', {data : results});
+            res.render('classMeet/classMeetList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -57,7 +58,7 @@ module.exports.add = function (req, res) {
             service.insertClassMeet(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
                 isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {
                     if (!err) {
-                        res.redirect('/jinquan/class_meet_list');
+                        res.redirect('/jinquan/class_meet_list?replytype=add');
                     } else {
                         next();
                     }
@@ -90,7 +91,7 @@ module.exports.doEdit = function (req, res, next) {
     service.updateClassMeet(id,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
         isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/class_meet_list');
+                res.redirect('/jinquan/class_meet_list?replytype=update');
             } else {
                 next();
             }
@@ -128,7 +129,7 @@ module.exports.del = function (req, res, next) {
 
     service.delClassMeet(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/class_meet_list');
+            res.redirect('/jinquan/class_meet_list?replytype=del');
         } else {
             next();
         }

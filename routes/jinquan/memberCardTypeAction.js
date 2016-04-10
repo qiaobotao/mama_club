@@ -15,7 +15,8 @@ module.exports.list = function (req, res,next) {
     var zeroDiscounts = req.query.zeroDiscounts ? req.query.zeroDiscounts : '';
     var currentPage = req.query.page ? req.query.page : '1';
     currentPage =currentPage<1?1:currentPage;
-
+// 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
 
     service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,currentPage, function (err, results) {
         if (!err) {
@@ -23,7 +24,7 @@ module.exports.list = function (req, res,next) {
             results.memberCardAmount = memberCardAmount;
             results.zeroDiscounts = zeroDiscounts;
             results.currentPage = currentPage;
-            res.render('memberCardType/memberCardTypeList', {data : results});
+            res.render('memberCardType/memberCardTypeList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             next();
@@ -78,7 +79,7 @@ module.exports.addOrEdit = function (req, res,next) {
     {
         service.insertMemberCardType(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_card_type_list');
+                res.redirect('/jinquan/member_card_type_list?replytype=add');
             } else {
                 next();
             }
@@ -88,7 +89,7 @@ module.exports.addOrEdit = function (req, res,next) {
     {
         service.updateMemberCardType(id,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_card_type_list');
+                res.redirect('/jinquan/member_card_type_list?replytype=update');
             } else {
                 next();
             }
@@ -119,7 +120,7 @@ module.exports.del = function (req, res,next) {
     if(id!=''){
         service.delMembercardtype(id, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_card_type_list');
+                res.redirect('/jinquan/member_card_type_list?replytype=del');
             } else {
                 next();
             }

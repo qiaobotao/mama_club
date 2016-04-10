@@ -20,14 +20,15 @@ module.exports.list = function (req, res,next) {
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
-
+ // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
             results.tel = tel;
             results.currentPage = currentPage;
-            res.render('member/memberList', {data : results});
+            res.render('member/memberList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -80,7 +81,7 @@ module.exports.add = function (req, res,next) {
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
         if (!err) {
-            res.redirect('/jinquan/member_list');
+            res.redirect('/jinquan/member_list?replytype=add');
         } else {
             next();
         }
@@ -126,7 +127,7 @@ module.exports.doEdit = function (req, res,next) {
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
             if (!err) {
-                res.redirect('/jinquan/member_list');
+                res.redirect('/jinquan/member_list?replytype=update');
             } else {
                 next();
             }
@@ -165,7 +166,7 @@ module.exports.del = function (req, res, next) {
 
     service.delMember(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/member_list');
+            res.redirect('/jinquan/member_list?replytype=del');
         } else {
             next();
         }

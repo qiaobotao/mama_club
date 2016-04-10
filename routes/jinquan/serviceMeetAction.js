@@ -26,7 +26,8 @@ module.exports.list = function (req, res,next) {
     }
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
-
+// 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllServiceMeet(tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
@@ -34,7 +35,7 @@ module.exports.list = function (req, res,next) {
             results.meetTime = meetTime;
             results.status = status;
             results.currentPage = currentPage;
-            res.render('serviceMeet/serviceMeetList', {data : results});
+            res.render('serviceMeet/serviceMeetList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -69,7 +70,7 @@ module.exports.add = function (req, res) {
 
     service.insertServiceMeet(specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
-            res.redirect('/jinquan/service_meet_list');
+            res.redirect('/jinquan/service_meet_list?replytype=add');
         } else {
             next();
         }
@@ -96,7 +97,7 @@ module.exports.doEdit = function (req, res,next) {
     var specified = req.body.specified ? req.body.specified : '';
     service.updateServiceMeet(specified,staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
-            res.redirect('/jinquan/service_meet_list');
+            res.redirect('/jinquan/service_meet_list?replytype=update');
         } else {
             next();
         }
@@ -204,7 +205,7 @@ module.exports.del = function (req, res, next) {
 
     service.delServiceMeet(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/service_meet_list');
+            res.redirect('/jinquan/service_meet_list?replytype=del');
         } else {
             next();
         }

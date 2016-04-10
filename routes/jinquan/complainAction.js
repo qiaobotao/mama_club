@@ -20,7 +20,8 @@ module.exports.list = function (req, res) {
     var dealPrincipal = req.query.dealPrincipal ? req.query.dealPrincipal : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
-
+  // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllComplain(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
@@ -29,7 +30,7 @@ module.exports.list = function (req, res) {
             results.complainTimeEnd = complainTimeEnd;
             results.dealPrincipal = dealPrincipal;
             results.currentPage = currentPage;
-            res.render('complain/complainList', {data : results});
+            res.render('complain/complainList', {data : results, replytype : replytype});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -61,7 +62,7 @@ module.exports.add = function (req, res, next) {
                     //修改服务单状态 4，已做回访
                     serviceMeetService.setStatus(serviceMeetId,5,function (err, results)
                         {
-                            res.redirect('/jinquan/complain_list');
+                            res.redirect('/jinquan/complain_list?replytype=add');
                         }
                     );
                 } else {
@@ -87,7 +88,7 @@ module.exports.doEdit = function (req, res, next) {
     var staffId = req.body.staffId ? req.body.staffId : '';
     service.updateComplain(staffId,id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
         if (!err) {
-            res.redirect('/jinquan/complain_list');
+            res.redirect('/jinquan/complain_list?replytype=update');
         } else {
             next();
         }
@@ -125,7 +126,7 @@ module.exports.del = function (req, res, next) {
 
     service.delComplaint(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/complain_list');
+            res.redirect('/jinquan/complain_list?replytype=del');
         } else {
             next();
         }
