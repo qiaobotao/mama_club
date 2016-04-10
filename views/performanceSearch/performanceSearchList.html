@@ -60,63 +60,160 @@
         </div>
     </div>
     <div class="tabCon">
-        <%
-            if(data.staffId == null){
-            %>
-                <!-- 考勤情况 -->
-                <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
-                    <tr>
-                        <th>正常考勤天数</th>
-                        <th>加班小时数</th>
-                        <th>年假</th>
-                        <th>调休</th>
-                        <th>事假</th>
-                        <th>其他请假</th>
-                        <th>应考勤天数</th>
-                        <th>查看详情</th>
-                    </tr>
-                </table>
-                <!-- 考勤情况 -->
-                <br/><br/>
-                <!-- 培训情况 -->
-                <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
-                    <tr>
-                        <th>参加培训次数</th>
-                        <th>考前总积分</th>
-                        <th>上课总积分</th>
-                        <th>课后总积分</th>
-                        <th>总积分</th>
-                        <th>应得积分</th>
-                        <th>查看详情</th>
-                    </tr>
-                </table>
-                <!-- 培训情况 -->
-                <br/><br/>
-                <!-- 实操情况 -->
-                <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
-                    <tr>
-                        <th>实操数量</th>
-                        <th>当前等级应参与考勤数量</th>
-                        <th>查看详情</th>
-                    </tr>
-                </table>
-                <!-- 实操情况 -->
-                <br/><br/>
-                <!-- 投诉情况 -->
-                <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
-                    <tr>
-                        <th>投诉次数</th>
-                        <th>吐槽数量</th>
-                        <th>换人数量</th>
-                        <th>退钱数量</th>
-                        <th>查看详情</th>
-                    </tr>
-                </table>
-                <!-- 投诉情况 -->
-            <%
+        <!-- 考勤情况 -->
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>正常出勤天数</th>
+                <th>加班小时数</th>
+                <th>年假</th>
+                <th>调休</th>
+                <th>事假</th>
+                <th>其他请假</th>
+                <th>应考勤天数</th>
+                <th>查看详情</th>
+            </tr>
+            <tr>
+                <td>正常考勤天数</td>
+                <td>加班小时数</td>
+                <td>年假</td>
+                <td>调休</td>
+                <td>事假</td>
+                <td>其他请假</td>
+                <td>
+                    <%
+                    if(data != null && data.staffLevel != null){
+                    %><%=data.staffLevel[0].attendanceNum%><%
+                    }else{%>0<%}
+                    %>
+                </td>
+                <td>查看详情</td>
+            </tr>
+        </table>
+        <!-- 考勤情况 -->
+        <br/><br/>
+        <!-- 培训情况 -->
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>参加培训次数</th>
+                <th>考前总积分</th>
+                <th>上课总积分</th>
+                <th>课后总积分</th>
+                <th>总积分</th>
+                <th>课程应得积分</th>
+                <th>升级所需积分</th>
+                <th>查看详情</th>
+            </tr>
+            <tr>
+                <td><%
+                    if(data != null && data.staffTrainSumDatas != null){
+                    %><%=data.staffTrainSumDatas[0].trainSum%><%
+                    }else{%>0<%}
+                    %>
+                </td>
 
+                <%
+                if(data != null && data.staffTrainIntegrationDatas != null){
+                %>
+                    <td><%=data.staffTrainIntegrationDatas[0].afterSum%></td>
+                    <td><%=data.staffTrainIntegrationDatas[0].classSum%></td>
+                    <td><%=data.staffTrainIntegrationDatas[0].beforeSum%></td>
+                    <td><%=data.staffTrainIntegrationDatas[0].afterSum + data.staffTrainIntegrationDatas[0].classSum + data.staffTrainIntegrationDatas[0].beforeSum%></td>
+                    <td><%=data.staffTrainIntegrationDatas[0].scorseSum%></td>
+                <%
+                }else{
+                %>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <%
+                }
+                %>
+                <td>
+                    <%
+                    if(data != null && data.staffLevel != null){
+                    %><%=data.staffLevel[0].trainNum%><%
+                    }else{%>0<%}
+                    %>
+                </td>
+                <td>查看详情</td>
+            </tr>
+        </table>
+        <!-- 培训情况 -->
+        <br/><br/>
+        <!-- 实操情况 -->
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>实操数量</th>
+                <th>升级所需数</th>
+                <th>查看详情</th>
+            </tr>
+            <tr>
+                <td>
+                    <%
+                    if(data != null && data.serviceDatas != null){
+                        %><%=data.serviceDatas[0].serverCount%><%
+                    }else{%>0<%}
+                    %>
+                </td>
+                <td>
+                    <%
+                    if(data != null && data.staffLevel != null){
+                        %><%=data.staffLevel[0].serverNum%><%
+                    }else{%>0<%}
+                    %>
+                </td>
+                <td>查看详情</td>
+            </tr>
+
+        </table>
+        <!-- 实操情况 -->
+        <br/><br/>
+        <!-- 投诉情况 -->
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>投诉次数</th>
+                <th>吐槽数量</th>
+                <th>换人数量</th>
+                <th>退钱数量</th>
+                <th>查看详情</th>
+            </tr>
+            <%
+            if(data != null && data.complainSumCount != null){
+            var sum1 = 0;
+            var sum2 = 0;
+            var sum3 = 0;
+            for(var i = 0 ; i < data.complainSumCount.length ; i ++){
+                if(data.complainSumCount[i].complainType == 1){
+                    sum1 = data.complainSumCount[i].complainSum;
+                }else if(data.complainSumCount[i].complainType == 2){
+                    sum2 = data.complainSumCount[i].complainSum;
+                }else if(data.complainSumCount[i].complainType == 3){
+                    sum3 = data.complainSumCount[i].complainSum;
+                }
             }
-        %>
+            %>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=sum1+sum2+sum3%></td>
+                <td><%=sum1 %></td>
+                <td><%=sum2 %></td>
+                <td><%=sum3 %></td>
+                <td>查看详情</td>
+            </tr>
+            <%
+            }else{
+            %>
+            <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>查看详情</td>
+            </tr>
+            <%
+            }
+            %>
+        </table>
+        <!-- 投诉情况 END -->
 
     </div>
 </div>

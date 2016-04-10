@@ -17,7 +17,14 @@ module.exports.list = function (req, res) {
         res.render('performanceSearch/performanceSearchList',{data : {}});
         return;
     }
-    service.fetchPerformanceSearch(staffId,performanceDate, function (err, results) {
+    /**
+     * 1、查找该月份的打卡记录
+     * 2、查找该月份用到的考勤类别
+     * 3、查找该月份内的考勤变更信息
+     * 4、遍历所有打卡记录，找到正常考勤天数等表格所需数据
+     */
+    var curMonthDays = new Date(performanceDate.split("-")[0], performanceDate.split("-")[1], 0).getDate();
+    service.fetchPerformanceSearch(staffId,performanceDate+"-01", performanceDate+"-"+curMonthDays,function (err, results) {
         if (!err) {
             results.staffId = staffId;
             results.staffName = staffName;
