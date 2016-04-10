@@ -15,6 +15,15 @@
 
 <script type="text/javascript">
 
+    var replytype = '<%=replytype%>';
+    if (replytype == '1') {
+        parent.layer.msg('此课程时间过期，不能删除');
+    } else if (replytype == '0') {
+        parent.layer.msg('删除成功');
+    } else if (replytype == '2') {
+        parent.layer.msg('此课程有人预约不能删除');
+    }
+
     function search () {
         var classroom = document.getElementById('classroom').value;
         var courseType = document.getElementById('courseType').value;
@@ -96,7 +105,9 @@
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/course_detail?id=<%=data.data[i].id%>&type=<%=data.data[i].courseType%>">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/course_del?id=<%=data.data[i].id%>&type=<%=data.data[i].courseType%>">删除</a>]</div></td>
                         </tr>
+
                     </table>
                 </td>
             </tr>

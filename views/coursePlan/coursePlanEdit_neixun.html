@@ -12,10 +12,6 @@
 
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript">
-        var classroomid = '<%=result.classRoomId%>';
-        var courseId = '<%=result.courseId%>';
-        var date = '<%=result.date%>';
-
         // 控制选择的时间段
         var arr_selectedTime = '<%-JSON.stringify(result.coursePlan)%>';
         arr_selectedTime = JSON.parse(arr_selectedTime);
@@ -45,6 +41,8 @@
 
         function submitForm () {
 
+            var courseId = document.getElementById('courseId').value;
+
             var type = document.getElementById('courseType').value;
 
             var course = document.getElementById('course').value;
@@ -62,35 +60,6 @@
             if(startTime >= endTime){
                 parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
             }
-            for(var i = 0 ; i < arr_selectedTime.length; i ++){
-                console.log(arr_selectedTime[i].courseTimeStart+'==='+startTime+"--"+arr_selectedTime[i].courseTimeEnd +"~"+ endTime);
-                if((arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd <= startTime)
-                        || (arr_selectedTime[i].courseTimeEnd >= endTime && arr_selectedTime[i].courseTimeEnd <= endTime)){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart > startTime && arr_selectedTime[i].courseTimeEnd <= startTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart < endTime && arr_selectedTime[i].courseTimeEnd > endTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart >= startTime && arr_selectedTime[i].courseTimeEnd < endTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-                if(arr_selectedTime[i].courseTimeStart < startTime && arr_selectedTime[i].courseTimeEnd > startTime){
-                    parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
-                    return;
-                }
-            }
-            if (startTime>=endTime) {
-                parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
-                return;
-            }
-
 
 
             var score = document.getElementById('score').value;
@@ -127,7 +96,7 @@
                 time: 2000//显示时间
             });
 
-            document.getElementById('neixunFrom').action="/jinquan/course_plan_add?type="+type+"&classroomid="+classroomid+"&courseId="+courseId+"&date="+date;
+            document.getElementById('neixunFrom').action="/jinquan/course_plan_update?type="+type+"&courseId="+courseId;
             document.getElementById('neixunFrom').submit();
 
         }
@@ -189,6 +158,9 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tablebox"  >
                         <tr>
                             <td width="10%">课程名称：</td>
+                            <input id="classroomid" name="classroomid" type="hidden" value="result.course.classroomId"/>
+                            <input id="courseId" name="courseId" type="hidden" value="<%=result.course.id%>" />
+                            <input id="courseDate" name="courseDate" type="hidden" value="<%=result.course.courseDate%>">
                             <td width="40%"><input id="course" name="course" type="text" class="input6"  value="<%=result.course.name%>"/></td>
                             <td width="10%">授课教师：</td>
                             <input id="teacherid" name="teacherid" type="hidden"  value="<%=result.teacherId%>"/>
