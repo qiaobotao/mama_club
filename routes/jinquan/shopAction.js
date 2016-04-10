@@ -2,7 +2,7 @@
  * Created by qiaojoe on 15-12-5.
  * 门店管理
  */
-
+var laypage = require('laypage');
 var service = require('../../model/service/shop');
 
 /**
@@ -17,6 +17,7 @@ module.exports.list = function (req, res, next) {
     var principal = req.query.principal ? req.query.principal : '';
     var number = req.query.number ? req.query.number : '';
 
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -26,8 +27,11 @@ module.exports.list = function (req, res, next) {
             results.name = shopname;
             results.principal = principal;
             results.number = number;
-            res.render('shop/shoplist', {data : results, replytype : replytype});
+            res.render('shop/shoplist', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
+            console.log(err);
             next();
         }
     });
