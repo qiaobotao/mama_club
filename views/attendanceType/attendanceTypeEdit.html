@@ -140,7 +140,12 @@
             %>
             <tr>
                 <td>
-                    星期<%=(i+1)%>
+                    星期
+                    <%
+                    if(i == 0 ){
+                        %>7<%
+                    }else{%><%=i%><%}
+                    %>
                     <input type="hidden" name="weekNum" value="<%=i%>"/>
                 </td>
                 <td>
