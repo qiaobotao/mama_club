@@ -215,3 +215,20 @@ module.exports.addAttendanceMx = function(id,attendanceArr,cb) {
         cb(err, results);
     });
 }
+
+/**
+ * 根据考勤类型主键集合获取所有其子表详情集合
+ * @param id
+ * @param cb
+ */
+module.exports.getCategoryMXByIds= function (attendanceCategoryIds, cb) {
+
+    var sql = 'select * FROM attendanceCategoryMX m WHERE attendanceCategoryId in (?)  order by m.attendanceCategoryId, m.weekNum';
+    db.query(sql, [attendanceCategoryIds], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
