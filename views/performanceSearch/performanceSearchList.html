@@ -65,20 +65,23 @@
             <tr>
                 <th>正常出勤天数</th>
                 <th>加班小时数</th>
-                <th>年假</th>
                 <th>调休</th>
                 <th>事假</th>
                 <th>其他请假</th>
-                <th>应考勤天数</th>
+                <th>升级所需考勤数</th>
                 <th>查看详情</th>
             </tr>
             <tr>
-                <td>正常考勤天数</td>
-                <td>加班小时数</td>
-                <td>年假</td>
-                <td>调休</td>
-                <td>事假</td>
-                <td>其他请假</td>
+                <td><%=data.attendanceNum%></td>
+                <%if(data.leaveDatas != null){
+                    %>
+                    <td><%=data.leaveDatas[0].overtime == null ? 0 :data.leaveDatas[0].overtime%></td>
+                    <td><%=data.leaveDatas[0].offTime == null ? 0 : data.leaveDatas[0].offTime%></td>
+                    <td><%=data.leaveDatas[0].thingLeave == null ? 0 : data.leaveDatas[0].thingLeave%></td>
+                    <td><%=data.leaveDatas[0].otherLeave == null ? 0 : data.leaveDatas[0].otherLeave%></td>
+
+                    <%
+                }%>
                 <td>
                     <%
                     if(data != null && data.staffLevel != null){
