@@ -143,7 +143,7 @@ module.exports.save = function (req, res) {
 
 
     var attendancesArr = new Array();
-    if (vocationalQualifications instanceof Array) {
+    if (attendanceId instanceof Array) {
         for (var i = 0; i < attendanceId.length; i++) {
             var obj = {};
             obj.attendanceId = attendanceId[i];
