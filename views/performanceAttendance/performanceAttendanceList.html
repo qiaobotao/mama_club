@@ -27,13 +27,10 @@
             window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
         }
         function preEdit (id,staffId,startDate,endDate) {
-            console.log(startDate);
-            console.log(endDate);
-            console.log('/jinquan/performance_search_list?attendance=pAttendanceId&pAttendanceId='+id+'&staffId='+staffId+'&performanceStartDate='+startDate+'&performanceEndDate='+endDate);
             window.location.href = '/jinquan/performance_search_list?attendance=attendance&pAttendanceId='+id+'&staffId='+staffId+'&performanceStartDate='+startDate+'&performanceEndDate='+endDate;
         }
         function del (id) {
-            window.location.href = '/jinquan/staff_del?id='+id;
+            window.location.href = '/jinquan/performance_search_del?id='+id;
         }
     </script>
 </head>
@@ -84,7 +81,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>,<%=data.data[i].staffId%>,'<%=data.data[i].startDate%>','<%=data.data[i].endDate%>')">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>,<%=data.data[i].staffId%>,'<%=data.data[i].startDate%>','<%=data.data[i].endDate%>')">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
                         </tr>
                     </table>

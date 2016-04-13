@@ -121,6 +121,7 @@ router.all('/performance_search_list',performanceSearchAction.list);
 // 绩效考勤
 router.all('/performance_attendance_list',performanceAttendanceAction.list);
 router.all('/performance_attendance_save',performanceAttendanceAction.save);
+router.all('/performance_search_del',performanceAttendanceAction.del);
 // 员工等级
 router.all('/staff_level_list',staffLevelAction.list);
 router.all('/staff_level_edit',staffLevelAction.preEdit);

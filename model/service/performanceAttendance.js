@@ -16,9 +16,13 @@ var async = require('async');
  */
 module.exports.insertPerformanceAttendance = function(staffId,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,cb) {
 
-    var sql = 'INSERT INTO performanceAttendance (staffId,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,dateline)' +
-        ' VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [staffId,new Date(),attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,new Date().getTime()], function(cbData, err, rows, fields) {
+    var thisDate = new Date();
+    var month = thisDate.getMonth()+1;
+    month = month < 10 ? "0"+month : month;
+    var thisDateVar = thisDate.getFullYear()+"-"+month+"-"+thisDate.getDate();
+    var sql = 'INSERT INTO performanceAttendance (staffId,attendanceDate,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,dateline)' +
+        ' VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [staffId,thisDateVar,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

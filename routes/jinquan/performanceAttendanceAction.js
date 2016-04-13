@@ -5,7 +5,7 @@
 
 var service = require('../../model/service/performanceAttendance');
 /**
- * 获取考勤类型列表
+ * 获取绩效考勤列表
  * @param req
  * @param res
  */
@@ -35,27 +35,7 @@ module.exports.list = function (req, res) {
         }
     });
 }
-/**
- * 跳转到编辑考勤类型页面
- * @param req
- * @param res
- */
-module.exports.edit = function (req, res) {
-    var id = req.query.id ? req.query.id : '';
-    if(id == ''){
-        var attendanceChange = [];
-        res.render('attendanceChange/attendanceChangeEdit', {attendanceChange : attendanceChange});
-    }else{
-        service.fetchSingleAttendanceChange(id, function(err, results) {
-            if (!err) {
-                var attendanceChange = results.length == 0 ? null : results[0];
-                res.render('attendanceChange/attendanceChangeEdit', {attendanceChange : attendanceChange});
-            } else {
-                next();
-            }
-        })
-    }
-}
+
 /**
  * 保存考勤变更
  * @param req
@@ -64,31 +44,36 @@ module.exports.edit = function (req, res) {
 module.exports.save = function (req, res) {
     //var id = req.body.id ? req.body.id : '';//只有新增，不需要id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
-    var performanceStartDate = req.body.performanceStartDate ? req.body.performanceStartDate : '';//考核开始时间
-    var performanceEndDate = req.body.performanceEndDate ? req.body.performanceEndDate : '';//考核截止时间
+    var performanceDate = req.body.performanceDate ? req.body.performanceDate : '';//考核时间(年份)
+    var assessmentCycle = req.body.assessmentCycle ? req.body.assessmentCycle : '';//考核时间(上半年/下半年)
+    //var performanceEndDate = req.body.performanceEndDate ? req.body.performanceEndDate : '';//考核截止时间
     var attendanceFraction = req.body.attendanceFraction ? req.body.attendanceFraction : '';//考勤打分
     var trainFraction = req.body.trainFraction ? req.body.trainFraction : '';//培训打分
     var serverFraction = req.body.serverFraction ? req.body.serverFraction : '';//实操数打分
     var complainFraction = req.body.complainFraction ? req.body.complainFraction : '';//投诉情况打分
     var remarks = req.body.remarks ? req.body.remarks : '';//备注
-
-    if(leaveEndDate == null){
-        leaveEndDate = leaveStartDate;
+    var performanceEndDate = "";
+    var performanceStartDate = "";
+    if(assessmentCycle == 1){
+        performanceStartDate = performanceDate + "-01-01";
+        performanceEndDate = performanceDate + "-06-30";
+    }else if(assessmentCycle == 2){
+        performanceStartDate = performanceDate + "-07-01";
+        performanceEndDate = performanceDate + "-12-31";
     }
+
 
     service.insertPerformanceAttendance(staffId,attendanceFraction,trainFraction,serverFraction,complainFraction,performanceStartDate,performanceEndDate,remarks,function(err, results) {
         if(!err) {
-            res.redirect('/jinquan/attendance_change_list');
+            res.redirect('/jinquan/performance_attendance_list?replytype=add');
         } else {
-            console.log(1123);
-            console.log(err.message);
             res.render('error');
         }
     })
 }
 
 /**
- * 删除考勤类型
+ * 删除绩效考勤
  * @param id
  * @param cb
  */
@@ -96,9 +81,9 @@ module.exports.del = function (req, res, next) {
 
     var id = req.query.id ? req.query.id :'';
 
-    service.delAttendanceChange(id,function(err, results){
+    service.delPerformanceAttendance(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/attendance_change_list');
+            res.redirect('/jinquan/performance_attendance_list?replytype=del');
         } else {
             next();
         }
