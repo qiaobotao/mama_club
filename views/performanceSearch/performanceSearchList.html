@@ -12,11 +12,62 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        function submitForm(){
+            var name = document.getElementById("name").value;
+            if (!name || name.length == 0) {
+                alert('门店名称不能为空');
+                return;
+            }
+            var serialNumber = document.getElementById("serialNumber").value;
+            if (!serialNumber || serialNumber.length == 0) {
+                alert('序列号不能为空');
+                return;
+            }
+            /*
+             var tel = document.getElementById("tel").value;
+             if (!tel || tel.length == 0) {
+             alert('电话不能为空');
+             return;
+             }
+             var address = document.getElementById("address").value;
+             if(!address || address.length == 0) {
+             alert('门店地址不能为空');
+             return;
+             }
+             var principal = document.getElementById("principal").value;
+             if (!principal || principal.length == 0) {
+             alert('负责人不能为空');
+             return;
+             }
+             */
+            document.getElementById("myform").submit();
+        }
+
         function search() {
-            var staffName = $("#staffName").val();
-            var staffId = $("#staffId").val();
-            var performanceDate = $("#performanceDate").val();
-            window.location.href = '/jinquan/performance_search_list?staffId='+staffId+'&staffName='+staffName+'&performanceDate='+performanceDate;
+            if('<%=attendance%>' == 'attendance'){
+                var staffName = $("#staffName").val();
+                var staffId = $("#staffId").val();
+                var assessmentCycle = $("#assessmentCycle").val();
+                var performanceDate = $("#performanceDate").val();
+                var attendance = $("#attendance").val();
+
+                var performanceStartDate = "";
+                var performanceEndDate = "";
+                if(assessmentCycle == 1){//上半年
+                    performanceStartDate = performanceDate +"-01-01";
+                    performanceEndDate = performanceDate +"-06-30";
+                }else if(assessmentCycle == 2){//下半年
+                    performanceStartDate = performanceDate +"-07-01";
+                    performanceEndDate = performanceDate +"-12-31";
+                }
+                window.location.href = '/jinquan/performance_search_list?staffId='+staffId+'&staffName='+staffName+'&performanceStartDate='+performanceStartDate+'&performanceEndDate='+performanceEndDate+'&attendance='+attendance;
+            }else{
+                var staffName = $("#staffName").val();
+                var staffId = $("#staffId").val();
+                var performanceDate = $("#performanceDate").val();
+                var attendance = $("#attendance").val();
+                window.location.href = '/jinquan/performance_search_list?staffId='+staffId+'&staffName='+staffName+'&performanceDate='+performanceDate+'&attendance='+attendance;
+            }
         }
         //员工的选择
         function getmembers(index){
@@ -44,16 +95,66 @@
     </div>
 </div>
 <div class="center_con">
+    <form method="post" id="myform" action="/jinquan/performance_attendance_save">
     <div class="butSet">
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
+                    <%
+                    if(pAttendance.id != null){//查看绩效考核时，只是显示即可
+                    %>
+                    <td>
+                        <input type="hidden" name="staffId" value="<%=pAttendance.staffId%>"/>
+                        员工名称：<%=pAttendance.staffName%>
+                    </td>
+                    </tr>
+                <tr>
+                    <td> &nbsp;绩效时间：<%=pAttendance.attendanceDate%></td>
+                    <td> &nbsp;考核周期：<%=pAttendance.startDate%>~<%=pAttendance.endDate%></td>
+                    <%
+                    }else if(attendance == 'attendance'){//新增绩效考核时，需要选择年份、上半年、下半年
+                    %>
                     <td>
                         <input type="hidden" id="staffId" name="staffId" value="<%=data.staffId%>"/>
+                        <input type="hidden" id="attendance" name="attendance" value="<%=attendance%>"/>
+                        员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="<%=data.staffName%>"  onfocus="getmembers('')"/>
+                    </td>
+                    <td>
+                        &nbsp;绩效时间：
+                        <!-- 此处日期精确到年 -->
+                        <input name="performanceDate" id="performanceDate" type="text" class="input5" readonly
+                               value="<%=data.performanceStartDate == null ? '' : data.performanceStartDate.substring(0,4)%>" onclick="laydate({istime: true, format: 'YYYY'})"/>
+                        <!-- 下拉框：上半年/下半年 -->
+                        <select name="assessmentCycle" id="assessmentCycle">
+                            <%
+                                var crcle = "";
+                                if(data.performanceStartDate != null){
+                                    if(data.performanceStartDate.substring(4,10) == '-01-01'){
+                                        crcle = '1';
+                                    }else if(data.performanceStartDate.substring(4,10) == '-07-01'){
+                                        crcle = '2';
+                                    }
+                                }
+                            %>
+                            <option value="">请选择</option>
+                            <option value="1" <%if(crcle == '1'){%>selected<%}%>>上半年</option>
+                            <option value="2" <%if(crcle == '2'){%>selected<%}%>>下半年</option>
+                        </select>
+                    </td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                    <%
+                    }else{
+                    %>
+                    <td>
+                        <input type="hidden" id="staffId" name="staffId" value="<%=data.staffId%>"/>
+                        <input type="hidden" id="attendance" name="attendance" value="<%=attendance%>"/>
                         员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="<%=data.staffName%>"  onfocus="getmembers('')"/>
                     </td>
                     <td> &nbsp;绩效时间：<input name="performanceDate" id="performanceDate" type="text" class="input5" value="<%=data.performanceDate%>" onclick="laydate({istime: true, format: 'YYYY-MM'})"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
+                    <%
+                    }
+                    %>
                 </tr>
             </table>
 
@@ -69,18 +170,24 @@
                 <th>事假</th>
                 <th>其他请假</th>
                 <th>升级所需考勤数</th>
-                <th>查看详情</th>
+                <%
+                if(attendance == 'attendance'){
+                %><th>打分</th><%
+                }else{
+                %><th>查看详情</th><%
+                }
+                %>
             </tr>
             <tr>
                 <td><%=data.attendanceNum%></td>
                 <%if(data.leaveDatas != null){
-                    %>
-                    <td><%=data.leaveDatas[0].overtime == null ? 0 :data.leaveDatas[0].overtime%></td>
-                    <td><%=data.leaveDatas[0].offTime == null ? 0 : data.leaveDatas[0].offTime%></td>
-                    <td><%=data.leaveDatas[0].thingLeave == null ? 0 : data.leaveDatas[0].thingLeave%></td>
-                    <td><%=data.leaveDatas[0].otherLeave == null ? 0 : data.leaveDatas[0].otherLeave%></td>
+                %>
+                <td><%=data.leaveDatas[0].overtime == null ? 0 :data.leaveDatas[0].overtime%></td>
+                <td><%=data.leaveDatas[0].offTime == null ? 0 : data.leaveDatas[0].offTime%></td>
+                <td><%=data.leaveDatas[0].thingLeave == null ? 0 : data.leaveDatas[0].thingLeave%></td>
+                <td><%=data.leaveDatas[0].otherLeave == null ? 0 : data.leaveDatas[0].otherLeave%></td>
 
-                    <%
+                <%
                 }%>
                 <td>
                     <%
@@ -89,7 +196,13 @@
                     }else{%>0<%}
                     %>
                 </td>
-                <td>查看详情</td>
+                <%
+                if(attendance == 'attendance'){
+                %><td><input type="text" name="attendanceFraction" value="<%=pAttendance.attendanceFraction%>"/></td><%
+                }else{
+                %><td>查看详情</td><%
+                }
+                %>
             </tr>
         </table>
         <!-- 考勤情况 -->
@@ -104,7 +217,13 @@
                 <th>总积分</th>
                 <th>课程应得积分</th>
                 <th>升级所需积分</th>
-                <th>查看详情</th>
+                <%
+                if(attendance == 'attendance'){
+                %><th>打分</th><%
+                }else{
+                %><th>查看详情</th><%
+                }
+                %>
             </tr>
             <tr>
                 <td><%
@@ -117,11 +236,11 @@
                 <%
                 if(data != null && data.staffTrainIntegrationDatas != null){
                 %>
-                    <td><%=data.staffTrainIntegrationDatas[0].afterSum%></td>
-                    <td><%=data.staffTrainIntegrationDatas[0].classSum%></td>
-                    <td><%=data.staffTrainIntegrationDatas[0].beforeSum%></td>
-                    <td><%=data.staffTrainIntegrationDatas[0].afterSum + data.staffTrainIntegrationDatas[0].classSum + data.staffTrainIntegrationDatas[0].beforeSum%></td>
-                    <td><%=data.staffTrainIntegrationDatas[0].scorseSum%></td>
+                <td><%=data.staffTrainIntegrationDatas[0].afterSum%></td>
+                <td><%=data.staffTrainIntegrationDatas[0].classSum%></td>
+                <td><%=data.staffTrainIntegrationDatas[0].beforeSum%></td>
+                <td><%=data.staffTrainIntegrationDatas[0].afterSum + data.staffTrainIntegrationDatas[0].classSum + data.staffTrainIntegrationDatas[0].beforeSum%></td>
+                <td><%=data.staffTrainIntegrationDatas[0].scorseSum%></td>
                 <%
                 }else{
                 %>
@@ -138,7 +257,13 @@
                     }else{%>0<%}
                     %>
                 </td>
-                <td>查看详情</td>
+                <%
+                if(attendance == 'attendance'){
+                %><td><input type="text" name="trainFraction" value="<%=pAttendance.trainFraction%>"/></td><%
+                }else{
+                %><td>查看详情</td><%
+                }
+                %>
             </tr>
         </table>
         <!-- 培训情况 -->
@@ -148,24 +273,36 @@
             <tr>
                 <th>实操数量</th>
                 <th>升级所需数</th>
-                <th>查看详情</th>
+                <%
+                if(attendance == 'attendance'){
+                %><th>打分</th><%
+                }else{
+                %><th>查看详情</th><%
+                }
+                %>
             </tr>
             <tr>
                 <td>
                     <%
                     if(data != null && data.serviceDatas != null){
-                        %><%=data.serviceDatas[0].serverCount%><%
+                    %><%=data.serviceDatas[0].serverCount%><%
                     }else{%>0<%}
                     %>
                 </td>
                 <td>
                     <%
                     if(data != null && data.staffLevel != null){
-                        %><%=data.staffLevel[0].serverNum%><%
+                    %><%=data.staffLevel[0].serverNum%><%
                     }else{%>0<%}
                     %>
                 </td>
-                <td>查看详情</td>
+                <%
+                if(attendance == 'attendance'){
+                %><td><input type="text" name="serverFraction" value="<%=pAttendance.serverFraction%>"/></td><%
+                }else{
+                %><td>查看详情</td><%
+                }
+                %>
             </tr>
 
         </table>
@@ -178,7 +315,13 @@
                 <th>吐槽数量</th>
                 <th>换人数量</th>
                 <th>退钱数量</th>
-                <th>查看详情</th>
+                <%
+                if(attendance == 'attendance'){
+                %><th>打分</th><%
+                }else{
+                %><th>查看详情</th><%
+                }
+                %>
             </tr>
             <%
             if(data != null && data.complainSumCount != null){
@@ -186,13 +329,13 @@
             var sum2 = 0;
             var sum3 = 0;
             for(var i = 0 ; i < data.complainSumCount.length ; i ++){
-                if(data.complainSumCount[i].complainType == 1){
-                    sum1 = data.complainSumCount[i].complainSum;
-                }else if(data.complainSumCount[i].complainType == 2){
-                    sum2 = data.complainSumCount[i].complainSum;
-                }else if(data.complainSumCount[i].complainType == 3){
-                    sum3 = data.complainSumCount[i].complainSum;
-                }
+            if(data.complainSumCount[i].complainType == 1){
+            sum1 = data.complainSumCount[i].complainSum;
+            }else if(data.complainSumCount[i].complainType == 2){
+            sum2 = data.complainSumCount[i].complainSum;
+            }else if(data.complainSumCount[i].complainType == 3){
+            sum3 = data.complainSumCount[i].complainSum;
+            }
             }
             %>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
@@ -200,7 +343,13 @@
                 <td><%=sum1 %></td>
                 <td><%=sum2 %></td>
                 <td><%=sum3 %></td>
-                <td>查看详情</td>
+                <%
+                if(attendance == 'attendance'){
+                %><td><input type="text" name="complainFraction" value="<%=pAttendance.complainFraction%>"/></td><%
+                }else{
+                %><td>查看详情</td><%
+                }
+                %>
             </tr>
             <%
             }else{
@@ -219,6 +368,28 @@
         <!-- 投诉情况 END -->
 
     </div>
+</div>
+<table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td class="regTd_l">备注：</td>
+        <td class="regTd_r" rowspan="3">
+            <input type="hidden" name="id" value="<%=pAttendance.id%>"/>
+            <input id="remarks" name="remarks" type="text" class="input5" value="<%=pAttendance.remarks%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+        </td>
+    </tr>
+</table>
+</form>
+<div class="reg_but">
+    <%
+    if(attendance == 'attendance'){
+        if(pAttendance.id == null){
+            %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
+        <div class="rb_l"><a href=/jinquan/performance_attendance_list class="close"></a></div>
+        <%
+    }
+    %>
 </div>
 
 </body>

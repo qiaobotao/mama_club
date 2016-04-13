@@ -5,18 +5,23 @@
 
 var service = require('../../model/service/performanceSearch');
 var attendanceTypeService = require('../../model/service/attendanceType');
+var pAttendanceService = require('../../model/service/performanceAttendance');
 /**
  * 获取绩效查询数据
  * @param req
  * @param res
  */
 module.exports.list = function (req, res) {
+    var attendance = req.query.attendance ? req.query.attendance : '';//是否针对考勤页面
+    var pAttendanceId = req.query.pAttendanceId ? req.query.pAttendanceId : '';//考勤id
     var workDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
     var staffId = req.query.staffId ? req.query.staffId : '';//员工名称
     var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
-    var performanceDate = req.query.performanceDate ? req.query.performanceDate : '';//考勤时间
+    var performanceStartDate = req.query.performanceStartDate ? req.query.performanceStartDate : '';//考勤开始时间
+    var performanceEndDate = req.query.performanceEndDate ? req.query.performanceEndDate : '';//考勤截止时间
+    var performanceDate = req.query.performanceDate ? req.query.performanceDate : '';//考勤截止时间
     if(staffId == ''){
-        res.render('performanceSearch/performanceSearchList',{data : {}});
+        res.render('performanceSearch/performanceSearchList',{data : {},attendance:attendance,pAttendance:{}});
         return;
     }
     /**
@@ -25,12 +30,18 @@ module.exports.list = function (req, res) {
      * 3、查找该月份内的考勤变更信息
      * 4、遍历所有打卡记录，找到正常考勤天数等表格所需数据
      */
-    var curMonthDays = new Date(performanceDate.split("-")[0], performanceDate.split("-")[1], 0).getDate();
-    service.fetchPerformanceSearch(staffId,performanceDate+"-01", performanceDate+"-"+curMonthDays,function (err, results) {
+    if(performanceDate != ''){
+        var curMonthDays = new Date(performanceDate.split("-")[0], performanceDate.split("-")[1], 0).getDate();
+        performanceStartDate = performanceDate +"-01";
+        performanceEndDate = performanceDate +"-"+curMonthDays;
+    }
+    service.fetchPerformanceSearch(staffId,performanceStartDate, performanceEndDate,function (err, results) {
         if (!err) {
             results.staffId = staffId;
             results.staffName = staffName;
             results.performanceDate = performanceDate;
+            results.performanceStartDate = performanceStartDate;
+            results.performanceEndDate = performanceEndDate;
             var attendanceIds = "";
             for(var attId = 0 ; attId < results.staffAttendanceDatas.length ; attId ++){
                 attendanceIds = results.staffAttendanceDatas[attId].attendanceId+",";
@@ -85,7 +96,19 @@ module.exports.list = function (req, res) {
                         // 在考勤变更中查看是否已经请假
                     }
                     results.attendanceNum = attendanceNum;//考勤时间
-                    res.render('performanceSearch/performanceSearchList', {data : results});
+                    var pAttendance = {};
+                    if(pAttendanceId != ""){//如果考核id不为空，查询出数据
+                        pAttendanceService.fetchSingleAttendanceChange(pAttendanceId, function(err, pAttendanceResults) {
+                            if (!err) {
+                                pAttendance = pAttendanceResults.length == 0 ? {} : pAttendanceResults[0];
+                                res.render('performanceSearch/performanceSearchList', {data : results,attendance:attendance,pAttendance:pAttendance});
+                            } else {
+                                next();
+                            }
+                        })
+                    }else{
+                        res.render('performanceSearch/performanceSearchList', {data : results,attendance:attendance,pAttendance:pAttendance});
+                    }
                 } else {
                     console.log(err.message);
                     res.render('error');
