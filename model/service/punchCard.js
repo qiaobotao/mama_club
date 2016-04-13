@@ -15,7 +15,7 @@ module.exports.list = function(name,date,currentPage,cb) {
         parm = parm + " AND date ="+date;
     }
 
-    var sql_count = 'SELECT count(*) as count FROM  '+parm+'  ORDER BY date DESC';
+    var sql_count = 'SELECT count(*) as count FROM punchCardRecord '+parm+'  ORDER BY date DESC';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
     var sql_data = 'SELECT * FROM punchCardRecord '+parm+' ORDER BY date DESC LIMIT ?,?';
