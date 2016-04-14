@@ -6,6 +6,7 @@
 var service = require('../../model/service/storeroomOut');
 var storeroomService = require('../../model/service/storeroom');
 var moment = require('moment');
+var laypage = require('laypage');
 /**
  * 获取出库列表
  * @param req
@@ -17,7 +18,7 @@ module.exports.list = function (req, res, next) {
     var oper = req.query.oper ? req.query.oper : '';// 领取人
     var outDate = req.query.outDate ? req.query.outDate : ''; // 出库日期
     var currentPage = req.query.page ? req.query.page : '1';
-
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -40,7 +41,8 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.outTypeClassify = outTypeClassify;
-                    res.render('storeroomOut/storeroomOutList',{data : results,replytype : replytype});
+                    res.render('storeroomOut/storeroomOutList',{data : results,replytype : replytype,laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})});
                 } else {
                     next();
                 }

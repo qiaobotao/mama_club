@@ -24,7 +24,7 @@ module.exports.list = function (outType,oper,outDate,currentPage,cb) {
 
     var sql_count = 'SELECT count(*) as count FROM storeroomOutLog s '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
 
     var sql_data = 'SELECT s.*, c.id AS cid, c.name AS outName, r.name AS storeroomName FROM storeroomOutLog AS s, systemClassify AS c, storeroom r  '+parm+' AND s.outType = c.id AND s.storeroomId = r.id ORDER BY dateline DESC LIMIT ?,?';
     async.series({

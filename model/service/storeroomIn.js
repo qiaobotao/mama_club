@@ -23,7 +23,7 @@ module.exports.list = function (buyer,buyType,buyDate,currentPage,cb) {
 
     var sql_count = 'SELECT count(*) as count FROM storeroomInLog s '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
 
     var sql_data = 'SELECT s.*, c.id AS inid, c.name AS inname, cc.id AS buyid, cc.name AS buyName, st.name AS storeroomName FROM storeroomInLog AS s, systemClassify AS c, systemClassify cc, storeroom st '+parm+' AND s.inType = c.id AND s.buyType = cc.id AND s.storeroomId = st.id ORDER BY dateline DESC LIMIT ?,?';
 

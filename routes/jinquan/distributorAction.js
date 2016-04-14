@@ -3,7 +3,7 @@
  */
 
 var service = require('../../model/service/distributor');
-
+var laypage = require('laypage');
 /**
  * 获取经销商列表
  * @param req
@@ -14,7 +14,7 @@ module.exports.list = function (req, res, next) {
     var name = req.query.name ? req.query.name : '';    // 经销商名称
     var classifyId = req.query.id ? req.query.id : '';  // 经销商分类
     var currentPage = req.query.page ? req.query.page : '1';
-
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -28,7 +28,9 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('distributor/distributorList', {data : results, replytype : replytype});
+                    res.render('distributor/distributorList', {data : results, replytype : replytype,laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     next();
                 }

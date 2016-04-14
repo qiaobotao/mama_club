@@ -40,7 +40,7 @@ module.exports.list = function(name,cid,currentPage,cb) {
 
     var sql_count = 'SELECT count(*) as count FROM storeroom s '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname FROM storeroom AS s, systemClassify AS c '+parm+' AND s.classify = c.id ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({

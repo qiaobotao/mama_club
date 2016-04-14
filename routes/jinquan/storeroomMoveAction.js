@@ -5,6 +5,7 @@
 var service_storeroom = require('../../model/service/storeroom');
 var service = require('../../model/service/storeroomMove');
 var moment = require('moment');
+var laypage = require('laypage');
 
 /**
  * 获取移库列表
@@ -18,7 +19,7 @@ module.exports.list = function (req, res, next) {
         var inId = req.query.inId ? req.query.inId : ''; // 入库房
         var moveDate = req.query.moveDate ? req.query.moveDate : ''; // 入库房
         var currentPage = req.query.page ? req.query.page : '1';
-
+        var url = '/jinquan'+req.url;
         // 接收操作参数
         var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -41,7 +42,8 @@ module.exports.list = function (req, res, next) {
 
                     if (!err) {
                         results.storerooms = storerooms;
-                        res.render('storeroomMove/storeroomMoveList', {data : results, replytype : replytype});
+                        res.render('storeroomMove/storeroomMoveList', {data : results, replytype : replytype,laypage: laypage({
+                            curr: currentPage,url: url,pages: results.totalPages})});
                     } else {
                         next();
                     }

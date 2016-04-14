@@ -21,7 +21,7 @@ module.exports.list = function (sid,currentPage,cb) {
     }
 
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
 
     async.series({
         totalPages : function(callback){

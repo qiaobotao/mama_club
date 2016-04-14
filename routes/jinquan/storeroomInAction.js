@@ -6,7 +6,7 @@ var service = require('../../model/service/storeroomIn');
 var storeroomService = require('../../model/service/storeroom');
 var distributorService = require('../../model/service/distributor');
 var moment = require('moment');
-
+var laypage = require('laypage');
 /**
  * 获取入库列表
  * @param req
@@ -18,7 +18,7 @@ module.exports.list = function (req, res, next) {
     var buyType = req.query.buyType ? req.query.buyType : '';// 采购方式
     var buyDate = req.query.buyDate ? req.query.buyDate : ''; // 采购日期
     var currentPage = req.query.page ? req.query.page : '1';
-
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -43,7 +43,9 @@ module.exports.list = function (req, res, next) {
                     service.getInTypeClassify(function(err, inTypeClassify) {
                         if (!err) {
                             results.inTypeClassify = inTypeClassify;
-                            res.render('storeroomIn/storeroomInList', {data : results, replytype : replytype});
+                            res.render('storeroomIn/storeroomInList', {data : results, replytype : replytype,laypage: laypage({
+                                curr: currentPage,url: url,pages: results.totalPages})
+                            });
                         } else {
                             next();
                         }

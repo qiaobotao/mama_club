@@ -4,7 +4,7 @@
  */
 
 var service = require('../../model/service/storeroom');
-
+var laypage = require('laypage');
 /**
  * 库房的增删改查
  * @param req
@@ -15,7 +15,7 @@ module.exports.list = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';    // 库房名称
     var classifyId = req.query.id ? req.query.id : '';  // 保存分类
     var currentPage = req.query.page ? req.query.page : '1';
-
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -29,7 +29,9 @@ module.exports.list = function (req, res,next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('storeroom/storeroomList', {data : results, replytype : replytype });
+                    res.render('storeroom/storeroomList', {data : results, replytype : replytype,laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     next();
                 }

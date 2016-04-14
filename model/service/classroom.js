@@ -76,7 +76,7 @@ module.exports.fetchAllCLassRoom = function(className,classCode,currentPage,cb) 
 
     var sql_count = 'SELECT count(*) as count FROM classroom AS r '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT r.id,r.name,r.serialNumber,r.status,c.name AS cname FROM classroom AS r,systemClassify AS c '+parm+' AND r.classType = c.id ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({

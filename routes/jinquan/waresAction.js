@@ -4,7 +4,7 @@
  */
 
 var service = require('../../model/service/wares');
-
+var laypage = require('laypage');
 /**
  * 商品展示首页list
  * @param req
@@ -16,6 +16,7 @@ module.exports.list = function (req, res, next) {
     var classifyId = req.query.id ? req.query.id : '';  // 商品分类
     var currentPage = req.query.page ? req.query.page : '1';
 
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -27,7 +28,9 @@ module.exports.list = function (req, res, next) {
             service.getWaresClassify(function(err,classify) {
                 if (!err) {
                     results.classify = classify;
-                    res.render('wares/waresList', {data : results, replytype :replytype});
+                    res.render('wares/waresList', {data : results, replytype :replytype,laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     console.log(err);
                     next();
