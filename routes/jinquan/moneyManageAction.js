@@ -64,16 +64,44 @@ module.exports.edit = function(req, res, next) {
  */
 module.exports.save = function(req, res, next) {
 
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
-    var name = req.body.name ? req.body.name : '';
-    var principal = req.body.principal ? req.body.principal : '';
-    var tel = req.body.tel ? req.body.tel : '';
-    var address = req.body.address ? req.body.address : '';
-    var remark = req.body.remark ? req.body.remark : '';
 
-    service.insertMoneyManage(serialNumber,name,principal,tel,address,remark,function(err, results) {
+    var memberId = req.body.memberId ? req.body.memberId : '';//会员id
+    var staffId = req.body.staffId ? req.body.staffId : '';//员工id
+    var classMeetId = req.body.classMeetId ? req.body.classMeetId : '';//课程id
+    var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
+    var state = req.body.state ? req.body.state : '';//状态
+    var chargeType = req.body.chargeType ? req.body.chargeType : '';//收费项目
+    var remark = req.body.remark ? req.body.remark : '';//描述
+
+    var proId = req.body.proId ? req.body.proId : '';//商品id
+    var price = req.body.price ? req.body.price : '';//商品单价
+    var count = req.body.count ? req.body.count : '';//购买数量
+    var cost = req.body.cost ? req.body.cost : '';//小计
+
+    // 处理子女集合数据
+    var proArr = new Array();
+    if (proId instanceof Array) {
+        for (var i = 0; i < proId.length; i++) {
+            var obj = {};
+            obj.proId = proId[i];
+            obj.price = price[i];
+            obj.count = count[i];
+            obj.cost = cost[i];
+            proArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.proId = proId;
+        obj.price = price;
+        obj.count = count;
+        obj.cost = cost;
+        proArr.push(obj);
+    }
+
+
+    service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,state,function(err, results) {
         if (!err) {
-            res.redirect('/jinquan/shop_list?replytype=add');
+            res.redirect('/jinquan/money_manage_list?replytype=add');
         } else {
             next();
         }

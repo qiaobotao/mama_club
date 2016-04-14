@@ -32,13 +32,24 @@
                 }
             });
         }
+
+        function getMenber(){//选择会员
+            //iframe层
+            iframIndex = parent.layer.open({
+                type: 2,
+                title: '选择会员信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/member_all_select', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
         //提交表单
         function submitForm(){
-            var buyer = document.getElementById("buyer").value;
-            if (!buyer || buyer.length == 0) {
-                parent.layer.alert('采购人不能为空',{icon: 2});
-                return;
-            }
 
             // 判断该表单中 是否有相同的 商品
             var arr_proId = document.getElementsByName('proId');
@@ -102,12 +113,14 @@
             var cell4=row.insertCell(3);//商品单价
             var cell5=row.insertCell(4);//删除本行
             var cell6=row.insertCell(5);//商品id
+            var cell7=row.insertCell(6);//商品id
             cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
             cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" />';
-            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
-            cell6.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
-            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
+            cell5.innerHTML='<input id="cost'+waresIndex+'" name="cost" type="text" class="input5 input_arr" readonly="true"/>';
+            cell6.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell7.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
         }
         //table中删除选中的行数据
         function delTr(delObj){
@@ -141,7 +154,8 @@
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">会员名称：</td>
                 <td class="regTd_r">
-                    <input type="text" name="memberName" value=""/>
+                    <input id="memberName" name="memberName" onfocus="getMenber()"/>
+                    <input id="memberId" name="memberId" type="hidden" />
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
             </tr>
@@ -161,6 +175,7 @@
                 <td>商品编号</td>
                 <td>采购数量</td>
                 <td>商品单价</td>
+                <td>小计</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
         </table>
