@@ -27,6 +27,36 @@
             }
             document.getElementById("myform").submit();
         }
+
+        function checkSeri() {
+
+            $.ajax({
+                type: "post",
+                url: "/jinquan/classroom_checkseril",
+                data: {'serial':$("#serialNumber").val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById('serialNumber').value = '';
+                        parent.layer.alert('该序列号占用',{icon: 2});
+                    }
+                }
+            });
+
+        }
+
+        function checkName() {
+            $.ajax({
+                type: "post",
+                url: "/jinquan/classroom_checkname",
+                data: {'name':$("#name").val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById('name').value = '';
+                        parent.layer.alert('该门店名称占用',{icon: 2});
+                    }
+                }
+            });
+        }
     </script>
 </head>
 
@@ -41,12 +71,12 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">序列号：</td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" onblur="checkSeri()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
 
             <tr>
                 <td  class="regTd_l">教室名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" onblur="checkName()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">教室分类：</td>

@@ -7,6 +7,7 @@
  * @param res
  */
 var service = require('../../model/service/course');
+var laypage = require('laypage');
 
 module.exports.list = function (req, res,next) {
 
@@ -15,6 +16,7 @@ module.exports.list = function (req, res,next) {
     var courseType = req.query.courseType ? req.query.courseType : '';
     var date = req.query.date ? req.query.date : '';
 
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -24,7 +26,9 @@ module.exports.list = function (req, res,next) {
             results.classroom = classroom;
             results.courseType = courseType;
             results.date = date;
-            res.render('course/courseList',{data : results,replytype : replytype});
+            res.render('course/courseList',{data : results,replytype : replytype,laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
 
         } else {
             next();

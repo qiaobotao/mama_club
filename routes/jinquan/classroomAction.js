@@ -6,6 +6,7 @@
  * @param req
  * @param res
  */
+var laypage = require('laypage');
 var service = require('../../model/service/classroom');
 
 module.exports.list = function (req, res,next) {
@@ -14,6 +15,7 @@ module.exports.list = function (req, res,next) {
     var classRoomName = req.query.classRoomName ? req.query.classRoomName : '';
     var classRoomCode = req.query.classRoomCode ? req.query.classRoomCode : '';
 
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
@@ -22,7 +24,8 @@ module.exports.list = function (req, res,next) {
             results.currentPage = currentPage;
             results.classRoomName = classRoomName;
             results.classRoomCode = classRoomCode;
-            res.render('classroom/classroomList', {data : results, replytype : replytype});
+            res.render('classroom/classroomList', {data : results, replytype : replytype,laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})});
         } else {
             next();
         }
@@ -96,6 +99,32 @@ module.exports.detail = function (req, res, next) {
             next();
         }
     });
+}
+
+module.exports.checkSeril = function (req, res, next) {
+
+    var seril = req.body.serial ? req.body.serial : '';
+    service.checkSeril(seril,function(err, results) {
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            next();
+        }
+    });
+
+}
+
+module.exports.checkName = function (req, res, next) {
+
+    var name = req.body.name ? req.body.name : '';
+
+    service.checkName(name,function (err, results) {
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            next();
+        }
+    })
 }
 
 

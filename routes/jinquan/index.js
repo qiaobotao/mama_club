@@ -63,8 +63,8 @@ router.all('/shop_del', shopAction.del);
 router.all('/shop_browse',shopAction.browse);
 router.all('/shop_pre_edit',shopAction.preEdit);
 router.all('/shop_update',shopAction.update);
-router.all('/check_seril',shopAction.checkSeril);
-router.all('/check_name', shopAction.checkName);
+router.all('/check_shopseril',shopAction.checkSeril);
+router.all('/check_shopname', shopAction.checkName);
 
 /*********************教室及课程管理****************************/
 // 教室管理
@@ -73,6 +73,9 @@ router.all('/classroom_pre_add',classroomAction.preAdd);
 router.all('/classroom_add',classroomAction.Add);
 router.all('/classroom_set', classroomAction.set);
 router.all('/classroom_browse',classroomAction.detail);
+router.all('/classroom_checkseril',classroomAction.checkSeril);
+router.all('/classroom_checkname',classroomAction.checkName);
+
 
 // 排课情况
 router.all('/course_plan',coursePlanAction.list);

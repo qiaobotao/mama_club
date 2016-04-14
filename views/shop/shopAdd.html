@@ -43,7 +43,7 @@
 
            $.ajax({
                type: "post",
-               url: "/jinquan/check_seril",
+               url: "/jinquan/check_shopseril",
                data: {'serial':$("#serialNumber").val()},
                success: function (result) {
                    if(!result.flag){
@@ -58,7 +58,7 @@
         function checkName() {
             $.ajax({
                 type: "post",
-                url: "/jinquan/check_name",
+                url: "/jinquan/check_shopname",
                 data: {'name':$("#name").val()},
                 success: function (result) {
                     if(!result.flag){
