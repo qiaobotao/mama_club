@@ -62,6 +62,8 @@ router.all('/shop_del', shopAction.del);
 router.all('/shop_browse',shopAction.browse);
 router.all('/shop_pre_edit',shopAction.preEdit);
 router.all('/shop_update',shopAction.update);
+router.all('/check_seril',shopAction.checkSeril);
+router.all('/check_name', shopAction.checkName);
 
 /*********************教室及课程管理****************************/
 // 教室管理

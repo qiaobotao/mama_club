@@ -173,3 +173,29 @@ module.exports.browse = function (req, res, next) {
     })
 }
 
+
+module.exports.checkSeril = function (req, res, next) {
+
+    var seril = req.body.serial ? req.body.serial : '';
+    service.checkSeril(seril,function(err, results) {
+         if (!err) {
+              res.json({flag:results});
+         } else {
+             next();
+         }
+    });
+}
+
+module.exports.checkName = function (req, res, next) {
+
+    var name = req.body.name ? req.body.name : '';
+
+    service.checkName(name,function (err, results) {
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            next();
+        }
+    })
+}
+

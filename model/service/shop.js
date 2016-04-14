@@ -169,3 +169,46 @@ module.exports.setStatus = function (id, status, cb) {
 
     });
 }
+
+/**
+ *
+ * @param seril
+ * @param cb
+ */
+module.exports.checkSeril = function(seril,cb) {
+
+    var checkSQL = 'SELECT * FROM shop WHERE serialNumber = ?';
+    db.query(checkSQL, [seril], function (cbData, err, rows, filelds) {
+        if(!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ *
+ * @param name
+ * @param cb
+ */
+module.exports.checkName = function (name, cb) {
+
+    var checkSql = 'SELECT * FROM shop WHERE name = ?';
+    db.query(checkSql, [name], function (cbData, err, rows, filelds) {
+        if(!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
+        } else {
+            cb(err);
+        }
+    });
+
+}
