@@ -28,6 +28,7 @@ var memberAction = require('./memberAction');//会员管理
 var classMeetAction = require('./classMeetAction');//预约课程管理
 var serviceMeetAction = require('./serviceMeetAction');//预约服务管理
 var nursServiceAction = require('./nursServiceAction');//护理服务管理
+var moneyManageAction = require('./moneyManageAction');//费用管理
 var returnVisitAction = require('./returnVisitAction');//回访信息管理
 var complainAction = require('./complainAction');//投诉信息管理
 var serviceAction = require('./serviceAction');//服务信息管理
@@ -196,6 +197,9 @@ router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
 router.all('/nurs_service_del',nursServiceAction.del);
 
 // 收费信息
+router.all('/money_manage_list',moneyManageAction.list);
+router.all('/money_manage_edit',moneyManageAction.edit);
+router.all('/money_manage_save',moneyManageAction.save);
 
 // 回访信息
 router.all('/return_visit_list',returnVisitAction.list);
