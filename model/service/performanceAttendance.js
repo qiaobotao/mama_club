@@ -16,9 +16,13 @@ var async = require('async');
  */
 module.exports.insertPerformanceAttendance = function(staffId,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,cb) {
 
-    var sql = 'INSERT INTO performanceAttendance (staffId,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,dateline)' +
-        ' VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [staffId,new Date(),attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,new Date().getTime()], function(cbData, err, rows, fields) {
+    var thisDate = new Date();
+    var month = thisDate.getMonth()+1;
+    month = month < 10 ? "0"+month : month;
+    var thisDateVar = thisDate.getFullYear()+"-"+month+"-"+thisDate.getDate();
+    var sql = 'INSERT INTO performanceAttendance (staffId,attendanceDate,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,dateline)' +
+        ' VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [staffId,thisDateVar,attendanceFraction,trainFraction,serverFraction,complainFraction,startDate,endDate,remarks,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -68,20 +72,15 @@ module.exports.fetchAttendanceChanges = function(pages, count, cb) {
  * 获取所有绩效考勤
  * @param cb
  */
-module.exports.fetchAllPerformanceAttendance = function(staffId,attendanceType,startDate,endDate,currentPage,cb) {
+module.exports.fetchAllPerformanceAttendance = function(staffName,startDate,endDate,currentPage,cb) {
 
-    var parm = "WHERE 1=1 ";
-    if(staffId != ''){
-        var parm = "AND b.id = ? ";
-    }
-    /*
+    var parm = "WHERE b.name like '%"+staffName+"%' ";
     if(startDate != ''){
-        parm += " AND startDate >= str_to_date('"+startDate+"', '%Y-%m-%d %H:%i:%s')";
+        parm += " AND str_to_date(a.attendanceDate,'%Y-%m-%d') >= str_to_date('"+startDate+"', '%Y-%m-%d')";
     }
     if(endDate != ''){
-        parm += " AND endDate <= str_to_date('"+endDate+"', '%Y-%m-%d %H:%i:%s')";
+        parm += " AND str_to_date(a.attendanceDate,'%Y-%m-%d') <= str_to_date('"+endDate+"', '%Y-%m-%d')";
     }
-    */
 
     var sql_count = 'SELECT count(*) as count FROM performanceAttendance a ,staff b  '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;

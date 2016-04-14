@@ -21,19 +21,16 @@
             parent.layer.msg('修改成功');
         }
         function search() {
-            var name = document.getElementById('name').value;
-            var serialNumber = document.getElementById('serialNumber').value;
-            var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
+            var staffName = document.getElementById('staffName').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            window.location.href = '/jinquan/performance_attendance_list?staffName='+staffName+'&startDate='+startDate+'&endDate='+endDate;
         }
         function preEdit (id,staffId,startDate,endDate) {
-            console.log(startDate);
-            console.log(endDate);
-            console.log('/jinquan/performance_search_list?attendance=pAttendanceId&pAttendanceId='+id+'&staffId='+staffId+'&performanceStartDate='+startDate+'&performanceEndDate='+endDate);
             window.location.href = '/jinquan/performance_search_list?attendance=attendance&pAttendanceId='+id+'&staffId='+staffId+'&performanceStartDate='+startDate+'&performanceEndDate='+endDate;
         }
         function del (id) {
-            window.location.href = '/jinquan/staff_del?id='+id;
+            window.location.href = '/jinquan/performance_search_del?id='+id;
         }
     </script>
 </head>
@@ -51,10 +48,15 @@
                 <tr>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
                     <td>员工名称：
+                        <!--
                         <input id="staffId" name="staffId" type="text" class="input5" value="<%=data.staffId%>"/>
+                        -->
                         <input id="staffName" name="staffName" type="text" class="input5" value="<%=data.staffName%>"/>
                     </td>
-                    <td> &nbsp;年份：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>" readonly onclick="laydate({format: 'YYYY'})"/></td>
+                    <td> &nbsp;考核时间：
+                        <input id="startDate" name="startDate" type="text" class="input5" value="<%=data.startDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>~
+                        <input id="endDate" name="endDate" type="text" class="input5" value="<%=data.endDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>
+                    </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -84,7 +86,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>,<%=data.data[i].staffId%>,'<%=data.data[i].startDate%>','<%=data.data[i].endDate%>')">编辑</a>]</div></td>
+                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>,<%=data.data[i].staffId%>,'<%=data.data[i].startDate%>','<%=data.data[i].endDate%>')">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
                         </tr>
                     </table>
