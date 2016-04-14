@@ -11,20 +11,16 @@ var service = require('../../model/service/performanceAttendance');
  */
 module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
-    var staffId = req.query.staffId ? req.query.staffId : '';//员工Id
+    var staffName = req.query.staffName ? req.query.staffName : '';//员工名称（用于模糊搜索）
+    var startDate = req.query.startDate ? req.query.startDate : '';//考勤开始时间
+    var endDate = req.query.endDate ? req.query.endDate : '';//考勤截止时间
 
 
-    var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
-    var attendanceType = req.query.attendanceType ? req.query.attendanceType : '';//变更类型
-    var startDate = req.query.startDate ? req.query.startDate : '';//请假开始日期
-    var endDate = req.query.endDate ? req.query.endDate : '';//请假截止日期
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
-    service.fetchAllPerformanceAttendance(staffId,attendanceType,startDate,endDate,currentPage, function (err, results) {
+    service.fetchAllPerformanceAttendance(staffName,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
-            results.staffId = staffId;
             results.staffName = staffName;
-            results.attendanceType = attendanceType;
             results.startDate = startDate;
             results.endDate = endDate;
             res.render('performanceAttendance/performanceAttendanceList', {data : results, replytype : replytype});

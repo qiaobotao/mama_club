@@ -72,20 +72,15 @@ module.exports.fetchAttendanceChanges = function(pages, count, cb) {
  * 获取所有绩效考勤
  * @param cb
  */
-module.exports.fetchAllPerformanceAttendance = function(staffId,attendanceType,startDate,endDate,currentPage,cb) {
+module.exports.fetchAllPerformanceAttendance = function(staffName,startDate,endDate,currentPage,cb) {
 
-    var parm = "WHERE 1=1 ";
-    if(staffId != ''){
-        var parm = "AND b.id = ? ";
-    }
-    /*
+    var parm = "WHERE b.name like '%"+staffName+"%' ";
     if(startDate != ''){
-        parm += " AND startDate >= str_to_date('"+startDate+"', '%Y-%m-%d %H:%i:%s')";
+        parm += " AND str_to_date(a.attendanceDate,'%Y-%m-%d') >= str_to_date('"+startDate+"', '%Y-%m-%d')";
     }
     if(endDate != ''){
-        parm += " AND endDate <= str_to_date('"+endDate+"', '%Y-%m-%d %H:%i:%s')";
+        parm += " AND str_to_date(a.attendanceDate,'%Y-%m-%d') <= str_to_date('"+endDate+"', '%Y-%m-%d')";
     }
-    */
 
     var sql_count = 'SELECT count(*) as count FROM performanceAttendance a ,staff b  '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;
