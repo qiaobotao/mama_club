@@ -55,7 +55,7 @@ module.exports.fetchAllSysUser = function(userName,currentPage,cb) {
 
     var sql_count = 'SELECT count(*) as count FROM sysUser a '+parm+'  ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'select a.id,a.userName,a.activity,st.name as `staffName`,s.name as `shopName` FROM sysUser a, shop s ,staff st '+parm+' AND st.shopId = s.id and a.staffId = st.id ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({

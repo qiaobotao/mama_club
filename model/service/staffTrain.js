@@ -14,9 +14,9 @@ module.exports.fetchAllStaffTrain = function(courseName,teacherName,classroomNam
 
     var parm = " WHERE r.name LIKE '%"+courseName+"%' AND st.`name` LIKE '%"+teacherName+"%' AND room.name LIKE '%"+classroomName+"%' ";
 
-    var sql_count = 'SELECT count(*) as count FROM course AS r ,courseTeacher AS c ,classroom room ,staff st '+parm+' AND r.id = c.courseId AND r.classroomId = room.id AND st.id = c.teacherId ORDER BY r.dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM course AS r ,courseTeacher AS c ,classroom room ,staff st '+parm+' AND r.id = c.courseId AND r.classroomId = room.id AND st.id = c.teacherId AND courseType = 1 ORDER BY r.dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT r.id as `id`,r.name as `name`,st.`name` as teacherName,r.courseDate,r.courseTimeStart,r.courseTimeEnd,r.classroomId,room.name as roomName ' +
         ' FROM course AS r,courseTeacher AS c,classroom room ,staff st '+parm+' AND courseType = 1 AND r.id = c.courseId AND r.classroomId = room.id AND st.id = c.teacherId ORDER BY r.dateline DESC LIMIT ?,?';
 

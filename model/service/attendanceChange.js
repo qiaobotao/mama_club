@@ -82,7 +82,7 @@ module.exports.fetchAllAttendanceChange = function(staffName,attendanceType,star
 
     var sql_count = 'SELECT count(*) as count FROM attendanceChange a ,staff b  '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end =  10;
     var sql_data = 'SELECT a.*,b.name as `staffName`,date_format(a.endDate,"%Y-%m-%d %H:%i:%S") as endDate2Str,date_format(a.startDate,"%Y-%m-%d %H:%i:%S") as startDate2Str FROM attendanceChange a ,staff b '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({

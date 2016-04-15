@@ -2,6 +2,7 @@
  * Created by kuanchang on 16/3/21.
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/staffLevel');
 /**
  * 获取员工等级列表
@@ -13,12 +14,15 @@ module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
     var name = req.query.name ? req.query.name : '';
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllStaffLevel(name,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
-            res.render('staffLevel/staffLevelList', {data : results,replytype:replytype});
+            res.render('staffLevel/staffLevelList', {data : results,replytype:replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

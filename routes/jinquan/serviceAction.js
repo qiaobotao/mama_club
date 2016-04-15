@@ -2,6 +2,7 @@
  * Created by kuanchang on 16/1/18.
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/service');
 
 /**
@@ -18,6 +19,7 @@ module.exports.list = function (req, res, next) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.list(name,classifyId,currentPage, function(err, results) {
 
@@ -29,7 +31,9 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('service/serviceList', {data : results, replytype : replytype});
+                    res.render('service/serviceList', {data : results, replytype : replytype, laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     next();
                 }

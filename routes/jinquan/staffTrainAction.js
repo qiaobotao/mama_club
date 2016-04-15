@@ -1,6 +1,7 @@
 /**
  * Created by kuanchang on 16/1/13.
  */
+var laypage = require('laypage');
 var service = require('../../model/service/staffTrain');
 /**
  * 获取员工培训列表
@@ -16,6 +17,7 @@ module.exports.list = function (req, res) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllStaffTrain(courseName,teacherName,classroomName,currentPage, function (err, results) {
         if (!err) {
@@ -24,7 +26,9 @@ module.exports.list = function (req, res) {
             results.teacherName = teacherName;
             results.classroomName = classroomName;
             var courseDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
-            res.render('staffTrain/staffTrainList', {data : results,replytype:replytype,courseDate:courseDate});
+            res.render('staffTrain/staffTrainList', {data : results,replytype:replytype,courseDate:courseDate, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

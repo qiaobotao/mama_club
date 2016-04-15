@@ -84,7 +84,7 @@ module.exports.fetchAllPerformanceAttendance = function(staffName,startDate,endD
 
     var sql_count = 'SELECT count(*) as count FROM performanceAttendance a ,staff b  '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end =  10;
     var sql_data = 'SELECT a.*,b.name as `staffName`,b.id as `staffId`,date_format(a.endDate,"%Y-%m-%d %H:%i:%S") as endDate2Str,date_format(a.startDate,"%Y-%m-%d %H:%i:%S") as startDate2Str FROM performanceAttendance a ,staff b '+parm+' AND b.id = a.staffId ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({

@@ -3,6 +3,7 @@
  * 考勤变更管理
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/attendanceChange');
 /**
  * 获取考勤类型列表
@@ -17,13 +18,16 @@ module.exports.list = function (req, res) {
     var endDate = req.query.endDate ? req.query.endDate : '';//请假截止日期
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     service.fetchAllAttendanceChange(staffName,attendanceType,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
             results.staffName = staffName;
             results.attendanceType = attendanceType;
             results.startDate = startDate;
             results.endDate = endDate;
-            res.render('attendanceChange/attendanceChangeList', {data : results, replytype : replytype});
+            res.render('attendanceChange/attendanceChangeList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error');

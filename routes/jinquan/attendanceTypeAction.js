@@ -3,6 +3,7 @@
  * 考勤类型管理
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/attendanceType');
 /**
  * 获取考勤类型列表
@@ -12,12 +13,15 @@ var service = require('../../model/service/attendanceType');
 module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
     var categoryName = req.query.categoryName ? req.query.categoryName : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllAttendanceType(categoryName,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.categoryName = categoryName;
-            res.render('attendanceType/attendanceTypeList', {data : results});
+            res.render('attendanceType/attendanceTypeList', {data : results, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error');

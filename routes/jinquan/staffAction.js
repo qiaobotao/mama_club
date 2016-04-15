@@ -2,6 +2,7 @@
  * Created by kuanchang on 16/1/12.
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/staff');//员工Server
 var shopService = require('../../model/service/shop');//门店Server
 var staffLevelService = require('../../model/service/staffLevel');//员工等级Server
@@ -19,6 +20,7 @@ module.exports.list = function (req, res) {
     var tel = req.query.tel ? req.query.tel : '';
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllStaff(name,serialNumber,tel,currentPage, function (err, results) {
         if (!err) {
@@ -26,7 +28,9 @@ module.exports.list = function (req, res) {
             results.name = name;
             results.serialNumber = serialNumber;
             results.tel = tel;
-            res.render('staff/staffList', {data : results, replytype : replytype});
+            res.render('staff/staffList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

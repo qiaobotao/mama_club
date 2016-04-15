@@ -3,6 +3,7 @@
  * 绩效考勤
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/performanceAttendance');
 /**
  * 获取绩效考勤列表
@@ -18,12 +19,15 @@ module.exports.list = function (req, res) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     service.fetchAllPerformanceAttendance(staffName,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
             results.staffName = staffName;
             results.startDate = startDate;
             results.endDate = endDate;
-            res.render('performanceAttendance/performanceAttendanceList', {data : results, replytype : replytype});
+            res.render('performanceAttendance/performanceAttendanceList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error');

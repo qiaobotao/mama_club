@@ -3,6 +3,7 @@
  * 角色管理
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/sysRole');
 var menuService = require('../../model/service/sysMenu');
 var resourcesService = require('../../model/service/sysResources');
@@ -19,12 +20,15 @@ module.exports.list = function (req, res) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllSysRole(name,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
-            res.render('sysRole/sysRoleList', {data : results, replytype : replytype});
+            res.render('sysRole/sysRoleList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

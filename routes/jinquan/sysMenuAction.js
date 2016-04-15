@@ -3,6 +3,7 @@
  * 菜单管理
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/sysMenu');
 
 /**
@@ -17,12 +18,15 @@ module.exports.list = function (req, res) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllSysMenu(textCh,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.textCh = textCh;
-            res.render('sysMenu/sysMenuList', {data : results, replytype : replytype});
+            res.render('sysMenu/sysMenuList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

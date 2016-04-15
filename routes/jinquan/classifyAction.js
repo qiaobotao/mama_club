@@ -3,7 +3,7 @@
  * 数据字典维护
  */
 
-
+var laypage = require('laypage');
 var service = require('../../model/service/classify');
 
 
@@ -16,12 +16,15 @@ module.exports.list = function (req, res,next) {
 
     var keywords = req.query.keywords ? req.query.keywords : '';
     var currentPage = req.query.page ? req.query.page : '1';
+    var url = '/jinquan'+req.url;
 
     service.getAllMainClassify(keywords,currentPage, function(err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.keywords = keywords;
-            res.render('classify/mainClassifyList',{data : results});
+            res.render('classify/mainClassifyList',{data : results, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

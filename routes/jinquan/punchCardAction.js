@@ -18,25 +18,7 @@ module.exports.list = function (req, res, next) {
     var currentPage = req.query.page ? req.query.page : '1';
 
     var replytype = req.query.replytype ? req.query.replytype : '';
-
-    //router.get('punch_card_list/page/:num', function(req, res){
-    //    res.render('punchCard/punchCardList', {
-    //        laypage: laypage({
-    //            curr: req.params.page || 1
-    //            ,url: req.url //必传参数，获取当前页的url
-    //            ,pages: 18 //分页总数你需要通过sql查询得到
-    //        })
-    //    })
-    //});
-    //router.get('punchCard/punchCardList/page/:num', function(req, res){
-    //    res.render('punchCard/punchCardList', {
-    //        laypage: laypage({
-    //            curr: req.params.page || 1
-    //            ,url: req.url //必传参数，获取当前页的url
-    //            ,pages: 18 //分页总数你需要通过sql查询得到
-    //        })
-    //    })
-    //});
+    var url = '/jinquan'+req.url;
 
     service.list(name,date,currentPage, function(err, results) {
 
@@ -44,7 +26,9 @@ module.exports.list = function (req, res, next) {
             results.currentPage = currentPage;
             results.name = name;
             results.date = date;
-            res.render('punchCard/punchCardList', {data : results,replytype : replytype});
+            res.render('punchCard/punchCardList', {data : results,replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }

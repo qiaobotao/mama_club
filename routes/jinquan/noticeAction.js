@@ -2,6 +2,7 @@
  * Created by kuanchang on 16/3/21.
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/notice');
 /**
  * 获取公告列表
@@ -13,12 +14,15 @@ module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : '1';
     var title = req.query.title ? req.query.title : '';
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllNotice(title,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.title = title;
-            res.render('notice/noticeList', {data : results,replytype:replytype});
+            res.render('notice/noticeList', {data : results,replytype:replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             next();
         }
