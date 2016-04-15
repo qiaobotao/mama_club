@@ -1,3 +1,5 @@
+
+var laypage = require('laypage');
 var service = require('../../model/service/nursservice');
 var storeroomOutService = require('../../model/service/storeroomOut');
 var serviceMeetService = require('../../model/service/servicemeet');
@@ -20,13 +22,16 @@ module.exports.list = function (req, res) {
     currentPage =currentPage<1?1:currentPage;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     service.fetchAllNursService(name,principal,serviceDate,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
             results.principal = principal;
             results.serviceDate = serviceDate;
             results.currentPage = currentPage;
-            res.render('nursService/nursServiceList', {data : results, replytype : replytype});
+            res.render('nursService/nursServiceList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error', {error : err});

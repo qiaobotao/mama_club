@@ -53,7 +53,7 @@ module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 
     var sql_count = 'SELECT count(*) as count FROM memberCard a  ';
     var sql_data = 'SELECT * FROM memberCard a '+parm;
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     if (type=='1')
     {
         sql_count= 'SELECT  count(1) as count  FROM memberCard a  LEFT JOIN memberCardType b ON a.parameter1= b.id '+parm

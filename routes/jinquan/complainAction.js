@@ -8,6 +8,7 @@
  * @param res
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/complain');
 var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res) {
@@ -22,6 +23,7 @@ module.exports.list = function (req, res) {
     currentPage =currentPage<1?1:currentPage;
   // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     service.fetchAllComplain(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
@@ -30,7 +32,9 @@ module.exports.list = function (req, res) {
             results.complainTimeEnd = complainTimeEnd;
             results.dealPrincipal = dealPrincipal;
             results.currentPage = currentPage;
-            res.render('complain/complainList', {data : results, replytype : replytype});
+            res.render('complain/complainList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error', {error : err});

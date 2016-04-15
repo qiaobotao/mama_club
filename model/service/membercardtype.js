@@ -47,7 +47,7 @@ module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmoun
 
     var sql_count = 'SELECT count(*) as count FROM memberCardType '+parm;
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT * FROM memberCardType '+parm+' ORDER BY  dateline DESC   LIMIT ?,?';
 
     async.series({

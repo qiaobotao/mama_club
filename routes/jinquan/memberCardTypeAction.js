@@ -1,4 +1,5 @@
 
+var laypage = require('laypage');
 var service = require('../../model/service/membercardtype');
 /**
  * Created by wangjuan on 16/2/21.
@@ -17,6 +18,7 @@ module.exports.list = function (req, res,next) {
     currentPage =currentPage<1?1:currentPage;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,currentPage, function (err, results) {
         if (!err) {
@@ -24,7 +26,9 @@ module.exports.list = function (req, res,next) {
             results.memberCardAmount = memberCardAmount;
             results.zeroDiscounts = zeroDiscounts;
             results.currentPage = currentPage;
-            res.render('memberCardType/memberCardTypeList', {data : results, replytype : replytype});
+            res.render('memberCardType/memberCardTypeList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             next();

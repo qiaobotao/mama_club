@@ -1,4 +1,5 @@
 
+var laypage = require('laypage');
 var service = require('../../model/service/membercard');
 var service1 = require('../../model/service/membercardtype');
 var moment = require('moment');
@@ -27,6 +28,7 @@ module.exports.list = function (req, res,next) {
     currentPage =currentPage<1?1:currentPage;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     if(type=='1')
     {
         //会员卡类型
@@ -82,7 +84,9 @@ module.exports.list = function (req, res,next) {
                     results.parameter8 = parameter8;
                     results.parameter9 = parameter9;
                     results.currentPage = currentPage;
-                    res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results, replytype : replytype});
+                    res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results, replytype : replytype, laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 }
                 else {
                     next();

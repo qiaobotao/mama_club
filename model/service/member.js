@@ -65,7 +65,7 @@ module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage
     var sql_count ='SELECT  count(1) as count  FROM member a left join  memberCard b'+ parm +' ORDER BY a.dateline DESC ';
 
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join  memberCard b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({

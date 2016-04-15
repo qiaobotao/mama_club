@@ -7,6 +7,7 @@
  * @param res
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/member');
 //预约服务单
 var servicemeet = require('../../model/service/servicemeet');
@@ -22,13 +23,16 @@ module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : 1;
  // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
             results.tel = tel;
             results.currentPage = currentPage;
-            res.render('member/memberList', {data : results, replytype : replytype});
+            res.render('member/memberList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error', {error : err});

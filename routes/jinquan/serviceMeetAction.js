@@ -1,3 +1,5 @@
+
+var laypage = require('laypage');
 var service = require('../../model/service/servicemeet');
 var memberService = require('../../model/service/member');
 
@@ -28,6 +30,7 @@ module.exports.list = function (req, res,next) {
     currentPage =currentPage<1?1:currentPage;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
     service.fetchAllServiceMeet(tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
@@ -35,7 +38,9 @@ module.exports.list = function (req, res,next) {
             results.meetTime = meetTime;
             results.status = status;
             results.currentPage = currentPage;
-            res.render('serviceMeet/serviceMeetList', {data : results, replytype : replytype});
+            res.render('serviceMeet/serviceMeetList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error', {error : err});

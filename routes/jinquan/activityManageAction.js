@@ -8,6 +8,7 @@
  * @param res
  */
 
+var laypage = require('laypage');
 var service = require('../../model/service/activityManage');
 module.exports.list = function (req, res) {
     var activityName = req.query.activityName ? req.query.activityName : '';
@@ -17,6 +18,7 @@ module.exports.list = function (req, res) {
     var status = req.query.status ? req.query.status : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
+    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllActivityManage(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage, function (err, results) {
@@ -27,7 +29,9 @@ module.exports.list = function (req, res) {
             results.effectiveTimeEnd = effectiveTimeEnd;
             results.status = status;
             results.currentPage = currentPage;
-            res.render('activityManage/activityManageList', {data : results, replytype : replytype});
+            res.render('activityManage/activityManageList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error', {error : err});

@@ -48,7 +48,7 @@ module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeSt
 
     var sql_count = 'SELECT count(1) as count FROM complain a , serviceMeet b '+ parm +' order by a.dateline  ';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT b.name,a.* FROM complain a , serviceMeet b '+ parm +' order by a.dateline  LIMIT ?,?';
 
     async.series({

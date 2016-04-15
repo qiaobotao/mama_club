@@ -45,7 +45,7 @@ module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStar
     var sql_count = 'SELECT count(1) as  count FROM classMeet a inner join member b inner join course c inner join courseTeacher d  INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC ';
 
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseDate,c.courseTimeStart,c.courseTimeEnd,f.name as teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d   INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
