@@ -205,6 +205,7 @@ router.all('/nurs_service_del',nursServiceAction.del);
 router.all('/money_manage_list',moneyManageAction.list);
 router.all('/money_manage_edit',moneyManageAction.edit);
 router.all('/money_manage_save',moneyManageAction.save);
+router.all('/money_manage_del',moneyManageAction.del);
 
 // 回访信息
 router.all('/return_visit_list',returnVisitAction.list);

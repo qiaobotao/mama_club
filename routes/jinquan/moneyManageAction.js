@@ -46,11 +46,25 @@ module.exports.list = function (req, res, next) {
 module.exports.edit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var chargeType = req.query.chargeType ? req.query.chargeType : '3';//收费类型
 
     service.fetchSingleMoneyManage(id, function(err, results) {
         if (!err) {
             var moneyManage = results.length == 0 ? null : results[0];
-            res.render('moneyManage/moneyManageEdit', {moneyManage : moneyManage});
+            //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+            if (chargeType == 1) {//护理收费
+                res.render('moneyManage/moneyManageEdit_huli', {moneyManage : moneyManage,chargeType:chargeType});
+            } else if (chargeType == 2) {//课程收费
+                res.render('moneyManage/moneyManageEdit_kecheng', {moneyManage : moneyManage,chargeType:chargeType});
+            } else if (chargeType == 3) {//会员购买商品收费
+                res.render('moneyManage/moneyManageEdit_shangpin', {moneyManage : moneyManage,chargeType:chargeType});
+            } else if (chargeType == 4) {//购买会员卡
+                res.render('moneyManage/moneyManageEdit_buycard', {moneyManage : moneyManage,chargeType:chargeType});
+            } else if (chargeType == 5) {//员工内购
+                res.render('moneyManage/moneyManageEdit_neigou', {moneyManage : moneyManage,chargeType:chargeType});
+            } else if (chargeType == 6) {//会员卡缴费
+                res.render('moneyManage/moneyManageEdit_xufei', {moneyManage : moneyManage,chargeType:chargeType});
+            }
         } else {
             next();
         }
@@ -64,7 +78,7 @@ module.exports.edit = function(req, res, next) {
  */
 module.exports.save = function(req, res, next) {
 
-
+    var id = req.body.id ? req.body.id : '';//收费单id
     var memberId = req.body.memberId ? req.body.memberId : '';//会员id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var classMeetId = req.body.classMeetId ? req.body.classMeetId : '';//课程id
@@ -72,40 +86,80 @@ module.exports.save = function(req, res, next) {
     var state = req.body.state ? req.body.state : '';//状态
     var chargeType = req.body.chargeType ? req.body.chargeType : '';//收费项目
     var remark = req.body.remark ? req.body.remark : '';//描述
+    if(chargeType == ''){
+        res.redirect('/jinquan/money_manage_list?replytype=error');
+        return;
+    }
 
-    var proId = req.body.proId ? req.body.proId : '';//商品id
+    var proNo = req.body.proNo ? req.body.proNo : '';//商品id
     var price = req.body.price ? req.body.price : '';//商品单价
     var count = req.body.count ? req.body.count : '';//购买数量
-    var cost = req.body.cost ? req.body.cost : '';//小计
+    var subtotal = req.body.subtotal ? req.body.subtotal : '';//小计
+    var discountPrice = req.body.discountPrice ? req.body.discountPrice : '';//优惠后价格
 
-    // 处理子女集合数据
+    // 处理商品集合数据
     var proArr = new Array();
-    if (proId instanceof Array) {
-        for (var i = 0; i < proId.length; i++) {
+    if (proNo instanceof Array) {
+        for (var i = 0; i < proNo.length; i++) {
             var obj = {};
-            obj.proId = proId[i];
+            obj.waresId = proNo[i];
             obj.price = price[i];
             obj.count = count[i];
-            obj.cost = cost[i];
+            obj.subtotal = subtotal[i];
+            obj.discountPrice = discountPrice[i];
             proArr.push(obj);
         }
     } else {
         var obj = {};
-        obj.proId = proId;
+        obj.waresId = proNo;
         obj.price = price;
         obj.count = count;
-        obj.cost = cost;
+        obj.subtotal = subtotal;
+        obj.discountPrice = discountPrice;
         proArr.push(obj);
     }
-
-
-    service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,state,function(err, results) {
-        if (!err) {
-            res.redirect('/jinquan/money_manage_list?replytype=add');
-        } else {
-            next();
-        }
-    });
+    if(id != ""){//只可以修改总费用和状态
+        res.redirect('/jinquan/money_manage_list?replytype=edit');
+    }else{
+        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,state,function(err, results) {
+            if (!err) {
+                /**
+                 * 1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+                 * 如果是课程、商品、内购，则需要继续添加商品集合
+                 * 如果是护理服务单，还需要往护理服务单中增加一条记录
+                 */
+                var addPro = false;
+                var addService = false;
+                if(chargeType == 2 || chargeType == 3 || chargeType == 5){
+                    addPro = true;
+                }
+                if(chargeType == 1){
+                    addService = true;
+                }
+                if(addPro){//需要添加商品
+                    service.insertProsByMoneyManage(results.insertId,proArr,function(err, results) {
+                        if (!err) {
+                            res.redirect('/jinquan/money_manage_list?replytype=add');
+                        } else {
+                            next();
+                        }
+                    });
+                }
+                if(addService){//添加护理服务单
+                    //service.insertServiceByMoneyManage(results.insertId,proArr,function(err, results) {
+                    //    if (!err) {
+                    //        res.redirect('/jinquan/money_manage_list?replytype=add');
+                    //    } else {
+                    //        next();
+                    //    }
+                    //});
+                }
+                //res.redirect('/jinquan/money_manage_list?replytype=add');
+            } else {
+                next();
+            }
+        });
+    }
 
 }
 
@@ -120,7 +174,7 @@ module.exports.del = function (req, res, next) {
 
     service.delMoneyManage(id,function(err, results){
         if (!err) {
-            res.redirect('/jinquan/shop_list?replytype=del');
+            res.redirect('/jinquan/money_manage_list?replytype=del');
         } else {
             next();
         }

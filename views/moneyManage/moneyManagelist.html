@@ -21,6 +21,8 @@
             parent.layer.msg('删除成功');
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
+        } else if (replytype == 'error') {
+            parent.layer.msg('数据填写错误，请查证后再提交');
         }
         function search () {
             var chargeName = document.getElementById('chargeName').value;
@@ -42,11 +44,11 @@
             window.location.href = '/jinquan/shop_set?page='+page+'&shopname='+shopname+'&principal='+principal+'&number='+number+'&status='+status+'&id='+id;
         }
         function preEdit (id) {
-            window.location.href = '/jinquan/shop_pre_edit?id='+id;
+            window.location.href = '/jinquan/money_manage_edit?id='+id;
         }
         function del (id) {
 
-            window.location.href = '/jinquan/shop_del?id='+id;
+            window.location.href = '/jinquan/money_manage_del?id='+id;
         }
         function browse (id) {
             window.location.href = '/jinquan/shop_browse?id='+id;
@@ -97,15 +99,46 @@
                 <th>付费人名称</th>
                 <th>收费类型</th>
                 <th>交易时间</th>
-                <th>收费金额</th>
+                <th>应收金额</th>
+                <th>实收金额</th>
+                <th>支付方式</th>
+                <th>状态</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
-                <td><%=data.data[i]%></td>
-                <td><%=data.data[i].chargeType%></td>
+                <%
+
+                var payer = "";
+                var chargeTypeVal = data.data[i].chargeType;
+                var chargeTypeTxt = "";
+                if(chargeTypeVal == 1){
+                    chargeTypeTxt = "护理付费";
+                    payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 2){
+                    chargeTypeTxt = "上课付费";
+                    payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 3){
+                    chargeTypeTxt = "购买商品";
+                    payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 4){
+                    chargeTypeTxt = "购买会员卡";
+                    payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 5){
+                    chargeTypeTxt = "员工内购";
+                    payer = data.data[i].staffName;
+                }else if (chargeTypeVal == 6){
+                    chargeTypeTxt = "会员卡续费";
+                    payer = data.data[i].memberName;
+                }
+                %>
+                <td><%=payer%></td>
+                <td><%=chargeTypeTxt%></td>
                 <td><%=data.data[i].chargeTime%></td>
-                <td><%=data.data[i]%></td>
+                <td><%=data.data[i].receivableMoney%></td>
+                <td><%=data.data[i].actualMoney%></td>
+                <td><%=data.data[i].payType%></td>
+                <td><%=data.data[i].state%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

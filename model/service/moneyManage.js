@@ -17,14 +17,42 @@ var async = require('async');
  * @param cb
  */
 module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,serviceId,state, cb) {
-
-    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,state,dateline) VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,state,new Date().getTime()], function(cbData, err, rows, fields) {
+    var thisDate = new Date();
+    var chargeTime = thisDate.getFullYear()+"-"+(thisDate.getMonth()+1)+thisDate.getDate();
+    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,chargeTime,state,dateline) VALUES (?,?,?,?,?,?,?)';
+    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,chargeTime,state,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
             cb(err);
         }
+    });
+};
+
+/**
+ * 增加收费单中商品列表
+ * @param chargeType
+ * @param memberId
+ * @param staffId
+ * @param classMeetId
+ * @param serviceId
+ * @param state：收费单状态包括：未收费、已收费
+ * @param cb
+ */
+module.exports.insertProsByMoneyManage = function(moneyManageId,proArr, cb) {
+
+    var sql = 'INSERT INTO moneyManageWares (moneyManageId,waresId,count,price,subtotal,discountPrice) VALUES (?,?,?,?,?,?)';
+    //批量添加收货单中商品列表信息
+    async.map(proArr, function(item, callback) {
+        db.query(sql, [moneyManageId,item.waresId,item.count,item.price,item.subtotal,item.discountPrice], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
     });
 };
 
@@ -56,7 +84,14 @@ module.exports.fetchAllMoneyManage = function(name,principal,number,currentPage,
     var sql_count = 'SELECT count(*) as count FROM moneyManage '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT * FROM moneyManage '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT m.id,m.chargeTime,m.chargeType,m.payType,m.receivableMoney,m.actualMoney,m.state,' +
+        '( ' +
+        '	select s.`name` from staff s where s.id = m.staffId ' +
+        ') as `staffName`, ' +
+        '(' +
+        '	select me.memberName from member me where me.id = m.memberId' +
+        ') as memberName ' +
+        'FROM moneyManage m '+parm+' ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
