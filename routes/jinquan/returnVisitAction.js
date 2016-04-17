@@ -9,7 +9,7 @@ module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : 1;
     var status = req.query.status ? req.query.status : '';
     currentPage =currentPage<1?1:currentPage;
-// ½ÓÊÕ²Ù×÷²ÎÊý
+// æŽ¥æ”¶æ“ä½œå‚æ•°
     var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
         if (!err) {
@@ -44,16 +44,16 @@ module.exports.add = function (req, res) {
     var status = req.body.status ? req.body.status : '0';
     service.insertReturnVisit(status,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
-                if (!err) {
-                    //ÐÞ¸Ä·þÎñµ¥×´Ì¬ 4£¬ÒÑ×ö»Ø·Ã
-                    serviceMeetService.setStatus(serviceMeetId,4,function (err, results)
-                        {
-                            res.redirect('/jinquan/return_visit_list?replytype=add');
-                        }
-                    );
-                } else {
-                    next();
-                }
+            if (!err) {
+                //ä¿®æ”¹æœåŠ¡å•çŠ¶æ€ 4ï¼Œå·²åšå›žè®¿
+                serviceMeetService.setStatus(serviceMeetId,4,function (err, results)
+                    {
+                        res.redirect('/jinquan/return_visit_list?replytype=add');
+                    }
+                );
+            } else {
+                next();
+            }
         });
 
 }
@@ -123,7 +123,7 @@ module.exports.del = function (req, res, next) {
 
 }
 /**
- * »ñÈ¡Ô¤Ô¼·þÎñÁÐ±í
+ * èŽ·å–é¢„çº¦æœåŠ¡åˆ—è¡¨
  * @param req
  * @param res
  */
