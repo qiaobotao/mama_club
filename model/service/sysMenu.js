@@ -74,7 +74,7 @@ module.exports.fetchAllSysMenu = function(textCh,currentPage,cb) {
     var sql_count = 'SELECT count(*) as count FROM sysMenu '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT a.*,(select b.textCh from sysMenu b where a.parentId=b.id) as parentName FROM sysMenu a '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.*,(select b.textCh from sysMenu b where a.parentId=b.id) as parentName FROM sysMenu a '+parm+' ORDER BY parentId , orderId LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
