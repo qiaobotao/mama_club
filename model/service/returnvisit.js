@@ -58,7 +58,7 @@ module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,retu
 
     var sql_count = 'SELECT count(1) as count FROM returnVisit a , serviceMeet b , nursService c'+ parm +'  ORDER BY a.dateline DESC   ';
     var start = (currentPage - 1) * 10;
-    var end = currentPage * 10;
+    var end = 10;
     var sql_data = 'SELECT a.id,b.name,b.tel,c.serviceDate,a.returnVisitType,a.returnVisitResult,a.returnVisitDate,a.status  FROM returnVisit a , serviceMeet b , nursService c'+ parm +'  ORDER BY a.dateline DESC  LIMIT ?,?';
 
     async.series({

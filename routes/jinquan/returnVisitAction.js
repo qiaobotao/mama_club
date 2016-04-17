@@ -1,3 +1,5 @@
+
+var laypage = require('laypage');
 var service = require('../../model/service/returnvisit');
 var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res) {
@@ -9,6 +11,7 @@ module.exports.list = function (req, res) {
     var currentPage = req.query.page ? req.query.page : 1;
     var status = req.query.status ? req.query.status : '';
     currentPage =currentPage<1?1:currentPage;
+    var url = '/jinquan'+req.url;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
@@ -18,7 +21,9 @@ module.exports.list = function (req, res) {
             results.returnVisitType = returnVisitType;
             results.status = status;
             results.currentPage =currentPage ;
-            res.render('returnVisit/returnVisitList', {data : results, replytype : replytype});
+            res.render('returnVisit/returnVisitList', {data : results, replytype : replytype, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
         } else {
             console.log(err.message);
             res.render('error', {error : err});
