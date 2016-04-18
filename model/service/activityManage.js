@@ -199,3 +199,49 @@ module.exports.delActivityManageMX= function (mid, cb) {
         console.error(new Error('删除活动明细表信息'));
     });
 }
+
+/**
+ * 根据活动id获取以下内容
+ * 该活动的活动打折项明细
+ * @param activityId
+ * @param cb
+ */
+module.exports.fetchActivityManageById = function(activityId,cb) {
+
+    //活动详情
+    var activity_sql = 'SELECT * FROM activityManage Where id = ? ';
+    //活动打折详情
+    var activity_mx_sql = 'SELECT * FROM activityManageMX Where activityId = ? and totalCount - usedCount > 0';
+
+    async.series({
+        //活动详情列表
+        activityMxData : function(callback){
+            db.query(activity_mx_sql, [activityId], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //当前活动信息
+        activityData : function(callback){
+            db.query(activity_sql, [activityId], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+
+}

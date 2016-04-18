@@ -160,6 +160,7 @@ router.all('/activity_manage_show',activityManageAction.show);
 router.all('/activity_manage_preEdit',activityManageAction.preEdit);
 router.all('/activity_manage_doEdit',activityManageAction.doEdit);
 router.all('/activity_manage_del',activityManageAction.del);
+router.all('/ajax_activity_manage_by_id',activityManageAction.fetchActivityManageById);
 // 会员列表
 router.all('/member_list',memberAction.list);
 router.all('/member_goAdd',memberAction.goAdd);

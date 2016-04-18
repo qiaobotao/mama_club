@@ -307,3 +307,22 @@ module.exports.del = function (req, res, next) {
     });
 
 }
+
+
+/**
+ * 根据活动id，获取活动子表详情集合记录
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.fetchActivityManageById = function (req, res, next) {
+    var activityId = req.body.activityId ? req.body.activityId : '';
+    service.fetchActivityManageById(activityId,function(err, results) {
+        if (!err) {
+            var activity = results.activityData == null? {}:results.activityData[0];
+            res.json({"activityManageMx":results.activityMxData,"activity":activity});
+        } else {
+            next();
+        }
+    });
+}
