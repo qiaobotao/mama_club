@@ -12,7 +12,6 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
-
         var iframIndex ;
         function getWares(index){
             //iframe层
@@ -109,16 +108,18 @@
             var cell2=row.insertCell(1);//商品编号
             var cell3=row.insertCell(2);//采购数量
             var cell4=row.insertCell(3);//商品单价
-            var cell5=row.insertCell(4);//删除本行
-            var cell6=row.insertCell(5);//商品id
+            var cell5=row.insertCell(4);//小计
+            var cell6=row.insertCell(5);//优惠价格
             var cell7=row.insertCell(6);//商品id
+            var cell8=row.insertCell(7);//商品id
             cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
             cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="getSubtotal('+waresIndex+')"/>';
             cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
             cell5.innerHTML='<input id="subtotal'+waresIndex+'" name="subtotal" type="text" class="input5 input_arr" readonly="true"/>';
-            cell6.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
-            cell7.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+            cell6.innerHTML='<input id="lessMoney'+waresIndex+'" name="lessMoney" type="text" class="input5 input_arr" readonly="true"/>';
+            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell8.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
         }
         //table中删除选中的行数据
         function delTr(delObj){
@@ -130,6 +131,7 @@
             var type = doc.value;
             window.location.href = "/jinquan/money_manage_edit?&type="+type;
         }
+        //计算每行商品的小计
         function getSubtotal(index){
             var count = $('#count'+index).val() ;
             var price = $('#price'+index).val() ;
@@ -137,6 +139,109 @@
                 $('#subtotal'+index).val( price * count);
             }
         }
+        /**
+         * 这些变量应为数据集合
+         * 定义全局某活动所参与的商品
+         * 定义全局某活动所参与的课程
+         * 定义全局某活动所参与的会员
+         * 定义全局某活动所参与的服务
+         * 定义全局某活动所参与的会员卡种类
+         */
+        var proIds,courseIds,memberIds,serviceIds,cardType = "";
+
+        function checkMember(){
+            var memberId = $('#memberId').val() ;//会员id
+            if(memberId == ''){
+                parent.layer.msg("请选择会员");
+                return false;
+            }
+        }
+        /**
+         * 选择活动后
+         * 1、将该活动的商品、会员、课程、服务信息、可与哪些种会员卡享受同等待遇全部为全局变量赋值
+         * 2、异步获取该活动所有的打折信息
+         */
+        function asyGetActivity(activityId) {
+            var activityId = activityId.value;
+            if(activityId == ''){
+                //用户选择“请选择”，不做处理
+                return ;
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/jinquan/ajax_activity_manage_by_id",
+                data: {'activityId':activityId},
+                success: function (result) {
+                    var activityManageMxList =  result.activityManageMx;
+                    var activityData =  result.activity;
+
+                    proIds = activityData.proIds;
+                    courseIds = activityData.courseIds;
+                    memberIds = activityData.memberIds;
+                    serviceIds = activityData.serviceIds;
+                    cardType = activityData.cardType;
+                    //for each遍历往“减免力度”下拉框中添加
+                    jQuery("#lessLevel").empty();
+                    jQuery("#lessLevel").append("<option value=''>请选择</option>");
+                    for (var i=0;i<activityManageMxList.length;i++)
+                    {
+                        jQuery("#lessLevel").append("<option value='"+activityManageMxList[i].id+"'>"+activityManageMxList[i].activityDynamics+"</option>");
+                    }
+                    activityPreferential();//计算活动优惠情况
+                }
+            });
+
+        }
+
+        /**
+         * 计算活动优惠方法
+         * 1、判断会员是否享受活动折扣
+         * 2、如果享受活动，当选择活动明细后，对应商品明细后计算出“优惠金额”（活动、课程、服务等）
+         * 3、为应收金额、活动后金额、活动优惠金额赋值
+         */
+        function activityPreferential(){
+            var memberId = $('#memberId').val() ;//会员id
+//            var lessLevel = $('#lessLevel').val() ;//活动打折/减免项目
+            if(memberId == '' ){
+                //如果会员id或减免力度为空，则不做成处理
+                return false;
+            }
+            //判断会员是否享受折扣活动
+            var memberIdArr = memberIds.split(",");
+            var memberHaveActivity = false;
+            for(var m = 0 ; m < memberIdArr.length ; m ++){
+                if(memberIdArr[m] == memberId) {
+                    memberHaveActivity = true;
+                    $('#inActivityId').show();
+                    $('#outActivityId').hide();
+                    break;
+                }
+            }
+            //显示会员是否可参与活动
+            if(!memberHaveActivity){
+                $('#outActivityId').show();
+                $('#inActivityId').hide();
+            }
+            //遍历已选择商品，判断每个商品是否可以打折，如果可以，则计算出折扣后金额
+            var receivableMoneys = 0;
+            var arr_proId = document.getElementsByName('proId');
+            for(var i=0;i<arr_proId.length;i++) {
+                var proId = arr_proId[i].value;//当前商品id
+                var proCount = $('#count'+i).val();//当前商品购买数量
+                var proPrice = $('#price'+i).val();//当前商品单价
+                receivableMoneys += proCount * proPrice;
+
+                if(proCount == ''){
+                    continue;
+                }
+                $('#lessMoney'+i).val(proCount * proPrice * 0.8);//当前商品优惠后价格
+            }
+            //设置应收总金额、活动后金额、活动优惠金额
+            $('#receivableMoney').val(receivableMoneys);
+        }
+
+
 
     </script>
 </head>
@@ -166,6 +271,7 @@
                 <td class="regTd_r">
                     <input id="memberName" name="memberName" onfocus="getMenber()"/>
                     <input id="memberId" name="memberId" type="hidden" />
+                    &nbsp;&nbsp;<span id="inActivityId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityId" style="color:#ff0505;display:none">不可参与活动</span>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
             </tr>
@@ -181,6 +287,7 @@
                 <td>采购数量</td>
                 <td>商品单价</td>
                 <td>小计</td>
+                <td>优惠价格</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
         </table>
@@ -189,17 +296,18 @@
             <tr>
                 <td class="regTd_l">可用活动：</td>
                 <td class="regTd_r">
-                    <select name="chargeType1">
-                        <option value="1" >请选择</option>
-                        <option value="1" >三八妇女节活动</option>
-                        <option value="1" >5周年店庆</option>
-                        <option value="1" >双十一活动</option>
-                        <option value="1" >双十二活动</option>
+                    <select name="chargeType1" onchange="asyGetActivity(this)" onclick="checkMember()">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.activityManageData.length ; i ++ ){
+                            %><option value="<%=data.activityManageData[i].id%>" ><%=data.activityManageData[i].activityName%></option><%
+                        }
+                        %>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">减免力度：</td>
                 <td class="regTd_r">
-                    <select name="chargeType2">
+                    <select id="lessLevel" name="lessLevel">
                         <option value="1" >请选择</option>
                         <option value="1" >9折扣</option>
                         <option value="1" >8.5折扣</option>
@@ -212,7 +320,7 @@
             <tr>
                 <td class="regTd_l">应收金额：</td>
                 <td class="regTd_r">
-                    <input type="text"/>
+                    <input type="text" id="receivableMoney" name="receivableMoney"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">活动后应收：</td>
                 <td class="regTd_r">

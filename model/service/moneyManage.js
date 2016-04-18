@@ -5,6 +5,7 @@
 
 
 var db = require('../../common/db');
+var consts = require('../utils/consts');
 var async = require('async');
 /**
  * 增加收费管理
@@ -154,15 +155,57 @@ module.exports.updateMoneyManage = function(id, chargeType,memberId,staffId,clas
  * @param id
  * @param cb
  */
-module.exports.fetchSingleMoneyManage =function (id, cb) {
+module.exports.fetchSingleMoneyManage =function (id,thisDate , cb) {
 
-    var sql = 'SELECT * FROM moneyManage WHERE id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    //根据id获取收费单id
+    var oneMoneyManageSql = 'SELECT * FROM moneyManage WHERE id = ? ';
+    //获取所有启用中的活动列表
+    var enableActivityManageSql = "select * from activityManage a " +
+        "where a.`status`  = ? " +
+        "and str_to_date(a.effectiveTimeStart, '%Y-%m-%d') <= str_to_date(?, '%Y-%m-%d') " +
+        "and  str_to_date(?, '%Y-%m-%d') <= str_to_date(a.effectiveTimeEnd, '%Y-%m-%d') ";
+
+    async.series({
+        //收费单id
+        moneyManageData : function(callback){
+            db.query(oneMoneyManageSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //所有活动信息
+        activityManageData : function(callback){
+            db.query(enableActivityManageSql, [consts.STATE_DISABLE, thisDate,thisDate], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+        //
+        //activityManageData : function(callback){
+        //    db.query(enableActivityManageSql, [consts.STATE_ENABLE, thisDate,thisDate], function (cbData, err, rows, fields) {
+        //
+        //        if (!err) {
+        //            callback(null,rows);
+        //        } else {
+        //            callback(err);
+        //        }
+        //    });
+        //},
+    },function(err, results) {
 
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+
+
 }

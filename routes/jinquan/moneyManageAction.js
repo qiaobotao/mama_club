@@ -18,9 +18,9 @@ module.exports.list = function (req, res, next) {
     var principal = req.query.principal ? req.query.principal : '';
     var number = req.query.number ? req.query.number : '';
 
-    var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
 
     service.fetchAllMoneyManage(shopname,principal,number,currentPage, function (err, results) {
         if (!err) {
@@ -48,22 +48,21 @@ module.exports.edit = function(req, res, next) {
     var id = req.query.id ? req.query.id : '';
     var chargeType = req.query.chargeType ? req.query.chargeType : '3';//收费类型
 
-    service.fetchSingleMoneyManage(id, function(err, results) {
+    service.fetchSingleMoneyManage(id, '2016-03-17',function(err, results) {
         if (!err) {
-            var moneyManage = results.length == 0 ? null : results[0];
             //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
             if (chargeType == 1) {//护理收费
-                res.render('moneyManage/moneyManageEdit_huli', {moneyManage : moneyManage,chargeType:chargeType});
+                res.render('moneyManage/moneyManageEdit_huli', {data : results,chargeType:chargeType});
             } else if (chargeType == 2) {//课程收费
-                res.render('moneyManage/moneyManageEdit_kecheng', {moneyManage : moneyManage,chargeType:chargeType});
+                res.render('moneyManage/moneyManageEdit_kecheng', {data : results,chargeType:chargeType});
             } else if (chargeType == 3) {//会员购买商品收费
-                res.render('moneyManage/moneyManageEdit_shangpin', {moneyManage : moneyManage,chargeType:chargeType});
+                res.render('moneyManage/moneyManageEdit_shangpin', {data : results,chargeType:chargeType});
             } else if (chargeType == 4) {//购买会员卡
-                res.render('moneyManage/moneyManageEdit_buycard', {moneyManage : moneyManage,chargeType:chargeType});
+                res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
             } else if (chargeType == 5) {//员工内购
-                res.render('moneyManage/moneyManageEdit_neigou', {moneyManage : moneyManage,chargeType:chargeType});
+                res.render('moneyManage/moneyManageEdit_neigou', {data : results,chargeType:chargeType});
             } else if (chargeType == 6) {//会员卡缴费
-                res.render('moneyManage/moneyManageEdit_xufei', {moneyManage : moneyManage,chargeType:chargeType});
+                res.render('moneyManage/moneyManageEdit_xufei', {data : results,chargeType:chargeType});
             }
         } else {
             next();
