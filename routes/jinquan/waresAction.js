@@ -207,6 +207,7 @@ module.exports.select = function (req, res, next) {
     var currentPage = req.query.page ? req.query.page : '1';
 
     var index = req.query.index ? req.query.index : '';
+    var url = '/jinquan'+req.url;
 
     service.list(name,classifyId,currentPage,function(err, results){
         if (!err) {
@@ -216,7 +217,9 @@ module.exports.select = function (req, res, next) {
             service.getWaresClassify(function(err,classify) {
                 if (!err) {
                     results.classify = classify;
-                    res.render('wares/waresSelect', {data : results, index : index});
+                    res.render('wares/waresSelect', {data : results, index : index ,laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     console.log(err);
                     next();
@@ -244,6 +247,7 @@ module.exports.selectFromInventory = function (req, res, next) {
     var currentPage = req.query.page ? req.query.page : '1';
 
     var index = req.query.index ? req.query.index : '';
+    var url = '/jinquan'+req.url;
 
     service.listByInventory(sid,name,classifyId,currentPage,function (err, results) {
 
@@ -254,7 +258,9 @@ module.exports.selectFromInventory = function (req, res, next) {
             service.getWaresClassify(function(err,classify) {
                 if (!err) {
                     results.classify = classify;
-                    res.render('wares/waresSelectFromInventory', {data : results, index : index, sid : sid});
+                    res.render('wares/waresSelectFromInventory', {data : results, index : index, sid : sid, laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     console.log(err);
                     next();
