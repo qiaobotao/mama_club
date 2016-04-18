@@ -42,8 +42,9 @@
            window.location.href = '/jinquan/shop_pre_edit?id='+id;
        }
        function del (id) {
-
-           window.location.href = '/jinquan/shop_del?id='+id;
+           if(confirm('确认删除已选择数据吗?')){
+               window.location.href = '/jinquan/shop_del?id='+id;
+           }
        }
        function browse (id) {
            window.location.href = '/jinquan/shop_browse?id='+id;

@@ -37,6 +37,12 @@
         var date = document.getElementById('date').value;
         window.location.href = '/jinquan/course_list?page='+selectPage+'&classroom='+classroom+'&courseType='+courseType+'&date='+date;
     }
+
+    function del (id,type) {
+        if(confirm('确认删除已选择数据吗?')){
+            window.location.href = '/jinquan/course_del?id='+id+'&type='+type;
+        }
+    }
 </script>
 
 <body>
@@ -105,7 +111,8 @@
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/course_detail?id=<%=data.data[i].id%>&type=<%=data.data[i].courseType%>">查看</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/course_del?id=<%=data.data[i].id%>&type=<%=data.data[i].courseType%>">删除</a>]</div></td>
+                           <!-- <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/course_del?id=<%=data.data[i].id%>&type=<%=data.data[i].courseType%>">删除</a>]</div></td> -->
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>,<%=data.data[i].courseType%>)">删除</a>]</div></td>
                         </tr>
 
                     </table>

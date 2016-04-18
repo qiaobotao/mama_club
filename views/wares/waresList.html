@@ -32,6 +32,12 @@
         var cid = document.getElementById('id').value;
         window.location.href = '/jinquan/wares_list?page='+selectPage+'&name='+name+'&id='+cid;
     }
+
+    function del (id) {
+        if(confirm('确认删除已选择数据吗?')){
+            window.location.href = '/jinquan/wares_del?id='+id;
+        }
+    }
 </script>
 
 <body>
@@ -79,7 +85,7 @@
                         <tr>
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/wares_detail?id=<%=data.data[i].id%>">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/wares_pre_edit?id=<%=data.data[i].id%>">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/wares_del?id=<%=data.data[i].id%>">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>
