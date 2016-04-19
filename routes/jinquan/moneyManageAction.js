@@ -84,17 +84,24 @@ module.exports.save = function(req, res, next) {
     var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
     var state = req.body.state ? req.body.state : '';//状态
     var chargeType = req.body.chargeType ? req.body.chargeType : '';//收费项目
-    var remark = req.body.remark ? req.body.remark : '';//描述
+    var payType = req.body.payType ? req.body.payType : '';//支付方式：现金；充值卡；折扣卡；微信；支付宝
+    var receivableMoney = req.body.receivableMoney ? req.body.receivableMoney : '';//应收金额
+    var discountMoney = req.body.activityDiscountMoney ? req.body.activityDiscountMoney : '';//优惠金额
+    var actualMoney = req.body.actualMoney ? req.body.actualMoney : '';//实收金额
+    var activityManageId = req.body.availableActivity ? req.body.availableActivity : '';//参与的活动id（如果没选活动不添加即可）
+    var activityManageMxId = req.body.lessLevel ? req.body.lessLevel : '';//活动中，选择的优惠方式id
+
     if(chargeType == ''){
         res.redirect('/jinquan/money_manage_list?replytype=error');
         return;
     }
 
+
     var proNo = req.body.proNo ? req.body.proNo : '';//商品id
     var price = req.body.price ? req.body.price : '';//商品单价
     var count = req.body.count ? req.body.count : '';//购买数量
     var subtotal = req.body.subtotal ? req.body.subtotal : '';//小计
-    var discountPrice = req.body.discountPrice ? req.body.discountPrice : '';//优惠后价格
+    var discount = req.body.lessMoney ? req.body.lessMoney : '';//优惠价格
 
     // 处理商品集合数据
     var proArr = new Array();
@@ -105,7 +112,7 @@ module.exports.save = function(req, res, next) {
             obj.price = price[i];
             obj.count = count[i];
             obj.subtotal = subtotal[i];
-            obj.discountPrice = discountPrice[i];
+            obj.discountPrice = discount[i];
             proArr.push(obj);
         }
     } else {
@@ -114,13 +121,13 @@ module.exports.save = function(req, res, next) {
         obj.price = price;
         obj.count = count;
         obj.subtotal = subtotal;
-        obj.discountPrice = discountPrice;
+        obj.discount = discount;
         proArr.push(obj);
     }
     if(id != ""){//只可以修改总费用和状态
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
-        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,state,function(err, results) {
+        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,state,function(err, results) {
             if (!err) {
                 /**
                  * 1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费

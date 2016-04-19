@@ -14,14 +14,22 @@ var async = require('async');
  * @param staffId
  * @param classMeetId
  * @param serviceId
- * @param state：收费单状态包括：未收费、已收费
+ * @param payType
+ * @param receivableMoney
+ * @param discountMoney
+ * @param actualMoney
+ * @param activityManageId
+ * @param activityManageMxId
+ * @param state
  * @param cb
  */
-module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,serviceId,state, cb) {
+module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,state, cb) {
     var thisDate = new Date();
-    var chargeTime = thisDate.getFullYear()+"-"+(thisDate.getMonth()+1)+thisDate.getDate();
-    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,chargeTime,state,dateline) VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,chargeTime,state,new Date().getTime()], function(cbData, err, rows, fields) {
+    var month = thisDate.getMonth()+1 < 10 ? "0"+(thisDate.getMonth()+1):thisDate.getMonth()+1;
+    var day = thisDate.getDate() < 10 ? "0"+thisDate.getDate() : thisDate.getDate();
+    var chargeTime = thisDate.getFullYear()+"-"+month+"-"+day;
+    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,state,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -42,10 +50,10 @@ module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMee
  */
 module.exports.insertProsByMoneyManage = function(moneyManageId,proArr, cb) {
 
-    var sql = 'INSERT INTO moneyManageWares (moneyManageId,waresId,count,price,subtotal,discountPrice) VALUES (?,?,?,?,?,?)';
+    var sql = 'INSERT INTO moneyManageWares (moneyManageId,waresId,count,price,subtotal,discount) VALUES (?,?,?,?,?,?)';
     //批量添加收货单中商品列表信息
     async.map(proArr, function(item, callback) {
-        db.query(sql, [moneyManageId,item.waresId,item.count,item.price,item.subtotal,item.discountPrice], function (cbData, err, rows, fields) {
+        db.query(sql, [moneyManageId,item.waresId,item.count,item.price,item.subtotal,item.discount], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
