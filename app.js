@@ -59,6 +59,7 @@ app.use(function(req, res, next){
                                     //记录用户信息：用户id、用户所在门店、用户名称
                                     var user = {};
                                     user.id = resUser.id;//用户id
+                                    user.shopId = resUser.shopId;
                                     user.userName = resUser.userName;//用户名称
                                     user.shopName = resUser.shopName;//所在门店
                                     user.shortcutMenuId1 = resUser.shortcutMenuId1;//快捷菜单1

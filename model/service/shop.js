@@ -34,14 +34,26 @@ module.exports.insertShop = function(serialNumber,name,principal,tel,address,rem
  */
 module.exports.delShop= function (id, cb) {
 
+    var check_sql = 'SELECT * FROM staff WHERE shopId = ?';
     var sql = 'DELETE FROM shop WHERE id = ?';
-    db.query(sql, [id], function(cbData, err, rows, fields) {
+    db.query(check_sql,[id],function(cbData, err, rows, fields) {
         if (!err) {
-            cb(null, rows);
+            if (rows.length != 0) { //  有员工，不能删除
+                 cb(null,false);
+            } else {
+                db.query(sql, [id], function(cbData, err, rows, fields) {
+                    if (!err) {
+                        cb(null, true);
+                    } else {
+                        cb(err);
+                    }
+                });
+            }
         } else {
             cb(err);
         }
     });
+
 }
 
 /**

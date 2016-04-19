@@ -107,7 +107,7 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
  * @param currentPage
  * @param cb
  */
-module.exports.getCourseList = function (classroom,courseType,date,currentPage,cb) {
+module.exports.getCourseList = function (shopId,classroom,courseType,date,currentPage,cb) {
 
     var par = "WHERE r.name LIKE '%"+classroom+"%' ";
     if (courseType != '') {
@@ -117,6 +117,8 @@ module.exports.getCourseList = function (classroom,courseType,date,currentPage,c
     if (date != '') {
         par = par + " AND courseDate = '"+date+"'";
     }
+
+    par = par + ' AND r.shopId = '+ shopId;
 
     var sql_count = 'SELECT count(*) as count FROM course c, classroom r '+par+' AND c.classroomId = r.id  ORDER BY c.dateline DESC';
 
@@ -751,13 +753,13 @@ module.exports.delCourse = function (courseId,type,cb) {
  * 获取所在月第一天至下月最后一天的排课信息
  * @param cb
  */
-module.exports.getCoursePlanList = function (cb) {
+module.exports.getCoursePlanList = function (shopId,cb) {
 
     var courseSql = 'SELECT a.id,a.courseDate,a.name,a.classroomId,a.courseTimeStart,a.courseTimeEnd,a.courseType ';
     courseSql += 'FROM course a inner join classroom b on (a.classroomId=b.id)';
     courseSql += 'where str_to_date(a.courseDate, "%Y-%m-%d") >= DATE_ADD(curdate(),interval -day(curdate())+1 day)';
     courseSql += 'and str_to_date(a.courseDate, "%Y-%m-%d") <= last_day(date_add(curdate(),interval 1 month))';
-    var classRoomSql = 'SELECT * from classroom t where t.`status` = 1';
+    var classRoomSql = 'SELECT * from classroom t where t.`status` = 1 AND t.shopId='+shopId;
     async.series({
         courseData : function(callback){
             db.query(courseSql, [],function (cbData, err, rows, fields) {

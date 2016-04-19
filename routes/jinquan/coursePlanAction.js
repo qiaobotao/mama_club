@@ -8,8 +8,9 @@ module.exports.list = function (req, res, next) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
-
-    service.getCoursePlanList(function (err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+    service.getCoursePlanList(shopId,function (err, results) {
         if (!err) {
             res.render('coursePlan/coursePlanList',{data : results,replytype:replytype});
         } else {

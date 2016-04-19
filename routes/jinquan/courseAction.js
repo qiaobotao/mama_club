@@ -11,6 +11,9 @@ var laypage = require('laypage');
 
 module.exports.list = function (req, res,next) {
 
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     var currentPage = req.query.page ? req.query.page : '1';
     var classroom = req.query.classroom ? req.query.classroom : '';
     var courseType = req.query.courseType ? req.query.courseType : '';
@@ -20,7 +23,7 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
-    service.getCourseList(classroom,courseType,date,currentPage,function(err, results){
+    service.getCourseList(shopId,classroom,courseType,date,currentPage,function(err, results){
         if (!err){
             results.currentPage = currentPage;
             results.classroom = classroom;

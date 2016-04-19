@@ -11,6 +11,9 @@ var service = require('../../model/service/classroom');
 
 module.exports.list = function (req, res,next) {
 
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     var currentPage = req.query.page ? req.query.page : '1';
     var classRoomName = req.query.classRoomName ? req.query.classRoomName : '';
     var classRoomCode = req.query.classRoomCode ? req.query.classRoomCode : '';
@@ -19,7 +22,7 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
-    service.fetchAllCLassRoom(classRoomName,classRoomCode,currentPage, function (err, results) {
+    service.fetchAllCLassRoom(shopId,classRoomName,classRoomCode,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.classRoomName = classRoomName;
@@ -55,13 +58,16 @@ module.exports.preAdd = function (req, res,next) {
  */
 module.exports.Add = function (req, res,next) {
 
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
     var name = req.body.name ? req.body.name : '';
     var classType = req.body.cid ? req.body.cid : '';
     var remark = req.body.remark ? req.body.remark : '';
     var materialId = req.body.outLogId ? req.body.outLogId : '';
 
-    service.insertClassroom(serialNumber,name,classType,remark,materialId,function(err, results) {
+    service.insertClassroom(shopId,serialNumber,name,classType,remark,materialId,function(err, results) {
         if(!err) {
             res.redirect('/jinquan/classroom_list?replytype=add');
         } else {

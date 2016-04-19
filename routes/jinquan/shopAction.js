@@ -81,9 +81,13 @@ module.exports.del = function (req, res, next) {
 
     var id = req.query.id ? req.query.id :'';
 
-    service.delShop(id,function(err, results){
+    service.delShop(id,function(err, flag){
         if (!err) {
-            res.redirect('/jinquan/shop_list?replytype=del');
+            if (flag) {
+                res.redirect('/jinquan/shop_list?replytype=del');
+            } else {
+                res.redirect('/jinquan/shop_list?replytype=no_del');
+            }
         } else {
             next();
         }

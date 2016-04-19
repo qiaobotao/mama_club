@@ -36,10 +36,10 @@ module.exports.getClassroomClassify = function (cb) {
  * @param materialid
  * @param cb
  */
-module.exports.insertClassroom = function(serialNumber,name,classType,remark,materialId, cb) {
+module.exports.insertClassroom = function(shopId,serialNumber,name,classType,remark,materialId, cb) {
 
-    var sql = 'INSERT INTO classroom (serialNumber,name,classType,remark,outLogId,dateline,status) VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,classType,remark,materialId,new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO classroom (serialNumber,name,classType,remark,outLogId,dateline,status,shopId) VALUES (?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,name,classType,remark,materialId,new Date().getTime(),'1',shopId], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -70,9 +70,11 @@ module.exports.setClassroomStatus= function (id, type, cb) {
  * 获取所有门店
  * @param cb
  */
-module.exports.fetchAllCLassRoom = function(className,classCode,currentPage,cb) {
+module.exports.fetchAllCLassRoom = function(shopId,className,classCode,currentPage,cb) {
 
     var parm = " WHERE r.name LIKE '%"+className+"%' AND r.serialNumber LIKE '%"+classCode+"%' ";
+
+    var parm = parm + ' AND r.shopId = '+shopId;
 
     var sql_count = 'SELECT count(*) as count FROM classroom AS r '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
