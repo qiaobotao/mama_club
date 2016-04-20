@@ -4,6 +4,7 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/notice');
+var multiparty = require('multiparty');
 /**
  * 获取公告列表
  * @param req
@@ -13,13 +14,15 @@ module.exports.list = function (req, res) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var title = req.query.title ? req.query.title : '';
+    var type = req.query.type ? req.query.type : '';
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
 
-    service.fetchAllNotice(title,currentPage, function (err, results) {
+    service.fetchAllNotice(title,type,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.title = title;
+            results.type = type;
             res.render('notice/noticeList', {data : results,replytype:replytype, laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages})
             });
@@ -52,14 +55,34 @@ module.exports.save = function (req, res) {
     }else{//添加
         service.insertNotice(title,content,type,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/notice_list?replytype=add');
+                service.insertSysUserNotice(results.newNotice.insertId,results.userData,function(err, results) {
+                    if(!err) {
+                        res.redirect('/jinquan/notice_list?replytype=add');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');
             }
         })
     }
+    /*
+    var form = new multiparty.Form({uploadDir: './public/files/'});
+    form.parse(req, function(err, fields, files) {
+        if (!err) {
+            var inputFile = files.recordfile[0];
+            var uploadedPath = inputFile.path;
+            var a= "";
+        } else {
+            console.log('parse error: ' + err);
+            next();
+        }
 
+    });
+    */
 }
 /**
  * 修改

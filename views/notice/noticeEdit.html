@@ -41,6 +41,18 @@
              return;
              }
              */
+            if($('#title').val() == ''){
+                parent.layer.alert('请输入标题',{icon: 2});
+                return;
+            }
+            if($('#content').val() == ''){
+                parent.layer.alert('请输入内容',{icon: 2});
+                return;
+            }
+            if($('#type').val() == ''){
+                parent.layer.alert('请选择公告类型',{icon: 2});
+                return;
+            }
             document.getElementById("myform").submit();
         }
     </script>
@@ -53,8 +65,11 @@
     </div>
 </div>
 <div class="center_con">
+    <!--
+    <form method="post" id="myform" action="/jinquan/notice_save" enctype='multipart/form-data'>
+    -->
     <form method="post" id="myform" action="/jinquan/notice_save">
-        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">标题：</td>
                 <td class="regTd_r">
@@ -62,13 +77,29 @@
                     <input id="title" name="title" type="text" class="input5" value="<%=notice.title%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
                 <td  class="regTd_l">类型：</td>
-                <td class="regTd_r"><input id="type" name="type" type="text" class="input5"  value="<%=notice.type%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="type" name="type">
+                        <option value="">请选择</option>
+                        <option value="1" <%if(notice.type == '1'){%>selected<%}%>>公告</option>
+                        <option value="2" <%if(notice.type == '2'){%>selected<%}%>>通知</option>
+                        <option value="3" <%if(notice.type == '3'){%>selected<%}%>>新闻</option>
+                        <option value="4" <%if(notice.type == '4'){%>selected<%}%>>警告</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">内容：</td>
-                <td class="regTd_r" rowspan="3">
-                    <textarea rows="10" cols="50" id="content" name="content"><%=notice.content%></textarea>
+                <td class="regTd_r" colspan="3">
+                    <textarea rows="10" cols="120" id="content" name="content"><%=notice.content%></textarea>
                 </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">上传文件1：</td>
+                <td class="regTd_r" colspan="3">文件路径：<input  name="recordfile" type="file" multiple='mutiple' class="input5"/></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">上传文件2：</td>
+                <td class="regTd_r" colspan="3">文件路径：<input name="recordfile" type="file" multiple='mutiple' class="input5"/></td>
             </tr>
         </table>
     </form>

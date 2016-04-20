@@ -5,6 +5,7 @@
     <title>公告列表</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -21,7 +22,8 @@
 
         function search() {
             var title = document.getElementById('title').value;
-            window.location.href = '/jinquan/notice_list?title='+title;
+            var type = $("#type").val();
+            window.location.href = '/jinquan/notice_list?title='+title+'&type='+type;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/notice_edit?id='+id;
@@ -45,6 +47,15 @@
                 <tr>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
                     <td>公告标题：<input id="title" name="title" type="text" class="input5" value="<%=data.title%>"/></td>
+                    <td>类型：
+                        <select id="type" name="type">
+                            <option value="">请选择</option>
+                            <option value="1" <%if(data.type == '1'){%>selected<%}%>>公告</option>
+                            <option value="2" <%if(data.type == '2'){%>selected<%}%>>通知</option>
+                            <option value="3" <%if(data.type == '3'){%>selected<%}%>>新闻</option>
+                            <option value="4" <%if(data.type == '4'){%>selected<%}%>>警告</option>
+                        </select>
+                    </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
@@ -62,7 +73,19 @@
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].title%></td>
-                <td><%=data.data[i].type%></td>
+                <%
+                var typeVal = "";
+                if(data.data[i].type == '1'){
+                    typeVal = "公告";
+                }else if(data.data[i].type == '2'){
+                    typeVal = "通知";
+                }else if(data.data[i].type == '3'){
+                    typeVal = "新闻";
+                }else if(data.data[i].type == '4'){
+                    typeVal = "警告";
+                }
+                %>
+                <td><%=typeVal%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

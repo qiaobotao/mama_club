@@ -7,39 +7,112 @@
 var db = require('../../common/db');
 var async = require('async');
 /**
- * 增加公告
+ * 往公告主表添加记录
  * @param title
  * @param content
  * @param type
  * @param cb
  */
 module.exports.insertNotice = function(title,content,type, cb) {
+    //往公告主表中增加一条记录
+    var insertSql = 'INSERT INTO notice (`title`,`content`,`type`,dateline) VALUES (?,?,?,?)';
+    //查询系统用户所对应的id
+    var selectUserSql = "select id from sysUser where activity = 'Y'";
 
-    var sql = 'INSERT INTO notice (`title`,`content`,`type`,dateline) VALUES (?,?,?,?)';
-    db.query(sql, [title,content,type,new Date().getTime()], function(cbData, err, rows, fields) {
+    async.series({
+        newNotice : function(callback){
+            db.query(insertSql, [title,content,type,new Date().getTime()], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        userData : function(callback){
+            db.query(selectUserSql, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
+    });
+
+};
+
+/**
+ * 往系统用户和公告表中增加记录
+ * @param noticeId
+ * @param userIds
+ * @param cb
+ */
+module.exports.insertSysUserNotice = function(noticeId,userIds, cb) {
+    //往公告主表中增加一条记录
+    var insertSql = 'INSERT INTO sysUserNotice (`noticeId`,`userId`,`isread`) VALUES (?,?,?)';
+    //批量添加员工的职业资格信息
+    async.map(userIds, function(item, callback) {
+        db.query(insertSql, [noticeId,item.id,'0'], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
     });
 };
 
 /**
  * 删除公告
+ * 删除用户及公告对应关系数据
  * @param id
  * @param cb
  */
 module.exports.delNotice= function (id, cb) {
 
-    var sql = 'DELETE FROM notice WHERE id = ?';
-    db.query(sql, [id], function(cbData, err, rows, fields) {
+    var delNoticeSql = 'DELETE FROM notice WHERE id = ?';
+    var delNoticeByUserSql = 'DELETE FROM sysUserNotice WHERE noticeId = ?';
+
+    async.series({
+        delNotice : function(callback){
+            db.query(delNoticeSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delNoticeByUser : function(callback){
+            db.query(delNoticeByUserSql, [id], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+
 }
 
 
@@ -47,18 +120,26 @@ module.exports.delNotice= function (id, cb) {
  * 获取所有公告
  * @param cb
  */
-module.exports.fetchAllNotice = function(title,currentPage,cb) {
+module.exports.fetchAllNotice = function(title,type,currentPage,cb) {
 
     var parm = "WHERE title LIKE '%"+title+"%'  ";
+    var parmArr = new Array();
+    var parmCountArr = new Array();
+    if(type != ''){
+        parm += " AND type = ? ";
+        parmArr.push(type);
+        parmCountArr.push(type);
+    }
 
     var sql_count = 'SELECT count(*) as count FROM notice '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
     var sql_data = 'SELECT * FROM notice '+parm+' ORDER BY dateline DESC LIMIT ?,?';
-
+    parmArr.push(start);
+    parmArr.push(end);
     async.series({
         totalPages : function(callback){
-            db.query(sql_count, [], function (cbData, err, rows, fields) {
+            db.query(sql_count, parmCountArr, function (cbData, err, rows, fields) {
 
                 if (!err) {
                     var count = rows[0].count;
@@ -70,7 +151,7 @@ module.exports.fetchAllNotice = function(title,currentPage,cb) {
             });
         },
         data : function(callback){
-            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+            db.query(sql_data, parmArr, function (cbData, err, rows, fields) {
 
                 if (!err) {
                     callback(null,rows);
