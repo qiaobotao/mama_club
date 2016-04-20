@@ -110,7 +110,9 @@ module.exports.detail = function (req, res, next) {
 module.exports.checkSeril = function (req, res, next) {
 
     var seril = req.body.serial ? req.body.serial : '';
-    service.checkSeril(seril,function(err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+    service.checkSeril(shopId,seril,function(err, results) {
         if (!err) {
             res.json({flag:results});
         } else {
@@ -123,8 +125,10 @@ module.exports.checkSeril = function (req, res, next) {
 module.exports.checkName = function (req, res, next) {
 
     var name = req.body.name ? req.body.name : '';
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
 
-    service.checkName(name,function (err, results) {
+    service.checkName(shopId,name,function (err, results) {
         if (!err) {
             res.json({flag:results});
         } else {

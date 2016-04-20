@@ -173,10 +173,10 @@ module.exports.getAllClassroom = function (cb) {
  * @param seril
  * @param cb
  */
-module.exports.checkSeril = function(seril,cb) {
+module.exports.checkSeril = function(shopId,seril,cb) {
 
-    var checkSQL = 'SELECT * FROM classroom WHERE serialNumber = ?';
-    db.query(checkSQL, [seril], function (cbData, err, rows, filelds) {
+    var checkSQL = 'SELECT * FROM classroom WHERE serialNumber = ? AND shopId =?';
+    db.query(checkSQL, [seril,shopId], function (cbData, err, rows, filelds) {
         if(!err) {
             if (rows.length != 0) {
                 cb(null,false);
@@ -194,10 +194,10 @@ module.exports.checkSeril = function(seril,cb) {
  * @param name
  * @param cb
  */
-module.exports.checkName = function (name, cb) {
+module.exports.checkName = function (shopId,name, cb) {
 
-    var checkSql = 'SELECT * FROM classroom WHERE name = ?';
-    db.query(checkSql, [name], function (cbData, err, rows, filelds) {
+    var checkSql = 'SELECT * FROM classroom WHERE name = ? AND shopId = ?';
+    db.query(checkSql, [name,shopId], function (cbData, err, rows, filelds) {
         if(!err) {
             if (rows.length != 0) {
                 cb(null,false);

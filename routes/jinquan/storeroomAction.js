@@ -19,7 +19,10 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
-    service.list(name,classifyId,currentPage, function(err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+    service.list(shopId,name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
             results.currentPage = currentPage;
@@ -86,8 +89,10 @@ module.exports.add = function (req, res, next) {
     var address = req.body.address ? req.body.address : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
 
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
 
-    service.insertStoreroom(name, address, principal, tel, serial, cid, remarks, function(err, results) {
+    service.insertStoreroom(shopId,name, address, principal, tel, serial, cid, remarks, function(err, results) {
         if(!err) {
             res.redirect('/jinquan/storeroom_list?replytype=add');
         } else {
@@ -193,6 +198,45 @@ module.exports.detail = function(req, res, next) {
     service.fetchSingleStoreroom(id,function(err, results) {
         if (!err && results.length != 0) {
             res.render('storeroom/storeroomDetail', {data : results[0]});
+        } else {
+            next();
+        }
+    })
+}
+
+/**
+ * 查看库房编号是否唯一
+ */
+module.exports.checkseril = function(req, res, next) {
+
+    var seril = req.body.serial ? req.body.serial : '';
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+    service.checkSeril(shopId,seril,function(err, results) {
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            next();
+        }
+    });
+}
+
+/**
+ * 名称不得相同
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.checkName = function (req, res, next) {
+
+    var name = req.body.name ? req.body.name : '';
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+    service.checkName(shopId,name,function (err, results) {
+        if (!err) {
+            res.json({flag:results});
         } else {
             next();
         }

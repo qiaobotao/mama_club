@@ -14,10 +14,10 @@ var mainStoreroomClassifyId = require('../../config').mainClassifyId.storeroom;
  * @param principal
  * @param cb
  */
-module.exports.insertStoreroom = function(name, address, principal, tel, serial, classify, remarks, cb) {
+module.exports.insertStoreroom = function(shopId,name, address, principal, tel, serial, classify, remarks, cb) {
 
-    var sql = 'INSERT INTO storeroom (name, address, principal, status, dateline, tel, serial, classify, remarks) VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [name, address, principal, '0', new Date().getTime(), tel, serial, classify, remarks], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO storeroom (name, address, principal, status, dateline, tel, serial, classify, remarks,shopId) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [name, address, principal, '0', new Date().getTime(), tel, serial, classify, remarks,shopId], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -30,9 +30,9 @@ module.exports.insertStoreroom = function(name, address, principal, tel, serial,
  * 获取所有仓库
  * @param cb
  */
-module.exports.list = function(name,cid,currentPage,cb) {
+module.exports.list = function(shopId,name,cid,currentPage,cb) {
 
-    var parm = "WHERE s.name LIKE '%"+name+"%' ";
+    var parm = "WHERE s.name LIKE '%"+name+"%' AND shopId="+shopId;
 
     if (cid != '') {
         parm = parm + " AND classify ="+cid;
@@ -182,4 +182,50 @@ module.exports.getAllStorerooms = function (cb) {
             cb(err);
         }
     });
+}
+
+/**
+ * 核对编号是否重复
+ * @param shopId
+ * @param seril
+ * @param cb
+ */
+module.exports.checkSeril = function(shopId,seril,cb) {
+
+    var checkSQL = 'SELECT * FROM storeroom WHERE serialNumber = ? AND shopId =?';
+    db.query(checkSQL, [seril,shopId], function (cbData, err, rows, filelds) {
+        if(!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
+        } else {
+            cb(err);
+        }
+    });
+
+}
+
+/**
+ * 查看名字是否相同
+ * @param shopId
+ * @param name
+ * @param cb
+ */
+module.exports.checkName = function(shopId,name, cb) {
+
+    var checkSql = 'SELECT * FROM storeroom WHERE name = ? AND shopId = ?';
+    db.query(checkSql, [name,shopId], function (cbData, err, rows, filelds) {
+        if(!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
+        } else {
+            cb(err);
+        }
+    });
+
 }
