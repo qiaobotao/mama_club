@@ -14,20 +14,22 @@ var service = require('../../model/service/moneyManage');
 module.exports.list = function (req, res, next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
-    var shopname = req.query.shopname ? req.query.shopname : '';
-    var principal = req.query.principal ? req.query.principal : '';
-    var number = req.query.number ? req.query.number : '';
+    var chargeType = req.query.chargeType ? req.query.chargeType : '';//收费类型
+    var startDate = req.query.startDate ? req.query.startDate : '';//开始时间
+    var endDate = req.query.endDate ? req.query.endDate : '';//截止时间
+    var state = req.query.state ? req.query.state : '';//状态
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
 
-    service.fetchAllMoneyManage(shopname,principal,number,currentPage, function (err, results) {
+    service.fetchAllMoneyManage(chargeType,startDate,endDate,state,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
-            results.name = shopname;
-            results.principal = principal;
-            results.number = number;
+            results.chargeType = chargeType;
+            results.startDate = startDate;
+            results.endDate = endDate;
+            results.state = state;
             res.render('moneyManage/moneyManagelist', {data : results, replytype : replytype, laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages})
             });
@@ -82,7 +84,6 @@ module.exports.save = function(req, res, next) {
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var classMeetId = req.body.classMeetId ? req.body.classMeetId : '';//课程id
     var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
-    var state = req.body.state ? req.body.state : '';//状态
     var chargeType = req.body.chargeType ? req.body.chargeType : '';//收费项目
     var payType = req.body.payType ? req.body.payType : '';//支付方式：现金；充值卡；折扣卡；微信；支付宝
     var receivableMoney = req.body.receivableMoney ? req.body.receivableMoney : '';//应收金额
@@ -90,6 +91,10 @@ module.exports.save = function(req, res, next) {
     var actualMoney = req.body.actualMoney ? req.body.actualMoney : '';//实收金额
     var activityManageId = req.body.availableActivity ? req.body.availableActivity : '';//参与的活动id（如果没选活动不添加即可）
     var activityManageMxId = req.body.lessLevel ? req.body.lessLevel : '';//活动中，选择的优惠方式id
+    var state = "0";
+    if(payType != '0'){//不是延迟收费，即为已收费
+        state = "1";//1、已收费；0：未收费
+    }
 
     if(chargeType == ''){
         res.redirect('/jinquan/money_manage_list?replytype=error');

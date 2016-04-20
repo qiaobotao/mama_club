@@ -86,11 +86,33 @@ module.exports.delMoneyManage= function (id, cb) {
  * 获取所有收费管理
  * @param cb
  */
-module.exports.fetchAllMoneyManage = function(name,principal,number,currentPage,cb) {
+module.exports.fetchAllMoneyManage = function(chargeType,startDate,endDate,state,currentPage,cb) {
 
+    var selectArr = new Array();
+    var selectCountArr = new Array();
     var parm = "WHERE 1=1 ";
+    if(chargeType != ''){
+        parm += " AND m.chargeType = ? ";
+        selectArr.push(chargeType);
+        selectCountArr.push(chargeType);
+    }
+    if(startDate != ''){
+        parm += " AND DATE_FORMAT(?,'%Y-%m-%d') <= DATE_FORMAT(m.chargeTime,'%Y-%m-%d') ";
+        selectArr.push(startDate);
+        selectCountArr.push(startDate);
+    }
+    if(endDate != ''){
+        parm += " AND DATE_FORMAT(?,'%Y-%m-%d') >= DATE_FORMAT(m.chargeTime,'%Y-%m-%d') ";
+        selectArr.push(endDate);
+        selectCountArr.push(endDate);
+    }
+    if(state != ''){
+        parm += " AND m.state = ?  ";
+        selectArr.push(state);
+        selectCountArr.push(state);
+    }
 
-    var sql_count = 'SELECT count(*) as count FROM moneyManage '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM moneyManage m '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
     var sql_data = 'SELECT m.id,m.chargeTime,m.chargeType,m.payType,m.receivableMoney,m.actualMoney,m.state,' +
@@ -102,9 +124,11 @@ module.exports.fetchAllMoneyManage = function(name,principal,number,currentPage,
         ') as memberName ' +
         'FROM moneyManage m '+parm+' ORDER BY dateline DESC LIMIT ?,?';
 
+    selectArr.push(start);
+    selectArr.push(end);
     async.series({
         totalPages : function(callback){
-            db.query(sql_count, [], function (cbData, err, rows, fields) {
+            db.query(sql_count, selectCountArr, function (cbData, err, rows, fields) {
 
                 if (!err) {
                     var count = rows[0].count;
@@ -116,7 +140,7 @@ module.exports.fetchAllMoneyManage = function(name,principal,number,currentPage,
             });
         },
         data : function(callback){
-            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+            db.query(sql_data, selectArr, function (cbData, err, rows, fields) {
 
                 if (!err) {
                     callback(null,rows);

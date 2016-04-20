@@ -25,10 +25,12 @@
             parent.layer.msg('数据填写错误，请查证后再提交');
         }
         function search () {
-            var chargeName = document.getElementById('chargeName').value;
-            var chargeStartTime = document.getElementById('chargeStartTime').value;
-            var chargeEndTime = document.getElementById('chargeEndTime').value;
-            window.location.href = '/jinquan/money_manage_list?chargeName='+chargeName+'&chargeStartTime='+chargeStartTime+'&chargeEndTime='+chargeEndTime;
+            var chargeType = $('#chargeType').val();
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var state = $('#state').val();
+
+            window.location.href = '/jinquan/money_manage_list?chargeType='+chargeType+'&startDate='+startDate+'&endDate='+endDate+'&state='+state;
         }
         function pageturning (selectPage) {
             var shopname = document.getElementById('shopname').value;
@@ -70,21 +72,30 @@
                 <tr>
                     <!-- 保存当前页，直接传入js，不能读到-->
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
+                    <!--
                     <td>付费人名称：<input id="chargeName" name="chargeName" type="text" class="input5" value="<%=data.name%>"/></td>
+                    -->
                     <td> &nbsp;付费类型：
-                        <select name="chargeType">
+                        <select name="chargeType" id="chargeType">
                             <option value="">请选择</option>
-                            <option value="1">护理付费</option>
-                            <option value="2">上课付费</option>
-                            <option value="3">购买商品</option>
-                            <option value="4">购买会员卡</option>
-                            <option value="5">员工内购</option>
-                            <option value="6">会员卡续费</option>
+                            <option value="1" <%if(data.chargeType == '1'){%>selected<%}%>>护理付费</option>
+                            <option value="2" <%if(data.chargeType == '2'){%>selected<%}%>>上课付费</option>
+                            <option value="3" <%if(data.chargeType == '3'){%>selected<%}%>>购买商品</option>
+                            <option value="4" <%if(data.chargeType == '4'){%>selected<%}%>>购买会员卡</option>
+                            <option value="5" <%if(data.chargeType == '5'){%>selected<%}%>>员工内购</option>
+                            <option value="6" <%if(data.chargeType == '6'){%>selected<%}%>>会员卡续费</option>
                         </select>
                     </td>
-                    <td> &nbsp;付费时间：
-                        <input id="chargeStartTime" name="chargeStartTime" type="text" class="input5" value="<%=data.chargeStartTime%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>~
-                        <input id="chargeEndTime" name="chargeEndTime" type="text" class="input5" value="<%=data.chargeEndTime%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>
+                    <td> &nbsp;购买时间：
+                        <input id="startDate" name="startDate" type="text" class="input5" value="<%=data.startDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>~
+                        <input id="endDate" name="endDate" type="text" class="input5" value="<%=data.endDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>
+                    </td>
+                    <td> &nbsp;付费状态：
+                        <select name="state" id="state">
+                            <option value="">请选择</option>
+                            <option value="1" <%if(data.state == '1'){%>selected<%}%>>已收款</option>
+                            <option value="0" <%if(data.state == '0'){%>selected<%}%>>未收款</option>
+                        </select>
                     </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
@@ -108,8 +119,8 @@
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <%
-
-                var payer = "";
+                //处理收费项目
+                var payer,payType = "";//收费项目、收费方式
                 var chargeTypeVal = data.data[i].chargeType;
                 var chargeTypeTxt = "";
                 if(chargeTypeVal == 1){
@@ -131,14 +142,27 @@
                     chargeTypeTxt = "会员卡续费";
                     payer = data.data[i].memberName;
                 }
+                //处理付费方式
+                if(data.data[i].payType == 0){
+                    payType = "延迟付费";
+                }else if(data.data[i].payType == 1){
+                    payType = "现金";
+                }else if(data.data[i].payType == 2){
+                    payType = "微信";
+                }else if(data.data[i].payType == 3){
+                    payType = "支付宝";
+                }else if(data.data[i].payType == 4){
+                    payType = "充值卡";
+                }
+
                 %>
                 <td><%=payer%></td>
                 <td><%=chargeTypeTxt%></td>
                 <td><%=data.data[i].chargeTime%></td>
                 <td><%=data.data[i].receivableMoney%></td>
                 <td><%=data.data[i].actualMoney%></td>
-                <td><%=data.data[i].payType%></td>
-                <td><%=data.data[i].state%></td>
+                <td><%=payType%></td>
+                <td><%if(data.data[i].state == '0'){%>未付款<%}else{%>已付款<%}%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
