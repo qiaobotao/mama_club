@@ -91,10 +91,15 @@
                     return;
                 }
             }
-            //实付金额应该等于活动后应收金额
-            if($('#activityActualMoney').val() != $('#actualMoney').val()){
-                parent.layer.alert('"实付金额"应该等于"活动后应收金额"',{icon: 2});
-                return;
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                $('#actualMoney').val("0");
+            }else{
+                //实付金额应该等于活动后应收金额
+                if($('#activityActualMoney').val() != $('#actualMoney').val()){
+                    parent.layer.alert('"实付金额"应该等于"活动后应收金额"',{icon: 2});
+                    return;
+                }
             }
             document.getElementById("myform").submit();
 
@@ -282,7 +287,17 @@
             getSubtotal();
         }
 
-
+        function changePayType(){
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                //延期付费，收款状态为未收款
+                //实付金额设为0，并不可编辑
+                $('#actualMoney').attr("disabled",true);
+                $('#actualMoney').val("0");
+            }else{
+                $('#actualMoney').attr("disabled",false);
+            }
+        }
 
     </script>
 </head>
@@ -387,8 +402,9 @@
             <tr>
                 <td  class="regTd_l">付费方式：</td>
                 <td class="regTd_r">
-                    <select name="payType">
+                    <select id="payType" name="payType" onchange="changePayType()">
                         <option value="">请选择</option>
+                        <option value="0">延迟付费</option>
                         <option value="1">现金</option>
                         <option value="2">微信</option>
                         <option value="3">支付宝</option>
