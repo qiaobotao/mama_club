@@ -13,15 +13,15 @@ var async = require('async');
  * @param type
  * @param cb
  */
-module.exports.insertNotice = function(title,content,type, cb) {
+module.exports.insertNotice = function(title,content,type,updateDate, cb) {
     //往公告主表中增加一条记录
-    var insertSql = 'INSERT INTO notice (`title`,`content`,`type`,dateline) VALUES (?,?,?,?)';
+    var insertSql = 'INSERT INTO notice (`title`,`content`,`type`,updateDate,dateline) VALUES (?,?,?,?,?)';
     //查询系统用户所对应的id
     var selectUserSql = "select id from sysUser where activity = 'Y'";
 
     async.series({
         newNotice : function(callback){
-            db.query(insertSql, [title,content,type,new Date().getTime()], function (cbData, err, rows, fields) {
+            db.query(insertSql, [title,content,type,updateDate,new Date().getTime()], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {
@@ -171,6 +171,57 @@ module.exports.fetchAllNotice = function(title,type,currentPage,cb) {
 }
 
 /**
+ * 根据用户id获取所有公告
+ * @param cb
+ */
+module.exports.fetchAllNoticeByUser = function(userId,currentPage,cb) {
+
+    var parm = "where s.noticeId = n.id and s.userId = ? ";
+    var parmArr = new Array();
+    var parmCountArr = new Array();
+    parmArr.push(userId);
+    parmCountArr.push(userId);
+
+    var sql_count = 'SELECT count(*) as count FROM sysUserNotice s,notice n  '+parm+'  ORDER BY dateline DESC';
+    var start = (currentPage - 1) * 10;
+    var end = 10;
+    var sql_data = 'SELECT n.*,s.isread FROM sysUserNotice s,notice n '+parm+' order by s.isread ,n.dateline desc LIMIT ?,?';
+    parmArr.push(start);
+    parmArr.push(end);
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, parmCountArr, function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, parmArr, function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
  * 修改公告
  * @param id
  * @param name
@@ -178,10 +229,10 @@ module.exports.fetchAllNotice = function(title,type,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateNotice = function(id, title,content,type, cb) {
+module.exports.updateNotice = function(id, title,content,type,updateDate, cb) {
 
-    var sql = 'UPDATE notice SET `title` = ?, `content` = ?, type = ? WHERE id = ?';
-    var par = [title,content,type, id];
+    var sql = 'UPDATE notice SET `title` = ?, `content` = ?, type = ?,updateDate=? WHERE id = ?';
+    var par = [title,content,type, updateDate,id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
@@ -202,6 +253,22 @@ module.exports.fetchSingleNotice =function (id, cb) {
 
     var sql = 'SELECT * FROM notice WHERE id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+/**
+ * 获取公告详情
+ * @param id
+ * @param cb
+ */
+module.exports.setUserNotice =function (id,userId, cb) {
+    var sql = 'UPDATE sysUserNotice SET `isread` = ? WHERE noticeId = ? and userId = ?';
+    var par = [1,id,userId];
+    db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

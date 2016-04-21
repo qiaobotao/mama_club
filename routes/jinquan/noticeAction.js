@@ -30,6 +30,27 @@ module.exports.list = function (req, res) {
             next();
         }
     });
+}/**
+ * 根据用户id获取公告列表
+ * @param req
+ * @param res
+ */
+module.exports.listByUser = function (req, res) {
+
+    var currentPage = req.query.page ? req.query.page : '1';
+    var url = '/jinquan'+req.url;
+
+
+    service.fetchAllNoticeByUser(req.session.user.id,currentPage, function (err, results) {
+        if (!err) {
+            results.currentPage = currentPage;
+            res.render('notice/noticeListByUser', {data : results, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
+        } else {
+            next();
+        }
+    });
 }
 
 /**
@@ -42,9 +63,10 @@ module.exports.save = function (req, res) {
     var title = req.body.title ? req.body.title : '';
     var type = req.body.type ? req.body.type : '';
     var content = req.body.content ? req.body.content : '';
-
+    var thisDate = new Date();
+    var updateDate = thisDate.getFullYear()+"-"+(thisDate.getMonth() < 10 ? "0"+thisDate.getMonth() :thisDate.getMonth())+"-"+thisDate.getDate();
     if(id!=''){//修改
-        service.updateNotice(id,title,content,type,function(err, results) {
+        service.updateNotice(id,title,content,type,updateDate,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/notice_list?replytype=update');
             } else {
@@ -53,7 +75,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertNotice(title,content,type,function(err, results) {
+        service.insertNotice(title,content,type,updateDate,function(err, results) {
             if(!err) {
                 service.insertSysUserNotice(results.newNotice.insertId,results.userData,function(err, results) {
                     if(!err) {
@@ -100,6 +122,33 @@ module.exports.preEdit = function(req, res, next) {
                 notice = {};
             }
             res.render('notice/noticeEdit', {notice : notice,show:show});
+        } else {
+            next();
+        }
+    })
+}
+
+/**
+ * 查看
+ * @param req
+ * @param res
+ */
+module.exports.view = function(req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';
+    service.fetchSingleNotice(id, function(err, results) {
+        if (!err) {
+            var notice = results.length == 0 ? null : results[0];
+            if(notice == null){
+                notice = {};
+            }
+            service.setUserNotice(id,req.session.user.id, function(err, results) {
+                if (!err) {
+                    res.render('notice/noticeView', {notice : notice});
+                } else {
+                    next();
+                }
+            })
         } else {
             next();
         }

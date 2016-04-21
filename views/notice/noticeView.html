@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <title>编辑公告信息</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+
+        function submitForm(){
+            /*
+             var name = document.getElementById("name").value;
+             if (!name || name.length == 0) {
+             alert('门店名称不能为空');
+             return;
+             }
+             var serialNumber = document.getElementById("serialNumber").value;
+             if (!serialNumber || serialNumber.length == 0) {
+             alert('序列号不能为空');
+             return;
+             }
+             var tel = document.getElementById("tel").value;
+             if (!tel || tel.length == 0) {
+             alert('电话不能为空');
+             return;
+             }
+             var address = document.getElementById("address").value;
+             if(!address || address.length == 0) {
+             alert('门店地址不能为空');
+             return;
+             }
+             var principal = document.getElementById("principal").value;
+             if (!principal || principal.length == 0) {
+             alert('负责人不能为空');
+             return;
+             }
+             */
+            if($('#title').val() == ''){
+                parent.layer.alert('请输入标题',{icon: 2});
+                return;
+            }
+            if($('#content').val() == ''){
+                parent.layer.alert('请输入内容',{icon: 2});
+                return;
+            }
+            if($('#type').val() == ''){
+                parent.layer.alert('请选择公告类型',{icon: 2});
+                return;
+            }
+            document.getElementById("myform").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：查看公告信息
+    </div>
+</div>
+<div class="center_con">
+    <!--
+    <form method="post" id="myform" action="/jinquan/notice_save" enctype='multipart/form-data'>
+    -->
+    <form method="post" id="myform" action="/jinquan/notice_save">
+    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">标题：</td>
+                <td class="regTd_r">
+                    <input type="hidden" name="id" value="<%=notice.id%>"/>
+                    <input id="title" name="title" type="text" class="input5" value="<%=notice.title%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+
+                    （<%if(notice.type == '1'){%>公告<%}%>
+                    <%if(notice.type == '2'){%>通知<%}%>
+                    <%if(notice.type == '3'){%>新闻<%}%>
+                    <%if(notice.type == '4'){%>警告<%}%>）
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">内容：</td>
+                <td class="regTd_r" colspan="3">
+                    <%=notice.content%>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">上传文件1：</td>
+                <td class="regTd_r" colspan="3">下载文件1</td>
+            </tr>
+            <tr>
+                <td class="regTd_l">上传文件2：</td>
+                <td class="regTd_r" colspan="3">下载文件2</td>
+            </tr>
+        </table>
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href=/jinquan/notice_user_list class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>

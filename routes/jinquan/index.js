@@ -331,7 +331,9 @@ router.all('/sys_user_set',sysUserAction.set);
 router.all('/sys_user_set_save',sysUserAction.updateSetBySysUser);
 // 公告管理
 router.all('/notice_list',noticeAction.list);
+router.all('/notice_user_list',noticeAction.listByUser);
 router.all('/notice_edit',noticeAction.preEdit);
+router.all('/notice_view',noticeAction.view);
 router.all('/notice_save',noticeAction.save);
 router.all('/notice_del',noticeAction.del);
 
