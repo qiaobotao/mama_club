@@ -23,7 +23,10 @@ module.exports.list = function (req, res, next) {
         // 接收操作参数
         var replytype = req.query.replytype ? req.query.replytype : '';
 
-        service.list(outId,oper,inId,moveDate,currentPage, function(err, results) {
+        // 从session 中获取门店id
+        var shopId = req.session.user.shopId;
+
+        service.list(shopId,outId,oper,inId,moveDate,currentPage, function(err, results) {
             if (!err) {
                 for (var i=0;i<results.data.length;i++) {
                     var dateline = results.data[i].moveDate;
@@ -38,7 +41,7 @@ module.exports.list = function (req, res, next) {
                 results.inId =inId;
                 results.moveDate = moveDate;
 
-                service_storeroom.getAllStorerooms(function(err, storerooms){
+                service_storeroom.getAllStorerooms(shopId,function(err, storerooms){
 
                     if (!err) {
                         results.storerooms = storerooms;
@@ -61,7 +64,10 @@ module.exports.list = function (req, res, next) {
  */
 module.exports.preadd = function (req, res, next) {
 
-    service_storeroom.getAllStorerooms(function (err, storerooms) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+    service_storeroom.getAllStorerooms(shopId,function (err, storerooms) {
 
         if (!err) {
             res.render('storeroomMove/storeroomMoveAdd', {data : storerooms});

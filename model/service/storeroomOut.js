@@ -10,7 +10,7 @@ var mainOutTypeClassifyId = require('../../config').mainClassifyId.outType;
 
 
 
-module.exports.list = function (outType,oper,outDate,currentPage,cb) {
+module.exports.list = function (shopId,outType,oper,outDate,currentPage,cb) {
 
     var parm = "WHERE s.oper LIKE '%"+oper+"%' ";
 
@@ -22,11 +22,11 @@ module.exports.list = function (outType,oper,outDate,currentPage,cb) {
         parm = parm + " AND s.outDate ="+outDate;
     }
 
-    var sql_count = 'SELECT count(*) as count FROM storeroomOutLog s '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM storeroomOutLog s,storeroom st '+parm+'  AND s.storeroomId = st.id AND st.shopId='+shopId+' ORDER BY s.dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
 
-    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS outName, r.name AS storeroomName FROM storeroomOutLog AS s, systemClassify AS c, storeroom r  '+parm+' AND s.outType = c.id AND s.storeroomId = r.id ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS outName, r.name AS storeroomName FROM storeroomOutLog AS s, systemClassify AS c, storeroom r  '+parm+' AND s.outType = c.id AND s.storeroomId = r.id AND r.shopId = '+shopId+' ORDER BY s.dateline DESC LIMIT ?,?';
     async.series({
         totalPages : function(callback){
             db.query(sql_count, [], function (cbData, err, rows, fields) {

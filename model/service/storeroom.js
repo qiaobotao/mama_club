@@ -170,9 +170,9 @@ module.exports.setStatus = function (id, status, cb) {
  *获取所有的仓库
  * @param cb
  */
-module.exports.getAllStorerooms = function (cb) {
+module.exports.getAllStorerooms = function (shopId,cb) {
 
-    var sql = 'SELECT id,name FROM storeroom ORDER BY dateline asc';
+    var sql = 'SELECT id,name FROM storeroom WHERE shopId='+shopId+' ORDER BY dateline asc';
 
     db.query(sql,[],function(cbData, err, rows, filelds) {
 

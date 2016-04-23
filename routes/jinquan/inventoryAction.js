@@ -10,11 +10,15 @@ module.exports.list = function (req, res, next) {
     var sid = req.query.sid ? req.query.sid : ''; // 入库房
     var currentPage = req.query.page ? req.query.page : '1';
     var url = '/jinquan'+req.url;
-    service.list(sid,currentPage, function(err, results) {
+
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+    service.list(shopId,sid,currentPage, function(err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.sid = sid;
-            service_storeroom.getAllStorerooms(function(err, storerooms){
+            service_storeroom.getAllStorerooms(shopId,function(err, storerooms){
 
                 if (!err) {
                     results.storerooms = storerooms;

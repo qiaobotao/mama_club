@@ -9,7 +9,7 @@ var mainInTypeClassifyId = require('../../config').mainClassifyId.inType;
 
 
 
-module.exports.list = function (outId,oper,inId,moveDate,currentPage,cb) {
+module.exports.list = function (shopId,outId,oper,inId,moveDate,currentPage,cb) {
 
     var parm = "WHERE s.oper LIKE '%"+oper+"%' ";
 
@@ -25,11 +25,11 @@ module.exports.list = function (outId,oper,inId,moveDate,currentPage,cb) {
         parm = parm + " AND s.moveDate ="+moveDate;
     }
 
-    var sql_count = 'SELECT count(*) as count FROM storeroomMoveLog s '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM storeroomMoveLog s, storeroom st '+parm+' AND s.outStoreroomId = st.id AND st.shopId='+shopId+' ORDER BY s.dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
 
-    var sql_data = 'SELECT s.*, r.name AS inStoreroomName, rr.name AS outStoreName FROM storeroomMoveLog AS s,  storeroom AS r, storeroom AS rr  '+parm+' AND  s.inStoreroomId = r.id AND s.outStoreroomId = rr.id ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, r.name AS inStoreroomName, rr.name AS outStoreName FROM storeroomMoveLog AS s,  storeroom AS r, storeroom AS rr  '+parm+' AND  s.inStoreroomId = r.id AND s.outStoreroomId = rr.id AND r.shopId='+shopId+' ORDER BY s.dateline DESC LIMIT ?,?';
     async.series({
         totalPages : function(callback){
             db.query(sql_count, [], function (cbData, err, rows, fields) {

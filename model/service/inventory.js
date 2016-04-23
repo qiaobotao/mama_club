@@ -7,17 +7,17 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.list = function (sid,currentPage,cb) {
+module.exports.list = function (shopId,sid,currentPage,cb) {
 
     var sql = '';
     var count_sql = '';
 
     if (sid == '') {
-        sql = 'SELECT sum(i.count) AS data_count, w.name AS waresName, w.serialNumber  FROM  inventory i, wares w WHERE i.waresId = w.id GROUP BY waresId LIMIT ?,?';
-        count_sql = 'SELECT count(*) AS count FROM inventory i, wares w WHERE i.waresId = w.id GROUP BY waresId ';
+        sql = 'SELECT sum(i.count) AS data_count, w.name AS waresName, w.serialNumber  FROM  inventory i, wares w, storeroom s WHERE s.id = i.storeroomId AND s.shopId = '+shopId+' AND i.waresId = w.id GROUP BY waresId LIMIT ?,?';
+        count_sql = 'SELECT count(*) AS count FROM inventory i, wares w, storeroom s WHERE i.waresId = w.id AND s.id = i.storeroomId AND s.shopId = '+shopId+' GROUP BY waresId ';
     } else {
-        sql = 'SELECT count AS data_count, w.name AS waresName,w.serialNumber  FROM  inventory i, wares w WHERE i.waresId = w.id AND storeroomId = '+sid + ' LIMIT ?,?';
-        count_sql = 'SELECT count(*) AS count FROM  inventory i, wares w WHERE i.waresId = w.id AND storeroomId = '+sid;
+        sql = 'SELECT count AS data_count, w.name AS waresName,w.serialNumber  FROM  inventory i, wares w, storeroom s WHERE s.id = i.storeroomId AND s.shopId = '+shopId+' AND i.waresId = w.id AND i.storeroomId = '+sid + ' LIMIT ?,?';
+        count_sql = 'SELECT count(*) AS count FROM  inventory i, wares w, storeroom s WHERE s.id = i.storeroomId AND s.shopId = '+shopId+' AND i.waresId = w.id AND i.storeroomId = '+sid;
     }
 
     var start = (currentPage - 1) * 10;

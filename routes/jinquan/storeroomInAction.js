@@ -22,7 +22,11 @@ module.exports.list = function (req, res, next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
-    service.list(buyer,buyType,buyDate,currentPage, function(err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+
+    service.list(shopId,buyer,buyType,buyDate,currentPage, function(err, results) {
         if (!err) {
             for (var i=0;i<results.data.length;i++) {
                 var dateline = results.data[i].buyDate;
@@ -67,6 +71,9 @@ module.exports.list = function (req, res, next) {
  */
 module.exports.preAdd = function (req, res, next) {
 
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     service.getBuyTypeClassify(function (err, buyTypeClassify) {
 
         if (!err) {
@@ -75,7 +82,7 @@ module.exports.preAdd = function (req, res, next) {
             service.getInTypeClassify(function(err, inTypeClassify) {
                 if (!err) {
                     data.inTypeClassify = inTypeClassify;
-                    storeroomService.getAllStorerooms(function(err, storerooms) {
+                    storeroomService.getAllStorerooms(shopId,function(err, storerooms) {
                         if (!err) {
                             data.storerooms = storerooms;
                             distributorService.getAllDistributors(function (err, distributors) {

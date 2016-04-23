@@ -22,7 +22,10 @@ module.exports.list = function (req, res, next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
-    service.list(outType,oper,outDate,currentPage,function (err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+    service.list(shopId,outType,oper,outDate,currentPage,function (err, results) {
 
         if (!err) {
             for (var i=0;i<results.data.length;i++) {
@@ -59,13 +62,15 @@ module.exports.list = function (req, res, next) {
  * @param res
  */
 module.exports.preAdd = function (req, res, next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
 
     service.getOutTypeClassify(function (err, outTypeClassify) {
 
         if (!err) {
             var data = {};
             data.outTypeClassify = outTypeClassify;
-            storeroomService.getAllStorerooms(function (err, storerooms) {
+            storeroomService.getAllStorerooms(shopId,function (err, storerooms) {
 
                 if (!err) {
                     data.storerooms = storerooms;

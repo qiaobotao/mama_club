@@ -9,7 +9,7 @@ var moment = require('moment');
 var mainInTypeClassifyId = require('../../config').mainClassifyId.inType;
 var mainBuyTypeClassifyId = require('../../config').mainClassifyId.buyType;
 
-module.exports.list = function (buyer,buyType,buyDate,currentPage,cb) {
+module.exports.list = function (shopId,buyer,buyType,buyDate,currentPage,cb) {
 
     var parm = "WHERE s.buyer LIKE '%"+buyer+"%' ";
 
@@ -21,11 +21,11 @@ module.exports.list = function (buyer,buyType,buyDate,currentPage,cb) {
         parm = parm + " AND s.buyDate >="+buyDate;
     }
 
-    var sql_count = 'SELECT count(*) as count FROM storeroomInLog s '+parm+'  ORDER BY dateline DESC';
+    var sql_count = "SELECT count(*) as count FROM storeroomInLog s, storeroom st "+parm+" AND s.storeroomId = st.id AND st.shopId = "+shopId+"   ORDER BY s.dateline DESC";
     var start = (currentPage - 1) * 10;
     var end = 10;
 
-    var sql_data = 'SELECT s.*, c.id AS inid, c.name AS inname, cc.id AS buyid, cc.name AS buyName, st.name AS storeroomName FROM storeroomInLog AS s, systemClassify AS c, systemClassify cc, storeroom st '+parm+' AND s.inType = c.id AND s.buyType = cc.id AND s.storeroomId = st.id ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, c.id AS inid, c.name AS inname, cc.id AS buyid, cc.name AS buyName, st.name AS storeroomName FROM storeroomInLog AS s, systemClassify AS c, systemClassify cc, storeroom st '+parm+' AND s.inType = c.id AND s.buyType = cc.id AND s.storeroomId = st.id AND st.shopId = '+shopId+' ORDER BY s.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
