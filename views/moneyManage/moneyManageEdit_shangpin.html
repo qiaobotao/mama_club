@@ -8,6 +8,7 @@
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="application/javascript" src="../../js/layer/layer.js"></script>
     <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -96,8 +97,8 @@
                 $('#actualMoney').val("0");
             }else{
                 //实付金额应该等于活动后应收金额
-                if($('#activityActualMoney').val() != $('#actualMoney').val()){
-                    parent.layer.alert('"实付金额"应该等于"活动后应收金额"',{icon: 2});
+                if($('#finalActualMoney').val() != $('#actualMoney').val()){
+                    parent.layer.alert('"实付金额"应该等于"最终应收"',{icon: 2});
                     return;
                 }
             }
@@ -150,10 +151,38 @@
         }
 
         function changeFrom(doc) { //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
-            var type = doc.value;
-            window.location.href = "/jinquan/money_manage_edit?&type="+type;
+            var chargeType = doc.value;
+            window.location.href = "/jinquan/money_manage_edit?&chargeType="+chargeType;
         }
-        //计算每行商品的小计
+
+        //变更付费方式后，对应付金额的的影响
+        function changePayType(){
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                //延期付费，收款状态为未收款
+                //实付金额设为0，并不可编辑
+                $('#actualMoney').attr("disabled",true);
+                $('#actualMoney').val("0");
+            }else{
+                $('#actualMoney').attr("disabled",false);
+            }
+        }
+
+        /**
+         * 这些变量应为数据集合
+         * 定义全局某活动所参与的商品
+         * 定义全局某活动所参与的课程
+         * 定义全局某活动所参与的会员
+         * 定义全局某活动所参与的服务
+         * 定义全局某活动所参与的会员卡种类
+         */
+        var proIds,courseIds,memberIds,serviceIds,memberCardType = "";
+        var inActivity = false;//是否参与活动
+
+        /**
+         * 计算每行商品的小计
+         * 设置应收总金额、活动后金额、活动优惠金额
+         */
         function getSubtotal(){
             var discount = 1;
             //查看所用折扣劵情况
@@ -190,24 +219,21 @@
                 }else{
                     discount = 0;//不参与优惠计算
                 }
-                $('#lessMoney'+i).val("-"+(proCount * proPrice * discount));//当前商品优惠后价格
-                activityDiscountMoney += proCount * proPrice * discount;
+                $('#lessMoney'+i).val("-"+ForDight(proCount * proPrice * discount,2));//当前商品优惠后价格
+                activityDiscountMoney += ForDight(proCount * proPrice * discount,2);
             }
             //设置应收总金额、活动后金额、活动优惠金额
-            $('#receivableMoney').val(receivableMoneys);
-            $('#activityDiscountMoney').val(activityDiscountMoney);
-            $('#activityActualMoney').val(receivableMoneys - activityDiscountMoney);
+            $('#receivableMoney').val(ForDight(receivableMoneys,2));
+            $('#activityDiscountMoney').val(ForDight(activityDiscountMoney,2));
+            var activityActualMoneyVal = receivableMoneys - activityDiscountMoney;
+            $('#activityActualMoney').val(ForDight(activityActualMoneyVal,2));
+
+//            //计算折上折情况
+            var discountsVal = $("#discounts").val();//折上折力度
+
+            $("#discountsMoney").val(ForDight((activityActualMoneyVal*(1-discountsVal)),2));//折扣卡优惠费用
+            $("#finalActualMoney").val(ForDight((activityActualMoneyVal*discountsVal),2));//折上折力度
         }
-        /**
-         * 这些变量应为数据集合
-         * 定义全局某活动所参与的商品
-         * 定义全局某活动所参与的课程
-         * 定义全局某活动所参与的会员
-         * 定义全局某活动所参与的服务
-         * 定义全局某活动所参与的会员卡种类
-         */
-        var proIds,courseIds,memberIds,serviceIds,memberCardType = "";
-        var inActivity = false;//是否参与活动
 
         /**
          * 选择活动后
@@ -283,22 +309,18 @@
                 $('#inActivityId').hide();
                 inActivity = false;
             }
-
-            getSubtotal();
-        }
-
-        function changePayType(){
-            var payType = $('#payType').val();//付费方式
-            if($('#payType').val() == '0'){
-                //延期付费，收款状态为未收款
-                //实付金额设为0，并不可编辑
-                $('#actualMoney').attr("disabled",true);
-                $('#actualMoney').val("0");
-            }else{
-                $('#actualMoney').attr("disabled",false);
+            //判断是否可用折扣卡、或者服务此卡
+            var memberCardTypeArr = memberCardType.split(",");
+//            parent.layer.alert("memberCardType="+memberCardType);
+            var memberType = $("#memberType").val();
+            for(var i = 0 ; i < memberCardTypeArr.length ; i ++){
+                //如果用户有打折卡
+                if(memberCardTypeArr[i] == memberType){
+                    $("#discounts").append("<option value='0.8'>8折</option>");
+                }
             }
+            getSubtotal();//计算每个商品的费用
         }
-
     </script>
 </head>
 
@@ -327,6 +349,7 @@
                 <td class="regTd_r">
                     <input id="memberName" type="text" name="memberName" onfocus="getMenber()" onblur="activationActivity()" />
                     <input id="memberId" name="memberId" type="hidden"/>
+                    <input id="memberType" name="memberType" type="hidden"/>
                     &nbsp;&nbsp;<span id="inActivityId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityId" style="color:#ff0505;display:none">不可参与活动</span>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
@@ -365,10 +388,6 @@
                 <td class="regTd_r">
                     <select id="lessLevel" name="lessLevel" onchange="getSubtotal()">
                         <option value="1" >请选择</option>
-                        <option value="1" >9折扣</option>
-                        <option value="1" >8.5折扣</option>
-                        <option value="1" >8折扣</option>
-                        <option value="1" >7折</option>
                     </select>
                     优惠 <input type="text" name="activityDiscountMoney" id="activityDiscountMoney" style="width: 40px;" readonly/> 元
                 </td>
@@ -383,22 +402,18 @@
                     <input type="text" id="activityActualMoney" name="activityActualMoney" readonly/>
                 </td>
             </tr>
-            <!--
             <tr>
-                <td class="regTd_l">使用卡片：</td>
+                <td class="regTd_l">打折力度：</td>
                 <td class="regTd_r">
-                    <select name="chargeType2">
+                    <select name="discounts" id="discounts" onchange="getSubtotal()">
                         <option value="1" >请选择</option>
-                        <option value="1" >打折卡</option>
-                        <option value="1" >充值卡</option>
                     </select>
                 </td>
                 <td  class="regTd_l">折扣卡优惠：</td>
                 <td class="regTd_r">
-                   50元，应收430
+                   <input type="text" id="discountsMoney" name="discountsMoney" value="0" style="width: 40px;" readonly/>元，最终应收<input type="text" id="finalActualMoney" name="finalActualMoney" value="0" style="width: 60px;" readonly/>
                 </td>
             </tr>
-            -->
             <tr>
                 <td  class="regTd_l">付费方式：</td>
                 <td class="regTd_r">

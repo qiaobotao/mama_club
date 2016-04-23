@@ -23,13 +23,13 @@ var async = require('async');
  * @param state
  * @param cb
  */
-module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,state, cb) {
+module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state, cb) {
     var thisDate = new Date();
     var month = thisDate.getMonth()+1 < 10 ? "0"+(thisDate.getMonth()+1):thisDate.getMonth()+1;
     var day = thisDate.getDate() < 10 ? "0"+thisDate.getDate() : thisDate.getDate();
     var chargeTime = thisDate.getFullYear()+"-"+month+"-"+day;
-    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,state,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -72,14 +72,37 @@ module.exports.insertProsByMoneyManage = function(moneyManageId,proArr, cb) {
  */
 module.exports.delMoneyManage= function (id, cb) {
 
-    var sql = 'DELETE FROM moneyManage WHERE id = ?';
-    db.query(sql, [id], function(cbData, err, rows, fields) {
+    var delMoneyManageSql = 'DELETE FROM moneyManage WHERE id = ?';
+    var delMoneyManageWaresSql = 'DELETE FROM moneyManageWares WHERE moneyManageId = ?';
+
+    async.series({
+        delMoneyManage : function(callback){
+            db.query(delMoneyManageSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delMoneyManageWares : function(callback){
+            db.query(delMoneyManageWaresSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
         if (!err) {
-            cb(null, rows);
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+
 }
 
 /**

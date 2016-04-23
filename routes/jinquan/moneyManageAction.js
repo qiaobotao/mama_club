@@ -91,6 +91,10 @@ module.exports.save = function(req, res, next) {
     var actualMoney = req.body.actualMoney ? req.body.actualMoney : '';//实收金额
     var activityManageId = req.body.availableActivity ? req.body.availableActivity : '';//参与的活动id（如果没选活动不添加即可）
     var activityManageMxId = req.body.lessLevel ? req.body.lessLevel : '';//活动中，选择的优惠方式id
+    var discounts = req.body.discounts ? req.body.discounts : '';//折上折力度
+    var discountsMoney = req.body.discountsMoney ? req.body.discountsMoney : '';//折扣卡优惠费用
+    var finalActualMoney = req.body.finalActualMoney ? req.body.finalActualMoney : '';//折上折力度
+
     var state = "0";
     if(payType != '0'){//不是延迟收费，即为已收费
         state = "1";//1、已收费；0：未收费
@@ -132,7 +136,7 @@ module.exports.save = function(req, res, next) {
     if(id != ""){//只可以修改总费用和状态
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
-        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,state,function(err, results) {
+        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 /**
                  * 1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
