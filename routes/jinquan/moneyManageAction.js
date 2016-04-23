@@ -121,7 +121,7 @@ module.exports.save = function(req, res, next) {
             obj.price = price[i];
             obj.count = count[i];
             obj.subtotal = subtotal[i];
-            obj.discountPrice = discount[i];
+            obj.discount = discount[i];
             proArr.push(obj);
         }
     } else {
