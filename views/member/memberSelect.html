@@ -28,9 +28,12 @@
         window.location.href = '/jinquan/member_select?serialNumber='+serialNumber+'&page='+selectPage+'&memberName='+memberName+'&tel='+tel;
     }
     //选择该商品
-    function select(name,seril){
+    function select(name,seril,type){
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName').value=name;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId').value=seril;
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberType')){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberType').value = type;
+        }
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 
@@ -91,7 +94,7 @@
             <td>
                 <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                     <tr>
-                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].memberName%>','<%=data.data[i].id%>')">选择会员</a>]</div></td>
+                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].memberName%>','<%=data.data[i].id%>','<%=data.data[i].type%>')">选择会员</a>]</div></td>
                     </tr>
                 </table>
             </td>
