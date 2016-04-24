@@ -24,13 +24,32 @@
         var cid = document.getElementById('id').value;
         window.location.href = '/jinquan/wares_select?page='+selectPage+'&name='+name+'&id='+cid;
     }
-    //选择该商品
-    function select(id,name,seril,price){
+    /*
+     选择该商品
+     id:商品id
+     name：商品名称
+     seril:编号
+     price：单价
+     isDiscount：是否允许内购
+     discountPrice：内购价格
+     */
+    function select(id,name,seril,price,isDiscount,discountPrice){
         var index = document.getElementById("index").value;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=id;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=name;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index).value=seril;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=price;
+        //内部价格
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index)){
+            if(isDiscount == 0){
+                //没有特殊的内购价格，内购费用为商品单价
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index).value = price;
+            }else{
+                //有特殊的内购价格
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index).value = discountPrice;
+            }
+        }
+
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 
@@ -78,7 +97,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].name%>','<%=data.data[i].serialNumber%>','<%=data.data[i].price%>')">选择商品</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].name%>','<%=data.data[i].serialNumber%>','<%=data.data[i].price%>','<%=data.data[i].isDiscount%>','<%=data.data[i].discountPrice%>')">选择商品</a>]</div></td>
                         </tr>
                     </table>
                 </td>

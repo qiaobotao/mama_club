@@ -1,10 +1,349 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>增加收费单</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        var iframIndex ;
+        function getWares(index){
+            //iframe层
+            iframIndex = parent.layer.open({
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/wares_select?index='+index, //iframe的url
+                success: function(layero, index){
 
+                },
+                close: function(d){
+
+                }
+            });
+        }
+
+        //员工的选择
+        function getmembers(){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_train?index=', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //提交表单
+        function submitForm(){
+
+            // 判断该表单中 是否有相同的 商品
+            var arr_proId = document.getElementsByName('proId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+
+
+            var arr_proname = document.getElementsByName('proname');
+            for (var i=0;i<arr_proname.length;i++) {
+                if(arr_proname[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_count = document.getElementsByName('count');
+            for (var i=0;i<arr_count.length;i++) {
+                if(arr_count[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_price = document.getElementsByName('price');
+            for (var i=0;i<arr_price.length;i++) {
+                if(arr_price[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品单价不能为空',{icon: 2});
+                    return;
+                }
+            }
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                $('#actualMoney').val("0");
+            }else{
+                //实付金额应该等于内购金额金额
+                if($('#activityActualMoney').val() != $('#actualMoney').val()){
+                    parent.layer.alert('"实付金额"应该等于"内购金额"',{icon: 2});
+                    return;
+                }
+                //为其他一下字段赋值：
+                $('#finalActualMoney').val($('#activityActualMoney').val());//最终应收
+            }
+            document.getElementById("myform").submit();
+
+        }
+
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//商品名称
+            var cell2=row.insertCell(1);//商品编号
+            var cell3=row.insertCell(2);//采购数量
+            var cell4=row.insertCell(3);//商品单价
+            var cell5=row.insertCell(4);//内购单价
+            var cell6=row.insertCell(5);//小计
+            var cell7=row.insertCell(6);//优惠价格
+            var cell8=row.insertCell(7);//删除按钮
+            var cell9=row.insertCell(8);//商品id
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"  readonly/>';
+            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="getSubtotal('+waresIndex+')"/>';
+            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
+            cell5.innerHTML='<input id="insidePrice'+waresIndex+'" name="insidePrice" type="text" class="input5 input_arr" readonly="true"/>';
+            cell6.innerHTML='<input id="subtotal'+waresIndex+'" name="subtotal" type="text" class="input5 input_arr" readonly="true"/>';
+            cell7.innerHTML='<input id="lessMoney'+waresIndex+'" name="lessMoney" type="text" class="input5 input_arr" readonly="true"/>';
+            cell8.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell9.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+            getSubtotal();
+        }
+        //选择会员后处理事件
+        function activationActivity(){
+            inActivity = false;
+            var memberName = $('#memberName').val;
+            if(memberName == ''){
+                $('#availableActivity').attr("disabled",true);
+            }else{
+                $('#availableActivity').attr("disabled",false);
+            }
+            activityPreferential();
+        }
+
+        function changeFrom(doc) { //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+            var chargeType = doc.value;
+            window.location.href = "/jinquan/money_manage_edit?&chargeType="+chargeType;
+        }
+
+        //变更付费方式后，对应付金额的的影响
+        function changePayType(){
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                //延期付费，收款状态为未收款
+                //实付金额设为0，并不可编辑
+                $('#actualMoney').attr("disabled",true);
+                $('#actualMoney').val("0");
+            }else{
+                $('#actualMoney').attr("disabled",false);
+            }
+        }
+
+        /**
+         * 这些变量应为数据集合
+         * 定义全局某活动所参与的商品
+         * 定义全局某活动所参与的课程
+         * 定义全局某活动所参与的会员
+         * 定义全局某活动所参与的服务
+         * 定义全局某活动所参与的会员卡种类
+         */
+        var proIds,courseIds,memberIds,serviceIds,memberCardType = "";
+        var inActivity = false;//是否参与活动
+
+        /**
+         * 计算每行商品的小计
+         * 设置应收总金额、活动后金额、活动优惠金额
+         */
+        function getSubtotal(){
+            var discount = 1;
+            //查看所用折扣劵情况
+            var lessLevel = $('#lessLevel').val() ;//活动打折/减免项目
+            if(inActivity && lessLevel != ''){
+                discount = lessLevel;
+            }else{
+                discount = 0;
+            }
+            //遍历已选择商品，判断每个商品是否可以打折，如果可以，则计算出折扣后金额
+            var receivableMoneys = 0,activityDiscountMoney = 0;//活动优惠价格
+            var arr_proId = document.getElementsByName('proId');
+            for(var i=1;i<=arr_proId.length;i++) {
+                var proId = $('#proId'+i).val();//当前商品id
+                var proCount = $('#count'+i).val();//当前商品购买数量
+                var proPrice = $('#price'+i).val();//当前商品单价
+                $('#subtotal'+i).val(Number(proCount) * Number(proPrice));//当前商品小计
+                receivableMoneys += Number(proCount) * Number(proPrice);
+                if(proCount == ''){
+                    continue;
+                }
+                var activityPro = false;
+                if(proIds != undefined){//没有选择活动时，不计算折扣信息
+                    var activityProIds = proIds.split(",");
+                    for(var p = 0 ; p < activityProIds.length ; p ++){
+                        if(proId == activityProIds[p]){//如果该商品参与活动
+                            activityPro = true;
+                            break;
+                        }
+                    }
+                    if(!activityPro){
+                        discount = 0;//不参与优惠计算
+                    }
+                }else{
+                    discount = 0;//不参与优惠计算
+                }
+                $('#lessMoney'+i).val("-"+ForDight(proCount * proPrice * discount,2));//当前商品优惠后价格
+                activityDiscountMoney += ForDight(proCount * proPrice * discount,2);
+            }
+            //设置应收总金额、活动后金额、活动优惠金额
+            $('#receivableMoney').val(ForDight(receivableMoneys,2));
+            $('#activityDiscountMoney').val(ForDight(activityDiscountMoney,2));
+            var activityActualMoneyVal = receivableMoneys - activityDiscountMoney;
+            $('#activityActualMoney').val(ForDight(activityActualMoneyVal,2));
+
+//            //计算折上折情况
+            var discountsVal = $("#discounts").val();//折上折力度
+
+            $("#discountsMoney").val(ForDight((activityActualMoneyVal*(1-discountsVal)),2));//折扣卡优惠费用
+        }
+
+        /**
+         * 计算活动优惠方法
+         * 1、判断会员是否享受活动折扣
+         * 2、如果享受活动，当选择活动明细后，对应商品明细后计算出“优惠金额”（活动、课程、服务等）
+         * 3、为应收金额、活动后金额、活动优惠金额赋值
+         */
+        function activityPreferential(){
+            var staffId = $('#staffId').val() ;//员工id
+            if(staffId == '' ){
+                //如果员工id或减免力度为空，则不做成处理
+                return false;
+            }
+            //判断会员是否享受折扣活动
+            if(memberIds == undefined){
+                inActivity = false;
+                return false;
+            }
+            getSubtotal();//计算每个商品的费用
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：员工内购
+    </div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/money_manage_save">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">收费项目：</td>
+                <td class="regTd_r">
+                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)">
+                        <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
+                        <option value="2" <%if(chargeType == '2'){%>selected<%}%>>护理收费</option>
+                        <option value="3" <%if(chargeType == '3'){%>selected<%}%>>上课付费</option>
+                        <option value="4" <%if(chargeType == '4'){%>selected<%}%>>仅商品购买</option>
+                        <option value="5" <%if(chargeType == '5'){%>selected<%}%>>仅服务此卡</option>
+                        <option value="6" <%if(chargeType == '6'){%>selected<%}%>>员工内购</option>
+                        <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">员工名称：</td>
+                <td class="regTd_r">
+                    <input id="staffName" type="text" name="staffName" onfocus="getmembers()" onblur="activationActivity()" readonly/>
+                    <input id="staffId" name="staffId" type="hidden"/>
+                </td>
+            </tr>
+        </table>
+
+        <!--商品信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
+        <br>
+        <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>商品名称</td>
+                <td>商品编号</td>
+                <td>采购数量</td>
+                <td>商品单价</td>
+                <td>内购单价</td>
+                <td>小计</td>
+                <td>减免费用</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+            </tr>
+        </table>
+        <!-- 收费信息 start -->
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">应收金额：</td>
+                <td class="regTd_r">
+                    <input type="text" id="receivableMoney" name="receivableMoney" readonly/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">内购金额：</td>
+                <td class="regTd_r">
+                    <input type="text" id="activityActualMoney" name="activityActualMoney" readonly/>
+                    <input type="hidden" id="finalActualMoney" name="finalActualMoney" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">付费方式：</td>
+                <td class="regTd_r">
+                    <select id="payType" name="payType" onchange="changePayType()">
+                        <option value="">请选择</option>
+                        <option value="0">延迟付费</option>
+                        <option value="1">现金</option>
+                        <option value="2">微信</option>
+                        <option value="3">支付宝</option>
+                    </select>
+                </td>
+                <td  class="regTd_l">实付金额：</td>
+                <td class="regTd_r">
+                    <input type="text" id="actualMoney" name="actualMoney"/>
+                </td>
+            </tr>
+        </table>
+        <!-- 收费信息 end -->
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/money_manage_list" class="close"></a></div>
+    </div>
+
+
+</div>
 </body>
 </html>

@@ -48,22 +48,24 @@ module.exports.list = function (req, res, next) {
 module.exports.edit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
-    var chargeType = req.query.chargeType ? req.query.chargeType : '3';//收费类型
+    var chargeType = req.query.chargeType ? req.query.chargeType : '4';//仅购买商品
 
     service.fetchSingleMoneyManage(id, '2016-03-17',function(err, results) {
         if (!err) {
             //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
-            if (chargeType == 1) {//护理收费
-                res.render('moneyManage/moneyManageEdit_huli', {data : results,chargeType:chargeType});
-            } else if (chargeType == 2) {//课程收费
-                res.render('moneyManage/moneyManageEdit_kecheng', {data : results,chargeType:chargeType});
-            } else if (chargeType == 3) {//会员购买商品收费
-                res.render('moneyManage/moneyManageEdit_shangpin', {data : results,chargeType:chargeType});
-            } else if (chargeType == 4) {//购买会员卡
+            if (chargeType == 1) {//购买会员卡
                 res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
-            } else if (chargeType == 5) {//员工内购
+            } else if (chargeType == 2) {//护理收费
+                res.render('moneyManage/moneyManageEdit_huli', {data : results,chargeType:chargeType});
+            } else if (chargeType == 3) {//上课付费
+                res.render('moneyManage/moneyManageEdit_kecheng', {data : results,chargeType:chargeType});
+            } else if (chargeType == 4) {//仅商品购买
+                res.render('moneyManage/moneyManageEdit_shangpin', {data : results,chargeType:chargeType});
+            } else if (chargeType == 5) {//仅服务此卡
+                res.render('moneyManage/moneyManageEdit_service', {data : results,chargeType:chargeType});
+            } else if (chargeType == 6) {//员工内购
                 res.render('moneyManage/moneyManageEdit_neigou', {data : results,chargeType:chargeType});
-            } else if (chargeType == 6) {//会员卡缴费
+            } else if (chargeType == 7) {//会员续费
                 res.render('moneyManage/moneyManageEdit_xufei', {data : results,chargeType:chargeType});
             }
         } else {
@@ -108,6 +110,7 @@ module.exports.save = function(req, res, next) {
 
     var proNo = req.body.proNo ? req.body.proNo : '';//商品id
     var price = req.body.price ? req.body.price : '';//商品单价
+    var insidePrice = req.body.insidePrice ? req.body.insidePrice : '';//内部单价
     var count = req.body.count ? req.body.count : '';//购买数量
     var subtotal = req.body.subtotal ? req.body.subtotal : '';//小计
     var discount = req.body.lessMoney ? req.body.lessMoney : '';//优惠价格
@@ -122,6 +125,7 @@ module.exports.save = function(req, res, next) {
             obj.count = count[i];
             obj.subtotal = subtotal[i];
             obj.discount = discount[i];
+            obj.insidePrice = insidePrice[i];
             proArr.push(obj);
         }
     } else {
@@ -131,6 +135,7 @@ module.exports.save = function(req, res, next) {
         obj.count = count;
         obj.subtotal = subtotal;
         obj.discount = discount;
+        obj.insidePrice = insidePrice;
         proArr.push(obj);
     }
     if(id != ""){//只可以修改总费用和状态
@@ -139,13 +144,13 @@ module.exports.save = function(req, res, next) {
         service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 /**
-                 * 1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+                 * 1：购买会员卡、2：护理收费、3：上课收费、4：仅商品购买、5：仅服务此卡、6：员工内购、7：会员续费
                  * 如果是课程、商品、内购，则需要继续添加商品集合
                  * 如果是护理服务单，还需要往护理服务单中增加一条记录
                  */
                 var addPro = false;
                 var addService = false;
-                if(chargeType == 2 || chargeType == 3 || chargeType == 5){
+                if(chargeType == 2 || chargeType == 3 || chargeType == 4|| chargeType == 6){
                     addPro = true;
                 }
                 if(chargeType == 1){

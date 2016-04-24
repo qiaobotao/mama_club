@@ -78,12 +78,13 @@
                     <td> &nbsp;付费类型：
                         <select name="chargeType" id="chargeType">
                             <option value="">请选择</option>
-                            <option value="1" <%if(data.chargeType == '1'){%>selected<%}%>>护理付费</option>
-                            <option value="2" <%if(data.chargeType == '2'){%>selected<%}%>>上课付费</option>
-                            <option value="3" <%if(data.chargeType == '3'){%>selected<%}%>>购买商品</option>
-                            <option value="4" <%if(data.chargeType == '4'){%>selected<%}%>>购买会员卡</option>
-                            <option value="5" <%if(data.chargeType == '5'){%>selected<%}%>>员工内购</option>
-                            <option value="6" <%if(data.chargeType == '6'){%>selected<%}%>>会员卡续费</option>
+                            <option value="1" <%if(data.chargeType == '1'){%>selected<%}%>>购买会员卡</option>
+                            <option value="2" <%if(data.chargeType == '2'){%>selected<%}%>>护理收费</option>
+                            <option value="3" <%if(data.chargeType == '3'){%>selected<%}%>>上课付费</option>
+                            <option value="4" <%if(data.chargeType == '4'){%>selected<%}%>>仅商品购买</option>
+                            <option value="5" <%if(data.chargeType == '5'){%>selected<%}%>>仅服务此卡</option>
+                            <option value="6" <%if(data.chargeType == '6'){%>selected<%}%>>员工内购</option>
+                            <option value="7" <%if(data.chargeType == '7'){%>selected<%}%>>会员续费</option>
                         </select>
                     </td>
                     <td> &nbsp;购买时间：
@@ -123,23 +124,27 @@
                 var payer,payType = "";//收费项目、收费方式
                 var chargeTypeVal = data.data[i].chargeType;
                 var chargeTypeTxt = "";
+                //1：购买会员卡、2：护理收费、3：上课收费、4：仅商品购买、5：仅服务此卡、6：员工内购、7：会员续费
                 if(chargeTypeVal == 1){
-                    chargeTypeTxt = "护理付费";
-                    payer = data.data[i].memberName;
-                }else if (chargeTypeVal == 2){
-                    chargeTypeTxt = "上课付费";
-                    payer = data.data[i].memberName;
-                }else if (chargeTypeVal == 3){
-                    chargeTypeTxt = "购买商品";
-                    payer = data.data[i].memberName;
-                }else if (chargeTypeVal == 4){
                     chargeTypeTxt = "购买会员卡";
                     payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 2){
+                    chargeTypeTxt = "护理收费";
+                    payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 3){
+                    chargeTypeTxt = "上课收费";
+                    payer = data.data[i].memberName;
+                }else if (chargeTypeVal == 4){
+                    chargeTypeTxt = "仅商品购买";
+                    payer = data.data[i].memberName;
                 }else if (chargeTypeVal == 5){
-                    chargeTypeTxt = "员工内购";
+                    chargeTypeTxt = "仅服务此卡";
                     payer = data.data[i].staffName;
                 }else if (chargeTypeVal == 6){
-                    chargeTypeTxt = "会员卡续费";
+                    chargeTypeTxt = "员工内购";
+                    payer = data.data[i].staffName;
+                }else if (chargeTypeVal == 7){
+                    chargeTypeTxt = "会员续费";
                     payer = data.data[i].memberName;
                 }
                 //处理付费方式
@@ -160,7 +165,7 @@
                 <td><%=chargeTypeTxt%></td>
                 <td><%=data.data[i].chargeTime%></td>
                 <td><%=data.data[i].receivableMoney%></td>
-                <td><%=data.data[i].actualMoney%></td>
+                <td><%=data.data[i].finalActualMoney%></td>
                 <td><%=payType%></td>
                 <td><%if(data.data[i].state == '0'){%>未付款<%}else{%>已付款<%}%></td>
                 <td>

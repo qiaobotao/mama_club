@@ -40,20 +40,16 @@ module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMee
 
 /**
  * 增加收费单中商品列表
- * @param chargeType
- * @param memberId
- * @param staffId
- * @param classMeetId
- * @param serviceId
- * @param state：收费单状态包括：未收费、已收费
+ * @param moneyManageId
+ * @param proArr
  * @param cb
  */
 module.exports.insertProsByMoneyManage = function(moneyManageId,proArr, cb) {
 
-    var sql = 'INSERT INTO moneyManageWares (moneyManageId,waresId,count,price,subtotal,discount) VALUES (?,?,?,?,?,?)';
+    var sql = 'INSERT INTO moneyManageWares (moneyManageId,waresId,count,price,subtotal,discount,insidePrice) VALUES (?,?,?,?,?,?,?)';
     //批量添加收货单中商品列表信息
     async.map(proArr, function(item, callback) {
-        db.query(sql, [moneyManageId,item.waresId,item.count,item.price,item.subtotal,item.discount], function (cbData, err, rows, fields) {
+        db.query(sql, [moneyManageId,item.waresId,item.count,item.price,item.subtotal,item.discount,item.insidePrice], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -138,7 +134,7 @@ module.exports.fetchAllMoneyManage = function(chargeType,startDate,endDate,state
     var sql_count = 'SELECT count(*) as count FROM moneyManage m '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT m.id,m.chargeTime,m.chargeType,m.payType,m.receivableMoney,m.actualMoney,m.state,' +
+    var sql_data = 'SELECT m.id,m.chargeTime,m.chargeType,m.payType,m.receivableMoney,m.actualMoney,m.finalActualMoney,m.state,' +
         '( ' +
         '	select s.`name` from staff s where s.id = m.staffId ' +
         ') as `staffName`, ' +
