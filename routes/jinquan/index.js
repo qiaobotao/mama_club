@@ -44,6 +44,7 @@ var sysRoleAction = require('./sysRoleAction');//角色管理
 var sysUserAction = require('./sysUserAction');//系统用户管理
 var noticeAction = require('./noticeAction');//公告管理
 var punchCardAction = require('./punchCardAction');
+var brandAction = require('./brandAction');
 
 var memberCardAction = require('./memberCardAction');//会员卡管理
 //demo演示
@@ -251,6 +252,16 @@ router.all('/wares_add', waresAction.add);
 router.all('/wares_del', waresAction.del);
 router.all('/wares_select', waresAction.select);
 router.all('/wares_select_in_storeroom', waresAction.selectFromInventory);
+
+// 商标管理
+router.all('/brand_list',brandAction.list);
+router.all('/brand_pre_add',brandAction.preAdd);
+router.all('/brand_add', brandAction.add);
+router.all('/brand_checkname',brandAction.checkName);
+router.all('/brand_browse', brandAction.browse);
+router.all('/brand_del', brandAction.del);
+router.all('/brand_update',brandAction.update);
+router.all('/brand_pre_update', brandAction.preUpdate);
 
 // 库房管理
 router.all('/storeroom_list',storeroomAction.list);

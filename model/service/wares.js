@@ -17,10 +17,10 @@ var async = require('async');
  * @param lowData
  * @param cb
  */
-module.exports.insertWares = function(name, longname, brand, standard, serialNumber, remarks, lowData, cid, cb) {
+module.exports.insertWares = function(name, longname, brand, standard, serialNumber, remarks, lowData, cid,price,isd,dprice, cb) {
 
-    var sql = 'INSERT INTO wares (name, longname, brand, standard, serialNumber, remarks, lowData, classify) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [name, longname, brand, standard, serialNumber, remarks, lowData, cid], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO wares (name, longname, brand, standard, serialNumber, remarks, lowData, classify,price,isDiscount,discountPrice) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [name, longname, brand, standard, serialNumber, remarks, lowData, cid, price, isd, dprice], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

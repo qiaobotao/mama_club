@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>教室列表</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript">
+
+        var replytype = '<%=replytype%>';
+        if (replytype == 'add') {
+            parent.layer.msg('增加成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
+        } else if (replytype == 'update') {
+            parent.layer.msg('修改成功');
+        }
+
+        function search () {
+            var did = document.getElementById('id').value;
+            window.location.href = '/jinquan/brand_list?did='+did;
+        }
+
+        function del (id) {
+            if(confirm('确认删除已选择数据吗?')){
+                window.location.href = '/jinquan/brand_del?id='+id;
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：商标列表
+    </div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td> 经销商名称：<select id="id" name="id">
+                        <option value =""></option>
+                        <%for(var i=0;i<data.distributors.length;i++){%>
+                        <option value ="<%=data.distributors[i].id%>" <%if(data.did == data.distributors[i].id){%>selected<%}%> ><%=data.distributors[i].name%></option>
+                        <%}%>
+                    </select></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+        <div class="but_0"><a href="/jinquan/brand_pre_add" class="bsty0"></a></div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>名称</th>
+                <th>经销商</th>
+                <th>操作</th>
+            </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].dname%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/brand_browse?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/brand_pre_update?id=<%=data.data[i].id%>">修改</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
+        </table>
+        <!-- <%- include ../pagination.html -%>   -->
+        <%- laypage %>
+    </div>
+</div>
+
+</body>
+</html>

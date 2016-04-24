@@ -96,8 +96,12 @@ module.exports.add = function (req, res, next) {
     var standard = req.body.standard ? req.body.standard : '';
     var remarks = req.body.remarks ? req.body.remarks  : '';
     var lowdata = req.body.lowdata ? req.body.lowdata : '';
+    var price = req.body.price ? req.body.price : '';
 
-    service.insertWares(name,longname,brand,standard,serial,remarks,lowdata,cid,function(err, results) {
+    var isd = req.body.isd ? req.body.isd : '';
+    var dprice = req.body.dprice ? req.body.dprice : '';
+
+    service.insertWares(name,longname,brand,standard,serial,remarks,lowdata,cid,price,isd,dprice,function(err, results) {
         if (!err) {
             res.redirect('/jinquan/wares_list?replytype=add');
         } else {

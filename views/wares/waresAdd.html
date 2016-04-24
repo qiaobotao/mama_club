@@ -38,7 +38,15 @@
                 return;
             }
 
+            var isd = document.getElementById("isd").value;
 
+            if (isd ==  1) { //如果可以内购 需要添加内购的值
+                var dprice = document.getElementById("dprice").value;
+                if(dprice == 0) {
+                    alert('请填写折扣价格');
+                    return;
+                }
+            }
             document.getElementById("myform").submit();
         }
     </script>
@@ -87,12 +95,25 @@
             </tr>
             <tr>
                 <td class="regTd_l">备注：</td>
-                <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19"></textarea></td>
+                <td class="regTd_r"><textarea id="remarks" name="remarks" rows="8" cols="19"></textarea></td>
             </tr>
             <tr>
                 <td class="regTd_l">最低库存：</td>
                 <td class="regTd_r"><input id="lowdata" name="lowdata" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
+
+            <tr>
+                <td class="regTd_l">是否内购：</td>
+                <td class="regTd_r"><select id="isd" name="isd">
+                    <option value ="0" >否</option>
+                    <option value ="1" >是</option>
+                </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">内购价格：</td>
+                <td class="regTd_r"><input id="dprice" name="dprice" type="text" class="input5" value="0"/></td>
+            </tr>
+
         </table>
     </form>
     <div class="reg_but">
