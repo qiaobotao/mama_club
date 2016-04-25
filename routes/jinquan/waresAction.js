@@ -174,7 +174,10 @@ module.exports.waresUpdate = function (req, res, next) {
     var lowdata = req.body.lowdata ? req.body.lowdata : '';
     var price = req.body.price ? req.body.price : '';
 
-    service.updateWares(price,id,name,longname,brand,standard,serial,remarks,lowdata,cid, function(err, results) {
+    var isd = req.body.isd ? req.body.isd : '';
+    var dprice = req.body.dprice ? req.body.dprice : '';
+
+    service.updateWares(price,id,name,longname,brand,standard,serial,remarks,lowdata,cid,isd,dprice, function(err, results) {
 
         if (!err) {
             res.redirect('/jinquan/wares_list?replytype=update');
