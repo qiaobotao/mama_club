@@ -12,25 +12,25 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('经销商名称不能为空');
+                parent.layer.alert('经销商名称不能为空',{icon: 2});
                 return;
             }
 
             var principal = document.getElementById('principal').value;
             if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
+                parent.layer.alert('负责人不能为空',{icon: 2});
                 return;
             }
 
             var tel = document.getElementById('tel').value;
             if (!tel || tel.length == 0) {
-                alert('电话不能为空');
+                parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }
 
             var address = document.getElementById('address').value;
             if (!address || address.length == 0) {
-                alert('地址不能为空');
+                parent.layer.alert('地址不能为空',{icon: 2});
                 return;
             }
 

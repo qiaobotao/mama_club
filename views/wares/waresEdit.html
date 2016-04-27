@@ -12,29 +12,29 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('商品名称不能为空');
+                parent.layer.alert('商品名称不能为空',{icon: 2});
                 return;
             }
             var price = document.getElementById("price").value;
             if (!price || price.length == 0) {
-                alert('商品售价不能为空');
+                parent.layer.alert('商品售价不能为空',{icon: 2});
                 return;
             }
             var serial = document.getElementById("serial").value;
             if (!serial || serial.length == 0) {
-                alert('序列号不能为空');
+                parent.layer.alert('序列号不能为空',{icon: 2});
                 return;
             }
 
             var brand = document.getElementById("brand").value;
             if(!brand || brand.length == 0) {
-                alert('商标不能为空');
+                parent.layer.alert('商标不能为空',{icon: 2});
                 return;
             }
 
             var lowdata = document.getElementById("lowdata").value;
             if (!lowdata || lowdata.length == 0) {
-                alert('最低库存量不能为空');
+                parent.layer.alert('最低库存量不能为空',{icon: 2});
                 return;
             }
 

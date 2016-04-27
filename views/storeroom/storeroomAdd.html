@@ -13,22 +13,22 @@
 
             var serial = document.getElementById("serial").value;
             if (!serial || serial.length == 0) {
-                alert('编号不能为空');
+                parent.layer.alert('编号不能为空',{icon: 2});
                 return;
             }
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('库房名称不能为空');
+                parent.layer.alert('库房名称不能为空',{icon: 2});
                 return;
             }
             var address = document.getElementById("address").value;
             if(!address || address.length == 0) {
-                alert('库房地址不能为空');
+                parent.layer.alert('库房地址不能为空',{icon: 2});
                 return;
             }
             var principal = document.getElementById("principal").value;
             if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
+                parent.layer.alert('负责人不能为空',{icon: 2});
                 return;
             }
             document.getElementById("myform").submit();
