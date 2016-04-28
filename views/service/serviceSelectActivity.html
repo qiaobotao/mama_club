@@ -25,11 +25,20 @@
         window.location.href = '/jinquan/service_list?page='+selectPage+'&name='+name+'&id='+cid;
     }
     //选择服务项目
-    function select(name,content,id){
+    function select(name,content,id,price){
         var index = document.getElementById("index").value;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceName'+index).value=name;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceContent'+index).value=content;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId'+index).value=id;
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceName'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceName'+index).value=name;
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceContent'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceContent'+index).value=content;
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId'+index).value=id;
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=price;
+        }
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 
@@ -76,7 +85,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].content%>','<%=data.data[i].id%>')">选择服务</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].name%>','<%=data.data[i].content%>','<%=data.data[i].id%>','<%=data.data[i].price%>')">选择服务</a>]</div></td>
                         </tr>
                     </table>
                 </td>
