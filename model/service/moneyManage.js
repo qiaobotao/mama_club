@@ -13,7 +13,6 @@ var async = require('async');
  * @param memberId
  * @param staffId
  * @param classMeetId
- * @param serviceId
  * @param payType
  * @param receivableMoney
  * @param discountMoney
@@ -23,13 +22,13 @@ var async = require('async');
  * @param state
  * @param cb
  */
-module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state, cb) {
+module.exports.insertMoneyManage = function(chargeType,memberId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state, cb) {
     var thisDate = new Date();
     var month = thisDate.getMonth()+1 < 10 ? "0"+(thisDate.getMonth()+1):thisDate.getMonth()+1;
     var day = thisDate.getDate() < 10 ? "0"+thisDate.getDate() : thisDate.getDate();
     var chargeTime = thisDate.getFullYear()+"-"+month+"-"+day;
-    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO moneyManage (chargeType,memberId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [chargeType,memberId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

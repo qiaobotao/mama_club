@@ -85,7 +85,7 @@ module.exports.save = function(req, res, next) {
     var memberId = req.body.memberId ? req.body.memberId : '';//会员id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var classMeetId = req.body.classMeetId ? req.body.classMeetId : '';//课程id
-    var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
+    //var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
     var chargeType = req.body.chargeType ? req.body.chargeType : '';//收费项目
     var payType = req.body.payType ? req.body.payType : '';//支付方式：现金；充值卡；折扣卡；微信；支付宝
     var receivableMoney = req.body.receivableMoney ? req.body.receivableMoney : '';//应收金额
@@ -141,7 +141,7 @@ module.exports.save = function(req, res, next) {
     if(id != ""){//只可以修改总费用和状态
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
-        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,serviceId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
+        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 /**
                  * 1：购买会员卡、2：护理收费、3：上课收费、4：仅商品购买、5：仅服务此卡、6：员工内购、7：会员续费
@@ -153,7 +153,7 @@ module.exports.save = function(req, res, next) {
                 if(chargeType == 2 || chargeType == 3 || chargeType == 4|| chargeType == 6){
                     addPro = true;
                 }
-                if(chargeType == 1){
+                if(chargeType == 2 || chargeType == 5){
                     addService = true;
                 }
                 if(addPro){//需要添加商品
@@ -166,13 +166,13 @@ module.exports.save = function(req, res, next) {
                     });
                 }
                 if(addService){//添加护理服务单
-                    //service.insertServiceByMoneyManage(results.insertId,proArr,function(err, results) {
-                    //    if (!err) {
-                    //        res.redirect('/jinquan/money_manage_list?replytype=add');
-                    //    } else {
-                    //        next();
-                    //    }
-                    //});
+                    service.insertServiceByMoneyManage(results.insertId,proArr,function(err, results) {
+                        if (!err) {
+                            res.redirect('/jinquan/money_manage_list?replytype=add');
+                        } else {
+                            next();
+                        }
+                    });
                 }
                 //res.redirect('/jinquan/money_manage_list?replytype=add');
             } else {
