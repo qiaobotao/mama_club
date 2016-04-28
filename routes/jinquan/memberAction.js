@@ -201,6 +201,7 @@ module.exports.selectAll = function (req, res, next) {
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
+    var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
 

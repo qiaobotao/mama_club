@@ -153,6 +153,7 @@ router.all('/member_card_del',memberCardAction.del);
 router.all('/member_card_addOrEdit',memberCardAction.addOrEdit);
 router.all('/member_card_show',memberCardAction.show);
 router.all('/member_card_check', memberCardAction.checkResidue);
+router.all('/member_card_select', memberCardAction.select);
 // 活动管理
 router.all('/activity_manage_list',activityManageAction.list);
 router.all('/activity_manage_goAdd',activityManageAction.goAdd);

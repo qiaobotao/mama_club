@@ -95,6 +95,54 @@ module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 
         }
     });
 }
+
+module.exports.fetchAllMemberCardBySelect = function(serialNumber,type,isActivation,currentPage,cb) {
+
+    var parm = " where me.id = m.memberId "
+    if (serialNumber != '')
+        parm += " and me.memberName like '%"+serialNumber+"%'";
+    if (type != '')
+        parm += " and m.type =  "+type;
+    if (isActivation != '')
+        parm += " and m.isActivation =  "+isActivation;
+
+    var sql_count = 'SELECT count(*) FROM memberCard m ,member me '+parm;
+    var start = (currentPage - 1) * 10;
+    var end = 10;
+    var sql_data = 'SELECT m.id,m.serialNumber,m.type,m.parameter5,me.memberName,m.isActivation FROM memberCard m ,member me '+ parm +' LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
 /**
  * 删除
  * @param id

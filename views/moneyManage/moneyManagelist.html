@@ -127,7 +127,7 @@
                 //1：购买会员卡、2：护理收费、3：上课收费、4：仅商品购买、5：仅服务此卡、6：员工内购、7：会员续费
                 if(chargeTypeVal == 1){
                     chargeTypeTxt = "购买会员卡";
-                    payer = data.data[i].memberName;
+                    payer = data.data[i].memberCardName;
                 }else if (chargeTypeVal == 2){
                     chargeTypeTxt = "护理收费";
                     payer = data.data[i].memberName;

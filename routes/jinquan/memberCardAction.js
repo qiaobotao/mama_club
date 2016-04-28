@@ -6,6 +6,39 @@ var moment = require('moment');
 /**
  * Created by wangjuan on 16/1/13.
  */
+
+/**
+ * 查询会员卡——用于会员卡收费
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.select = function (req, res, next) {
+    var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
+    var type = req.query.type ? req.query.type : '';
+    var isActivation = req.query.isActivation ? req.query.isActivation : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+    var index = req.query.index ? req.query.index : '';
+    var url = '/jinquan'+req.url;
+
+    service.fetchAllMemberCardBySelect(serialNumber,type,isActivation,currentPage, function (err, results) {
+        if (!err) {
+            results.serialNumber = serialNumber;
+            results.type = type;
+            results.isActivation = isActivation;
+            results.currentPage = currentPage;
+            res.render('memberCard/memberCardSelect', {data : results,index:index, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
+        } else {
+            next();
+        }
+    });
+
+}
+
+
+
 /**
  * 获取会员卡类型列表
  * @param req

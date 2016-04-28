@@ -83,6 +83,7 @@ module.exports.save = function(req, res, next) {
 
     var id = req.body.id ? req.body.id : '';//收费单id
     var memberId = req.body.memberId ? req.body.memberId : '';//会员id
+    var memberCardId = req.body.memberCardId ? req.body.memberCardId : '';//会员卡id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var classMeetId = req.body.classMeetId ? req.body.classMeetId : '';//课程id
     //var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
@@ -141,7 +142,7 @@ module.exports.save = function(req, res, next) {
     if(id != ""){//只可以修改总费用和状态
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
-        service.insertMoneyManage(chargeType,memberId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
+        service.insertMoneyManage(chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 /**
                  * 1：购买会员卡、2：护理收费、3：上课收费、4：仅商品购买、5：仅服务此卡、6：员工内购、7：会员续费
@@ -173,6 +174,9 @@ module.exports.save = function(req, res, next) {
                             next();
                         }
                     });
+                }
+                if(!addPro && !addService){//两个都没有，则直接跳转
+                    res.redirect('/jinquan/money_manage_list?replytype=add');
                 }
                 //res.redirect('/jinquan/money_manage_list?replytype=add');
             } else {
