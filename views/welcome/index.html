@@ -23,7 +23,10 @@
                     '<%=user.shortcutMenuId2 %>'==menus[i].id ||
                     '<%=user.shortcutMenuId3 %>'==menus[i].id ||
                     '<%=user.shortcutMenuId4 %>'==menus[i].id){
-                $("#shortcutTdId").append("<a href='"+menus[i].url+"' target='mainFrame'>"+menus[i].textCh+"</a> &nbsp; &nbsp;");
+//                $("#shortcutTdId").append("<a href='"+menus[i].url+"' target='mainFrame'>"+menus[i].textCh+"</a> &nbsp; &nbsp;");
+//                $("#shortcutTdId").append('<li><a href="#" class="active">门店列表</a></li>');
+//                $("#nav").append('<li><a href="#" class="">门店列表</a></li>');
+                $("#nav").append('<li><a href="'+menus[i].url+'" class="" target="mainFrame">'+menus[i].textCh+'</a></li>');
             }
         }
     });
@@ -37,7 +40,15 @@
                 <td >
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td id="shortcutTdId">
+                            <td>
+                                <ul id="nav">
+                                    <!--
+                                    <li><a href="#" class="active">门店列表</a></li>
+                                    <li><a href="#">教室管理</a></li>
+                                    <li><a href="#">排课情况</a></li>
+                                    <li><a href="#">员工列表</a></li>
+                                    -->
+                                </ul>
                             </td>
                             <td class="top_c" style="text-align:right">
                                 欢迎  <%=user.userName%>  使用金泉平台！
