@@ -46,7 +46,7 @@ module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStar
 
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseDate,c.courseTimeStart,c.courseTimeEnd,f.name as teacherName,a.courseConfirm FROM classMeet a inner join member b inner join course c inner join courseTeacher d   INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.id,a.memberId,a.courseId,b.memberName,b.tel,c.courseDate,c.courseTimeStart,c.courseTimeEnd,c.name `courseName`,f.name as teacherName,a.courseConfirm,c.price  FROM classMeet a inner join member b inner join course c inner join courseTeacher d   INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

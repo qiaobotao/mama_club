@@ -8,6 +8,7 @@
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="application/javascript" src="../../js/layer/layer.js"></script>
     <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -31,15 +32,15 @@
             });
         }
 
-        function getMenber(){//选择会员
+        function getCourse(){//选择课程
             //iframe层
-            iframIndex = parent.layer.open({
+            courseIfram = parent.layer.open({
                 type: 2,
-                title: '选择会员信息',
+                title: '选择课程信息',
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/member_all_select', //iframe的url
+                content: '/jinquan/class_meet_select_list', //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
@@ -95,9 +96,9 @@
             if($('#payType').val() == '0'){
                 $('#actualMoney').val("0");
             }else{
-                //实付金额应该等于活动后应收金额
-                if($('#activityActualMoney').val() != $('#actualMoney').val()){
-                    parent.layer.alert('"实付金额"应该等于"活动后应收金额"',{icon: 2});
+                //实付金额应该等于最终应收
+                if($('#finalActualMoney').val() != $('#actualMoney').val()){
+                    parent.layer.alert('"实付金额"应该等于"最终应收"',{icon: 2});
                     return;
                 }
             }
@@ -194,12 +195,13 @@
             //遍历已选择商品，判断每个商品是否可以打折，如果可以，则计算出折扣后金额
             var receivableMoneys = 0,activityDiscountMoney = 0;//活动优惠价格
             var arr_proId = document.getElementsByName('proId');
-            for(var i=1;i<=arr_proId.length;i++) {
+            for(var i=1;i<=arr_proId.length;i++) {/*计算每个商品小计费用 start*/
                 var proId = $('#proId'+i).val();//当前商品id
                 var proCount = $('#count'+i).val();//当前商品购买数量
                 var proPrice = $('#price'+i).val();//当前商品单价
-                $('#subtotal'+i).val(Number(proCount) * Number(proPrice));//当前商品小计
-                receivableMoneys += Number(proCount) * Number(proPrice);
+                $('#subtotal'+i).val(ForDight(Number(proCount) * Number(proPrice),2));//当前商品小计
+//                alert("receivableMoneys="+receivableMoneys);
+                receivableMoneys += ForDight(Number(proCount) * Number(proPrice),2);
                 if(proCount == ''){
                     continue;
                 }
@@ -218,13 +220,26 @@
                 }else{
                     discount = 0;//不参与优惠计算
                 }
-                $('#lessMoney'+i).val("-"+(proCount * proPrice * discount));//当前商品优惠后价格
-                activityDiscountMoney += proCount * proPrice * discount;
-            }
-            //设置应收总金额、活动后金额、活动优惠金额
-            $('#receivableMoney').val(receivableMoneys);
+                $('#lessMoney'+i).val("-"+ForDight((proCount * proPrice * discount),2));//当前商品优惠后价格
+                activityDiscountMoney += ForDight(proCount * proPrice * discount,2);
+            }/*计算每个商品小计费用 end*/
+
+//            if(!$("#inActivityCourseId").is(":hidden")){//该课程参与本次活动
+            $('#courseDiscountPrice').val($("#coursePrice").val() * lessLevel);
+//            }
+            //设置应收总金额、商品优惠费用、优惠总金额（课程优惠金额+商品优惠总金额）
+            receivableMoneys = receivableMoneys+Number($("#coursePrice").val());
+            $('#receivableMoney').val(receivableMoneys);//总金额等于商品小计+课程费用
             $('#activityDiscountMoney').val(activityDiscountMoney);
-            $('#activityActualMoney').val(receivableMoneys - activityDiscountMoney);
+            $('#activityActualMoney').val(receivableMoneys - activityDiscountMoney-Number($('#courseDiscountPrice').val()));//优惠后应收金额
+
+
+//            //计算折上折情况
+            var discountsVal = Number($("#discounts").val());//折上折力度
+//            alert("discountsVal="+discountsVal+"===="+'$("#activityActualMoney").val()='+$("#activityActualMoney").val()+"--最终应收："+($("#activityActualMoney").val()*discountsVal));
+            $("#discountsMoney").val(ForDight(($("#activityActualMoney").val()*(1-discountsVal)),2));//折扣卡优惠费用=活动优惠后费用*（1-折扣）
+//            $("#finalActualMoney").val(ForDight((($("#activityActualMoney").val()*discountsVal),2)));//折上折力度=活动优惠后费用*折扣
+            $("#finalActualMoney").val(ForDight($("#activityActualMoney").val()*discountsVal),2);//折上折力度=活动优惠后费用*折扣
         }
 
         /**
@@ -246,11 +261,11 @@
                 success: function (result) {
                     var activityManageMxList =  result.activityManageMx;
                     var activityData =  result.activity;
-                    proIds = activityData.proIds;
-//                    courseIds = activityData.courseIds;
-                    memberIds = activityData.memberIds;
-//                    serviceIds = activityData.serviceIds;
-                    memberCardType = activityData.memberCardType;
+                    proIds = activityData.proIds;//商品ids
+                    courseIds = activityData.courseIds;//课程ids
+                    memberIds = activityData.memberIds;//会员ids
+//                    serviceIds = activityData.serviceIds;//服务ids
+                    memberCardType = activityData.memberCardType;//参与活动的会员卡
                     //for each遍历往“减免力度”下拉框中添加
                     jQuery("#lessLevel").empty();
                     jQuery("#lessLevel").append("<option value=''>请选择</option>");
@@ -284,7 +299,7 @@
                 return false;
             }
             var memberIdArr = memberIds.split(",");
-            var memberHaveActivity = false;
+            var memberHaveActivity,courseHaveActivity = false;
             for(var m = 0 ; m < memberIdArr.length ; m ++){
                 memberId = $('#memberId').val() ;//会员id
                 if(memberIdArr[m] == memberId) {
@@ -301,7 +316,34 @@
                 $('#inActivityId').hide();
                 inActivity = false;
             }
+            var courseId = $("#courseId").val();//课程id
+            var courseIdArr = courseIds.split(",");
+            for(var c = 0 ; c < courseIdArr.length ; c ++){
+                if(courseIdArr[c] == courseId){
+                    courseHaveActivity = true;
+                    //该课程参与活动，按照所选折扣卡进行收费
+                    $('#inActivityCourseId').show();
+                    $('#outActivityCourseId').hide();
+                }
+            }
+            //显示会员是否可参与活动
+            if(!courseHaveActivity){
+                $('#outActivityCourseId').show();
+                $('#inActivityCourseId').hide();
+                inActivity = false;
+            };
 
+            //判断是否可用折扣卡、或者服务此卡
+            var memberCardTypeArr = memberCardType.split(",");
+            var memberType = $("#memberType").val();
+            $("#discounts").removeAllListeners;
+            $("#discounts").append("<option value='0.8'>8折</option>");
+            for(var i = 0 ; i < memberCardTypeArr.length ; i ++){
+                //如果用户有打折卡
+                if(memberCardTypeArr[i] == memberType){
+//                    $("#discounts").append("<option value='0.8'>8折</option>");
+                }
+            }
             getSubtotal();
         }
     </script>
@@ -310,7 +352,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：购买商品
+        当前位置：课程收费
     </div>
 </div>
 <div class="center_con">
@@ -329,11 +371,38 @@
                         <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">课程名称：</td>
+                <td class="regTd_r">
+                    <input id="courseName" type="text" name="courseName" onfocus="getCourse()" onblur="activationActivity()" />
+                    <input id="courseId" name="courseId" type="hidden"/>
+                    <!-- 预约课程id -->
+                    <input id="classMeetId" name="classMeetId" type="hidden"/>
+                    &nbsp;&nbsp;<span id="inActivityCourseId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityCourseId" style="color:#ff0505;display:none">不可参与活动</span>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
                 <td  class="regTd_l">会员名称：</td>
                 <td class="regTd_r">
-                    <input id="memberName" type="text" name="memberName" onfocus="getMenber()" onblur="activationActivity()" />
+                    <input id="memberName" type="text" name="memberName" readonly/>
                     <input id="memberId" name="memberId" type="hidden"/>
+                    <input id="memberType" name="memberType" type="hidden"/>
                     &nbsp;&nbsp;<span id="inActivityId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityId" style="color:#ff0505;display:none">不可参与活动</span>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+                <td  class="regTd_l">课程时间：</td>
+                <td class="regTd_r">
+                    <input id="courseTime" type="text" name="courseTime" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">课程费用：</td>
+                <td class="regTd_r">
+                    <input id="coursePrice" type="text" name="coursePrice" readonly/>
+                </td>
+                <td class="regTd_l">课程优惠：</td>
+                <td class="regTd_r">
+                    <input id="courseDiscountPrice" type="text" name="courseDiscountPrice" readonly value="0"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
             </tr>
@@ -376,11 +445,11 @@
                         <option value="1" >8折扣</option>
                         <option value="1" >7折</option>
                     </select>
-                    优惠 <input type="text" name="activityDiscountMoney" id="activityDiscountMoney" style="width: 40px;" readonly/> 元
+                    商品优惠 <input type="text" name="activityDiscountMoney" id="activityDiscountMoney" style="width: 40px;" readonly/> 元
                 </td>
             </tr>
             <tr>
-                <td class="regTd_l">应收金额：</td>
+                <td class="regTd_l">应收总金额：</td>
                 <td class="regTd_r">
                     <input type="text" id="receivableMoney" name="receivableMoney" readonly/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
@@ -389,22 +458,18 @@
                     <input type="text" id="activityActualMoney" name="activityActualMoney" readonly/>
                 </td>
             </tr>
-            <!--
             <tr>
-                <td class="regTd_l">使用卡片：</td>
+                <td class="regTd_l">打折力度：</td>
                 <td class="regTd_r">
-                    <select name="chargeType2">
+                    <select name="discounts" id="discounts" onchange="getSubtotal()">
                         <option value="1" >请选择</option>
-                        <option value="1" >打折卡</option>
-                        <option value="1" >充值卡</option>
                     </select>
                 </td>
                 <td  class="regTd_l">折扣卡优惠：</td>
                 <td class="regTd_r">
-                   50元，应收430
+                    <input type="text" id="discountsMoney" name="discountsMoney" value="0" style="width: 40px;" readonly/>元，最终应收<input type="text" id="finalActualMoney" name="finalActualMoney" value="0" style="width: 60px;" readonly/>
                 </td>
             </tr>
-            -->
             <tr>
                 <td  class="regTd_l">付费方式：</td>
                 <td class="regTd_r">

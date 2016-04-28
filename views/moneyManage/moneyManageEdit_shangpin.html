@@ -226,7 +226,7 @@
             $('#receivableMoney').val(ForDight(receivableMoneys,2));
             $('#activityDiscountMoney').val(ForDight(activityDiscountMoney,2));
             var activityActualMoneyVal = receivableMoneys - activityDiscountMoney;
-            $('#activityActualMoney').val(ForDight(activityActualMoneyVal,2));
+            $('#activityActualMoney').val(ForDight(activityActualMoneyVal,2));//活动后应收金额
 
 //            //计算折上折情况
             var discountsVal = $("#discounts").val();//折上折力度
@@ -311,7 +311,6 @@
             }
             //判断是否可用折扣卡、或者服务此卡
             var memberCardTypeArr = memberCardType.split(",");
-//            parent.layer.alert("memberCardType="+memberCardType);
             var memberType = $("#memberType").val();
             for(var i = 0 ; i < memberCardTypeArr.length ; i ++){
                 //如果用户有打折卡

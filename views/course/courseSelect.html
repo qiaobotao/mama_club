@@ -21,8 +21,14 @@
     function select(courseName,courseId,courseTime,coursePrice){
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseName').value=courseName;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseId').value=courseId;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseTimeStart').value=courseTime;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('coursePrice').value=coursePrice;
+        //课程时间
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseTimeStart')){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseTimeStart').value=courseTime;
+        }
+        //课程费用
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('coursePrice')){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('coursePrice').value=coursePrice;
+        }
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 

@@ -160,3 +160,35 @@ module.exports.checkIsSelectCourse = function (req, res, next) {
         }
     });
 }
+
+
+/**
+ * 获取预约课程列表
+ * @param req
+ * @param res
+ */
+module.exports.classMeetSelectList = function (req, res) {
+    var memberName = req.query.memberName ? req.query.memberName : '';
+    var courseName = req.query.courseName ? req.query.courseName : '';
+    var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+    var index = req.query.index ? req.query.index : "";
+    currentPage =currentPage<1?1:currentPage;
+    // 接收操作参数
+    var replytype = req.query.replytype ? req.query.replytype : '';
+    var url = '/jinquan'+req.url;
+    service.fetchAllClassMeet(memberName,courseName,courseTimeStart,currentPage, function (err, results) {
+        if (!err) {
+            results.memberName = memberName;
+            results.courseName = courseName;
+            results.courseTimeStart = courseTimeStart;
+            results.currentPage=currentPage;
+            res.render('classMeet/classMeetSelectList', {data : results, replytype : replytype, index:index,laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+}

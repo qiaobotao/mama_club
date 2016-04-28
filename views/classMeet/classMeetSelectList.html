@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>课程报名</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function search () {
+            var selectPage = document.getElementById('page').value;
+            var memberName = document.getElementById('memberName').value;
+            var courseName = document.getElementById('courseName').value;
+            var courseTimeStart = document.getElementById('courseTimeStart').value;
+            window.location.href = '/jinquan/class_meet_select_list?memberName='+memberName+'&page='+selectPage+'&courseName='+courseName+ '&courseTimeStart='+courseTimeStart;
+        }
+
+        //选择该课程
+        function select(id,memberId,memberName,courseId,courseName,price){
+            var index = document.getElementById("index").value;
+            if(index == '') {
+                //会员id
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId').value = memberId;
+                }
+                //会员名称
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName').value = memberName;
+                }
+                //课程id
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseId')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseId').value = courseId;
+                }
+                //课程名称
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseName')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('courseName').value = courseName;
+                }
+                //预约课程id
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('classMeetId')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('classMeetId').value = id;
+                }
+                //课程费用
+                if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('coursePrice')){
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('coursePrice').value = price;
+                }
+            }
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：课程报名列表
+    </div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <input id="index" name="index" type="hidden" value="<%=index%>"/>
+                        <input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>&nbsp;
+                        客户名称：<input id="memberName" name="memberName" type="text" class="input5" value="<%=data.memberName%>"/>
+                    </td>
+                    <td>&nbsp;课程名称：<input id="courseName" name="courseName" type="text" class="input5" value="<%=data.courseName%>"/></td>
+                    <td> &nbsp;上课时间：<input id="courseTimeStart" name="courseTimeStart" type="text" class="input5" value="<%=data.courseTimeStart%>" onclick="laydate()"/></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>客户名称</th>
+                <th>课程名称</th>
+                <th>电话</th>
+                <th>课程时间</th>
+                <th>技师</th>
+                <th>上课状态</th>
+                <th>操作</th>
+            </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].memberName%></td>
+                <td><%=data.data[i].courseName%></td>
+                <td><%=data.data[i].tel%></td>
+                <td><%=data.data[i].courseDate%></td>
+                <td><%=data.data[i].teacherName%></td>
+                <td>
+                    <%
+                    var courseConfirm ="";
+                    if( data.data[i].courseConfirm=='yes'){
+                    courseConfirm="已上课";
+                    }
+                    else if(data.data[i].courseConfirm=='no')
+                    {
+                    courseConfirm="未上课";
+                    }
+                    %>
+                    <%=courseConfirm%>
+                </td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;
+                                [
+                                    <a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].memberId%>','<%=data.data[i].memberName%>','<%=data.data[i].courseId%>','<%=data.data[i].courseName%>','<%=data.data[i].price%>')">选择课程</a>
+                                ]
+                            </div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
+        </table>
+        <%- laypage %>
+    </div>
+</div>
+
+</body>
+</html>
