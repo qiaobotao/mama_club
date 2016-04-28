@@ -112,7 +112,7 @@ module.exports.fetchSingleActivityManage =function (id, cb) {
     var sql = 'SELECT * FROM activityManage WHERE id = ?';
     var detail_sql = 'SELECT * FROM activityManageMX Where activityId = ?';
     var proIds_sql ="select * from wares where 1=1";
-    var courseIds_sql ="SELECT a.*,b.teacherName FROM course a ,courseTeacher b WHERE a.id=b.courseId";
+    var courseIds_sql ="SELECT a.*,s.`name` as teacherName FROM course a ,courseTeacher b ,staff s WHERE a.id=b.courseId and b.teacherId = s.id";
     var memberIds_sql ="SELECT  id,memberName,tel FROM member where 1=1";
     var serviceIds_sql ="SELECT  id,name,content FROM  service  where 1=1";
 
