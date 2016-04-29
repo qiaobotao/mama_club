@@ -165,7 +165,7 @@
                 <td class="regTd_l">所属菜单：</td>
                 <td class="regTd_r">
                     <input id="menuId" name="menuId" type="hidden" value="<%=data.menuId%>" />
-                    <input id="menuName" name="menuName" type="text" class="input5" value="<%=data.menuId%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input id="menuName" name="menuName" type="text" class="input5" value="<%=data.menuId%>" readonly />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                     <a id="menuBtn" href="#" onclick="showMenu(); return false;">选择</a>
                     <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
                         <ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>
@@ -175,7 +175,7 @@
                 <td class="regTd_r"><input id="orderId" name="orderId" type="text" class="input5"  value="<%=data.orderId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">功能标示：</td>
+                <td class="regTd_l">功能地址：</td>
                 <td class="regTd_r" colspan="3"><input id="url" name="url" type="text" value="<%=data.url%>" class="input5" style="width: 70%;" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>

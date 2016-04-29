@@ -53,7 +53,7 @@ module.exports.fetchSysMenus = function(pages, count, cb) {
 
     var start = pages * count;
     var end = start + count;
-    var sql = 'SELECT * FROM sysMenu ORDER BY dateline DESC LIMIT ?, ?';
+    var sql = 'SELECT * FROM sysMenu ORDER BY parentId , orderId LIMIT ?, ?';
     db.query(sql, [start, end], function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
