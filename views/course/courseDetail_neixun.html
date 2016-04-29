@@ -54,44 +54,18 @@
                             <td width="10%">选择授课时间段：</td>
                             <td width="40%">
                                 <select id="startTime" name="startTime" class="select2" style="width:100px;">
-                                    <option value="0" <%if(data.course.courseTimeStart == 0){%>selected<%}%>>8:00</option>
-                                    <option value="1" <%if(data.course.courseTimeStart == 1){%>selected<%}%>>8:30</option>
-                                    <option value="2" <%if(data.course.courseTimeStart == 2){%>selected<%}%>>9:00</option>
-                                    <option value="3" <%if(data.course.courseTimeStart == 3){%>selected<%}%>>9:30</option>
-                                    <option value="4" <%if(data.course.courseTimeStart == 4){%>selected<%}%>>10:00</option>
-                                    <option value="5" <%if(data.course.courseTimeStart == 5){%>selected<%}%>>10:30</option>
-                                    <option value="6" <%if(data.course.courseTimeStart == 6){%>selected<%}%>>11:00</option>
-                                    <option value="7" <%if(data.course.courseTimeStart == 7){%>selected<%}%>>11:30</option>
-                                    <option value="8" <%if(data.course.courseTimeStart == 8){%>selected<%}%>>12:00</option>
-                                    <option value="9" <%if(data.course.courseTimeStart == 9){%>selected<%}%>>14:00</option>
-                                    <option value="10" <%if(data.course.courseTimeStart == 10){%>selected<%}%>>14:30</option>
-                                    <option value="11" <%if(data.course.courseTimeStart == 11){%>selected<%}%>>15:00</option>
-                                    <option value="12" <%if(data.course.courseTimeStart == 12){%>selected<%}%>>15:30</option>
-                                    <option value="13" <%if(data.course.courseTimeStart == 13){%>selected<%}%>>16:00</option>
-                                    <option value="14" <%if(data.course.courseTimeStart == 14){%>selected<%}%>>16:30</option>
-                                    <option value="15" <%if(data.course.courseTimeStart == 15){%>selected<%}%>>17:00</option>
-                                    <option value="16" <%if(data.course.courseTimeStart == 16){%>selected<%}%>>17:30</option>
-                                    <option value="17" <%if(data.course.courseTimeStart == 17){%>selected<%}%>>18:00</option>
+                                    <%
+                                    for(var i = 0 ; i < courseDate.length ; i ++){
+                                        %><option value="<%=i%>" <%if(data.course.courseTimeStart==i){%>selected<%}%>><%=courseDate[i]%></option></th><%
+                                    }
+                                    %>
                                 </select> --
                                 <select id="endTime" name="endTime" class="select2" style="width:100px;">
-                                    <option value="0" <%if(data.course.courseTimeEnd == 0){%>selected<%}%>>8:00</option>
-                                    <option value="1" <%if(data.course.courseTimeEnd == 1){%>selected<%}%>>8:30</option>
-                                    <option value="2" <%if(data.course.courseTimeEnd == 2){%>selected<%}%>>9:00</option>
-                                    <option value="3" <%if(data.course.courseTimeEnd == 3){%>selected<%}%>>9:30</option>
-                                    <option value="4" <%if(data.course.courseTimeEnd == 4){%>selected<%}%>>10:00</option>
-                                    <option value="5" <%if(data.course.courseTimeEnd == 5){%>selected<%}%>>10:30</option>
-                                    <option value="6" <%if(data.course.courseTimeEnd == 6){%>selected<%}%>>11:00</option>
-                                    <option value="7" <%if(data.course.courseTimeEnd == 7){%>selected<%}%>>11:30</option>
-                                    <option value="8" <%if(data.course.courseTimeEnd == 8){%>selected<%}%>>12:00</option>
-                                    <option value="9" <%if(data.course.courseTimeEnd == 9){%>selected<%}%>>14:00</option>
-                                    <option value="10" <%if(data.course.courseTimeEnd == 10){%>selected<%}%>>14:30</option>
-                                    <option value="11" <%if(data.course.courseTimeEnd == 11){%>selected<%}%>>15:00</option>
-                                    <option value="12" <%if(data.course.courseTimeEnd == 12){%>selected<%}%>>15:30</option>
-                                    <option value="13" <%if(data.course.courseTimeEnd == 13){%>selected<%}%>>16:00</option>
-                                    <option value="14" <%if(data.course.courseTimeEnd == 14){%>selected<%}%>>16:30</option>
-                                    <option value="15" <%if(data.course.courseTimeEnd == 15){%>selected<%}%>>17:00</option>
-                                    <option value="16" <%if(data.course.courseTimeEnd == 16){%>selected<%}%>>17:30</option>
-                                    <option value="17" <%if(data.course.courseTimeEnd == 17){%>selected<%}%>>18:00</option>
+                                    <%
+                                    for(var i = 0 ; i < courseDate.length ; i ++){
+                                    %><option value="<%=i%>" <%if(data.course.courseTimeEnd==i){%>selected<%}%>><%=courseDate[i]%></option></th><%
+                                    }
+                                    %>
                                 </select>
 
                             </td>

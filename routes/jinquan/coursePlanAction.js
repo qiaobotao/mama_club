@@ -3,6 +3,7 @@
  */
 
 var service = require('../../model/service/course');
+var consts = require('../../model/utils/consts');
 
 module.exports.list = function (req, res, next) {
 
@@ -12,7 +13,7 @@ module.exports.list = function (req, res, next) {
     var shopId = req.session.user.shopId;
     service.getCoursePlanList(shopId,function (err, results) {
         if (!err) {
-            res.render('coursePlan/coursePlanList',{data : results,replytype:replytype});
+            res.render('coursePlan/coursePlanList',{data : results,replytype:replytype,"courseDate":consts.COURSE_DATE});
         } else {
             res.render('error', {error : err});
         }
@@ -35,13 +36,13 @@ module.exports.preadd = function (req, res, next) {
         if (!err) {
             obj.coursePlan = results;
             if (type == 1) {
-                res.render('coursePlan/coursePlanAdd_neixun', {result : obj});
+                res.render('coursePlan/coursePlanAdd_neixun', {result : obj,"courseDate":consts.COURSE_DATE});
             } else if (type == 2) {
-                res.render('coursePlan/coursePlanAdd_zhuanye', {result : obj});
+                res.render('coursePlan/coursePlanAdd_zhuanye', {result : obj,"courseDate":consts.COURSE_DATE});
             } else if (type == 3) {
-                res.render('coursePlan/coursePlanAdd_fumu', {result : obj});
+                res.render('coursePlan/coursePlanAdd_fumu', {result : obj,"courseDate":consts.COURSE_DATE});
             } else if (type == 4) {
-                res.render('coursePlan/coursePlanAdd_huiyi', {result : obj});
+                res.render('coursePlan/coursePlanAdd_huiyi', {result : obj,"courseDate":consts.COURSE_DATE});
             }
 
         } else {
@@ -231,7 +232,7 @@ module.exports.edit = function (req, res, next) {
                         results.courseId = courseId;
                         results.date = date;
                         console.log(results);
-                        res.render('coursePlan/coursePlanEdit_neixun', {result: results});
+                        res.render('coursePlan/coursePlanEdit_neixun', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
                         next();
                     }
@@ -251,7 +252,7 @@ module.exports.edit = function (req, res, next) {
                         results.classRoomId = classRoomId;
                         results.courseId = courseId;
                         results.date = date;
-                        res.render('coursePlan/coursePlanEdit_zhuanye', {result: results});
+                        res.render('coursePlan/coursePlanEdit_zhuanye', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
                         next();
                     }
@@ -271,7 +272,7 @@ module.exports.edit = function (req, res, next) {
                         results.classRoomId = classRoomId;
                         results.courseId = courseId;
                         results.date = date;
-                        res.render('coursePlan/coursePlanEdit_fumu', {result: results});
+                        res.render('coursePlan/coursePlanEdit_fumu', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
                         next();
                     }
@@ -292,7 +293,7 @@ module.exports.edit = function (req, res, next) {
                         results.classRoomId = classRoomId;
                         results.courseId = courseId;
                         results.date = date;
-                        res.render('coursePlan/coursePlanEdit_huiyi', {result: results});
+                        res.render('coursePlan/coursePlanEdit_huiyi', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
                         next();
                     }

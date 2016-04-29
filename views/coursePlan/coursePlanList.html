@@ -138,6 +138,12 @@
                 <tr>
                     <th width="10%">日期</th>
                     <th width="10%">教室编码</th>
+                    <%
+                    for(var i = 0 ; i < courseDate.length-1 ; i ++){
+                        %><th width="7%"><%=courseDate[i]%>~<%=courseDate[i+1]%></th><%
+                    }
+                    %>
+                    <!--
                     <th width="7%">8:00~8:30</th>
                     <th width="7%">8:30~9:00</th>
                     <th width="7%">9:00~9:30</th>
@@ -154,6 +160,7 @@
                     <th width="7%">16:30~17:00</th>
                     <th width="7%">17:00~17:30</th>
                     <th width="7%">17:30~18:00</th>
+                    -->
                 </tr>
                 </thead>
                 <tbody>
@@ -175,7 +182,7 @@
                         %>
                         <td><%=data.classRoomData[j].name%></td>
                         <%
-                        for(var day = 0 ; day < 16 ; day++){//从8：00~8：30到16：30~17：00，共12个区域，用12表示
+                        for(var day = 0 ; day < courseDate.length - 1 ; day++){//从8：00~8：30到16：30~17：00，共12个区域，用12表示
                             var isHaveCourse = '';
                             for(var k = 0 ; k < data.courseData.length ; k ++){//遍历每个课程
                                 if(data.dataArr[i] == data.courseData[k].courseDate && data.classRoomData[j].id == data.courseData[k].classroomId){//如果遍历的时间和当前课程日期相同

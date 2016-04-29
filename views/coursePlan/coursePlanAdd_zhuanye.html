@@ -212,7 +212,12 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="bordered">
                         <thead>
                         <tr>
-
+                            <%
+                            for(var i = 0 ; i < courseDate.length-1 ; i ++){
+                            %><th><%=courseDate[i]%>~<%=courseDate[i+1]%></th><%
+                            }
+                            %>
+                            <!--
                             <th>8:00~8:30</th>
                             <th>8:30~9:00</th>
                             <th>9:00~9:30</th>
@@ -229,12 +234,13 @@
                             <th>16:30~17:00</th>
                             <th>17:00~17:30</th>
                             <th>17:30~18:00</th>
+                            -->
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <%
-                            for(var j = 0; j < 16 ; j ++){
+                            for(var j = 0; j < courseDate.length-1 ; j ++){
                             var isHaveCourse = '';
                             var tdClass = "classDefault";
                             for(var i = 0 ; i < result.coursePlan.length ; i ++){
@@ -285,6 +291,12 @@
                             <td width="10%">选择授课时间段：</td>
                             <td width="40%">
                                 <select id="startTime" name="startTime" class="select2" style="width:100px;">
+                                    <%
+                                    for(var i = 0 ; i < courseDate.length ; i ++){
+                                        %><option value="<%=i%>"><%=courseDate[i]%></option></th><%
+                                    }
+                                    %>
+                                <!--
                                     <option value="0">8:00</option>
                                     <option value="1">8:30</option>
                                     <option value="2">9:00</option>
@@ -303,8 +315,15 @@
                                     <option value="15">17:00</option>
                                     <option value="16">17:30</option>
                                     <option value="17">18:00</option>
+                                    -->
                                 </select> --
                                 <select id="endTime" name="endTime" class="select2" style="width:100px;">
+                                    <%
+                                    for(var i = 0 ; i < courseDate.length ; i ++){
+                                        %><option value="<%=i%>"><%=courseDate[i]%></option></th><%
+                                    }
+                                    %>
+                                    <!--
                                     <option value="0">8:00</option>
                                     <option value="1">8:30</option>
                                     <option value="2">9:00</option>
@@ -323,6 +342,7 @@
                                     <option value="15">17:00</option>
                                     <option value="16">17:30</option>
                                     <option value="17">18:00</option>
+                                    -->
                                 </select>
 
                             </td>

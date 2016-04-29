@@ -91,7 +91,7 @@ module.exports.detail = function (req, res, next) {
     if (type == 1) {
         service.browse_neixun(id,function(err, results){
             if (!err) {
-                res.render('course/courseDetail_neixun', {data : results});
+                res.render('course/courseDetail_neixun', {data : results,courseDate:consts.COURSE_DATE});
             } else {
                 next();
             }
@@ -101,7 +101,7 @@ module.exports.detail = function (req, res, next) {
        service.browse_zhuanye(id,function(err, results) {
 
            if (!err) {
-               res.render('course/courseDetail_zhuanye', {data : results});
+               res.render('course/courseDetail_zhuanye', {data : results,courseDate:consts.COURSE_DATE});
 
            } else {
                next();
@@ -112,7 +112,7 @@ module.exports.detail = function (req, res, next) {
 
         service.browse_fumu(id,function(err, results) {
             if (!err) {
-                res.render('course/courseDetail_fumu', {data : results});
+                res.render('course/courseDetail_fumu', {data : results,courseDate:consts.COURSE_DATE});
             }  else {
                 next();
             }
@@ -122,7 +122,7 @@ module.exports.detail = function (req, res, next) {
     } else if (type ==4) { // 会议
         service.browse_huiyi(id,function(err, results) {
             if (!err) {
-                res.render('course/courseDetail_huiyi', {data : results});
+                res.render('course/courseDetail_huiyi', {data : results,courseDate:consts.COURSE_DATE});
             } else {
                 next();
             }
