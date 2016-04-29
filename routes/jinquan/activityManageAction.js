@@ -10,6 +10,9 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/activityManage');
+var consts = require('../../model/utils/consts');
+
+
 module.exports.list = function (req, res) {
     var activityName = req.query.activityName ? req.query.activityName : '';
     var activityType = req.query.activityType ? req.query.activityType : '';
@@ -44,7 +47,7 @@ module.exports.list = function (req, res) {
  * @param res
  */
 module.exports.goAdd = function (req, res) {
-    res.render('activityManage/activityManageAdd');
+    res.render('activityManage/activityManageAdd',{"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
 }
 
 
@@ -287,7 +290,7 @@ module.exports.preEdit = function(req, res, next) {
     var id = req.query.id ? req.query.id : '';
     service.fetchSingleActivityManage(id, function(err, results) {
         if (!err) {
-            res.render('activityManage/activityManageEdit', {data : results});
+            res.render('activityManage/activityManageEdit', {data : results,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
 
         } else {
             next();
