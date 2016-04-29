@@ -1,6 +1,7 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/membercardtype');
+var consts = require('../../model/utils/consts');
 /**
  * Created by wangjuan on 16/2/21.
  */
@@ -41,8 +42,7 @@ module.exports.list = function (req, res,next) {
  * @param res
  */
 module.exports.goAdd = function(req, res) {
-
-    res.render('memberCardType/memberCardTypeAdd' );
+    res.render('memberCardType/memberCardTypeAdd',{"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
 
 };
 
@@ -58,7 +58,7 @@ module.exports.goEdit = function(req, res,next) {
     service.fetchSingleMembercardtype(id, function(err, results) {
         if (!err) {
             var memberCardType = results.length == 0 ? null : results[0];
-            res.render('memberCardType/memberCardTypeEdit', {memberCardType : memberCardType});
+            res.render('memberCardType/memberCardTypeEdit', {memberCardType : memberCardType,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
         } else {
             console.log(err.message);
             next();
