@@ -4,6 +4,7 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var consts = require('../../model/utils/consts');
 
 module.exports.selectAllCourse = function(currentPage,cb) {
 
@@ -50,7 +51,7 @@ module.exports.selectAllCourse = function(currentPage,cb) {
 
 module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb) {
 
-    var parm = ' where  a.classroomId=b.id  and c.courseId=a.id and f.id=c.teacherId';
+    var parm = ' where  a.classroomId=b.id ';
     if(courseType!='')
     {
         parm+='  and  a.courseType ='+courseType ;
@@ -59,12 +60,17 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
     {
         parm+= ' and a.id in('+courseIds+')';
     }
-    var sql_count = 'SELECT count(*) as count FROM course a ,classroom b, courseTeacher c, staff f '+ parm;
+    var sql_count = 'SELECT count(*) as count FROM course a ,classroom b '+ parm;
 
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = "SELECT a.id,a.name,a.classroomId,a.courseDate,concat(a.courseTimeStart,'~',a.courseTimeEnd) as courseTime,a.courseType,"
-        +' a.content,a.memberCount,a.price, b.name as classroomName, f.name as teacherName FROM course a ,classroom b, courseTeacher c, staff f '+ parm +' LIMIT ?,?';
+    //var sql_data = "SELECT a.id,a.name,a.classroomId,a.courseDate,a.courseTimeStart,a.courseTimeEnd,concat(a.courseTimeStart,'~',a.courseTimeEnd) as courseTime,a.courseType,"
+    var sql_data = "SELECT a.id,a.name,a.classroomId,a.courseDate,a.courseTimeStart,a.courseTimeEnd,a.courseType,"
+        +' a.content,a.memberCount,a.price, b.name as classroomName, ' +
+        '(' +
+        '   select GROUP_CONCAT(f.name) from staff f,courseTeacher c  where f.id = c.teacherId and c.courseId=a.id ' +
+        ') as teacherName ' +
+        ' FROM course a ,classroom b '+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -90,7 +96,13 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
             });
         }
     },function(err, results) {
-
+        var dataArr = results.data;
+        for(var i = 0 ; i< dataArr.length ; i ++){
+            var dataObj = dataArr[i];
+            dataObj.courseTimeStart = consts.COURSE_DATE[dataObj.courseTimeStart];
+            dataObj.courseTimeEnd = consts.COURSE_DATE[dataObj.courseTimeEnd];
+            dataObj.courseTime = dataObj.courseTimeStart +"~"+ dataObj.courseTimeEnd;
+        }
         if (!err) {
             cb (null, results);
         } else {

@@ -8,6 +8,7 @@
  */
 var service = require('../../model/service/course');
 var laypage = require('laypage');
+var consts = require('../../model/utils/consts');
 
 module.exports.list = function (req, res,next) {
 
@@ -53,8 +54,7 @@ module.exports.select = function (req, res, next) {
     service.selectAllCourse(currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
-
-            var courseDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+            var courseDate = consts.COURSE_DATE;
             res.render('course/courseSelect', {data : results,courseDate:courseDate});
         } else {
             next();

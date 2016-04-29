@@ -83,9 +83,8 @@ module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStar
 
 module.exports.fetchSingleClassMeet =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.memberName,c.name as courseName,c.courseTimeStart,c.price as coursePrice FROM classMeet a inner join member b inner join course c on(a.memberId=b.id and a.courseId=c.id) WHERE a.id = ?';
+    var sql = 'SELECT a.*,b.memberName,c.name as courseName,c.courseTimeStart,c.courseTimeEnd,c.price as coursePrice FROM classMeet a inner join member b inner join course c on(a.memberId=b.id and a.courseId=c.id) WHERE a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
-
         if (!err) {
             cb(null, rows);
         } else {

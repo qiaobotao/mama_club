@@ -9,6 +9,7 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/classMeet');
+var consts = require('../../model/utils/consts');
 
 module.exports.list = function (req, res) {
     var memberName = req.query.memberName ? req.query.memberName : '';
@@ -108,6 +109,9 @@ module.exports.show = function(req, res, next) {
     service.fetchSingleClassMeet(id, function(err, results) {
         if (!err) {
             var classMeet = results.length == 0 ? null : results[0];
+            if(classMeet != null){
+                classMeet.courseTimeStart = consts.COURSE_DATE[classMeet.courseTimeStart] + "~" +consts.COURSE_DATE[classMeet.courseTimeEnd];
+            }
             res.render('classMeet/classMeetDetail', {classMeet : classMeet});
         } else {
             next();
@@ -121,6 +125,9 @@ module.exports.preEdit = function(req, res, next) {
     service.fetchSingleClassMeet(id, function(err, results) {
         if (!err) {
             var classMeet = results.length == 0 ? null : results[0];
+            if(classMeet != null){
+                classMeet.courseTimeStart = consts.COURSE_DATE[classMeet.courseTimeStart] + "~" +consts.COURSE_DATE[classMeet.courseTimeEnd];
+            }
             res.render('classMeet/classMeetEdit', {classMeet : classMeet});
         } else {
             next();

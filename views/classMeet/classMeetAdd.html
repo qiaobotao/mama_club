@@ -38,7 +38,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/course_select', //iframe的url
+                content: '/jinquan/course_select_activity?courseType=3', //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
@@ -109,7 +109,7 @@
                 data: {'courseId':$("#courseId").val(),'memberId':$("#memberId").val() },
                 success: function (result) {
                     if(result.flag){
-                        parent.layer.alert('此课程已修过，请重新选择课程！',{icon: 2});
+                        parent.layer.alert('该会员已预约此课程！',{icon: 2});
                     }
                 }
             });
@@ -149,8 +149,14 @@
                 <td class="regTd_r"><input id="externPersons" name="externPersons" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">是否可带宝宝：</td>
-                <td class="regTd_r"><input id="weatherLeadBaby" name="weatherLeadBaby" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">是否带宝宝：</td>
+                <td class="regTd_r">
+                    <select id="weatherLeadBaby" name="weatherLeadBaby">
+                        <option>请选择</option>
+                        <option value="1">带</option>
+                        <option value="0">不带</option>
+                    </select>
+                            &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">备注：</td>
                 <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
