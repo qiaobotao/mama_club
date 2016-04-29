@@ -3,6 +3,7 @@ var laypage = require('laypage');
 var service = require('../../model/service/membercard');
 var service1 = require('../../model/service/membercardtype');
 var moment = require('moment');
+var consts = require('../../model/utils/consts');
 /**
  * Created by wangjuan on 16/1/13.
  */
@@ -142,7 +143,7 @@ module.exports.goAdd = function(req, res,next) {
     service1.fetchMembercardtypeByStatus(status, function (err, results) {
         if (!err) {
             results.type = type;
-            res.render('memberCard/memberCardAdd' , {data : results});
+            res.render('memberCard/memberCardAdd' , {data : results,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
         } else {
             console.log(err.message);
             next();
@@ -164,7 +165,7 @@ module.exports.goEdit = function(req, res,next) {
             service1.fetchMembercardtypeByStatus(status, function (err, datas) {
                 if (!err && datas.length != 0) {
                     var memberCard = results.length == 0 ? null : results[0];
-                    res.render('memberCard/memberCardEdit', {memberCard: memberCard, data: datas});
+                    res.render('memberCard/memberCardEdit', {memberCard: memberCard, data: datas,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
                 }
                 else {
                     next();
