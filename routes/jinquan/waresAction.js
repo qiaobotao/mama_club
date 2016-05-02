@@ -4,6 +4,7 @@
  */
 
 var service = require('../../model/service/wares');
+var brandService = require('../../model/service/brand');
 var laypage = require('laypage');
 /**
  * 商品展示首页list
@@ -77,10 +78,18 @@ module.exports.modular = function (req, res, next) {
 module.exports.preAdd = function (req, res, next) {
 
     service.getWaresClassify(function(err, results) {
-
+        var data = {};
         if (!err) {
-            res.render('wares/waresAdd', {data : results});
-        } else {
+            data.classify = results;
+            brandService.getAllBrands(function(err,brands) {
+                if(!err) {
+                    data.brands = brands;
+                    res.render('wares/waresAdd', {data : data});
+                } else {
+                    next();
+                }
+            });
+        }  else {
             next();
         }
     })
@@ -144,12 +153,17 @@ module.exports.preEdit = function (req, res, next) {
             var wares = results[0];
             service.getWaresClassify(function(err, classifys) {
                 if (!err) {
-                    res.render('wares/waresEdit', {wares : wares, classifys : classifys});
+                    brandService.getAllBrands(function(err, brands) {
+                        if (!err) {
+                            res.render('wares/waresEdit', {wares : wares, classifys : classifys, brand : brands});
+                        } else {
+                            next();
+                        }
+                    })
                 } else {
                    next();
                 }
             })
-
         } else {
             next();
         }
@@ -278,6 +292,34 @@ module.exports.selectFromInventory = function (req, res, next) {
         }
 
     });
+}
+
+module.exports.check_serial= function(req, res, next) {
+
+    var serial = req.body.serial? req.body.serial : '';
+
+    service.check_serial(serial,function(err, results) {
+
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            console.log(err);
+            next();
+        }
+    })
+}
+
+module.exports.check_name = function(req, res, next) {
+
+    var name = req.body.name ? req.body.name : '';
+    service.check_name(name,function(err, results) {
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            console.log(err);
+            next();
+        }
+    })
 }
 
 

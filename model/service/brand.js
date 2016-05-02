@@ -143,3 +143,16 @@ module.exports.update = function (id, name, did, remarks, cb) {
 
     });
 }
+
+module.exports.getAllBrands = function (cb) {
+
+    var sql = "SELECT * FROM brand ORDER BY id desc";
+    db.query(sql,[],function(cbData, err, rows, fields){
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}

@@ -67,7 +67,11 @@
         </tr>
         <tr>
             <td class="regTd_l">商标：</td>
-            <td class="regTd_r"><input id="brand" name="brand" type="text" class="input5"  value="<%=wares.brand%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            <td class="regTd_r"><select id="brand" name="brand">
+                <%for(var i=0;i<brand.length;i++){%>
+                <option value ="<%=brand[i].id%>" <%if(wares.brand == brand[i].id){%>selected<%}%> ><%=brand[i].name%></option>
+                <%}%>
+            </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
         </tr>
         <tr>
             <td class="regTd_l">商品分类：</td>

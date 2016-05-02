@@ -192,7 +192,7 @@ module.exports.getAllStorerooms = function (shopId,cb) {
  */
 module.exports.checkSeril = function(shopId,seril,cb) {
 
-    var checkSQL = 'SELECT * FROM storeroom WHERE serialNumber = ? AND shopId =?';
+    var checkSQL = 'SELECT * FROM storeroom WHERE serial = ? AND shopId =?';
     db.query(checkSQL, [seril,shopId], function (cbData, err, rows, filelds) {
         if(!err) {
             if (rows.length != 0) {

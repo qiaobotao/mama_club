@@ -5,6 +5,7 @@
     <title>添加商品</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -49,6 +50,35 @@
             }
             document.getElementById("myform").submit();
         }
+
+        function checkSeri() {
+            $.ajax({
+                type: "post",
+                url: "/jinquan/wares_checkseril",
+                data: {'serial':$("#serial").val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById('serial').value = '';
+                        parent.layer.alert('该序列号占用',{icon: 2});
+                    }
+                }
+            });
+        }
+
+        function checkName() {
+            $.ajax({
+                type: "post",
+                url: "/jinquan/wares_checkname",
+                data: {'name':$("#name").val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById('name').value = '';
+                        parent.layer.alert('该名称占用',{icon: 2});
+                    }
+                }
+            });
+        }
+
     </script>
 </head>
 
@@ -63,11 +93,11 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">序列号：</td>
-                <td class="regTd_r"><input id="serial" name="serial" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serial" name="serial" type="text" class="input5" onblur="checkSeri()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">商品名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" onblur="checkName()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">商品别名：</td>
@@ -79,13 +109,17 @@
             </tr>
             <tr>
                 <td class="regTd_l">商标：</td>
-                <td class="regTd_r"><input id="brand" name="brand" class="input5" type="text"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><select id="brand" name="brand">
+                    <%for(var i=0;i<data.brands.length;i++){%>
+                    <option value ="<%=data.brands[i].id%>" ><%=data.brands[i].name%></option>
+                    <%}%>
+                </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">商品分类：</td>
                 <td class="regTd_r"><select id="cid" name="cid">
-                    <%for(var i=0;i<data.length;i++){%>
-                    <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
+                    <%for(var i=0;i<data.classify.length;i++){%>
+                    <option value ="<%=data.classify[i].id%>" ><%=data.classify[i].name%></option>
                     <%}%>
                 </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>

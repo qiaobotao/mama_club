@@ -254,6 +254,8 @@ router.all('/wares_add', waresAction.add);
 router.all('/wares_del', waresAction.del);
 router.all('/wares_select', waresAction.select);
 router.all('/wares_select_in_storeroom', waresAction.selectFromInventory);
+router.all('/wares_checkseril', waresAction.check_serial);
+router.all('/wares_checkname',waresAction.check_name);
 
 // 商标管理
 router.all('/brand_list',brandAction.list);

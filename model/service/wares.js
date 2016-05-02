@@ -46,7 +46,7 @@ module.exports.list = function(name,cid,currentPage, cb) {
     var sql_count = 'SELECT count(*) as count FROM wares s '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname FROM wares AS s, systemClassify AS c '+parm+' AND s.classify = c.id ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname, b.name AS bname FROM wares AS s, systemClassify AS c,brand b '+parm+' AND s.brand = b.id AND s.classify = c.id ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -132,7 +132,7 @@ module.exports.delWares = function (id, cb) {
  */
 module.exports.fetchSingleWares =function (id, cb) {
 
-    var sql = 'SELECT w.*,c.id AS cid, c.name AS cname FROM wares w, systemClassify c  WHERE  w.classify = c.id AND w.id = ?';
+    var sql = 'SELECT w.*,c.id AS cid, c.name AS cname, b.name AS bname FROM wares w, systemClassify c, brand b  WHERE  w.classify = c.id AND w.id = ? AND w.brand = b.id';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {
@@ -208,6 +208,37 @@ module.exports.listByInventory = function(sid,name,cid,currentPage, cb) {
 
         if (!err) {
             cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+module.exports.check_serial = function (serial,cb) {
+
+    var sql = 'SELECT * FROM wares WHERE serialNumber = ?';
+    db.query(sql,[serial],function(cbData, err, rows, fields) {
+        if (!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
+        } else {
+            cb(err);
+        }
+    });
+}
+
+module.exports.check_name = function (name,cb) {
+    var sql = 'SELECT * FROM wares WHERE name = ?';
+    db.query(sql,[name],function(cbData, err, rows, fields) {
+        if (!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
         } else {
             cb(err);
         }
