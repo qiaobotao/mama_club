@@ -53,17 +53,18 @@ module.exports.updateServiceMeet = function(specified,staffId,id,tel,name,age,pr
 module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPage,cb) {
 
     var myDate = new Date();
-    var parm = "where tel like '%" + tel + "%' and name like '%" + name
-        + "%' and meetTime like '%" + meetTime + "%'" ;
+    var parm = "where sm.tel like '%" + tel + "%' and sm.name like '%" + name+ "%'" +
+        " and sm.meetTime like '%" + meetTime + "%'" +
+        " and sm.serviceId = s.id " ;
 
     if(status!="")
     {
-        parm+=" and status = " + status ;
+        parm+=" and sm.status = " + status ;
     }
-    var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
+    var sql_count = 'SELECT count(*) as count FROM serviceMeet sm ,service s '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT * FROM serviceMeet '+parm+'  ORDER BY dateline DESC   LIMIT ?,?';
+    var sql_data = "SELECT sm.*,s.name as 'serviceName',s.price as 'servicePrice',(select s.name from staff s where s.id = sm.staffId) as staffName FROM serviceMeet sm ,service s "+parm+"  ORDER BY sm.dateline DESC   LIMIT ?,?";
 
     async.series({
         totalPages : function(callback){

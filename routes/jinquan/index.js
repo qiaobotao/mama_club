@@ -58,14 +58,14 @@ router.all('/welcome',welcomeAction.Welcome);
 /*********************门店管理****************************/
 // 门店管理
 router.all('/shop_list',shopAction.list);
-router.all('/shop_pre_add',shopAction.preAdd);
-router.all('/shop_add',shopAction.add);
-router.all('/shop_del', shopAction.del);
-router.all('/shop_browse',shopAction.browse);
-router.all('/shop_pre_edit',shopAction.preEdit);
-router.all('/shop_update',shopAction.update);
-router.all('/check_shopseril',shopAction.checkSeril);
-router.all('/check_shopname', shopAction.checkName);
+router.all('/shop_pre_add',shopAction.preAdd);//添加门店
+router.all('/shop_add',shopAction.add);//保存门店
+router.all('/shop_del', shopAction.del);//删除门店
+router.all('/shop_browse',shopAction.browse);//门店浏览
+router.all('/shop_pre_edit',shopAction.preEdit);//编辑门店
+router.all('/shop_update',shopAction.update);//修改门店
+router.all('/check_shopseril',shopAction.checkSeril);//检查门店号是否重复
+router.all('/check_shopname', shopAction.checkName);//检查门店名称是否重复
 
 /*********************教室及课程管理****************************/
 // 教室管理
