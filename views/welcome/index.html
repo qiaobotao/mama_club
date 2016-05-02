@@ -19,13 +19,17 @@
     $(document).ready(function(){
         var mm = '';
         for(var i = 0 ; i < menus.length ; i ++){
-            if('<%=user.shortcutMenuId1 %>'==menus[i].id ||
-                    '<%=user.shortcutMenuId2 %>'==menus[i].id ||
-                    '<%=user.shortcutMenuId3 %>'==menus[i].id ||
-                    '<%=user.shortcutMenuId4 %>'==menus[i].id){
-//                $("#shortcutTdId").append("<a href='"+menus[i].url+"' target='mainFrame'>"+menus[i].textCh+"</a> &nbsp; &nbsp;");
-//                $("#shortcutTdId").append('<li><a href="#" class="active">门店列表</a></li>');
-//                $("#nav").append('<li><a href="#" class="">门店列表</a></li>');
+            if('<%=user.shortcutMenuId1 %>'==menus[i].id){
+                $("#nav").append('<li><a href="'+menus[i].url+'" class="" target="mainFrame">'+menus[i].textCh+'</a></li>');
+            }
+
+            if('<%=user.shortcutMenuId2 %>'==menus[i].id ){
+                $("#nav").append('<li><a href="'+menus[i].url+'" class="" target="mainFrame">'+menus[i].textCh+'</a></li>');
+            }
+            if('<%=user.shortcutMenuId3 %>'==menus[i].id ){
+                $("#nav").append('<li><a href="'+menus[i].url+'" class="" target="mainFrame">'+menus[i].textCh+'</a></li>');
+            }
+            if('<%=user.shortcutMenuId4 %>'==menus[i].id ){
                 $("#nav").append('<li><a href="'+menus[i].url+'" class="" target="mainFrame">'+menus[i].textCh+'</a></li>');
             }
         }

@@ -18,6 +18,7 @@
         var replytype = '<%=replytype%>';
         if (replytype == 'OK') {
             parent.layer.msg('设置成功');
+            window.parent.location.href="/jinquan";
         }
         var setting = {
             view: {
@@ -56,24 +57,27 @@
                 nodesObj.name = fatherMenus[j].textCh;
                 zNodes[index]= nodesObj;
                 index++;
-                for(var k = j ; k < childMenus.length ; k ++){
+                for(var k = 0 ; k < childMenus.length ; k ++){
                     if(childMenus[k].parentId == fatherMenus[j].id){
                         if(childMenus[k].id == '<%=shortcutMenuId1%>'){
                             var menuIdObj = $("#menuId1");
                             menuIdObj.attr("value", childMenus[k].id);
                             var menuNameObj = $("#menuName1");
                             menuNameObj.attr("value", childMenus[k].textCh);
-                        }else if(childMenus[k].id == '<%=shortcutMenuId2%>'){
+                        }
+                        if(childMenus[k].id == '<%=shortcutMenuId2%>'){
                             var menuIdObj = $("#menuId2");
                             menuIdObj.attr("value", childMenus[k].id);
                             var menuNameObj = $("#menuName2");
                             menuNameObj.attr("value", childMenus[k].textCh);
-                        }else if(childMenus[k].id == '<%=shortcutMenuId3%>'){
+                        }
+                        if(childMenus[k].id == '<%=shortcutMenuId3%>'){
                             var menuIdObj = $("#menuId3");
                             menuIdObj.attr("value", childMenus[k].id);
                             var menuNameObj = $("#menuName3");
                             menuNameObj.attr("value", childMenus[k].textCh);
-                        }else if(childMenus[k].id == '<%=shortcutMenuId4%>'){
+                        }
+                        if(childMenus[k].id == '<%=shortcutMenuId4%>'){
                             var menuIdObj = $("#menuId4");
                             menuIdObj.attr("value", childMenus[k].id);
                             var menuNameObj = $("#menuName4");
