@@ -13,15 +13,15 @@ var async = require('async');
  * @param type
  * @param cb
  */
-module.exports.insertNotice = function(title,content,type,updateDate, cb) {
+module.exports.insertNotice = function(title,startDate,endDate,content,type,updateDate, cb) {
     //往公告主表中增加一条记录
-    var insertSql = 'INSERT INTO notice (`title`,`content`,`type`,updateDate,dateline) VALUES (?,?,?,?,?)';
+    var insertSql = 'INSERT INTO notice (`title`,startDate,endDate,`content`,`type`,updateDate,dateline) VALUES (?,?,?,?,?,?,?)';
     //查询系统用户所对应的id
     var selectUserSql = "select id from sysUser where activity = 'Y'";
 
     async.series({
         newNotice : function(callback){
-            db.query(insertSql, [title,content,type,updateDate,new Date().getTime()], function (cbData, err, rows, fields) {
+            db.query(insertSql, [title,startDate,endDate,content,type,updateDate,new Date().getTime()], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {
@@ -176,7 +176,9 @@ module.exports.fetchAllNotice = function(title,type,currentPage,cb) {
  */
 module.exports.fetchAllNoticeByUser = function(userId,currentPage,cb) {
 
-    var parm = "where s.noticeId = n.id and s.userId = ? ";
+    var parm = "where s.noticeId = n.id and s.userId = ? " +
+        "and str_to_date(n.startDate, '%Y-%m-%d') <= sysdate() " +
+        "and str_to_date(n.endDate, '%Y-%m-%d') >= sysdate()";
     var parmArr = new Array();
     var parmCountArr = new Array();
     parmArr.push(userId);
@@ -229,10 +231,10 @@ module.exports.fetchAllNoticeByUser = function(userId,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateNotice = function(id, title,content,type,updateDate, cb) {
+module.exports.updateNotice = function(id, title,startDate,endDate,content,type,updateDate, cb) {
 
-    var sql = 'UPDATE notice SET `title` = ?, `content` = ?, type = ?,updateDate=? WHERE id = ?';
-    var par = [title,content,type, updateDate,id];
+    var sql = 'UPDATE notice SET `title` = ?, `startDate` = ? , `endDate` = ? , `content` = ?, type = ?,updateDate=? WHERE id = ?';
+    var par = [title,startDate,endDate,content,type, updateDate,id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

@@ -14,33 +14,6 @@
     <script type="text/javascript">
 
         function submitForm(){
-            /*
-             var name = document.getElementById("name").value;
-             if (!name || name.length == 0) {
-             alert('门店名称不能为空');
-             return;
-             }
-             var serialNumber = document.getElementById("serialNumber").value;
-             if (!serialNumber || serialNumber.length == 0) {
-             alert('序列号不能为空');
-             return;
-             }
-             var tel = document.getElementById("tel").value;
-             if (!tel || tel.length == 0) {
-             alert('电话不能为空');
-             return;
-             }
-             var address = document.getElementById("address").value;
-             if(!address || address.length == 0) {
-             alert('门店地址不能为空');
-             return;
-             }
-             var principal = document.getElementById("principal").value;
-             if (!principal || principal.length == 0) {
-             alert('负责人不能为空');
-             return;
-             }
-             */
             if($('#title').val() == ''){
                 parent.layer.alert('请输入标题',{icon: 2});
                 return;
@@ -86,6 +59,16 @@
                         <option value="4" <%if(notice.type == '4'){%>selected<%}%>>警告</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">开始时间：</td>
+                <td class="regTd_r">
+                    <input id="startDate" name="startDate" type="text" class="input5" value="<%=notice.startDate%>" onclick="laydate()" readonly/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+                <td class="regTd_l">截止时间：</td>
+                <td class="regTd_r">
+                    <input id="endDate" name="endDate" type="text" class="input5" value="<%=notice.endDate%>" onclick="laydate()" readonly/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">内容：</td>

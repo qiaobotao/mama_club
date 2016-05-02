@@ -62,11 +62,13 @@ module.exports.save = function (req, res) {
     var id = req.body.id ? req.body.id : '';
     var title = req.body.title ? req.body.title : '';
     var type = req.body.type ? req.body.type : '';
+    var startDate = req.body.startDate ? req.body.startDate : '';
+    var endDate = req.body.endDate ? req.body.endDate : '';
     var content = req.body.content ? req.body.content : '';
     var thisDate = new Date();
     var updateDate = thisDate.getFullYear()+"-"+(thisDate.getMonth() < 10 ? "0"+thisDate.getMonth() :thisDate.getMonth())+"-"+thisDate.getDate();
     if(id!=''){//修改
-        service.updateNotice(id,title,content,type,updateDate,function(err, results) {
+        service.updateNotice(id,title,startDate,endDate,content,type,updateDate,function(err, results) {
             if(!err) {
                 res.redirect('/jinquan/notice_list?replytype=update');
             } else {
