@@ -20,7 +20,7 @@ module.exports.list = function (req, res, next) {
     var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
-
+    var resourcesData = req.session.resourcesData;
     service.fetchAllShop(shopname,principal,number,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
@@ -28,7 +28,7 @@ module.exports.list = function (req, res, next) {
             results.principal = principal;
             results.number = number;
             res.render('shop/shoplist', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err);

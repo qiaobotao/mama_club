@@ -15,3 +15,15 @@ function  ForDight(Dight,How)
     Dight  =  Math.round  (Dight*Math.pow(10,How))/Math.pow(10,How);
     return  Dight;
 }
+function checkresources(resourcesData,resourceUrl){
+    var resourcesData = '<%-JSON.stringify(resourcesData)%>';
+    resourcesData = JSON.parse(resourcesData);
+    for(var i = 0 ; i < resourcesData.lent ; i++){
+        alert("resourcesData[i]"+resourcesData[i]);
+    }
+}
+
+
+function checkresources1(userMenus,url){
+    alert("1212"+userMenus[url]);
+}
