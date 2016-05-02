@@ -16,6 +16,6 @@ module.exports.layui = function (req, res) {
 
     console.log(new Date().getTime());
 
-
+     res.locals.user = req.session.user;
     res.render('demo/layuiDemo');
 }
