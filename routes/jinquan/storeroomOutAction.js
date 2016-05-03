@@ -97,6 +97,9 @@ module.exports.add = function (req, res, next) {
     var outType = req.body.outType ? req.body.outType : '';
     var storeroom = req.body.storeroom ? req.body.storeroom : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
+    var address = req.body.address ? req.body.address : '';
+    var consignee = req.body.consignee ? req.body.consignee : '';
+    var consigneeTel = req.body.consigneeTel ? req.body.consigneeTel : '';
 
 
     // 数组
@@ -128,7 +131,7 @@ module.exports.add = function (req, res, next) {
         obj.price = arr_price;
         arr.push(obj);
     }
-    service.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+    service.insertOutLog(oper,outType,new Date(),storeroom,remarks,address,consignee,consigneeTel,function(err, results) {
 
         if (!err) {
 

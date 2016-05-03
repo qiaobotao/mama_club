@@ -70,6 +70,24 @@
                 return;
             }
 
+            var address = document.getElementById('address').value;
+            if(!address || address.length == 0) {
+                parent.layer.alert('发货地址不能为空',{icon: 2});
+                return;
+            }
+
+            var consigneeTel = document.getElementById('consigneeTel').value;
+            if(!consigneeTel || consigneeTel.length == 0) {
+                parent.layer.alert('收货人电话不能为空',{icon: 2});
+                return;
+            }
+
+            var consignee = document.getElementById('consignee').value;
+            if(!consignee || consignee.length == 0) {
+                parent.layer.alert('收货人不能为空',{icon: 2});
+                return;
+            }
+
             // 判断该表单中 是否有相同的 商品
             var arr_proId = document.getElementsByName('proId');
             var arr = new Array();
@@ -165,6 +183,8 @@
                     <option value ="<%=data.outTypeClassify[i].id%>" ><%=data.outTypeClassify[i].name%></option>
                     <%}%>
                 </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">收货人：</td>
+                <td class="regTd_r"><input id="consignee" name="consignee" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出库库房：</td>
@@ -173,6 +193,10 @@
                     <option value ="<%=data.storerooms[i].id%>" ><%=data.storerooms[i].name%></option>
                     <%}%>
                 </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">发货地址：</td>
+                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">收货人电话：</td>
+                <td class="regTd_r"><input id="consigneeTel" name="consigneeTel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>

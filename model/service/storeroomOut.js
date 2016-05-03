@@ -88,11 +88,11 @@ module.exports.getOutTypeClassify = function (cb) {
  * @param remarks
  * @param cb
  */
-module.exports.insertOutLog = function (oper,outType,outDate,storeroomId,remarks,cb) {
+module.exports.insertOutLog = function (oper,outType,outDate,storeroomId,remarks,address,consignee,consigneeTel,cb) {
 
-    var sql = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,remarks,dateline) VALUES (?,?,?,?,?,?)';
+    var sql = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,remarks,dateline,address,consignee,consigneeTel) VALUES (?,?,?,?,?,?,?,?,?)';
 
-    db.query(sql, [outType,oper,outDate,storeroomId,remarks,new Date().getTime()], function (cbData, err, rows, fields) {
+    db.query(sql, [outType,oper,outDate,storeroomId,remarks,new Date().getTime(),address,consignee,consigneeTel], function (cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);
@@ -197,7 +197,7 @@ module.exports.checkResidue = function (storeroomId, waresId, num, cb) {
 module.exports.detail = function (outLogId,cb) {
 
     // 分两步查，1先查表单头，2查表单内容
-    var sql = 'SELECT l.oper,l.outDate,l.remarks, s.name AS storeroomName, c.name AS outTypeName ' +
+    var sql = 'SELECT l.oper,l.outDate,l.remarks,l.address,l.consignee,l.consigneeTel, s.name AS storeroomName, c.name AS outTypeName ' +
         'FROM storeroomOutLog l, systemClassify c, storeroom s ' +
         'WHERE l.outType = c.id AND l.storeroomId = s.id AND l.id = ?';
 
