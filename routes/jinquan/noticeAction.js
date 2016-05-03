@@ -65,6 +65,7 @@ module.exports.save = function (req, res) {
     var startDate = req.body.startDate ? req.body.startDate : '';
     var endDate = req.body.endDate ? req.body.endDate : '';
     var content = req.body.content ? req.body.content : '';
+    var createUser = req.session.user.userName;
     var thisDate = new Date();
     var updateDate = thisDate.getFullYear()+"-"+(thisDate.getMonth() < 10 ? "0"+thisDate.getMonth() :thisDate.getMonth())+"-"+thisDate.getDate();
     if(id!=''){//修改
@@ -77,7 +78,7 @@ module.exports.save = function (req, res) {
             }
         })
     }else{//添加
-        service.insertNotice(title,content,type,updateDate,function(err, results) {
+        service.insertNotice(title,startDate,endDate,content,type,updateDate,createUser,function(err, results) {
             if(!err) {
                 service.insertSysUserNotice(results.newNotice.insertId,results.userData,function(err, results) {
                     if(!err) {

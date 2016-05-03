@@ -13,15 +13,15 @@ var async = require('async');
  * @param type
  * @param cb
  */
-module.exports.insertNotice = function(title,startDate,endDate,content,type,updateDate, cb) {
+module.exports.insertNotice = function(title,startDate,endDate,content,type,updateDate,createUser, cb) {
     //往公告主表中增加一条记录
-    var insertSql = 'INSERT INTO notice (`title`,startDate,endDate,`content`,`type`,updateDate,dateline) VALUES (?,?,?,?,?,?,?)';
+    var insertSql = 'INSERT INTO notice (`title`,startDate,endDate,`content`,`type`,updateDate,createUser,dateline) VALUES (?,?,?,?,?,?,?,?)';
     //查询系统用户所对应的id
     var selectUserSql = "select id from sysUser where activity = 'Y'";
 
     async.series({
         newNotice : function(callback){
-            db.query(insertSql, [title,startDate,endDate,content,type,updateDate,new Date().getTime()], function (cbData, err, rows, fields) {
+            db.query(insertSql, [title,startDate,endDate,content,type,updateDate,createUser,new Date().getTime()], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {

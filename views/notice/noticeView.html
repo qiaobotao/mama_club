@@ -65,39 +65,36 @@
     </div>
 </div>
 <div class="center_con">
-    <!--
-    <form method="post" id="myform" action="/jinquan/notice_save" enctype='multipart/form-data'>
-    -->
-    <form method="post" id="myform" action="/jinquan/notice_save">
-    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="regTd_l">标题：</td>
-                <td class="regTd_r">
-                    <input type="hidden" name="id" value="<%=notice.id%>"/>
-                    <input id="title" name="title" type="text" class="input5" value="<%=notice.title%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
 
-                    （<%if(notice.type == '1'){%>公告<%}%>
+    <table  border="0" cellspacing="0" cellpadding="0" class="table6">
+        <tr>
+            <td><h1 class="ggtm"><%=notice.title%></h1></td>
+        </tr>
+        <tr>
+            <td class="lineSty2">
+                <div class="ggSty1"><span>类型：（<%if(notice.type == '1'){%>公告<%}%>
                     <%if(notice.type == '2'){%>通知<%}%>
                     <%if(notice.type == '3'){%>新闻<%}%>
-                    <%if(notice.type == '4'){%>警告<%}%>）
-                </td>
-            </tr>
-            <tr>
-                <td class="regTd_l">内容：</td>
-                <td class="regTd_r" colspan="3">
-                    <%=notice.content%>
-                </td>
-            </tr>
-            <tr>
-                <td class="regTd_l">上传文件1：</td>
-                <td class="regTd_r" colspan="3">下载文件1</td>
-            </tr>
-            <tr>
-                <td class="regTd_l">上传文件2：</td>
-                <td class="regTd_r" colspan="3">下载文件2</td>
-            </tr>
-        </table>
-    </form>
+                    <%if(notice.type == '4'){%>警告<%}%>）</span><span>发布人：<%=notice.createUser%></span> 	</div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p><%=notice.content%></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="lineSty3  ggSty">
+                <span><a href="#">附件一下载</a></span>
+                <span><a href="#">附件一下载</a></span>
+                <span><a href="#">附件一下载</a></span>
+                <span><a href="#">附件一下载</a></span>
+                <span><a href="#">附件一下载</a></span>
+                <span><a href="#">附件一下载</a></span>
+
+            </td>
+        </tr>
+    </table>
     <div class="reg_but">
         <div class="rb_l"><a href=/jinquan/notice_user_list class="close"></a></div>
     </div>

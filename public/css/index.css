@@ -452,3 +452,17 @@ ul,li{list-style:none;}
 #nav li a:link,#nav li a:visited{ margin:0px; padding:0px; width:80px; height:30px; font-size:15px; border:2px solid #f56394; border-bottom:none; background:#FFF; display:block;}
 #nav li a:hover{ background:#f56394; color:#FFF; font-weight:bold;}
 #nav li a.active{ background:#f56394; color:#FFF; font-weight:bold;}
+
+/***********查看公告样式*******************************/
+.table6{margin:0px auto; padding:0px; width:800px;}
+.table6 tr td{ line-height:25px; text-align:left; font-size:15px; padding:4px;}
+.table6 p{ text-indent:2em; padding:7px 0px; color:#000;}
+.ggtm{ margin:0px auto; padding:0px; height:45px; line-height:45px; font-weight:bold; text-align:center; font-size:30px; color:#000; margin-top:10px; }
+.ggtm span{ font-size:15px; color:#f00; padding-left:15px;}
+.ggSty span{ padding-right:30px; display:block; float:left;}
+.ggSty span a:link,.ggSty span a:visited{ color:#00F; font-size:12px; }
+.ggSty span a:hover{ text-decoration:underline; }
+.lineSty2{border-bottom:2px solid #e2e2e2; margin-top:10px; margin-bottom:10px;}
+.lineSty3{border-top:2px solid #e2e2e2; margin-top:10px; margin-bottom:10px;}
+.ggSty1{ padding:0px; text-align:center; font-size:12px;}
+.ggSty1 span{ padding:0px 15px; color:#999;}
