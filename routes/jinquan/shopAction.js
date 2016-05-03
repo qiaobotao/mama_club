@@ -20,7 +20,7 @@ module.exports.list = function (req, res, next) {
     var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
-    var resourcesData = req.session.resourcesData;
+    var resourcesData = req.session.user.resourcesData;
     service.fetchAllShop(shopname,principal,number,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;

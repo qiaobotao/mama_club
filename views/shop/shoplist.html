@@ -78,7 +78,12 @@
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/shop_pre_add" class="bsty0"></a></div>
+        <%
+            if(resourcesData["/shop_pre_add"] == "1"){
+            %><div class="but_0"><a href="/jinquan/shop_pre_add" class="bsty0"></a></div><%
+            }
+        %>
+
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -98,9 +103,15 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                            <%if(resourcesData["/shop_browse"] == "1"){
+                                %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                            }%>
+                            <%if(resourcesData["/shop_pre_edit"] == "1"){
+                                %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td><%
+                            }%>
+                            <%if(resourcesData["/shop_del"] == "1"){
+                                %><td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td><%
+                            }%>
                         </tr>
                     </table>
                 </td>
