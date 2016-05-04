@@ -1,10 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>增加收费单</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        var iframIndex ;
 
+        function getMenber(){//选择会员
+            //iframe层
+            iframIndex = parent.layer.open({
+                type: 2,
+                title: '选择会员卡信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/member_card_select?isActivation=1&type=2', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //提交表单
+        function submitForm(){
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                $('#actualMoney').val("0");
+            }else{
+                //实付金额应该等于活动后应收金额
+                if($('#finalActualMoney').val() != $('#actualMoney').val()){
+                    parent.layer.alert('"实付金额"应该等于"会员卡费用"',{icon: 2});
+                    return;
+                }
+            }
+            document.getElementById("myform").submit();
+
+        }
+
+        function changeFrom(doc) { //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+            var chargeType = doc.value;
+            window.location.href = "/jinquan/money_manage_edit?&chargeType="+chargeType;
+        }
+
+        //变更付费方式后，对应付金额的的影响
+        function changePayType(){
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == '0'){
+                //延期付费，收款状态为未收款
+                //实付金额设为0，并不可编辑
+                $('#actualMoney').attr("disabled",true);
+                $('#actualMoney').val("0");
+            }else{
+                $('#actualMoney').attr("disabled",false);
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：会员续费
+    </div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/money_manage_save">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">收费项目：</td>
+                <td class="regTd_r">
+                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)">
+                        <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
+                        <option value="2" <%if(chargeType == '2'){%>selected<%}%>>护理收费</option>
+                        <option value="3" <%if(chargeType == '3'){%>selected<%}%>>上课付费</option>
+                        <option value="4" <%if(chargeType == '4'){%>selected<%}%>>仅商品购买</option>
+                        <option value="5" <%if(chargeType == '5'){%>selected<%}%>>仅服务此卡</option>
+                        <option value="6" <%if(chargeType == '6'){%>selected<%}%>>员工内购</option>
+                        <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">会员名称：</td>
+                <td class="regTd_r">
+                    <input id="memberName" type="text" name="memberName" onfocus="getMenber()" onchange="alert('2323')"/>
+                    <input id="memberCardId" name="memberCardId" type="hidden"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">会员卡类型：</td>
+                <td class="regTd_r">
+                    <input type="text" id="memberCartTypeVal" name="memberCartTypeVal" readonly/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">卡内费用：</td>
+                <td class="regTd_r">
+                    <input type="text" id="finalActualMoney" name="finalActualMoney" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">充值优惠：</td>
+                <td class="regTd_r">
+                    <span>满1000送100</span>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">为0后折扣：</td>
+                <td class="regTd_r">
+                    <input type="text" id="finalActualMoney" name="finalActualMoney" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">付费方式：</td>
+                <td class="regTd_r">
+                    <select id="payType" name="payType" onchange="changePayType()">
+                        <option value="">请选择</option>
+                        <option value="0">延迟付费</option>
+                        <option value="1">现金</option>
+                        <option value="2">微信</option>
+                        <option value="3">支付宝</option>
+                    </select>
+                </td>
+                <td  class="regTd_l">充值金额：</td>
+                <td class="regTd_r">
+                    <input type="text" id="actualMoney" name="actualMoney"/>
+                </td>
+            </tr>
+        </table>
+        <!-- 收费信息 end -->
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/money_manage_list" class="close"></a></div>
+    </div>
+
+
+</div>
 </body>
 </html>

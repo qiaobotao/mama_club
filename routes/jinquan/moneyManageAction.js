@@ -4,7 +4,8 @@
  */
 
 var laypage = require('laypage');
-var service = require('../../model/service/moneyManage');
+var service = require('../../model/service/moneyManage');//收费单Server
+var nursService = require('../../model/service/nursservice');//护理服务单Service
 
 /**
  * 获取收费管理列表
@@ -86,7 +87,7 @@ module.exports.save = function(req, res, next) {
     var memberCardId = req.body.memberCardId ? req.body.memberCardId : '';//会员卡id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var classMeetId = req.body.classMeetId ? req.body.classMeetId : '';//课程id
-    //var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务单id
+    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';//预约服务单id
     var chargeType = req.body.chargeType ? req.body.chargeType : '';//收费项目
     var payType = req.body.payType ? req.body.payType : '';//支付方式：现金；充值卡；折扣卡；微信；支付宝
     var receivableMoney = req.body.receivableMoney ? req.body.receivableMoney : '';//应收金额
@@ -108,7 +109,7 @@ module.exports.save = function(req, res, next) {
         return;
     }
 
-
+    //记录商品信息集合  start
     var proNo = req.body.proNo ? req.body.proNo : '';//商品id
     var price = req.body.price ? req.body.price : '';//商品单价
     var insidePrice = req.body.insidePrice ? req.body.insidePrice : '';//内部单价
@@ -139,44 +140,94 @@ module.exports.save = function(req, res, next) {
         obj.insidePrice = insidePrice;
         proArr.push(obj);
     }
+    //记录商品信息集合  end
+
+    //记录服务信息集合  start
+    var serviceId = req.body.serviceId ? req.body.serviceId : '';//服务id
+    var serviceCount = req.body.serviceCount ? req.body.serviceCount : '';//服务次数
+    var servicePrice = req.body.servicePrice ? req.body.servicePrice : '';//服务单价
+    var serviceSubtotal = req.body.serviceSubtotal ? req.body.serviceSubtotal : '';//服务小计
+    var serviceLessMoney = req.body.serviceLessMoney ? req.body.serviceLessMoney : '';//服务优惠费用
+
+
+    // 处理服务集合数据
+    var serviceArr = new Array();
+    if (serviceId instanceof Array) {
+        for (var i = 0; i < serviceId.length; i++) {
+            var obj = {};
+            obj.serviceId = serviceId[i];
+            obj.serviceCount = serviceCount[i];
+            obj.servicePrice = servicePrice[i];
+            obj.serviceSubtotal = serviceSubtotal[i];
+            obj.serviceLessMoney = serviceLessMoney[i];
+            serviceArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.serviceId = serviceId;
+        obj.serviceCount = serviceCount;
+        obj.servicePrice = servicePrice;
+        obj.serviceSubtotal = serviceSubtotal;
+        obj.serviceLessMoney = serviceLessMoney;
+        serviceArr.push(obj);
+    }
+    //记录服务信息集合  end
     if(id != ""){//只可以修改总费用和状态
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
         service.insertMoneyManage(chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
-                /**
-                 * 1：购买会员卡、2：护理收费、3：上课收费、4：仅商品购买、5：仅服务此卡、6：员工内购、7：会员续费
-                 * 如果是课程、商品、内购，则需要继续添加商品集合
-                 * 如果是护理服务单，还需要往护理服务单中增加一条记录
-                 */
-                var addPro = false;
-                var addService = false;
-                if(chargeType == 2 || chargeType == 3 || chargeType == 4|| chargeType == 6){
-                    addPro = true;
-                }
-                if(chargeType == 2 || chargeType == 5){
-                    addService = true;
-                }
-                if(addPro){//需要添加商品
-                    service.insertProsByMoneyManage(results.insertId,proArr,function(err, results) {
+                var moneyManageId = results.insertId;
+                if(chargeType == 2){//添加护理服务单
+                    nursService.insertNursServiceByMoneyManage(serviceMeetId,function(err, results) {
+                        if (!err) {
+                            var nursServiceId = results.insertId;//刚创建的服务单id
+                            //更新收费单主表中的服务单id
+                            service.updateMoneyManage4ServiceId(moneyManageId,nursServiceId,function(err, results) {
+                                if (!err) {
+                                    //将收费的服务信息保存到子表中（并记录收费主表id、护理服务单主表id）
+                                    service.insertServiceByMoneyManage(moneyManageId,nursServiceId,serviceArr,function(err, results) {
+                                        if (!err) {
+                                            if(proArr.length > 0){
+                                                //将收费的商品信息保存到子表中（并记录收费主表id、护理服务单主表id）
+                                                service.insertProsByMoneyManage(moneyManageId,nursServiceId,proArr,function(err, results) {
+                                                    if (!err) {
+                                                        res.redirect('/jinquan/money_manage_list?replytype=add');
+                                                    } else {
+                                                        next();
+                                                    }
+                                                });
+                                            }else{
+                                                res.redirect('/jinquan/money_manage_list?replytype=add');
+                                            }
+                                        } else {
+                                            next();
+                                        }
+                                    });
+                                } else {
+                                    next();
+                                }
+                            });
+                        } else {
+                            next();
+                        }
+                    });
+                }else if(chargeType == 3 || chargeType == 4 || chargeType == 6){//需要添加商品
+                    service.insertProsByMoneyManage(moneyManageId,proArr,function(err, results) {
                         if (!err) {
                             res.redirect('/jinquan/money_manage_list?replytype=add');
                         } else {
                             next();
                         }
                     });
-                }
-                if(addService){//添加护理服务单
-                    service.insertServiceByMoneyManage(results.insertId,proArr,function(err, results) {
+                }else if(chargeType = 5){//服务此卡
+                    service.insertServiceByMoneyManage(moneyManageId,serviceArr,function(err, results) {
                         if (!err) {
                             res.redirect('/jinquan/money_manage_list?replytype=add');
                         } else {
                             next();
                         }
                     });
-                }
-                if(!addPro && !addService){//两个都没有，则直接跳转
-                    res.redirect('/jinquan/money_manage_list?replytype=add');
                 }
                 //res.redirect('/jinquan/money_manage_list?replytype=add');
             } else {
@@ -195,8 +246,9 @@ module.exports.save = function(req, res, next) {
 module.exports.del = function (req, res, next) {
 
     var id = req.query.id ? req.query.id :'';
+    var serviceId = req.query.serviceId ? req.query.serviceId :'';
 
-    service.delMoneyManage(id,function(err, results){
+    service.delMoneyManage(id,serviceId,function(err, results){
         if (!err) {
             res.redirect('/jinquan/money_manage_list?replytype=del');
         } else {

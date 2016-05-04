@@ -36,6 +36,17 @@ module.exports.insertMoneyManage = function(chargeType,memberId,memberCardId,sta
         }
     });
 };
+module.exports.updateMoneyManage4ServiceId = function(moneyManageId,nursServiceId, cb) {
+    var sql = 'UPDATE moneyManage SET serviceId = ? WHERE id = ?';
+    var par = [nursServiceId, moneyManageId];
+    db.query(sql, par, function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
 
 /**
  * 增加收费单中商品列表
@@ -43,12 +54,34 @@ module.exports.insertMoneyManage = function(chargeType,memberId,memberCardId,sta
  * @param proArr
  * @param cb
  */
-module.exports.insertProsByMoneyManage = function(moneyManageId,proArr, cb) {
+module.exports.insertProsByMoneyManage = function(moneyManageId,nursServiceId,proArr, cb) {
 
-    var sql = 'INSERT INTO moneyManageWares (moneyManageId,waresId,count,price,subtotal,discount,insidePrice) VALUES (?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO moneyManageWares (moneyManageId,nursServiceId,waresId,count,price,subtotal,discount,insidePrice) VALUES (?,?,?,?,?,?,?,?)';
     //批量添加收货单中商品列表信息
     async.map(proArr, function(item, callback) {
-        db.query(sql, [moneyManageId,item.waresId,item.count,item.price,item.subtotal,item.discount,item.insidePrice], function (cbData, err, rows, fields) {
+        db.query(sql, [moneyManageId,nursServiceId,item.waresId,item.count,item.price,item.subtotal,item.discount,item.insidePrice], function (cbData, err, rows, fields) {
+            if (!err) {
+                callback(null, rows);
+            } else {
+                callback(err);
+            }
+        });
+    }, function(err,results) {
+        cb(err, results);
+    });
+};
+/**
+ * 增加收费单中服务列表
+ * @param moneyManageId
+ * @param proArr
+ * @param cb
+ */
+module.exports.insertServiceByMoneyManage = function(moneyManageId,nursServiceId,serviceArr, cb) {
+
+    var sql = 'INSERT INTO moneyManageServices (moneyManageId,nursServiceId,serviceId,count,price,subtotal,discount) VALUES (?,?,?,?,?,?,?)';
+    //批量添加收货单中商品列表信息
+    async.map(serviceArr, function(item, callback) {
+        db.query(sql, [moneyManageId,nursServiceId,item.serviceId,item.serviceCount,item.servicePrice,item.serviceSubtotal,item.serviceLessMoney], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -65,10 +98,12 @@ module.exports.insertProsByMoneyManage = function(moneyManageId,proArr, cb) {
  * @param id
  * @param cb
  */
-module.exports.delMoneyManage= function (id, cb) {
+module.exports.delMoneyManage= function (id, serviceId,cb) {
 
     var delMoneyManageSql = 'DELETE FROM moneyManage WHERE id = ?';
     var delMoneyManageWaresSql = 'DELETE FROM moneyManageWares WHERE moneyManageId = ?';
+    var delMoneyManageServicesSql = 'DELETE FROM moneyManageServices WHERE moneyManageId = ?';
+    var delNursServiceSql = 'DELETE FROM nursService WHERE id = ?';
 
     async.series({
         delMoneyManage : function(callback){
@@ -82,6 +117,24 @@ module.exports.delMoneyManage= function (id, cb) {
         },
         delMoneyManageWares : function(callback){
             db.query(delMoneyManageWaresSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delMoneyManageServices : function(callback){
+            db.query(delMoneyManageServicesSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        delNursService : function(callback){
+            db.query(delNursServiceSql, [serviceId], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {
@@ -133,7 +186,7 @@ module.exports.fetchAllMoneyManage = function(chargeType,startDate,endDate,state
     var sql_count = 'SELECT count(*) as count FROM moneyManage m '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT m.id,m.chargeTime,m.chargeType,m.payType,m.receivableMoney,m.actualMoney,m.finalActualMoney,m.state,' +
+    var sql_data = 'SELECT m.id,m.chargeTime,m.serviceId,m.chargeType,m.payType,m.receivableMoney,m.actualMoney,m.finalActualMoney,m.state,' +
         '( ' +
         '	select s.`name` from staff s where s.id = m.staffId ' +
         ') as `staffName`, ' +

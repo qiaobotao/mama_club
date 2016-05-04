@@ -28,10 +28,50 @@
         }
         //选择该商品
         function select(serviceMeet){
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId').value=serviceMeet.id;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('name').value=serviceMeet.name;
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel').value=serviceMeet.tel;
-             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId')){//预约单id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId').value=serviceMeet.id;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('name')){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('name').value=serviceMeet.name;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel')){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel').value=serviceMeet.tel;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('complainPrincipal')){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('complainPrincipal').value=serviceMeet.complainPrincipal;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId')){//会员id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId').value=serviceMeet.memberId;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName')){//会员名称
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName').value=serviceMeet.memberName;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId')){//技师id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffId').value=serviceMeet.staffId;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName')){//技师名称
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('staffName').value=serviceMeet.staffName;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('meetTime')){//预约时间
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('meetTime').value=serviceMeet.meetTime;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId1')){//服务id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId1').value=serviceMeet.serviceId;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceContent1')){//服务描述
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceContent1').value=serviceMeet.serviceContent;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceName1')){//服务名称
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceName1').value=serviceMeet.serviceName;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('servicePrice1')){//服务价格
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('servicePrice1').value=serviceMeet.servicePrice;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price')){//前台价格
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price').value=serviceMeet.price;
+            }
+
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
 
         }

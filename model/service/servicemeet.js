@@ -64,7 +64,16 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
     var sql_count = 'SELECT count(*) as count FROM serviceMeet sm ,service s '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = "SELECT sm.*,s.name as 'serviceName',s.price as 'servicePrice',(select s.name from staff s where s.id = sm.staffId) as staffName FROM serviceMeet sm ,service s "+parm+"  ORDER BY sm.dateline DESC   LIMIT ?,?";
+    var sql_data = "SELECT " +
+        "sm.*,s.name as 'serviceName',s.content as 'serviceContent' , " +
+        "s.price as 'servicePrice'," +
+        "s.id as 'serviceId'," +
+        "(" +
+        "   select s.name from staff s where s.id = sm.staffId" +
+        ") as staffName," +
+        "(" +
+        "select m.memberName from member m where m.id = sm.memberId " +
+        ") as memberName FROM serviceMeet sm ,service s "+parm+"  ORDER BY sm.dateline DESC   LIMIT ?,?";
 
     async.series({
         totalPages : function(callback){

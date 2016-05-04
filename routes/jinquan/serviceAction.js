@@ -19,6 +19,7 @@ module.exports.list = function (req, res, next) {
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var index = req.query.index ? req.query.index : '';
     var url = '/jinquan'+req.url;
 
     service.list(name,classifyId,currentPage, function(err, results) {
@@ -31,7 +32,7 @@ module.exports.list = function (req, res, next) {
 
                 if (!err) {
                     results.classify = classify;
-                    res.render('service/serviceList', {data : results, replytype : replytype, laypage: laypage({
+                    res.render('service/serviceList', {data : results, replytype : replytype,index:index, laypage: laypage({
                         curr: currentPage,url: url,pages: results.totalPages})
                     });
                 } else {
@@ -195,6 +196,7 @@ module.exports.selectForActivity = function(req, res, next) {
     var classifyId = req.query.id ? req.query.id : '';  // 服务分类
     var currentPage = req.query.page ? req.query.page : '1';
     var index = req.query.index ? req.query.index : '';
+    var url = '/jinquan'+req.url;
     service.list(name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
@@ -204,7 +206,9 @@ module.exports.selectForActivity = function(req, res, next) {
             service.getServiceClassify(function(err,classify) {
                 if (!err) {
                     results.classify = classify;
-                    res.render('service/serviceSelectActivity', {data : results,index:index});
+                    res.render('service/serviceSelectActivity', {data : results,index:index, laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages})
+                    });
                 } else {
                     next();
                 }

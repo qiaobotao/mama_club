@@ -55,7 +55,7 @@
             //iframe层
             iframIndex = parent.layer.open({
                 type: 2,
-                title: '选择会员信息',
+                title: '选择预约单信息',
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
@@ -142,12 +142,37 @@
             var cell8=row.insertCell(7);//商品id
             cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"  readonly/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
-            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="getSubtotal('+waresIndex+')"/>';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="getSubtotal()"/>';
             cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
             cell5.innerHTML='<input id="subtotal'+waresIndex+'" name="subtotal" type="text" class="input5 input_arr" readonly="true"/>';
             cell6.innerHTML='<input id="lessMoney'+waresIndex+'" name="lessMoney" type="text" class="input5 input_arr" readonly="true"/>';
-            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,2)"><h1>-</h1></a>';
             cell8.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+        }
+        //table中增加需要添加的行信息
+        function addServicesTr(){
+            //获取表格对象
+            var table=document.getElementById("servicesTable");
+            //获取当前行数
+            var serviceIndex = $("#servicesTable tr").length;
+            var row=table.insertRow(serviceIndex);
+            var cell1=row.insertCell(0);//服务名称
+            var cell2=row.insertCell(1);//服务描述
+            var cell3=row.insertCell(2);//消费数量
+            var cell4=row.insertCell(3);//服务单价
+            var cell5=row.insertCell(4);//小计
+            var cell6=row.insertCell(5);//优惠价格
+            var cell7=row.insertCell(6);//删除服务
+            var cell8=row.insertCell(7);//服务id
+            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'"  name="serviceName" type="text" class="input5 input_arr" onfocus="getServices('+serviceIndex+')"  readonly/>';
+            cell2.innerHTML='<input id="serviceContent'+serviceIndex+'" name="serviceContent" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="serviceCount'+serviceIndex+'" name="serviceCount" type="text" class="input5 input_arr" onblur="getSubtotal()"/>';
+            cell4.innerHTML='<input id="servicePrice'+serviceIndex+'" name="servicePrice" type="text" class="input5 input_arr" readonly="true"/>';
+            cell5.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" name="serviceSubtotal" type="text" class="input5 input_arr" readonly="true"/>';
+            cell6.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" name="serviceLessMoney" type="text" class="input5 input_arr" readonly="true"/>';
+            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
+            cell8.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
+
         }
         /**
          * table中删除选中的行数据
@@ -155,9 +180,13 @@
          * delTemp：删除那个表格:1服务表；2：商品表格
          */
 
-        function delTr(delObj){
+        function delTr(delObj,delIndex){
             var deltr = delObj.parentNode.parentNode;
-            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+            if(delIndex == 1){//从服务table中删除行
+                $('#servicesTable tr:eq('+deltr.rowIndex+')').remove();
+            }else if(delIndex == 2){//从商品table中删除行
+                $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+            }
             getSubtotal();
         }
         //选择会员后处理事件
@@ -252,6 +281,7 @@
             var arr_serviceId = document.getElementsByName('serviceId');
             for(var i=1;i<=arr_serviceId.length;i++) {
                 var serviceId = $('#serviceId'+i).val();//当前服务id
+//                alert("serviceId="+serviceId);
                 var serviceCount = $('#serviceCount'+i).val();//当前服务次数
                 var servicePrice = $('#servicePrice'+i).val();//当前服务单价
                 $('#serviceSubtotal'+i).val(Number(serviceCount) * Number(servicePrice));//当前商品小计
@@ -268,7 +298,7 @@
                 if(serviceIds != undefined){//没有选择活动时，不计算折扣信息
                     var activityServices = serviceIds.split(",");
                     for(var s = 0 ; s < activityServices.length ; s ++){
-                        alert("检查有没有符合的服务信息"+serviceIds);
+//                        alert("检查有没有符合的服务信息"+serviceIds);
                         if(serviceId == activityServices[s]){//如果该服务参与活动
                             activityService = true;
                             break;
@@ -409,6 +439,7 @@
                 <td  class="regTd_l">会员：</td>
                 <td class="regTd_r">
                     <input id="memberName" type="text" name="memberName" onfocus="getServiceMeet()" onblur="activationActivity()" />
+                    <input id="serviceMeetId" type="hidden" name="serviceMeetId"/>
                     <input id="memberId" name="memberId" type="hidden"/>
                     <input id="memberType" name="memberType" type="hidden"/>
                     &nbsp;&nbsp;<span id="inActivityId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityId" style="color:#ff0505;display:none">不可参与活动</span>
@@ -418,28 +449,63 @@
             <tr>
                 <td  class="regTd_l">预约技师：</td>
                 <td class="regTd_r">
-                    <input id="serviceName" type="text" name="memberName" onfocus="getMenber()" onblur="activationActivity()" />
-                    <input id="serviceId" name="memberId" type="hidden"/>
+                    <input id="staffName" type="text" name="staffName"/>
+                    <input id="staffId" name="staffId" type="hidden"/>
                 </td>
                 <td  class="regTd_l">预约时间：</td>
                 <td class="regTd_r">
-                    <input id="serviceName" type="text" name="memberName" onfocus="getMenber()" onblur="activationActivity()" />
-                    <input id="serviceId" name="memberId" type="hidden"/>
+                    <input id="meetTime" type="text" name="meetTime"/>
                 </td>
             </tr>
+            <!--
             <tr>
                 <td  class="regTd_l">预约服务：</td>
                 <td class="regTd_r">
-                    <input id="serviceName" type="text" name="memberName" onfocus="getMenber()" onblur="activationActivity()" />
+                    <input id="serviceName" type="text" name="serviceName"/>
                     <input id="serviceId" name="memberId" type="hidden"/>
                 </td>
                 <td  class="regTd_l">服务费用：</td>
                 <td class="regTd_r">
-                    <input id="serviceName" type="text" name="memberName" onfocus="getMenber()" onblur="activationActivity()" />
-                    <input id="serviceId" name="memberId" type="hidden"/>
+                    <input id="servicePrice" type="text" name="servicePrice"/>
+                </td>
+            </tr>
+            -->
+            <tr>
+                <td  class="regTd_l">前台报价：</td>
+                <td class="regTd_r">
+                    <!--<input id="price" type="text" name="price"/>-->
+                </td>
+                <td  class="regTd_l"></td>
+                <td class="regTd_r">
                 </td>
             </tr>
         </table>
+        <!--服务信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>服务信息</h3></span>
+        <br>
+        <table id="servicesTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>服务名称</td>
+                <td>服务描述</td>
+                <td>采购数量</td>
+                <td>商品单价</td>
+                <td>小计</td>
+                <td>减免费用</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addServicesTr()"><h1>+</h1></a></td>
+            </tr>
+            <tr>
+                <td><input id="serviceName1"  name="serviceName" type="text" class="input5 input_arr"readonly/></td>
+                <td><input id="serviceContent1" name="serviceContent" type="text" class="input5 input_arr" readonly="true"/></td>
+                <td><input id="serviceCount1" name="serviceCount" type="text" class="input5 input_arr" onblur="getSubtotal('+waresIndex+')"/></td>
+                <td><input id="servicePrice1" name="servicePrice" type="text" class="input5 input_arr" readonly="true"/></td>
+                <td><input id="serviceSubtotal1" name="serviceSubtotal" type="text" class="input5 input_arr" readonly="true"/></td>
+                <td><input id="serviceLessMoney1" name="serviceLessMoney" type="text" class="input5 input_arr" readonly="true"/></td>
+                <td>
+                    <input id="serviceId1" name="serviceId" type="hidden" class="input5 input_arr" />
+                </td>
+            </tr>
+        </table>
+        <!--服务信息 end-->
 
         <!--商品信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>

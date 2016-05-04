@@ -48,9 +48,9 @@
         function preEdit (id) {
             window.location.href = '/jinquan/money_manage_edit?id='+id;
         }
-        function del (id) {
+        function del (id,serviceId) {
 
-            window.location.href = '/jinquan/money_manage_del?id='+id;
+            window.location.href = '/jinquan/money_manage_del?id='+id+'&serviceId='+serviceId;
         }
         function browse (id) {
             window.location.href = '/jinquan/shop_browse?id='+id;
@@ -173,7 +173,7 @@
                         <tr>
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>
+                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>,<%=data.data[i].serviceId%>)">删除</a>]</div></td>
                         </tr>
                     </table>
                 </td>

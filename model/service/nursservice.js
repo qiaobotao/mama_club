@@ -14,6 +14,27 @@ var mainMomReasonsClassifyId = require('../../config').mainClassifyId.momReasons
 var mainBabyResultClassifyId = require('../../config').mainClassifyId.babyReasons;
 var mainOtherReasonsClassifyId = require('../../config').mainClassifyId.otherReasons;
 
+/**
+ * 在收费单中生成护理服务单信息
+ * @param serviceMeetId
+ * @param serviceDate
+ */
+module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,cb){
+    var sql = 'INSERT INTO nursService(serviceMeetId,dateLine) VALUES (?,?)';
+    db.query(sql, [serviceMeetId,new Date().getTime()], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+
+/**
+ * 2016年05月04日
+ * 此方法以后将不被使用：业务上，由收费功能生成护理服务单；护理服务单可以自行修改
+ * @param cb
+ */
 module.exports.insertNursService = function(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
