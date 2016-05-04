@@ -33,12 +33,12 @@
      isDiscount：是否允许内购
      discountPrice：内购价格
      */
-    function select(id,name,seril,price,isDiscount,discountPrice){
+    function select(id,name,seril,price,isDiscount,discountPrice,bname){
         var index = document.getElementById("index").value;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=id;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=name;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index).value=seril;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=price;
+        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=bname;
         //内购价格
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index)){
             if(isDiscount == 0){
@@ -84,20 +84,20 @@
                 <th>商品商标</th>
                 <th>商品分类</th>
                 <th>最低库存</th>
-                <th>统一售价</th>
+               <!-- <th>统一售价</th>   -->
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].name%></td>
-                <td><%=data.data[i].brand%></td>
+                <td><%=data.data[i].bname%></td>
                 <td><%=data.data[i].cname%></td>
                 <td><%=data.data[i].lowData%></td>
-                <td><%=data.data[i].price%></td>
+                <!--<td><%=data.data[i].price%></td>  -->
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].name%>','<%=data.data[i].serialNumber%>','<%=data.data[i].price%>','<%=data.data[i].isDiscount%>','<%=data.data[i].discountPrice%>')">选择商品</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].name%>','<%=data.data[i].serialNumber%>','<%=data.data[i].price%>','<%=data.data[i].isDiscount%>','<%=data.data[i].discountPrice%>','<%=data.data[i].bname%>')">选择商品</a>]</div></td>
                         </tr>
                     </table>
                 </td>

@@ -179,7 +179,7 @@ module.exports.listByInventory = function(sid,name,cid,currentPage, cb) {
     var sql_count = 'SELECT count(*) as count FROM wares AS s,  inventory AS i '+parm+' AND s.id = i.waresId  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname, i.count FROM wares AS s, systemClassify AS c , inventory AS i '+parm+' AND s.classify = c.id AND s.id = i.waresId ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname,b.name AS bname, i.count FROM wares AS s, systemClassify AS c , brand AS b, inventory AS i '+parm+' AND s.classify = c.id AND b.id = s.brand AND s.id = i.waresId ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
