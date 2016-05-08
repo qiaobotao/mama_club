@@ -32,7 +32,13 @@
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=id;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=name;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index).value=seril;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=bname;
+       // window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=bname;
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index)) {
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=price;
+        }
+        if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index)) {
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index).value = bname;
+        }
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
 

@@ -10,6 +10,54 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+
+        var iframIndex ;
+        function getWares(index){
+
+            var sid = document.getElementById('sid').value;
+            if (sid == '' || sid.length == 0) { //库房不能为空
+                parent.layer.alert('请先选择库房！',{icon: 2});
+                return;
+            }
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/wares_select_in_storeroom?index='+index+'&sid='+sid, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+        // 验证库存量
+        function check (index) {
+
+            var proId = $("#proId"+index).val();
+            if (proId == '') {
+                parent.layer.alert('请先选择商品！',{icon: 2});
+                document.getElementById("count"+index).value = '';
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/jinquan/storeroom_check",
+                data: {'storeroomId':$("#sid").val(),'waresId':$("#proId"+index).val(),'num':$("#count"+index).val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById("count"+index).value = '';
+                        parent.layer.alert('该商品库存不够！',{icon: 2});
+                    }
+                }
+            });
+        }
+
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
@@ -21,11 +69,55 @@
                 alert('序列号不能为空');
                 return;
             }
-            var outLogId = document.getElementById("outLogId").value;
-            if (!outLogId || outLogId.length == 0) {
-                alert('教室物资不能为空');
+
+            var oper = document.getElementById("oper").value;
+            if (!oper || oper.length == 0) {
+                alert('操作人不能为空');
                 return;
             }
+
+            // 判断该表单中 是否有相同的 商品
+            var arr_proId = document.getElementsByName('proId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_proname = document.getElementsByName('proname');
+            for (var i=0;i<arr_proname.length;i++) {
+                if(arr_proname[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_count = document.getElementsByName('count');
+            for (var i=0;i<arr_count.length;i++) {
+                if(arr_count[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_price = document.getElementsByName('price');
+            for (var i=0;i<arr_price.length;i++) {
+                if(arr_price[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品单价不能为空',{icon: 2});
+                    return;
+                }
+            }
+
             document.getElementById("myform").submit();
         }
 
@@ -57,6 +149,35 @@
                 }
             });
         }
+
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//商品名称
+            var cell2=row.insertCell(1);//商品编号
+            var cell3=row.insertCell(2);//采购数量
+            var cell4=row.insertCell(3);//商品单价
+            var cell5=row.insertCell(4);//删除本行
+            var cell6=row.insertCell(5);//商品id
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="check('+waresIndex+')"/>';
+            cell4.innerHTML='<input id="bname'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
+            cell6.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
     </script>
 </head>
 
@@ -82,8 +203,8 @@
                 <td class="regTd_l">教室分类：</td>
                 <td class="regTd_r">
                     <select id="cid" name="cid">
-                        <%for(var i=0;i<data.length;i++){%>
-                        <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
+                        <%for(var i=0;i<data.classify.length;i++){%>
+                        <option value ="<%=data.classify[i].id%>" ><%=data.classify[i].name%></option>
                         <%}%>
                     </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -92,10 +213,32 @@
                 <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19"></textarea></td>
             </tr>
             <tr>
-                <td class="regTd_l">教室物资（出库单号）：</td>
-                <td class="regTd_r"><input id="outLogId" name="outLogId" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">出库库房：</td>
+                <td class="regTd_r">
+                    <select id="sid" name="sid">
+                        <%for(var i=0;i<data.storeroom.length;i++){%>
+                        <option value ="<%=data.storeroom[i].id%>" ><%=data.storeroom[i].name%></option>
+                        <%}%>
+                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
+            <tr>
+                <td  class="regTd_l">操作人：</td>
+                <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+        </table>
 
+        <!--商品信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
+        <br>
+        <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+
+                <td>商品名称</td>
+                <td>商品编号</td>
+                <td>使用数量</td>
+                <td>商标</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+            </tr>
         </table>
     </form>
     <div class="reg_but">
