@@ -23,7 +23,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/member_card_select?isActivation=1&type=2', //iframe的url
+                content: '/jinquan/member_card_select?isActivation=1&type=1', //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
@@ -32,15 +32,20 @@
         }
         //提交表单
         function submitForm(){
+
+            if($('#actualMoney').val() == ''){
+                parent.layer.alert("请填写充值金额。",{icon: 2});
+                return;
+            }
+            if($('#discountMoney').val() == ''){
+                parent.layer.alert("请填写赠送金额。",{icon: 2});
+                return;
+            }
+
             var payType = $('#payType').val();//付费方式
-            if($('#payType').val() == '0'){
-                $('#actualMoney').val("0");
-            }else{
-                //实付金额应该等于活动后应收金额
-                if($('#finalActualMoney').val() != $('#actualMoney').val()){
-                    parent.layer.alert('"实付金额"应该等于"会员卡费用"',{icon: 2});
-                    return;
-                }
+            if($('#payType').val() == ''){
+                parent.layer.alert('请选择付费方式。',{icon: 2});
+                return;
             }
             document.getElementById("myform").submit();
 
@@ -50,18 +55,12 @@
             var chargeType = doc.value;
             window.location.href = "/jinquan/money_manage_edit?&chargeType="+chargeType;
         }
-
-        //变更付费方式后，对应付金额的的影响
-        function changePayType(){
-            var payType = $('#payType').val();//付费方式
-            if($('#payType').val() == '0'){
-                //延期付费，收款状态为未收款
-                //实付金额设为0，并不可编辑
-                $('#actualMoney').attr("disabled",true);
-                $('#actualMoney').val("0");
-            }else{
-                $('#actualMoney').attr("disabled",false);
-            }
+        //设置应收金额、优惠金额、最终收费金额
+        function setReceivableMoney() {
+            var actualMoney = $('#actualMoney').val();//实收金额
+            var discountMoney = $('#discountMoney').val();//赠送金额
+            $('#receivableMoney').val(Number(actualMoney)+Number(discountMoney));//赠送金额
+            $('#finalActualMoney').val(actualMoney);//赠送金额
         }
 
     </script>
@@ -92,44 +91,58 @@
                 <td  class="regTd_l">会员名称：</td>
                 <td class="regTd_r">
                     <input id="memberName" type="text" name="memberName" onfocus="getMenber()" onchange="alert('2323')"/>
+                    <input id="memberId" name="memberId" type="hidden"/>
                     <input id="memberCardId" name="memberCardId" type="hidden"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
             </tr>
             <tr>
+                <td  class="regTd_l">会员卡名称：</td>
+                <td class="regTd_r">
+                    <input type="text" id="cardTypeName" name="cardTypeName" readonly/>
+                </td>
                 <td class="regTd_l">会员卡类型：</td>
                 <td class="regTd_r">
                     <input type="text" id="memberCartTypeVal" name="memberCartTypeVal" readonly/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
                 <td  class="regTd_l">卡内费用：</td>
                 <td class="regTd_r">
-                    <input type="text" id="finalActualMoney" name="finalActualMoney" readonly/>
+                    <input type="text" id="thisTimeMoney" name="thisTimeMoney" readonly/>
                 </td>
-            </tr>
-            <tr>
                 <td class="regTd_l">充值优惠：</td>
                 <td class="regTd_r">
-                    <span>满1000送100</span>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td  class="regTd_l">为0后折扣：</td>
+                    <input type="text" id="reductionDes" name="reductionDes" readonly/>
+            </tr>
+            <tr>
+                <td  class="regTd_l">充值金额：</td>
                 <td class="regTd_r">
-                    <input type="text" id="finalActualMoney" name="finalActualMoney" readonly/>
+                    <input type="text" id="actualMoney" name="actualMoney" onchange="setReceivableMoney()"/><!-- 实收金额 -->
+                    <input type="hidden" id="receivableMoney" name="receivableMoney"/><!-- 应收金额 -->
+                    <input type="hidden" id="finalActualMoney" name="finalActualMoney"/><!-- 最终实收金额 -->
+                </td>
+                <td  class="regTd_l">赠送金额：</td>
+                <td class="regTd_r">
+                    <input type="text" id="discountMoney" name="discountMoney" onchange="setReceivableMoney()"/><!-- 优惠金额 -->
                 </td>
             </tr>
             <tr>
+                <td  class="regTd_l">为0后折扣：</td>
+                <td class="regTd_r">
+                    <input type="text" id="zeroDiscounts" name="zeroDiscounts" readonly/>
+                </td>
                 <td  class="regTd_l">付费方式：</td>
                 <td class="regTd_r">
                     <select id="payType" name="payType" onchange="changePayType()">
                         <option value="">请选择</option>
+                        <!--
                         <option value="0">延迟付费</option>
+                        -->
                         <option value="1">现金</option>
                         <option value="2">微信</option>
                         <option value="3">支付宝</option>
                     </select>
-                </td>
-                <td  class="regTd_l">充值金额：</td>
-                <td class="regTd_r">
-                    <input type="text" id="actualMoney" name="actualMoney"/>
                 </td>
             </tr>
         </table>

@@ -14,39 +14,62 @@
 
     <script type="text/javascript">
         //选择该会员卡
-        function select(id,serialNumber,type,parameter5,memberName){
+        function select(obj){
+//        , id,serialNumber,type,parameter5,memberName
             var index = document.getElementById("index").value;
             if(index == '') {
                 if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardId')){
-                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardId').value = id;
+                    window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardId').value = obj.id;
                 }
             }
             if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardId'+index)) {
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardId'+index).value=id;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardId'+index).value=obj.id;
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardNo'+index)){
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardNo'+index).value=serialNumber;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCardNo'+index).value=obj.serialNumber;
             }
             //如果父页面有门店id、门店名称对象，则为其赋值
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCartType'+index)){
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCartType'+index).value=type;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCartType'+index).value=obj.type;
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCartTypeVal'+index)){
                 var typeVal = "";//1：充值卡2 服务次卡3打折卡
-                if(type == 1){
+                if(obj.type == 1){
                     typeVal = "充值卡";
-                }else if(type == 2){
+                }else if(obj.type == 2){
                     typeVal = "服务次卡";
-                }else if(type == 3){
+                }else if(obj.type == 3){
                     typeVal = "打折卡";
                 }
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberCartTypeVal'+index).value=typeVal;
             }
+            //
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('finalActualMoney'+index)){
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('finalActualMoney'+index).value=parameter5;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('finalActualMoney'+index).value=obj.parameter5;
             }
+            //客户id
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId'+index).value=obj.memberId;
+            }
+            //客户名称
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName'+index)){
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName'+index).value=memberName;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName'+index).value=obj.memberName;
+            }
+            //充值卡名称
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('cardTypeName'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('cardTypeName'+index).value=obj.cardTypeName;
+            }
+            //当前金额
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('thisTimeMoney'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('thisTimeMoney'+index).value=obj.thisTimeMoney;
+            }
+            //折扣描述
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('reductionDes'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('reductionDes'+index).value=obj.reductionDes;
+            }
+            //为零后折扣
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('zeroDiscounts'+index)){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('zeroDiscounts'+index).value=obj.zeroDiscounts;
             }
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
@@ -69,21 +92,42 @@
                 <th  width="9%">卡号</th>
                 <th  width="9%">类型</th>
                 <th  width="9%">所属会员</th>
+                <th  width="9%">会员电话</th>
                 <th  width="9%">激活状态</th>
+                <!--
                 <th  width="9%">购卡金额</th>
+                -->
                 <th  width="14%">操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].serialNumber%></td>
-                <td><%=data.data[i].type%></td>
+                <%
+                var type = data.data[i].type;
+                var typeVal = "";
+                //1：充值卡2 服务次卡3打折卡
+                if(type == 1){
+                    typeVal = "充值卡";
+                }else if(type == 2){
+                    typeVal = "服务次卡";
+                }else if(type == 3){
+                    typeVal = "打折卡";
+                }
+                %>
+                <td><%=typeVal%></td>
                 <td><%=data.data[i].memberName%> </td>
-                <td><%=data.data[i].isActivation%> </td>
+                <td><%=data.data[i].tel%> </td>
+                <td><%if(data.data[i].isActivation == '1'){%>激活<%}else{%>未激活<%}%> </td>
+                <!--
                 <td><%=data.data[i].parameter5%> </td>
+                -->
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select(<%=JSON.stringify(data.data[i])%>)">选择会员卡</a>]</div></td>
+                            <!--
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].serialNumber%>','<%=data.data[i].type%>','<%=data.data[i].parameter5%>','<%=data.data[i].memberName%>')">选择会员卡</a>]</div></td>
+                            -->
                             <!--
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
                             <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td>

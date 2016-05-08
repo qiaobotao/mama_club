@@ -109,7 +109,17 @@ module.exports.fetchAllMemberCardBySelect = function(serialNumber,type,isActivat
     var sql_count = 'SELECT count(*) FROM memberCard m ,member me '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT m.id,m.serialNumber,m.type,m.parameter5,me.memberName,m.isActivation FROM memberCard m ,member me '+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT m.id,m.serialNumber,m.type,m.parameter5,me.id as "memberId",me.tel,me.memberName,m.isActivation,parameter2 as "thisTimeMoney",' +
+        '(' +
+        '   select t.memberCardType from memberCardType t where t.id = m.parameter1' +
+        ') as "cardTypeName",' +
+        '(' +
+        '   select CONCAT(t.zeroDiscounts*10,"折") from memberCardType t where t.id = m.parameter1' +
+        ') as "zeroDiscounts",' +
+        '(' +
+        '   select CONCAT("满",t.memberCardAmount ,"减",t.consumerLimit - t.memberCardAmount) from memberCardType t where t.id = m.parameter1' +
+        ') as "reductionDes"' +
+        ' FROM memberCard m ,member me '+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
