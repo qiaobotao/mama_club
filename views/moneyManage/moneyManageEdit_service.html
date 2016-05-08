@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>增加收费单</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        var iframIndex ;
+
+        function getServiceMeet(){//选择预约单
+            //iframe层
+            iframIndex = parent.layer.open({
+                type: 2,
+                title: '选择预约单信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/service_meet_select', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //提交表单
+        function submitForm(){
+
+            // 判断该表单中 是否有相同的 商品
+            var arr_proId = document.getElementsByName('proId');
+            var arr = new Array();
+            for(var i=0;i<arr_proId.length;i++) {
+                arr.push(arr_proId[i].value);
+            }
+            //排序
+            var nary=arr.sort();
+            for (var i=0;i<arr.length;i++) {
+                if (nary[i]==nary[i+1]){
+                    parent.layer.alert('商品中有两条数据相同，请查证后提交！',{icon: 2});
+                    return;
+                }
+            }
+
+
+            var arr_proname = document.getElementsByName('proname');
+            for (var i=0;i<arr_proname.length;i++) {
+                if(arr_proname[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_count = document.getElementsByName('count');
+            for (var i=0;i<arr_count.length;i++) {
+                if(arr_count[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    return;
+                }
+            }
+
+            var arr_price = document.getElementsByName('price');
+            for (var i=0;i<arr_price.length;i++) {
+                if(arr_price[i].value == '') {
+                    var n = i+1;
+                    parent.layer.alert('商品详情第'+n+'行商品单价不能为空',{icon: 2});
+                    return;
+                }
+            }
+            var payType = $('#payType').val();//付费方式
+            if($('#payType').val() == ''){
+                parent.layer.alert("请选择付费方式",{icon: 2});
+                return ;
+            }
+            if($('#payType').val() == '0'){
+                $('#actualMoney').val("0");
+            }else{
+                //实付金额应该等于活动后应收金额
+                if($('#finalActualMoney').val() != $('#actualMoney').val()){
+                    parent.layer.alert('"实付金额"应该等于"最终应收"',{icon: 2});
+                    return;
+                }
+            }
+            document.getElementById("myform").submit();
+        }
+
+        function changeFrom(doc) { //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+            var chargeType = doc.value;
+            window.location.href = "/jinquan/money_manage_edit?&chargeType="+chargeType;
+        }
+        /**
+         * 计算每行商品的小计
+         * 设置应收总金额、活动后金额、活动优惠金额
+         */
+        function getSubtotal(){
+            var discount = 1;
+            //遍历已选择商品，判断每个商品是否可以打折，如果可以，则计算出折扣后金额
+            var receivableMoneys = 0,activityDiscountMoney = 0;//活动优惠价格
+            //遍历已选择的服务，判断每个服务是否可以打折，如果可以，则计算出折扣后金额
+            var arr_serviceId = document.getElementsByName('serviceId');
+            for(var i=1;i<=arr_serviceId.length;i++) {
+                var serviceId = $('#serviceId'+i).val();//当前服务id
+//                alert("serviceId="+serviceId);
+                var serviceCount = $('#serviceCount'+i).val();//当前服务次数
+                var servicePrice = $('#servicePrice'+i).val();//当前服务单价
+                $('#serviceSubtotal'+i).val(Number(serviceCount) * Number(servicePrice));//当前商品小计
+
+
+                receivableMoneys += Number(serviceCount) * Number(servicePrice);
+                $('#serviceLessMoney'+i).val("-"+ForDight(serviceCount * servicePrice * discount,2));//当前商品优惠后价格
+                activityDiscountMoney += ForDight(serviceCount * servicePrice * discount,2);
+            }
+            //设置应收总金额、活动后金额、活动优惠金额
+            $('#receivableMoney').val(ForDight(receivableMoneys,2));
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：护理收费
+    </div>
+</div>
+<div class="center_con">
+    <form method="post" id="myform" action="/jinquan/money_manage_save">
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">收费项目：</td>
+                <td class="regTd_r">
+                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)">
+                        <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
+                        <option value="2" <%if(chargeType == '2'){%>selected<%}%>>护理收费</option>
+                        <option value="3" <%if(chargeType == '3'){%>selected<%}%>>上课付费</option>
+                        <option value="4" <%if(chargeType == '4'){%>selected<%}%>>仅商品购买</option>
+                        <option value="5" <%if(chargeType == '5'){%>selected<%}%>>仅服务次卡</option>
+                        <option value="6" <%if(chargeType == '6'){%>selected<%}%>>员工内购</option>
+                        <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">会员：</td>
+                <td class="regTd_r">
+                    <input id="memberName" type="text" name="memberName" onfocus="getServiceMeet()"/>
+                    <input id="serviceMeetId" type="hidden" name="serviceMeetId"/>
+                    <input id="memberId" name="memberId" type="hidden"/>
+                    <input id="memberType" name="memberType" type="hidden"/>
+                    &nbsp;&nbsp;<span id="inActivityId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityId" style="color:#ff0505;display:none">不可参与活动</span>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">预约技师：</td>
+                <td class="regTd_r">
+                    <input id="staffName" type="text" name="staffName"/>
+                    <input id="staffId" name="staffId" type="hidden"/>
+                </td>
+                <td  class="regTd_l">预约时间：</td>
+                <td class="regTd_r">
+                    <input id="meetTime" type="text" name="meetTime"/>
+                </td>
+            </tr>
+        </table>
+        <!--服务信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>服务信息</h3></span>
+        <br>
+        <table id="servicesTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>服务名称</td>
+                <td>服务描述</td>
+                <td>采购数量</td>
+                <td>商品单价</td>
+                <td>小计</td>
+                <!--
+                <td>减免费用</td>
+                <td><a style="cursor: pointer" onclick="javaScript:addServicesTr()"><h1>+</h1></a></td>
+                -->
+            </tr>
+            <tr>
+                <td><input id="serviceName1"  name="serviceName" type="text" class="input5 input_arr"readonly/></td>
+                <td><input id="serviceContent1" name="serviceContent" type="text" class="input5 input_arr" readonly="true"/></td>
+                <td><input id="serviceCount1" name="serviceCount" type="text" value="1" class="input5 input_arr" readonly/></td>
+                <td><input id="servicePrice1" name="servicePrice" type="text" class="input5 input_arr"/></td>
+                <td><input id="serviceSubtotal1" name="serviceSubtotal" type="text" class="input5 input_arr" readonly="true"/></td>
+                <!--
+                <td><input id="serviceLessMoney1" name="serviceLessMoney" type="text" class="input5 input_arr" readonly="true"/></td>
+                -->
+                <td>
+                    <input id="serviceId1" name="serviceId" type="hidden" class="input5 input_arr" />
+                </td>
+            </tr>
+        </table>
+        <!--服务信息 end-->
+
+        <!-- 收费信息 start -->
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">应收金额：</td>
+                <td class="regTd_r">
+                    <input type="text" id="receivableMoney" name="receivableMoney" readonly/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td> <td  class="regTd_l">付费方式：</td>
+                <td class="regTd_r">
+                    <select id="payType" name="payType">
+                        <option value="">请选择</option>
+                        <option value="4">服务次卡</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <!-- 收费信息 end -->
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="/jinquan/money_manage_list" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>

@@ -220,10 +220,25 @@ module.exports.save = function(req, res, next) {
                             next();
                         }
                     });
-                }else if(chargeType = 5){//服务此卡
-                    service.insertServiceByMoneyManage(moneyManageId,serviceArr,function(err, results) {
+                }else if(chargeType = 5){//服务此卡：只修改服务单
+                    nursService.insertNursServiceByMoneyManage(serviceMeetId,function(err, results) {
                         if (!err) {
-                            res.redirect('/jinquan/money_manage_list?replytype=add');
+                            var nursServiceId = results.insertId;//刚创建的服务单id
+                            //更新收费单主表中的服务单id
+                            service.updateMoneyManage4ServiceId(moneyManageId,nursServiceId,function(err, results) {
+                                if (!err) {
+                                    //将收费的服务信息保存到子表中（并记录收费主表id、护理服务单主表id）
+                                    service.insertServiceByMoneyManage(moneyManageId,nursServiceId,serviceArr,function(err, results) {
+                                        if (!err) {
+                                            res.redirect('/jinquan/money_manage_list?replytype=add');
+                                        } else {
+                                            next();
+                                        }
+                                    });
+                                } else {
+                                    next();
+                                }
+                            });
                         } else {
                             next();
                         }

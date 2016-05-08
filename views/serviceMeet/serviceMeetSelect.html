@@ -70,6 +70,9 @@
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price')){//前台价格
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price').value=serviceMeet.price;
             }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal && typeof(window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal)=="function"){//前台价格
+                window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal();
+            }
 
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
