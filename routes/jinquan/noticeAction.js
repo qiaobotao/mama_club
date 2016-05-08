@@ -58,7 +58,7 @@ module.exports.listByUser = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res, next) {
     var id = req.body.id ? req.body.id : '';
     var title = req.body.title ? req.body.title : '';
     var type = req.body.type ? req.body.type : '';
@@ -94,20 +94,20 @@ module.exports.save = function (req, res) {
             }
         })
     }
-    /*
-    var form = new multiparty.Form({uploadDir: './public/files/'});
-    form.parse(req, function(err, fields, files) {
-        if (!err) {
-            var inputFile = files.recordfile[0];
-            var uploadedPath = inputFile.path;
-            var a= "";
-        } else {
-            console.log('parse error: ' + err);
-            next();
-        }
 
-    });
-    */
+    //var form = new multiparty.Form({uploadDir: './public/files/'});
+    //form.parse(req, function(err, fields, files) {
+    //    if (!err) {
+    //        var inputFile = files.recordfile[0];
+    //        var uploadedPath = inputFile.path;
+    //        console.log(uploadedPath);
+    //    } else {
+    //        console.log('parse error: ' + err);
+    //        next();
+    //    }
+    //
+    //});
+
 }
 /**
  * 修改

@@ -14,8 +14,8 @@
         var replytype = '<%=replytype%>';
         if (replytype == 'add') {
             parent.layer.msg('增加成功');
-        } else if (replytype == 'set') {
-            parent.layer.msg('设置成功');
+        } else if (replytype == 'del') {
+            parent.layer.msg('删除成功');
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
@@ -79,7 +79,7 @@
                 <td><%=data.data[i].cname%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
-                        <tr>
+                       <!-- <tr>
                             <%if (data.data[i].status == '1') {%>
                             <td><div align="center"><img src="../../images/nav2.gif" width="9" height="9" />&nbsp;[<a href="javascript:setStatus('<%=data.data[i].id%>',0)">停用</a>]</div></td>
                             <%} else {%>
@@ -87,7 +87,10 @@
                             <%}%>
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">查看</a>]</div></td>
 
-                        </tr>
+                        </tr>  -->
+                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">查看</a>]</div></td>
+                        <td><div align="center"><img src="../../images/nav2.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">修改</a>]</div></td>
+                        <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_predel?id=<%=data.data[i].id%>">删除</a>]</div></td>
                     </table>
                 </td>
             </tr>
