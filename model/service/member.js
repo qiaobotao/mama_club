@@ -175,10 +175,27 @@ module.exports.delMember= function (id, cb) {
         }
     });
 }
-module.exports.getMemberByNameTel =function (memberName,tel , cb) {
+module.exports.getMemberByNameTel_bak =function (memberName,tel , cb) {
 
     var sql = 'SELECT * FROM member WHERE memberName = ? and tel=?';
     db.query(sql, [memberName,tel],  function(cbData, err, rows, fields) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+/**
+ * 根据手机号查询会员信息
+ * @param tel
+ * @param cb
+ */
+module.exports.getMemberByNameTel =function (tel , cb) {
+
+    var sql = 'SELECT * FROM member WHERE tel=?';
+    db.query(sql, [tel],  function(cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);

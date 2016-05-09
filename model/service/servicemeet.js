@@ -196,7 +196,8 @@ module.exports.fetchSingleServiceMeet =function (id, cb) {
  * @param id
  * @param cb
  */
-module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
+module.exports.getTop3ServiceMeet =function (memberId,tel, cb) {
+//module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
 
     var parm ="";
 
@@ -206,7 +207,8 @@ module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
     }
     else
     {
-        parm=   " and tel='" + tel + "' and name ='" + name + "'" ;
+        parm=   " and tel='" + tel + "' " ;
+        //parm=   " and tel='" + tel + "' and name ='" + name + "'" ;
     }
     parm+=" order by dateline limit 0,3";
     var sql = 'SELECT a.*,b.`name` AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  '+parm ;

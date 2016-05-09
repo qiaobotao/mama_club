@@ -157,7 +157,7 @@ var replytype = '<%=replytype%>';
                             <td><%=memberCardTypes[j].memberCardAmount%></td>
                             <td><%=data.data[i].parameter2%></td>
                             <td><%=memberCardTypes[j].zeroDiscounts%></td>
-                            <td><%=memberCardTypes[j].isManyPeopleUsed%></td>
+                            <td><%if(memberCardTypes[j].isManyPeopleUsed == 'Y'){%>是<%}else{%>否<%}%></td>
                           <%}%>
                         <%}%>
                         <td><%=data.data[i].createDate%> </td>
@@ -197,7 +197,9 @@ var replytype = '<%=replytype%>';
                                 <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                                     <tr>
                                         <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
+                                        <!--
                                         <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                                        -->
                                         <!--<td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->
 
                                     </tr>

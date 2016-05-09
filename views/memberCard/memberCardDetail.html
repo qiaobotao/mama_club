@@ -98,7 +98,7 @@
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">是否可以多人使用：</td>
-                                        <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" readonly="true" class="input5" value="<%=memberCard.isManyPeopleUsed%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                                        <td class="regTd_r"><input id="isManyPeopleUsed" name="isManyPeopleUsed" type="text" readonly="true" class="input5" value="<%if(memberCard.isManyPeopleUsed == 'Y'){%>是<%}else{%>否<%}%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                                     </tr>
                                     <tr>
                                         <td class="regTd_l">当前金额：</td>

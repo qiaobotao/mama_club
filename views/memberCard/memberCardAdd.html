@@ -56,6 +56,12 @@
                 }
                 //当前金额/首次应缴费金额/首次应缴费金额
                 parameter2= document.getElementById("parameter2").value;
+                var isManyPeopleUsed = document.getElementById("isManyPeopleUsed");
+                if(isManyPeopleUsed == "是"){
+                    document.getElementById("isManyPeopleUsed").value = "Y";
+                }else{
+                    document.getElementById("isManyPeopleUsed").value = "N";
+                }
             }
             if(type=='2')
             {
@@ -127,7 +133,12 @@
                         document.getElementById("consumerLimit").value=datas.consumerLimit-datas.memberCardAmount;
                         document.getElementById("actualAmount").value=datas.consumerLimit;
                         document.getElementById("zeroDiscounts").value=datas.zeroDiscounts;
-                        document.getElementById("isManyPeopleUsed").value=datas.isManyPeopleUsed;
+
+                        if(datas.isManyPeopleUsed == 'Y'){
+                            document.getElementById("isManyPeopleUsed").value='是';
+                        }else{
+                            document.getElementById("isManyPeopleUsed").value='否';
+                        }
                         document.getElementById("parameter2").value=datas.consumerLimit;
                     }
                 },

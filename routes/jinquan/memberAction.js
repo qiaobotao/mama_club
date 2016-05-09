@@ -247,19 +247,19 @@ module.exports.selectAll = function (req, res, next) {
 }
 module.exports.getMemberByNameTel = function(req, res, next) {
 
-    var memberName = req.body.memberName ? req.body.memberName : '';
+    //var memberName = req.body.memberName ? req.body.memberName : '';
     var tel = req.body.memberTel ? req.body.memberTel : '';
     var result={} ;
     result.flag= false;
 
-    service.getMemberByNameTel(memberName,tel ,function(err, results) {
+    service.getMemberByNameTel(tel ,function(err, results) {
         if (!err) {
                 var member = results.length == 0 ? null : results[0];
                 if(member!=null)
                 {
                     result.member=member;
                     //预约服务单
-                      servicemeet.getTop3ServiceMeet(member.id,memberName,tel,function(err, services) {
+                      servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
                           result.serviceMeets=services;
 
                           var serviceMeetIds="";

@@ -14,18 +14,19 @@
     <script type="text/javascript">
         function getMemberId()
         {
-            var memberName = document.getElementById("name").value;
-            if (!memberName || memberName.length == 0) {
-                alert('名称不能为空');
-                return;
-            }
+//            var memberName = document.getElementById("name").value;
+//            if (!memberName || memberName.length == 0) {
+//                alert('名称不能为空');
+//                return;
+//            }
             var memberTel = document.getElementById("tel").value;
             if (!memberTel || memberTel.length == 0) {
                 alert('电话不能为空');
                 return;
             }
             $.ajax({
-                data: {"memberName":memberName,"memberTel":memberTel},
+//                data: {"memberName":memberName,"memberTel":memberTel},
+                data: {"memberTel":memberTel},
                 url: '/jinquan/getMemberByNameTel',
                 type: 'post',
                 dataType: 'json',
