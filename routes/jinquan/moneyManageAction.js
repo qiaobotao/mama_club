@@ -5,7 +5,9 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/moneyManage');//收费单Server
+var memberCardService = require('../../model/service/membercard');
 var nursService = require('../../model/service/nursservice');//护理服务单Service
+var consts = require('../../model/utils/consts');
 
 /**
  * 获取收费管理列表
@@ -178,7 +180,15 @@ module.exports.save = function(req, res, next) {
         service.insertMoneyManage(chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 var moneyManageId = results.insertId;
-                if(chargeType == 2){//添加护理服务单
+                if(chargeType == 1){//购买会员卡：需要将会员卡状态改为启用
+                    memberCardService.updateMemberCardByActivation(consts.STATE_ENABLE,memberCardId,function(err, results) {
+                        if (!err) {
+                            res.redirect('/jinquan/money_manage_list?replytype=add');
+                        } else {
+                            next();
+                        }
+                    });
+                }else if(chargeType == 2){//添加护理服务单
                     nursService.insertNursServiceByMoneyManage(serviceMeetId,function(err, results) {
                         if (!err) {
                             var nursServiceId = results.insertId;//刚创建的服务单id
@@ -220,7 +230,7 @@ module.exports.save = function(req, res, next) {
                             next();
                         }
                     });
-                }else if(chargeType = 5){//服务此卡：只修改服务单
+                }else if(chargeType = 5){//服务此卡：只修改
                     nursService.insertNursServiceByMoneyManage(serviceMeetId,function(err, results) {
                         if (!err) {
                             var nursServiceId = results.insertId;//刚创建的服务单id

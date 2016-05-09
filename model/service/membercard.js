@@ -3,15 +3,16 @@
  */
 /**
  * Created by qiaojoe on 16-1-2.
- * 教室管理
+ * 会员卡管理
  */
 
 
 var db = require('../../common/db');
 var async = require('async');
+var consts = require('../../model/utils/consts');
 
 /**
- * 添加教室
+ * 添加会员卡
  * @param serialNumber
  * @param name
  * @param classCode
@@ -19,11 +20,12 @@ var async = require('async');
  * @param remark
  * @param materialid
  * @param cb
+ * 添加会员卡时，启用状态，默认为未启用状态（在交费处修改）
  */
 module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,cb) {
 
-    var sql = 'INSERT INTO memberCard (serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCard (serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,isActivation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,consts.STATE_DISABLE], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -32,7 +34,7 @@ module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline 
     });
 };
 /**
- * 添加教室
+ * 添加会员卡
  * @param serialNumber
  * @param name
  * @param classCode
@@ -190,6 +192,27 @@ module.exports.fetchMembercard = function(pages, count, cb) {
     });
 }
 
+
+
+/**
+ * 修改会员卡启用状态信息
+
+ * @param cb
+ */
+module.exports.updateMemberCardByActivation = function(id,isActivation,cb) {
+
+    var sql = 'UPDATE  memberCard  SET isActivation  = ? WHERE  id  = ?';
+    var par = [isActivation, id];
+
+    db.query(sql, par, function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+
+}
 
 
 /**

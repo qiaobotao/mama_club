@@ -15,6 +15,10 @@ module.exports.insertMember = function(age,memberCardType,memberName,tel,contact
                                        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
 
+
+
+    //memberCardType = "12";
+
     var sql = 'INSERT INTO member (age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
         + 'deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,'
         + 'husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,'

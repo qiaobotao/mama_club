@@ -80,9 +80,22 @@ module.exports.add = function (req, res,next) {
     var useToolReason = req.body.useToolReason ? req.body.useToolReason : '';
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
 
+    //如果understandJinQuanChannel为多选，将多选的值用逗号隔开
+    var understandJinQuanChannelVal = "";
+    if (understandJinQuanChannel instanceof Array) {
+        for (var i = 0; i < understandJinQuanChannel.length; i++) {
+            if(i != 0){
+                understandJinQuanChannelVal += ",";
+            }
+            understandJinQuanChannelVal += understandJinQuanChannel[i];
+        }
+    }else{
+        understandJinQuanChannelVal = understandJinQuanChannel;
+    }
+
     service.insertMember(age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
-        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
+        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/member_list?replytype=add');
@@ -126,9 +139,22 @@ module.exports.doEdit = function (req, res,next) {
     var useToolReason = req.body.useToolReason ? req.body.useToolReason : '';
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
 
+    //如果understandJinQuanChannel为多选，将多选的值用逗号隔开
+    var understandJinQuanChannelVal = "";
+    if (understandJinQuanChannel instanceof Array) {
+        for (var i = 0; i < understandJinQuanChannel.length; i++) {
+            if(i != 0){
+                understandJinQuanChannelVal += ",";
+            }
+            understandJinQuanChannelVal += understandJinQuanChannel[i];
+        }
+    }else{
+        understandJinQuanChannelVal = understandJinQuanChannel;
+    }
+
     service.updateMember(id,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
-        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
+        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_list?replytype=update');
