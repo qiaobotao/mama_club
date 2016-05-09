@@ -33,26 +33,40 @@
      isDiscount：是否允许内购
      discountPrice：内购价格
      */
-    function select(id,name,seril,price,isDiscount,discountPrice,bname){
+    function select(obj){
         var index = document.getElementById("index").value;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=id;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=name;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index).value=seril;
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=obj.id;
+        }
+
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=obj.name;
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proNo'+index).value=obj.serialNumber;
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('storeroomId'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('storeroomId'+index).value=obj.storeroomId;//库房id
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('inventoryCount'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('inventoryCount'+index).value=obj.inventoryCount;//剩余数量
+        }
+
        // window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=bname;
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index)) {
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=price;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=obj.price;
         }
         if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index)) {
-            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index).value = bname;
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index).value = obj.bname;
         }
         //内购价格
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index)){
             if(isDiscount == 0){
                 //没有特殊的内购价格，内购费用为商品单价
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index).value = price;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index).value = obj.price;
             }else{
                 //有特殊的内购价格
-                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index).value = discountPrice;
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('insidePrice'+index).value = obj.discountPrice;
             }
         }
 
@@ -103,7 +117,7 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select('<%=data.data[i].id%>','<%=data.data[i].name%>','<%=data.data[i].serialNumber%>','<%=data.data[i].price%>','<%=data.data[i].isDiscount%>','<%=data.data[i].discountPrice%>','<%=data.data[i].bname%>')">选择商品</a>]</div></td>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select(<%=JSON.stringify(data.data[i])%>)">选择商品</a>]</div></td>
                         </tr>
                     </table>
                 </td>

@@ -37,16 +37,16 @@ module.exports.insertWares = function(name, longname, brand, standard, serialNum
  */
 module.exports.list = function(name,cid,currentPage, cb) {
 
-    var parm = "WHERE s.name LIKE '%"+name+"%' ";
+    var parm = "WHERE s.name LIKE '%"+name+"%' and  s.id = i.waresId ";
 
     if (cid != '') {
         parm = parm + " AND classify ="+cid;
     }
 
-    var sql_count = 'SELECT count(*) as count FROM wares s '+parm+'  ORDER BY dateline DESC';
+    var sql_count = 'SELECT count(*) as count FROM wares s ,inventory i '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname, b.name AS bname FROM wares AS s, systemClassify AS c,brand b '+parm+' AND s.brand = b.id AND s.classify = c.id ORDER BY dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT s.*, c.id AS cid, c.name AS cname, b.name AS bname,i.storeroomId,i.count as "inventoryCount" FROM wares AS s, systemClassify AS c,brand b,inventory i  '+parm+' AND s.brand = b.id AND s.classify = c.id ORDER BY dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
