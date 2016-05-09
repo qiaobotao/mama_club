@@ -8,6 +8,7 @@ var service = require('../../model/service/moneyManage');//收费单Server
 var memberCardService = require('../../model/service/membercard');
 var nursService = require('../../model/service/nursservice');//护理服务单Service
 var consts = require('../../model/utils/consts');
+var utils = require('../../common/utils');
 
 /**
  * 获取收费管理列表
@@ -15,7 +16,7 @@ var consts = require('../../model/utils/consts');
  * @param res
  */
 module.exports.list = function (req, res, next) {
-
+    utils.printSystemLog("kchang在收费单list中");
     var currentPage = req.query.page ? req.query.page : '1';
     var chargeType = req.query.chargeType ? req.query.chargeType : '';//收费类型
     var startDate = req.query.startDate ? req.query.startDate : '';//开始时间
@@ -55,7 +56,7 @@ module.exports.edit = function(req, res, next) {
 
     service.fetchSingleMoneyManage(id, '2016-03-17',function(err, results) {
         if (!err) {
-            //1、护理；2、课程；3、商品；4、购买会员卡；5、内购；6、会员卡续费
+            //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
             if (chargeType == 1) {//购买会员卡
                 res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
             } else if (chargeType == 2) {//护理收费
@@ -177,6 +178,7 @@ module.exports.save = function(req, res, next) {
     if(id != ""){//只可以修改总费用和状态
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
+        //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
         service.insertMoneyManage(chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 var moneyManageId = results.insertId;
@@ -202,6 +204,7 @@ module.exports.save = function(req, res, next) {
                                                 //将收费的商品信息保存到子表中（并记录收费主表id、护理服务单主表id）
                                                 service.insertProsByMoneyManage(moneyManageId,nursServiceId,proArr,function(err, results) {
                                                     if (!err) {
+                                                        //增加出库单后，进行跳转
                                                         res.redirect('/jinquan/money_manage_list?replytype=add');
                                                     } else {
                                                         next();
@@ -225,6 +228,15 @@ module.exports.save = function(req, res, next) {
                 }else if(chargeType == 3 || chargeType == 4 || chargeType == 6){//需要添加商品
                     service.insertProsByMoneyManage(moneyManageId,proArr,function(err, results) {
                         if (!err) {
+                            /**
+                             * 判断所有商品出自几个库房
+                             * 如果是多个，分开生成多个出库单
+                             *      a、遍历所有商品对应库房id，判断分别出自几个库房
+                             *      b、添加所有入库单主表
+                             *      c、添加所有入库单子表（主表id通过第二步获取）
+                             *      c、修改库存表数据
+                             */
+
                             res.redirect('/jinquan/money_manage_list?replytype=add');
                         } else {
                             next();

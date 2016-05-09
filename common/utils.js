@@ -5,6 +5,8 @@
 var crypto = require('crypto');
 var util = require('util');
 var send_http = require('request');
+var printSystemLogFlag = require('../config').mainClassifyId.printSystemLogFlag;
+
 /**
  * AES加密
  * @param str 明文
@@ -96,4 +98,34 @@ exports.http_server = function(type,url,data,callback){
         );
     }
     return;
+};
+
+/**
+ * 日期格式转换成字符串格式
+ * @param date
+ * @param format
+ * @returns {XML|string|void}
+ */
+function date2str (date, format) {
+    var z = {
+        y: date.getFullYear(),
+        M: date.getMonth() + 1,
+        d: date.getDate(),
+        h: date.getHours(),
+        m: date.getMinutes(),
+        s: date.getSeconds()
+    };
+    return format.replace(/(y+|M+|d+|h+|m+|s+)/g, function(v) {
+        return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-(v.length > 2 ? v.length : 2))
+    });
+}
+/**
+ * 打印系统日志
+ * @param flag：是否打印
+ * @param msg：打印内容
+ */
+exports.printSystemLog = function(msg){
+    if(printSystemLogFlag){
+        console.log(date2str(new Date(), "yyyy-MM-d h:m:s")+":"+msg);
+    }
 };

@@ -62,7 +62,8 @@ module.exports = {
         diagnosticResult:23,
         momReasons:21 ,
         babyReasons:20,
-        otherReasons:22
+        otherReasons:22,
+        printSystemLogFlag:true
     }
 
 };

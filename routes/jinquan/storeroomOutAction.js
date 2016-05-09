@@ -64,12 +64,13 @@ module.exports.list = function (req, res, next) {
 module.exports.preAdd = function (req, res, next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
-
+    //获取出库方式
     service.getOutTypeClassify(function (err, outTypeClassify) {
 
         if (!err) {
             var data = {};
             data.outTypeClassify = outTypeClassify;
+            //获取所有的仓库
             storeroomService.getAllStorerooms(shopId,function (err, storerooms) {
 
                 if (!err) {
