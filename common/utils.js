@@ -119,6 +119,7 @@ function date2str (date, format) {
         return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1))).slice(-(v.length > 2 ? v.length : 2))
     });
 }
+exports.date2str = date2str;
 /**
  * 打印系统日志
  * @param flag：是否打印

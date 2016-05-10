@@ -17,10 +17,14 @@
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
+        var defaultPage = '<%=data.totalPages%>';
         //查询方法
         function search () {
             var textCh = document.getElementById('textCh').value;
-            window.location.href = '/jinquan/sys_resources_list?textCh='+textCh;
+            window.location.href = '/jinquan/sys_resources_list?textCh='+textCh+"&page="+defaultPage;
+        }
+        function setDefault(){
+            defaultPage = "1";
         }
 
         //跳转到编辑页面
@@ -49,7 +53,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>资源名称：<input name="textCh" id="textCh" value="<%=data.textCh%>" type="text" class="input5" /></td>
+                    <td>资源名称：<input name="textCh" id="textCh" value="<%=data.textCh%>" type="text" class="input5" onchange="setDefault()" /></td>
                     <td><a href="javascript:search ()" class="chaxun"></a></td>
                 </tr>
             </table>

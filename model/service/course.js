@@ -5,6 +5,8 @@
 var db = require('../../common/db');
 var async = require('async');
 var consts = require('../../model/utils/consts');
+var utils = require('../../common/utils');
+
 
 module.exports.selectAllCourse = function(currentPage,cb) {
 
@@ -51,7 +53,9 @@ module.exports.selectAllCourse = function(currentPage,cb) {
 
 module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb) {
 
+    var thisTime = utils.date2str(new Date(),"yyyy-MM-dd");
     var parm = ' where  a.classroomId=b.id ';
+    parm += " and str_to_date(a.courseDate,'%Y-%m-%d') >= str_to_date('"+thisTime+"','%Y-%m-%d') ";
     if(courseType!='')
     {
         parm+='  and  a.courseType ='+courseType ;
