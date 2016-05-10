@@ -13,15 +13,15 @@ var async = require('async');
  * @param type
  * @param cb
  */
-module.exports.insertNotice = function(title,startDate,endDate,content,type,updateDate,createUser, cb) {
+module.exports.insertNotice = function(title,startDate,endDate,content,type,updateDate,createUser,filesName1,filesName2, cb) {
     //往公告主表中增加一条记录
-    var insertSql = 'INSERT INTO notice (`title`,startDate,endDate,`content`,`type`,updateDate,createUser,dateline) VALUES (?,?,?,?,?,?,?,?)';
+    var insertSql = 'INSERT INTO notice (`title`,startDate,endDate,`content`,`type`,updateDate,createUser,dateline,filesName1,filesName2) VALUES (?,?,?,?,?,?,?,?,?,?)';
     //查询系统用户所对应的id
     var selectUserSql = "select id from sysUser where activity = 'Y'";
 
     async.series({
         newNotice : function(callback){
-            db.query(insertSql, [title,startDate,endDate,content,type,updateDate,createUser,new Date().getTime()], function (cbData, err, rows, fields) {
+            db.query(insertSql, [title,startDate,endDate,content,type,updateDate,createUser,new Date().getTime(),filesName1,filesName2], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {
@@ -231,10 +231,11 @@ module.exports.fetchAllNoticeByUser = function(userId,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateNotice = function(id, title,startDate,endDate,content,type,updateDate, cb) {
+module.exports.updateNotice = function(id, title,startDate,endDate,content,type,updateDate,filesName1,filesName2, cb) {
 
-    var sql = 'UPDATE notice SET `title` = ?, `startDate` = ? , `endDate` = ? , `content` = ?, type = ?,updateDate=? WHERE id = ?';
-    var par = [title,startDate,endDate,content,type, updateDate,id];
+
+    var sql = 'UPDATE notice SET `title` = ?, `startDate` = ? , `endDate` = ? , `content` = ?, type = ?,updateDate=?,filesName1=?,filesName2=? WHERE id = ?';
+    var par = [title,startDate,endDate,content,type, updateDate,filesName1,filesName2,id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

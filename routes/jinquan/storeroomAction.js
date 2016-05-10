@@ -22,6 +22,8 @@ module.exports.list = function (req, res,next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
 
+    var resourcesData = req.session.user.resourcesData;
+
     service.list(shopId,name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
@@ -33,7 +35,7 @@ module.exports.list = function (req, res,next) {
                 if (!err) {
                     results.classify = classify;
                     res.render('storeroom/storeroomList', {data : results, replytype : replytype,laypage: laypage({
-                        curr: currentPage,url: url,pages: results.totalPages})
+                        curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
                     });
                 } else {
                     next();

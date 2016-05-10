@@ -156,31 +156,31 @@ module.exports.detail = function (id, cb) {
  * @param id
  * @param cb
  */
-module.exports.preEdit = function(id, cb) {
-
-    var sql = 'SELECT c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc WHERE cc.id = c.classType AND c.id = ?';
-
-    db.query(sql,[id],function(cbData, err, rows, fields) {
-
-        if (!err) {
-            if (rows.length != 0) {
-                var outLogId = rows[0].outLogId;
-                var outSQl = 'SELECT * FROM storeroomOutLog WHERE id = ?';
-                db.query(outSQl,[outLogId],function(cbData, err, rows, fields) {
-                    if(!err) {
-                        if(rows.length != 0) { // 出库单主表，查找出
-
-                        }
-                    } else {
-                        cb(err);
-                    }
-                });
-            }
-        } else {
-            cb(err);
-        }
-    });
-}
+//module.exports.preEdit = function(id, cb) {
+//
+//    var sql = 'SELECT c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc WHERE cc.id = c.classType AND c.id = ?';
+//
+//    db.query(sql,[id],function(cbData, err, rows, fields) {
+//
+//        if (!err) {
+//            if (rows.length != 0) {
+//                var outLogId = rows[0].outLogId;
+//                var outSQl = 'SELECT * FROM storeroomOutLog WHERE id = ?';
+//                db.query(outSQl,[outLogId],function(cbData, err, rows, fields) {
+//                    if(!err) {
+//                        if(rows.length != 0) { // 出库单主表，查找出
+//
+//                        }
+//                    } else {
+//                        cb(err);
+//                    }
+//                });
+//            }
+//        } else {
+//            cb(err);
+//        }
+//    });
+//}
 
 module.exports.preDel = function(id,shopId, cb) {
 

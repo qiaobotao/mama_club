@@ -25,13 +25,15 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
+    var resourcesData = req.session.user.resourcesData;
+
     service.fetchAllCLassRoom(shopId,classRoomName,classRoomCode,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.classRoomName = classRoomName;
             results.classRoomCode = classRoomCode;
             res.render('classroom/classroomList', {data : results, replytype : replytype,laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})});
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData});
         } else {
             next();
         }
@@ -196,12 +198,12 @@ module.exports.checkName = function (req, res, next) {
     })
 }
 
-module.exports.preEdit = function(req, res, next) {
-
-    var id = req.query.id ? req.query.id : '';
-
-
-}
+//module.exports.preEdit = function(req, res, next) {
+//
+//    var id = req.query.id ? req.query.id : '';
+//
+//
+//}
 
 module.exports.preDel = function(req, res, next) {
 

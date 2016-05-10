@@ -11,9 +11,12 @@ module.exports.list = function (req, res, next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
+
+    var resourcesData = req.session.user.resourcesData;
+
     service.getCoursePlanList(shopId,function (err, results) {
         if (!err) {
-            res.render('coursePlan/coursePlanList',{data : results,replytype:replytype,"courseDate":consts.COURSE_DATE});
+            res.render('coursePlan/coursePlanList',{data : results,replytype:replytype,"courseDate":consts.COURSE_DATE,resourcesData:resourcesData});
         } else {
             res.render('error', {error : err});
         }

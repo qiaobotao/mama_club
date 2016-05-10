@@ -16,6 +16,8 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var currentPage = req.query.page ? req.query.page : '1';
 
+    var resourcesData = req.session.user.resourcesData;
+
     service.getAllBrand(did,currentPage,function (err, results) {
         if (!err) {
             distr_service.getAllDistributors(function(err, resu) {
@@ -24,7 +26,7 @@ module.exports.list = function (req, res,next) {
                     results.currentPage = currentPage;
                     results.distributors = resu;
                     res.render('brand/brandList', {data : results, replytype : replytype,laypage: laypage({
-                        curr: currentPage,url: url,pages: results.totalPages})});
+                        curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData});
                 } else {
                     console.log(err);
                     next();

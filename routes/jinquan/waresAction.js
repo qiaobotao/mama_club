@@ -270,6 +270,8 @@ module.exports.selectFromInventory = function (req, res, next) {
     var index = req.query.index ? req.query.index : '';
     var url = '/jinquan'+req.url;
 
+    var resourcesData = req.session.user.resourcesData;
+
     service.listByInventory(sid,name,classifyId,currentPage,function (err, results) {
 
         if (!err) {
@@ -280,7 +282,7 @@ module.exports.selectFromInventory = function (req, res, next) {
                 if (!err) {
                     results.classify = classify;
                     res.render('wares/waresSelectFromInventory', {data : results, index : index, sid : sid, laypage: laypage({
-                        curr: currentPage,url: url,pages: results.totalPages})
+                        curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
                     });
                 } else {
                     console.log(err);

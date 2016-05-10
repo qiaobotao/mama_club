@@ -35,7 +35,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.listByUser = function (req, res) {
+module.exports.listByUser = function (req, res, next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var url = '/jinquan'+req.url;
@@ -59,55 +59,66 @@ module.exports.listByUser = function (req, res) {
  * @param res
  */
 module.exports.save = function (req, res, next) {
-    var id = req.body.id ? req.body.id : '';
-    var title = req.body.title ? req.body.title : '';
-    var type = req.body.type ? req.body.type : '';
-    var startDate = req.body.startDate ? req.body.startDate : '';
-    var endDate = req.body.endDate ? req.body.endDate : '';
-    var content = req.body.content ? req.body.content : '';
+    var id = req.query.id ? req.query.id : '';
+    var title = req.query.title ? req.query.title : '';
+    var type = req.query.type ? req.query.type : '';
+    var startDate = req.query.startDate ? req.query.startDate : '';
+    var endDate = req.query.endDate ? req.query.endDate : '';
+    var content = req.query.content ? req.query.content : '';
     var createUser = req.session.user.userName;
     var thisDate = new Date();
     var updateDate = thisDate.getFullYear()+"-"+(thisDate.getMonth() < 10 ? "0"+thisDate.getMonth() :thisDate.getMonth())+"-"+thisDate.getDate();
-    if(id!=''){//修改
-        service.updateNotice(id,title,startDate,endDate,content,type,updateDate,function(err, results) {
-            if(!err) {
-                res.redirect('/jinquan/notice_list?replytype=update');
-            } else {
-                console.log(err.message);
-                res.render('error');
+
+    var form = new multiparty.Form({uploadDir: './public/files/'});
+    form.parse(req, function(err, fields, files) {
+        if (!err) {
+            var inputFile1 = files.recordfile[0];
+            var inputFile2 = files.recordfile[1];
+            // var uploadedPath = inputFile.path;
+            console.log(inputFile1);
+            console.log(inputFile2);
+            var filename1 = '';
+            var filename2 = '';
+            var baseUrl = req.headers.origin;
+            if (inputFile1.originalFilename != '' && inputFile1.size != 0) {
+                 filename1 = baseUrl + inputFile1.path.substr(inputFile1.path.indexOf('/'),inputFile1.path.length);;
             }
-        })
-    }else{//添加
-        service.insertNotice(title,startDate,endDate,content,type,updateDate,createUser,function(err, results) {
-            if(!err) {
-                service.insertSysUserNotice(results.newNotice.insertId,results.userData,function(err, results) {
+
+            if (inputFile1.originalFilename != '' && inputFile1.size != 0) {
+                 filename2 = baseUrl + inputFile2.path.substr(inputFile2.path.indexOf('/'),inputFile2.path.length);
+            }
+
+            if(id!=''){//修改
+                service.updateNotice(id,title,startDate,endDate,content,type,updateDate,filename1,filename2,function(err, results) {
                     if(!err) {
-                        res.redirect('/jinquan/notice_list?replytype=add');
+                        res.redirect('/jinquan/notice_list?replytype=update');
                     } else {
                         console.log(err.message);
                         res.render('error');
                     }
                 })
-            } else {
-                console.log(err.message);
-                res.render('error');
+            }else{//添加
+                service.insertNotice(title,startDate,endDate,content,type,updateDate,createUser,filename1,filename2,function(err, results) {
+                    if(!err) {
+                        service.insertSysUserNotice(results.newNotice.insertId,results.userData,function(err, results) {
+                            if(!err) {
+                                res.redirect('/jinquan/notice_list?replytype=add');
+                            } else {
+                                console.log(err.message);
+                                res.render('error');
+                            }
+                        })
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             }
-        })
-    }
-
-    //var form = new multiparty.Form({uploadDir: './public/files/'});
-    //form.parse(req, function(err, fields, files) {
-    //    if (!err) {
-    //        var inputFile = files.recordfile[0];
-    //        var uploadedPath = inputFile.path;
-    //        console.log(uploadedPath);
-    //    } else {
-    //        console.log('parse error: ' + err);
-    //        next();
-    //    }
-    //
-    //});
-
+        } else {
+            console.log('parse error: ' + err);
+            next();
+        }
+    });
 }
 /**
  * 修改
