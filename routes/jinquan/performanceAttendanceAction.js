@@ -10,7 +10,7 @@ var service = require('../../model/service/performanceAttendance');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var staffName = req.query.staffName ? req.query.staffName : '';//员工名称（用于模糊搜索）
     var startDate = req.query.startDate ? req.query.startDate : '';//考勤开始时间
@@ -41,7 +41,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     //var id = req.body.id ? req.body.id : '';//只有新增，不需要id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var performanceDate = req.body.performanceDate ? req.body.performanceDate : '';//考核时间(年份)

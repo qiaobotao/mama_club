@@ -13,7 +13,7 @@ var service = require('../../model/service/activityManage');
 var consts = require('../../model/utils/consts');
 
 
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var activityName = req.query.activityName ? req.query.activityName : '';
     var activityType = req.query.activityType ? req.query.activityType : '';
     var effectiveTimeStart = req.query.effectiveTimeStart ? req.query.effectiveTimeStart : '';
@@ -46,7 +46,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
     res.render('activityManage/activityManageAdd',{"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
 }
 

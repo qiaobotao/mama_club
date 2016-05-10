@@ -6,7 +6,7 @@
  * @param req
  * @param res
  */
-module.exports.layui = function (req, res) {
+module.exports.layui = function (req, res,next) {
 
     var time = '2016-04-10'.replace(/-/g,'/');
     console.log(time);

@@ -10,7 +10,7 @@ var service = require('../../model/service/attendanceChange');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
     var attendanceType = req.query.attendanceType ? req.query.attendanceType : '';//变更类型
@@ -40,7 +40,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.edit = function (req, res) {
+module.exports.edit = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
     if(id == ''){
         var attendanceChange = [];
@@ -61,7 +61,7 @@ module.exports.edit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
     var attendanceType = req.body.attendanceType ? req.body.attendanceType : '';//类型

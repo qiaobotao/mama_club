@@ -58,7 +58,7 @@ module.exports.goAdd = function (req, res,next) {
     res.render('serviceMeet/serviceMeetAdd');
 }
 
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res,next) {
     var tel = req.body.tel ? req.body.tel : '';
     var name = req.body.name ? req.body.name : '';
     var memberId = req.body.memberId ? req.body.memberId : '';

@@ -41,7 +41,7 @@ module.exports.list = function (req, res,next) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function(req, res) {
+module.exports.goAdd = function(req, res,next) {
     res.render('memberCardType/memberCardTypeAdd',{"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
 
 };

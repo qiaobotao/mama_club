@@ -11,7 +11,7 @@ var laypage = require('laypage');
 var service = require('../../model/service/classMeet');
 var consts = require('../../model/utils/consts');
 
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var memberName = req.query.memberName ? req.query.memberName : '';
     var courseName = req.query.courseName ? req.query.courseName : '';
     var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';
@@ -41,7 +41,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
     res.render('classMeet/classMeetAdd');
 }
 
@@ -174,7 +174,7 @@ module.exports.checkIsSelectCourse = function (req, res, next) {
  * @param req
  * @param res
  */
-module.exports.classMeetSelectList = function (req, res) {
+module.exports.classMeetSelectList = function (req, res,next) {
     var memberName = req.query.memberName ? req.query.memberName : '';
     var courseName = req.query.courseName ? req.query.courseName : '';
     var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';

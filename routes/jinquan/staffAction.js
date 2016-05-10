@@ -12,7 +12,7 @@ var attendanceTypeService = require('../../model/service/attendanceType');//è€ƒå
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var name = req.query.name ? req.query.name : '';
@@ -41,7 +41,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res,next) {
     var staff =[];
     res.render('staff/staffAdd', {staff : staff});
 }
@@ -50,7 +50,7 @@ module.exports.add = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var name = req.body.name ? req.body.name : '';
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';

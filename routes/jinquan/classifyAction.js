@@ -68,7 +68,7 @@ module.exports.del = function(req, res, next) {
  * @param req
  * @param res
  */
-module.exports.preAdd = function (req, res) {
+module.exports.preAdd = function (req, res,next) {
 
     res.render('classify/mainClassifyAdd');
 
@@ -167,7 +167,7 @@ module.exports.subList = function (req, res,next) {
  * @param req
  * @param res
  */
-module.exports.preSubAddClassify = function (req, res) {
+module.exports.preSubAddClassify = function (req, res,next) {
 
     var pid = req.query.pid ? req.query.pid : 0;
 

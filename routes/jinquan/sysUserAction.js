@@ -12,7 +12,7 @@ var menuService = require('../../model/service/sysMenu');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var shop = req.query.shop ? req.query.shop : '';
     var account = req.query.account ? req.query.account : '';
@@ -44,7 +44,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.edit = function (req, res) {
+module.exports.edit = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';//用户id
     var show = req.query.show ? req.query.show : '';
     var currentPage = req.query.page ? req.query.page : '1';
@@ -102,7 +102,7 @@ module.exports.edit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var userName = req.body.userName ? req.body.userName : '';
     var password = req.body.password ? req.body.password : '';
@@ -214,7 +214,7 @@ module.exports.del = function (req, res, next) {
  * @param req
  * @param res
  */
-module.exports.set = function (req, res) {
+module.exports.set = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     //获取登陆用户的菜单信息
     menuService.findSysMenusByUserId(req.session.user.id,function(err, results) {
@@ -241,7 +241,7 @@ module.exports.set = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.updateSetBySysUser = function (req, res) {
+module.exports.updateSetBySysUser = function (req, res,next) {
     var id = req.session.user.id;
     var oldpwd = req.body.oldpwd ? req.body.oldpwd :'';
     var newpwd = req.body.newpwd ? req.body.newpwd :'';

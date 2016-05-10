@@ -9,7 +9,7 @@ var service = require('../../model/service/attendanceSearch');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
     var startDate = req.query.startDate ? req.query.startDate : '';//请假开始日期

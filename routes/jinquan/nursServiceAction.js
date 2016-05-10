@@ -12,7 +12,7 @@ var serviceMeetService = require('../../model/service/servicemeet');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     //res.render('nursService/nursServiceList');
 
     var name = req.query.name ? req.query.name : '';
@@ -44,7 +44,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
     //查询页面需要展示的数据库字典表
     //诊断结果
     service.getnursserviceClassify(function (err, results) {
@@ -60,7 +60,7 @@ module.exports.goAdd = function (req, res) {
     //其他原因
 }
 
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res,next) {
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var serviceDate = req.body.serviceDate ? req.body.serviceDate : '';
     var name = req.body.name ? req.body.name : '';
@@ -247,7 +247,7 @@ module.exports.add = function (req, res) {
 }
 
 
-module.exports.doEdit = function (req, res) {
+module.exports.doEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var serviceDate = req.body.serviceDate ? req.body.serviceDate : '';

@@ -6,15 +6,17 @@
 var service = require('../../model/service/performanceSearch');
 var attendanceTypeService = require('../../model/service/attendanceType');
 var pAttendanceService = require('../../model/service/performanceAttendance');
+var consts = require('../../model/utils/consts');
 /**
  * 获取绩效查询数据
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var attendance = req.query.attendance ? req.query.attendance : '';//是否针对考勤页面
     var pAttendanceId = req.query.pAttendanceId ? req.query.pAttendanceId : '';//考勤id
-    var workDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+    //var workDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+    var workDate = consts.COURSE_DATE;
     var staffId = req.query.staffId ? req.query.staffId : '';//员工名称
     var staffName = req.query.staffName ? req.query.staffName : '';//员工名称
     var performanceStartDate = req.query.performanceStartDate ? req.query.performanceStartDate : '';//考勤开始时间

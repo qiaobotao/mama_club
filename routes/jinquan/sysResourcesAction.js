@@ -10,7 +10,7 @@ var menuService = require('../../model/service/sysMenu');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var textCh = req.query.textCh ? req.query.textCh : '';
 
@@ -37,7 +37,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.edit = function (req, res) {
+module.exports.edit = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
     var show = req.query.show ? req.query.show : '';
     if(id == ''){
@@ -76,7 +76,7 @@ module.exports.edit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var textCh = req.body.textCh ? req.body.textCh : '';
     var textEn = req.body.textEn ? req.body.textEn : '';

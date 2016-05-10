@@ -8,7 +8,7 @@ var service = require('../../model/service/staffTrain');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var courseName = req.query.courseName ? req.query.courseName : '';
@@ -40,7 +40,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.edit = function (req, res) {
+module.exports.edit = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
     var show = req.query.show ? req.query.show : '';
     service.fetchSingleStaffTrain(id, function(err, results) {
@@ -58,7 +58,7 @@ module.exports.edit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     var courseId = req.body.id ? req.body.id : '';
     var staffId = req.body.staffId ? req.body.staffId : '';
     var staffName = req.body.staffName ? req.body.staffName : '';

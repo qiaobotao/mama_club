@@ -9,7 +9,7 @@ var service = require('../../model/service/staffLevel');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var name = req.query.name ? req.query.name : '';
@@ -34,7 +34,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var name = req.body.name ? req.body.name : '';
     var describe = req.body.describe ? req.body.describe : '';

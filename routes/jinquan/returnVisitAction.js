@@ -2,7 +2,7 @@
 var laypage = require('laypage');
 var service = require('../../model/service/returnvisit');
 var serviceMeetService = require('../../model/service/servicemeet');
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     //res.render('returnVisit/returnVisitList');
 
     var serviceMeetId = req.query.serviceMeetId ? req.query.serviceMeetId : '';
@@ -31,11 +31,11 @@ module.exports.list = function (req, res) {
     });
 }
 
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
     res.render('returnVisit/returnVisitAdd');
 }
 
-module.exports.add = function (req, res) {
+module.exports.add = function (req, res,next) {
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -64,7 +64,7 @@ module.exports.add = function (req, res) {
 }
 
 
-module.exports.doEdit = function (req, res) {
+module.exports.doEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';

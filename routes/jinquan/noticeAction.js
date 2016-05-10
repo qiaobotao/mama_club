@@ -10,7 +10,7 @@ var multiparty = require('multiparty');
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var title = req.query.title ? req.query.title : '';
@@ -35,7 +35,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.listByUser = function (req, res) {
+module.exports.listByUser = function (req, res,next) {
 
     var currentPage = req.query.page ? req.query.page : '1';
     var url = '/jinquan'+req.url;

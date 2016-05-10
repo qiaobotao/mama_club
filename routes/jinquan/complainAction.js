@@ -11,7 +11,7 @@
 var laypage = require('laypage');
 var service = require('../../model/service/complain');
 var serviceMeetService = require('../../model/service/servicemeet');
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
    // res.render('complain/complainList');
 
     var name = req.query.name ? req.query.name : '';
@@ -46,7 +46,7 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.goAdd = function (req, res) {
+module.exports.goAdd = function (req, res,next) {
     res.render('complain/complainAdd');
 }
 

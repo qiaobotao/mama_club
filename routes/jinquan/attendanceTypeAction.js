@@ -5,12 +5,13 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/attendanceType');
+var consts = require('../../model/utils/consts');
 /**
  * 获取考勤类型列表
  * @param req
  * @param res
  */
-module.exports.list = function (req, res) {
+module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var categoryName = req.query.categoryName ? req.query.categoryName : '';
     var url = '/jinquan'+req.url;
@@ -34,9 +35,11 @@ module.exports.list = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.edit = function (req, res) {
+module.exports.edit = function (req, res,next) {
     var id = req.query.id ? req.query.id : '';
-    var workDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+    //var workDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'];
+
+    var workDate = consts.COURSE_DATE;
     if(id == ''){
         var attendanceType = [];
         res.render('attendanceType/attendanceTypeEdit', {attendanceType : attendanceType,workDate:workDate,attendanceTypeMx:[]});
@@ -57,7 +60,7 @@ module.exports.edit = function (req, res) {
  * @param req
  * @param res
  */
-module.exports.save = function (req, res) {
+module.exports.save = function (req, res,next) {
     //主表信息
     var id = req.body.id ? req.body.id : '';
     var categoryName = req.body.categoryName ? req.body.categoryName : '';
