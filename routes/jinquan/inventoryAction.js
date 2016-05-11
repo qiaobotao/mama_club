@@ -5,6 +5,7 @@
 var service = require('../../model/service/inventory');
 var service_storeroom = require('../../model/service/storeroom');
 var laypage = require('laypage');
+var myUtils = require('../../common/utils');
 module.exports.list = function (req, res, next) {
 
     var sid = req.query.sid ? req.query.sid : ''; // 入库房
@@ -25,10 +26,12 @@ module.exports.list = function (req, res, next) {
                     res.render('inventory/inventoryList', {data : results,laypage: laypage({
                         curr: currentPage,url: url,pages: results.totalPages})});
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             })
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });

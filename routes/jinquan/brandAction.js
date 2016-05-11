@@ -5,7 +5,7 @@
 var laypage = require('laypage');
 var service = require('../../model/service/brand');
 var distr_service = require('../../model/service/distributor');
-
+var myUtils = require('../../common/utils');
 
 module.exports.list = function (req, res,next) {
 
@@ -28,12 +28,12 @@ module.exports.list = function (req, res,next) {
                     res.render('brand/brandList', {data : results, replytype : replytype,laypage: laypage({
                         curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData});
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             })
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -46,7 +46,7 @@ module.exports.preAdd = function(req, res, next) {
          if (!err) {
              res.render('brand/brandAdd',{distributors:results});
          } else {
-             console.log(err);
+             myUtils.printSystemLog(err)
              next();
          }
      })
@@ -63,7 +63,7 @@ module.exports.add = function(req, res, next) {
         if (!err) {
              res.redirect('/jinquan/brand_list?replytype=add');
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -78,7 +78,7 @@ module.exports.checkName = function(req, res, next) {
         if (!err) {
             res.json({flag:results});
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -93,7 +93,7 @@ module.exports.browse = function(req, res, next) {
         if (!err) {
              res.render('brand/brandBrowse', {data : results[0]});
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
              next();
         }
     });
@@ -108,7 +108,7 @@ module.exports.del = function(req, res, next) {
         if (!err) {
             res.redirect('/jinquan/brand_list?replytype=del');
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -127,7 +127,7 @@ module.exports.preUpdate = function(req, res, next) {
                 res.render('brand/brandUpdate', {data:data});
             })
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -144,7 +144,7 @@ module.exports.update = function(req, res, next) {
         if (!err) {
             res.redirect('/jinquan/brand_list?replytype=update');
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })

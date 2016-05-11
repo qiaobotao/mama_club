@@ -6,6 +6,7 @@ var service_storeroom = require('../../model/service/storeroom');
 var service = require('../../model/service/storeroomMove');
 var moment = require('moment');
 var laypage = require('laypage');
+var myUtils = require('../../common/utils');
 
 /**
  * 获取移库列表
@@ -51,10 +52,12 @@ module.exports.list = function (req, res, next) {
                         res.render('storeroomMove/storeroomMoveList', {data : results, replytype : replytype,laypage: laypage({
                             curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData});
                     } else {
+                        myUtils.printSystemLog(err)
                         next();
                     }
                 })
             } else {
+                myUtils.printSystemLog(err)
                 next();
             }
         });
@@ -75,6 +78,7 @@ module.exports.preadd = function (req, res, next) {
         if (!err) {
             res.render('storeroomMove/storeroomMoveAdd', {data : storerooms});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -127,15 +131,18 @@ module.exports.add = function (req, res, next) {
                       } else {
                           service.delMoveLog(moveLogId);
                           service.delMoveLogMX(moveLogId);
+                          myUtils.printSystemLog(err)
                           next();
                       }
                    })
                } else {
                    service.delMoveLog(moveLogId);
+                   myUtils.printSystemLog(err)
                    next();
                }
            })
        } else {
+           myUtils.printSystemLog(err)
            next();
        }
    })
@@ -150,6 +157,7 @@ module.exports.detail = function (req, res, next) {
         if (!err) {
             res.render('storeroomMove/storeroomMoveDetail', {data : results});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });

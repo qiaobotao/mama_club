@@ -7,6 +7,7 @@ var storeroomService = require('../../model/service/storeroom');
 var distributorService = require('../../model/service/distributor');
 var moment = require('moment');
 var laypage = require('laypage');
+var myUtils = require('../../common/utils');
 /**
  * 获取入库列表
  * @param req
@@ -52,14 +53,17 @@ module.exports.list = function (req, res, next) {
                                 curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
                             });
                         } else {
+                            myUtils.printSystemLog(err)
                             next();
                         }
                     })
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             })
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -91,18 +95,22 @@ module.exports.preAdd = function (req, res, next) {
                                     data.distributors =  distributors;
                                     res.render('storeroomIn/storeroomInAdd',{data : data});
                                 } else {
+                                    myUtils.printSystemLog(err)
                                     next();
                                 }
                             })
                         } else {
+                            myUtils.printSystemLog(err)
                             next();
                         }
                     })
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             })
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -168,16 +176,19 @@ module.exports.add = function (req, res, next) {
                         } else {
                             service.delInLog(logId);
                             service.delInLogMX(logId);
+                            myUtils.printSystemLog(err)
                             next();
                         }
                     });
 
                 } else { // 如果入库详情出现错误，则将主表记录同时删除
                     service.delInLog(logId);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
+            myUtils.printSystemLog(err)
            next();
         }
     });
@@ -198,6 +209,7 @@ module.exports.detail = function (req, res, next) {
         if (!err) {
             res.render('storeroomIn/storeroomInDetail',{data : results});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });

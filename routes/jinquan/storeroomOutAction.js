@@ -7,6 +7,7 @@ var service = require('../../model/service/storeroomOut');
 var storeroomService = require('../../model/service/storeroom');
 var moment = require('moment');
 var laypage = require('laypage');
+var myUtils = require('../../common/utils');
 /**
  * 获取出库列表
  * @param req
@@ -50,10 +51,12 @@ module.exports.list = function (req, res, next) {
                     res.render('storeroomOut/storeroomOutList',{data : results,replytype : replytype,laypage: laypage({
                         curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData});
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -80,10 +83,12 @@ module.exports.preAdd = function (req, res, next) {
                     data.storerooms = storerooms;
                     res.render('storeroomOut/storeroomOutAdd', {data : data});
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
+            myUtils.printSystemLog(err)
            next();
         }
     });
@@ -151,15 +156,18 @@ module.exports.add = function (req, res, next) {
                         } else {
                             service.delOutLog(outLogId);
                             service.delOutLogMX(outLogId);
+                            myUtils.printSystemLog(err)
                             next();
                         }
                     });
                 } else {
                     service.delOutLog(outLogId);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             })
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -181,6 +189,7 @@ module.exports.checkResidue = function (req, res, next) {
         if (!err) {
             res.json({flag : flag});
         } else {
+            myUtils.printSystemLog(err)
           next();
         }
     });
@@ -201,6 +210,7 @@ module.exports.detail = function (req, res, next) {
         if (!err) {
             res.render('storeroomOut/storeroomOutDetail',{data : results});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });

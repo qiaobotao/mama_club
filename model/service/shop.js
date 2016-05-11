@@ -6,6 +6,7 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var myUtils = require('../../common/utils');
 /**
  * 增加门店
  * @param serialNumber
@@ -16,6 +17,8 @@ var async = require('async');
  * @param cb
  */
 module.exports.insertShop = function(serialNumber,name,principal,tel,address,remark, cb) {
+
+    myUtils.printSystemLog('增加门店:'+serialNumber+'-'+name+'-'+principal+'-'+tel+'-'+address+'-'+remark);
 
     var sql = 'INSERT INTO shop (serialNumber,name,principal,tel,address,remark,dateline,status) VALUES (?,?,?,?,?,?,?,?)';
     db.query(sql, [serialNumber,name,principal,tel,address,remark, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
@@ -33,6 +36,8 @@ module.exports.insertShop = function(serialNumber,name,principal,tel,address,rem
  * @param cb
  */
 module.exports.delShop= function (id, cb) {
+
+    myUtils.printSystemLog('删除门店：'+id)
 
     var check_sql = 'SELECT * FROM staff WHERE shopId = ?';
     var sql = 'DELETE FROM shop WHERE id = ?';
@@ -131,6 +136,8 @@ module.exports.fetchAllShop = function(name,principal,number,currentPage,cb) {
  * @param cb
  */
 module.exports.updateShop = function(id, serialNumber,  name, address, principal, tel, remark, cb) {
+
+    myUtils.printSystemLog('修改门店：'+id+'-'+serialNumber+'-'+name+'-'+address+'-'+principal+'-'+tel+'-'+remark)
 
     var sql = 'UPDATE shop SET serialNumber = ?, name = ?, tel = ?, address = ?, principal = ?, remark = ? WHERE id = ?';
     var par = [serialNumber, name, tel, address, principal, remark, id];

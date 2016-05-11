@@ -6,6 +6,7 @@
 var service = require('../../model/service/wares');
 var brandService = require('../../model/service/brand');
 var laypage = require('laypage');
+var myUtils = require('../../common/utils');
 /**
  * 商品展示首页list
  * @param req
@@ -35,12 +36,12 @@ module.exports.list = function (req, res, next) {
                         curr: currentPage,url: url,pages: results.totalPages}) ,resourcesData:resourcesData
                     });
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -66,12 +67,12 @@ module.exports.modular = function (req, res, next) {
                     results.classify = classify;
                     res.render('wares/waresModular', {data : results});
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -88,10 +89,12 @@ module.exports.preAdd = function (req, res, next) {
                     data.brands = brands;
                     res.render('wares/waresAdd', {data : data});
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         }  else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -116,6 +119,7 @@ module.exports.add = function (req, res, next) {
         if (!err) {
             res.redirect('/jinquan/wares_list?replytype=add');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -136,6 +140,7 @@ module.exports.detail = function (req, res, next) {
             var wares = results[0];
             res.render('wares/waresDetail', {wares : wares});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -159,14 +164,17 @@ module.exports.preEdit = function (req, res, next) {
                         if (!err) {
                             res.render('wares/waresEdit', {wares : wares, classifys : classifys, brand : brands});
                         } else {
+                            myUtils.printSystemLog(err)
                             next();
                         }
                     })
                 } else {
+                    myUtils.printSystemLog(err)
                    next();
                 }
             })
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -198,6 +206,7 @@ module.exports.waresUpdate = function (req, res, next) {
         if (!err) {
             res.redirect('/jinquan/wares_list?replytype=update');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -212,6 +221,7 @@ module.exports.del = function (req, res, next) {
         if (!err) {
             res.redirect('/jinquan/wares_list?replytype=del');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -244,11 +254,12 @@ module.exports.select = function (req, res, next) {
                         curr: currentPage,url: url,pages: results.totalPages})
                     });
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -285,11 +296,12 @@ module.exports.selectFromInventory = function (req, res, next) {
                         curr: currentPage,url: url,pages: results.totalPages})
                     });
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
 
@@ -305,7 +317,7 @@ module.exports.check_serial= function(req, res, next) {
         if (!err) {
             res.json({flag:results});
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -318,7 +330,7 @@ module.exports.check_name = function(req, res, next) {
         if (!err) {
             res.json({flag:results});
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err)
             next();
         }
     })

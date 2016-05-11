@@ -7,7 +7,7 @@
 var db = require('../../common/db');
 var async = require('async');
 var mainClassroomClassifyId = require('../../config').mainClassifyId.classroomType;
-
+var myUtils = require('../../common/utils');
 
 /**
  * 获取教室分类
@@ -38,12 +38,13 @@ module.exports.getClassroomClassify = function (cb) {
  */
 module.exports.insertClassroom = function(shopId,serialNumber,name,classType,remark,materialId, cb) {
 
+    myUtils.printSystemLog('增加教室：'+shopId+'_'+serialNumber+'_'+name+'_'+classType+'_'+remark+'_'+materialId);
+
     var sql = 'INSERT INTO classroom (serialNumber,name,classType,remark,outLogId,dateline,status,shopId) VALUES (?,?,?,?,?,?,?,?)';
     db.query(sql, [serialNumber,name,classType,remark,materialId,new Date().getTime(),'1',shopId], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
-            console.log(err);
             cb(err);
         }
     });
@@ -275,6 +276,8 @@ module.exports.checkName = function (shopId,name, cb) {
  */
 module.exports.del = function(id,sid,shopId,userName, cb) {
 
+    myUtils.printSystemLog('删除教室：'+id+'-'+sid+'-'+shopId+'-'+userName)
+
     var getOutLogId = 'SELECT outLogId FROM classroom WHERE id = ? AND shopId = ?';
     var del = 'DELETE FROM classroom WHERE id = ? AND shopId = ?';
 
@@ -325,6 +328,8 @@ module.exports.del = function(id,sid,shopId,userName, cb) {
  */
 function inStoreroom (oper,sid,arr,cb) {
 
+    myUtils.printSystemLog('删除教室新增入库单数据：'+oper+'-'+sid+'-'+arr)
+
     var sql = 'INSERT INTO storeroomInLog (buyer,buyDate,storeroomId,dateline,inType,buyType,distributorId) VALUES (?,?,?,?,?,?,?)';
 
     // 教室物品 id 53
@@ -357,6 +362,8 @@ function inStoreroom (oper,sid,arr,cb) {
  * @param cb
  */
 function updateInventory (sid,arr,cb) {
+
+    myUtils.printSystemLog('删除或者添加教室库存更改：'+sid+'-'+arr)
 
     // 查看是否原来有库存
     var check_sql = 'SELECT * FROM inventory WHERE storeroomId = ? AND waresId = ?';

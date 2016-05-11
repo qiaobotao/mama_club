@@ -5,7 +5,7 @@
 
 var laypage = require('laypage');
 var service = require('../../model/service/classify');
-
+ var myUtils = require('../../common/utils');
 
 /**
  * 返回所有父分类和子分类
@@ -26,6 +26,7 @@ module.exports.list = function (req, res,next) {
                 curr: currentPage,url: url,pages: results.totalPages})
             });
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -52,11 +53,13 @@ module.exports.del = function(req, res, next) {
                    if(!err) {
                        res.redirect('/jinquan/main_classify_list');
                    } else {
+                       myUtils.printSystemLog(err)
                        next();
                    }
                })
            }
         } else {
+            myUtils.printSystemLog(err)
            next();
         }
     })
@@ -89,6 +92,7 @@ module.exports.add = function (req, res, next) {
         if(!err) {
             res.redirect('/jinquan/main_classify_list');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -109,6 +113,7 @@ module.exports.preEdit = function(req, res, next) {
             var mainClassify = results.length == 0 ? null : results[0];
             res.render('classify/mainClassifyEdit',{mainClassify : mainClassify});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -131,6 +136,7 @@ module.exports.update = function (req, res,next) {
         if (!err) {
             res.redirect('/jinquan/main_classify_list');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -156,6 +162,7 @@ module.exports.subList = function (req, res,next) {
             results.pid = pid;
             res.render('classify/subClassifyList', {data : results});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -191,6 +198,7 @@ module.exports.addSubClassify = function (req, res, next) {
         if(!err) {
             res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -210,6 +218,7 @@ module.exports.delSubClassify = function (req, res, next) {
         if(!err) {
             res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -230,6 +239,7 @@ module.exports.preSubEdit = function (req, res, next) {
             var subClassify = results.length == 0 ? null : results[0];
             res.render('classify/subClassifyEdit', {classify : subClassify});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
 
@@ -252,6 +262,7 @@ module.exports.subUpdate = function (req, res, next) {
         if(!err) {
             res.redirect('/jinquan/sub_classify_list?id='+pid);
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });

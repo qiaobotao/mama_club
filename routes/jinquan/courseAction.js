@@ -9,6 +9,7 @@
 var service = require('../../model/service/course');
 var laypage = require('laypage');
 var consts = require('../../model/utils/consts');
+var myUtils = require('../../common/utils');
 
 module.exports.list = function (req, res,next) {
 
@@ -37,6 +38,7 @@ module.exports.list = function (req, res,next) {
             });
 
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -59,6 +61,7 @@ module.exports.select = function (req, res, next) {
             var courseDate = consts.COURSE_DATE;
             res.render('course/courseSelect', {data : results,courseDate:courseDate});
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -80,6 +83,7 @@ module.exports.selectForActivity = function (req, res, next) {
         if (!err) {
             res.render('course/courseSelectActivity', {data : results,index : index});
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -95,6 +99,7 @@ module.exports.detail = function (req, res, next) {
             if (!err) {
                 res.render('course/courseDetail_neixun', {data : results,courseDate:consts.COURSE_DATE});
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -106,6 +111,7 @@ module.exports.detail = function (req, res, next) {
                res.render('course/courseDetail_zhuanye', {data : results,courseDate:consts.COURSE_DATE});
 
            } else {
+               myUtils.printSystemLog(err);
                next();
            }
        });
@@ -116,6 +122,7 @@ module.exports.detail = function (req, res, next) {
             if (!err) {
                 res.render('course/courseDetail_fumu', {data : results,courseDate:consts.COURSE_DATE});
             }  else {
+                myUtils.printSystemLog(err);
                 next();
             }
 
@@ -126,6 +133,7 @@ module.exports.detail = function (req, res, next) {
             if (!err) {
                 res.render('course/courseDetail_huiyi', {data : results,courseDate:consts.COURSE_DATE});
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -143,7 +151,7 @@ module.exports.del = function (req, res, next) {
             res.redirect('/jinquan/course_list?replytype='+result);
 
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err);
             next();
         }
 

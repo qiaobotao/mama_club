@@ -4,6 +4,7 @@
 
 var service = require('../../model/service/distributor');
 var laypage = require('laypage');
+var myUtils = require('../../common/utils');
 /**
  * 获取经销商列表
  * @param req
@@ -34,10 +35,12 @@ module.exports.list = function (req, res, next) {
                         curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
                     });
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             });
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
 
@@ -56,6 +59,7 @@ module.exports.preadd = function (req, res, next) {
         if (!err) {
             res.render('distributor/distributorAdd', {data : results});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -75,6 +79,7 @@ module.exports.add = function (req, res, next) {
         if (!err) {
             res.redirect('/jinquan/distributor_list?replytype=add');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -89,6 +94,7 @@ module.exports.detail = function (req, res, next) {
         if (!err && results.length != 0) {
             res.render('distributor/distributorDetail', {data : results[0]});
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -104,6 +110,7 @@ module.exports.del = function (req, res, next) {
         if (!err) {
             res.redirect('/jinquan/distributor_list?replytype=del');
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     });
@@ -124,10 +131,12 @@ module.exports.preEdit = function(req, res, next) {
                     res.render('distributor/distributorEdit', {data : service , classifys : classify});
 
                 } else {
+                    myUtils.printSystemLog(err)
                     next();
                 }
             })
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })
@@ -150,6 +159,7 @@ module.exports.update = function (req, res, next) {
             res.redirect('/jinquan/distributor_list?replytype=update');
 
         } else {
+            myUtils.printSystemLog(err)
             next();
         }
     })

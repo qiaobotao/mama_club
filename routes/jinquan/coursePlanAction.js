@@ -4,6 +4,7 @@
 
 var service = require('../../model/service/course');
 var consts = require('../../model/utils/consts');
+var myUtils = require('../../common/utils');
 
 module.exports.list = function (req, res, next) {
 
@@ -15,7 +16,8 @@ module.exports.list = function (req, res, next) {
         if (!err) {
             res.render('coursePlan/coursePlanList',{data : results,replytype:replytype,"courseDate":consts.COURSE_DATE});
         } else {
-            res.render('error', {error : err});
+            myUtils.printSystemLog(err);
+            next();
         }
     });
 }
@@ -46,6 +48,7 @@ module.exports.preadd = function (req, res, next) {
             }
 
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -88,6 +91,7 @@ module.exports.add = function (req, res, next) {
             if(!err) {
                  res.redirect('/jinquan/course_plan?replytype=add');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         }) ;
@@ -129,6 +133,7 @@ module.exports.add = function (req, res, next) {
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=add');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -173,6 +178,7 @@ module.exports.add = function (req, res, next) {
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=add');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -204,6 +210,7 @@ module.exports.add = function (req, res, next) {
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=add');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -234,6 +241,7 @@ module.exports.edit = function (req, res, next) {
                         console.log(results);
                         res.render('coursePlan/coursePlanEdit_neixun', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
+                        myUtils.printSystemLog(err);
                         next();
                     }
                 });
@@ -254,6 +262,7 @@ module.exports.edit = function (req, res, next) {
                         results.date = date;
                         res.render('coursePlan/coursePlanEdit_zhuanye', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
+                        myUtils.printSystemLog(err);
                         next();
                     }
                 });
@@ -274,10 +283,12 @@ module.exports.edit = function (req, res, next) {
                         results.date = date;
                         res.render('coursePlan/coursePlanEdit_fumu', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
+                        myUtils.printSystemLog(err);
                         next();
                     }
                 });
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -295,10 +306,12 @@ module.exports.edit = function (req, res, next) {
                         results.date = date;
                         res.render('coursePlan/coursePlanEdit_huiyi', {result: results,"courseDate":consts.COURSE_DATE});
                     } else {
+                        myUtils.printSystemLog(err);
                         next();
                     }
                 });
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -339,6 +352,7 @@ module.exports.update = function (req, res, next) {
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=update');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -382,7 +396,7 @@ module.exports.update = function (req, res, next) {
            if (!err) {
                res.redirect('/jinquan/course_plan?replytype=update');
            } else {
-               console.log(err);
+               myUtils.printSystemLog(err);
                next();
            }
        });
@@ -427,6 +441,7 @@ module.exports.update = function (req, res, next) {
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=update');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });
@@ -455,6 +470,7 @@ module.exports.update = function (req, res, next) {
             if (!err) {
                 res.redirect('/jinquan/course_plan?replytype=update');
             } else {
+                myUtils.printSystemLog(err);
                 next();
             }
         });

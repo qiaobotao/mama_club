@@ -4,7 +4,7 @@
  */
 var laypage = require('laypage');
 var service = require('../../model/service/shop');
-
+var myUtils = require('../../common/utils');
 /**
  * 获取门店列表
  * @param req
@@ -31,7 +31,7 @@ module.exports.list = function (req, res, next) {
                 curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
-            console.log(err);
+            myUtils.printSystemLog('获取门店列表'+err);
             next();
         }
     });
@@ -66,6 +66,7 @@ module.exports.add = function(req, res, next) {
        if (!err) {
            res.redirect('/jinquan/shop_list?replytype=add');
        } else {
+           myUtils.printSystemLog('增加门店'+err)
            next();
        }
    });
@@ -89,6 +90,7 @@ module.exports.del = function (req, res, next) {
                 res.redirect('/jinquan/shop_list?replytype=no_del');
             }
         } else {
+            myUtils.printSystemLog('删除门店'+err)
             next();
         }
     });
@@ -115,6 +117,7 @@ module.exports.setStatus = function(req, res, next) {
         if (!err) {
             res.redirect('/jinquan/shop_list?page='+selectPage+'&shopname='+shopname+'&principal='+principal+'&number='+number);
         } else {
+            myUtils.printSystemLog('编辑门店'+err)
             next();
         }
 
@@ -135,6 +138,7 @@ module.exports.preEdit = function(req, res, next) {
             var shop = results.length == 0 ? null : results[0];
             res.render('shop/shopEdit', {shop : shop});
         } else {
+            myUtils.printSystemLog('编辑门店'+err)
             next();
         }
     })
@@ -159,6 +163,7 @@ module.exports.update = function(req, res,next) {
         if (!err) {
             res.redirect('/jinquan/shop_list?replytype=update');
         } else {
+            myUtils.printSystemLog('修改门店'+err)
             next();
         }
     })
@@ -172,6 +177,7 @@ module.exports.browse = function (req, res, next) {
              var data = results[0];
             res.render('shop/shopBrowse', {data : data});
         } else {
+            myUtils.printSystemLog('浏览门店'+err)
              next();
         }
     })
@@ -185,6 +191,7 @@ module.exports.checkSeril = function (req, res, next) {
          if (!err) {
               res.json({flag:results});
          } else {
+             myUtils.printSystemLog('验证序列号门店'+err)
              next();
          }
     });
@@ -198,6 +205,7 @@ module.exports.checkName = function (req, res, next) {
         if (!err) {
             res.json({flag:results});
         } else {
+            myUtils.printSystemLog('验证名称门店'+err)
             next();
         }
     })

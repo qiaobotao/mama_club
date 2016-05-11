@@ -11,6 +11,7 @@ var service = require('../../model/service/classroom');
 
 var storeroomService = require('../../model/service/storeroom');
 var sotreroomOutService = require('../../model/service/storeroomOut');
+var myUtils = require('../../common/utils');
 
 module.exports.list = function (req, res,next) {
 
@@ -34,6 +35,7 @@ module.exports.list = function (req, res,next) {
             res.render('classroom/classroomList', {data : results, replytype : replytype,laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData});
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -64,7 +66,7 @@ module.exports.preAdd = function (req, res,next) {
                 }
             });
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -128,7 +130,7 @@ module.exports.Add = function (req, res,next) {
                 }
             })
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -146,6 +148,7 @@ module.exports.set = function (req, res, next) {
         if (!err) {
             res.redirect('/jinquan/classroom_list');
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     })
@@ -162,6 +165,7 @@ module.exports.detail = function (req, res, next) {
             res.render('classroom/classroomDetail', {data : results});
 
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -176,6 +180,7 @@ module.exports.checkSeril = function (req, res, next) {
         if (!err) {
             res.json({flag:results});
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -192,17 +197,18 @@ module.exports.checkName = function (req, res, next) {
         if (!err) {
             res.json({flag:results});
         } else {
+            myUtils.printSystemLog(err);
             next();
         }
     })
 }
 
-module.exports.preEdit = function(req, res, next) {
-
-    var id = req.query.id ? req.query.id : '';
-
-
-}
+//module.exports.preEdit = function(req, res, next) {
+//
+//    var id = req.query.id ? req.query.id : '';
+//
+//
+//}
 
 module.exports.preDel = function(req, res, next) {
 
@@ -220,12 +226,12 @@ module.exports.preDel = function(req, res, next) {
                    data.detail = results;
                    res.render('classroom/classroomDel', {data : data});
                } else {
-                   console.log(err);
+                   myUtils.printSystemLog(err);
                    next();
                }
             })
         } else {
-            console.log(err);
+            myUtils.printSystemLog(err);
             next();
         }
     });
@@ -242,7 +248,7 @@ module.exports.del = function(req, res, next) {
          if(!err) {
             res.redirect('/jinquan/classroom_list?replytype=del');
          } else {
-             console.log(err);
+             myUtils.printSystemLog(err);
              next();
          }
     });
