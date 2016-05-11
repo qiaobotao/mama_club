@@ -18,6 +18,8 @@ module.exports.list = function (req, res, next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
+    var resourcesData = req.session.user.resourcesData;
+
     service.list(name,classifyId,currentPage, function(err, results) {
 
         if (!err) {
@@ -29,7 +31,7 @@ module.exports.list = function (req, res, next) {
                 if (!err) {
                     results.classify = classify;
                     res.render('distributor/distributorList', {data : results, replytype : replytype,laypage: laypage({
-                        curr: currentPage,url: url,pages: results.totalPages})
+                        curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
                     });
                 } else {
                     next();

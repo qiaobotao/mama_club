@@ -85,13 +85,8 @@
         </tr>
         <tr>
             <td class="lineSty3  ggSty">
-                <span><a href="#">附件一下载</a></span>
-                <span><a href="#">附件一下载</a></span>
-                <span><a href="#">附件一下载</a></span>
-                <span><a href="#">附件一下载</a></span>
-                <span><a href="#">附件一下载</a></span>
-                <span><a href="#">附件一下载</a></span>
-
+                <%if(notice.filesName1 != ''){%><span><a href="<%=notice.filesName1%>">附件一下载</a></span><%}%>
+                <%if(notice.filesName2 != ''){%><span><a href="<%=notice.filesName2%>">附件一下载</a></span><%}%>
             </td>
         </tr>
     </table>

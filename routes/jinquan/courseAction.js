@@ -24,6 +24,8 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
 
+    var resourcesData = req.session.user.resourcesData;
+
     service.getCourseList(shopId,classroom,courseType,date,currentPage,function(err, results){
         if (!err){
             results.currentPage = currentPage;
@@ -31,7 +33,7 @@ module.exports.list = function (req, res,next) {
             results.courseType = courseType;
             results.date = date;
             res.render('course/courseList',{data : results,replytype : replytype,laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
 
         } else {

@@ -26,6 +26,15 @@
                 parent.layer.alert('请选择公告类型',{icon: 2});
                 return;
             }
+
+            var title = $('#title').val();
+            var content = $('#content').val();
+            var type = $('#type').val();
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+            var id = $('#id').val();
+
+            document.getElementById("myform").action = "/jinquan/notice_save?id="+id+'&title='+title+'&content='+content+'&type='+type+'&startDate='+startDate+'&endDate='+endDate;
             document.getElementById("myform").submit();
         }
     </script>
@@ -39,14 +48,14 @@
 </div>
 <div class="center_con">
 
-    <form enctype="multipart/form-data" method="post" id="myform" action="/jinquan/notice_save">
+    <form enctype="multipart/form-data" method="post" id="myform" >
 
-   <!-- <form method="post" id="myform" action="/jinquan/notice_save">  -->
-    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <!-- <form method="post" id="myform" action="/jinquan/notice_save">  -->
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">标题：</td>
                 <td class="regTd_r">
-                    <input type="hidden" name="id" value="<%=notice.id%>"/>
+                    <input type="hidden" id="id" name="id" value="<%=notice.id%>"/>
                     <input id="title" name="title" type="text" class="input5" value="<%=notice.title%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
                 <td  class="regTd_l">类型：</td>
@@ -77,7 +86,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="regTd_l">上传文件1：</td>
+                <td class="regTd_l">上传文件：</td>
                 <td class="regTd_r" colspan="3">文件路径：<input  name="recordfile" type="file" multiple='mutiple' class="input5"/></td>
             </tr>
             <tr>
