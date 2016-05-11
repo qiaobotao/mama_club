@@ -9,11 +9,15 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        var defaultPage = '<%=data.totalPages%>';
+        function setDefault(){
+            defaultPage = "1";
+        }
         function search() {
             var categoryName = document.getElementById('categoryName').value;
 //            var serialNumber = document.getElementById('serialNumber').value;
 //            var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/attendance_type_list?categoryName='+categoryName;
+            window.location.href = '/jinquan/attendance_type_list?categoryName='+categoryName+"&page="+defaultPage;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/attendance_type_edit?id='+id;
@@ -35,8 +39,8 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>类别名称：<input name="categoryName" id="categoryName" type="text" class="input5" value="<%=data.categoryName%>" /></td>
-                    <td> &nbsp;描述：<input name="" type="text" class="input5" /></td>
+                    <td>类别名称：<input name="categoryName" id="categoryName" type="text" class="input5" value="<%=data.categoryName%>" onchange="setDefault()"/></td>
+                    <td> &nbsp;描述：<input name="" type="text" class="input5" onchange="setDefault()"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

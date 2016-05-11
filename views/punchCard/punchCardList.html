@@ -16,10 +16,14 @@
         parent.layer.msg('导入成功');
     }
 
+    var defaultPage = '<%=data.totalPages%>';
+    function setDefault(){
+        defaultPage = "1";
+    }
     function search () {
         var name = document.getElementById('name').value;
         var date = document.getElementById('date').value;
-        window.location.href = '/jinquan/punch_card_list?name='+name+'&date='+date;
+        window.location.href = '/jinquan/punch_card_list?name='+name+'&date='+date+"&page="+defaultPage;
     }
 
     function pageturning (selectPage) {
@@ -40,7 +44,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
+                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>" onchange="setDefault()" /></td>
                     <td>日期：<input id="date" name="date" type="text" class="input5" value="<%=data.date%>"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>

@@ -12,12 +12,16 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
+        var defaultPage = '<%=data.totalPages%>';
+        function setDefault(){
+            defaultPage = "1";
+        }
         function search() {
             var staffName = $("#staffName").val();
             var attendanceType = $("#attendanceType").val();
             var startDate = $("#startDate").val();
             var endDate = $("#endDate").val();
-            window.location.href = '/jinquan/attendance_change_list?staffName='+staffName+'&attendanceType='+attendanceType+'&startDate='+startDate+'&endDate='+endDate;
+            window.location.href = '/jinquan/attendance_change_list?staffName='+staffName+'&attendanceType='+attendanceType+'&startDate='+startDate+'&endDate='+endDate+"&page="+defaultPage;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/attendance_change_edit?id='+id;
@@ -39,16 +43,16 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="<%=data.staffName%>" /></td>
+                    <td>员工名称：<input name="staffName" id="staffName" type="text" class="input5" value="<%=data.staffName%>" onchange="setDefault()"/></td>
                     <td> &nbsp;变更类型：
-                        <select name="attendanceType" id="attendanceType" >
+                        <select name="attendanceType" id="attendanceType" onchange="setDefault()">
                             <option value="">请选择</option>
                             <option value="jb" <%if(data.attendanceType == 'jb'){%>selected<%}  %>>加班</option>
                             <option value="qj" <%if(data.attendanceType == 'qj'){%>selected<%}  %>>请假</option>
                         </select>
                     </td>
-                    <td> &nbsp;开始日期：<input name="startDate" id="startDate" type="text" class="input5" value="<%=data.startDate%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
-                    <td> &nbsp;截止日期：<input name="endDate" id="endDate" type="text" class="input5" value="<%=data.endDate%>"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/></td>
+                    <td> &nbsp;开始日期：<input name="startDate" id="startDate" type="text" class="input5" value="<%=data.startDate%>" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" onchange="setDefault()"/></td>
+                    <td> &nbsp;截止日期：<input name="endDate" id="endDate" type="text" class="input5" value="<%=data.endDate%>"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" onchange="setDefault()"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

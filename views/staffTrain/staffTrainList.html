@@ -23,11 +23,16 @@
         parent.layer.msg('修改成功');
     }
 
+    var defaultPage = '<%=data.totalPages%>';
+    function setDefault(){
+        defaultPage = "1";
+    }
+
     function search () {
         var courseName = document.getElementById('courseName').value;
         var teacherName = document.getElementById('teacherName').value;
         var classroomName = document.getElementById('classroomName').value;
-        window.location.href = '/jinquan/staff_train_list?courseName='+courseName+'&teacherName='+teacherName+'&classroomName='+classroomName;
+        window.location.href = '/jinquan/staff_train_list?courseName='+courseName+'&teacherName='+teacherName+'&classroomName='+classroomName+"&page="+defaultPage;
     }
 //
 //    function pageturning (selectPage) {
@@ -48,12 +53,12 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>课程名称：<input id="courseName" type="text" value="<%=data.courseName%>" class="input5" /></td>
-                    <td> &nbsp;讲师名称：<input id="teacherName" type="text" value="<%=data.teacherName%>" class="input5" /></td>
+                    <td>课程名称：<input id="courseName" type="text" value="<%=data.courseName%>" class="input5"  onchange="setDefault()" /></td>
+                    <td> &nbsp;讲师名称：<input id="teacherName" type="text" value="<%=data.teacherName%>" class="input5"  onchange="setDefault()" /></td>
                     <!--
                     <td> &nbsp;培训时间：<input name="" type="text" class="input5" /></td>
                     -->
-                    <td> &nbsp;培训教室：<input id="classroomName" value="<%=data.classroomName%>" type="text" class="input5" /></td>
+                    <td> &nbsp;培训教室：<input id="classroomName" value="<%=data.classroomName%>" type="text" class="input5"  onchange="setDefault()" /></td>
                     <td><a href="javascript:search();" class="chaxun"></a></td>
                 </tr>
             </table>

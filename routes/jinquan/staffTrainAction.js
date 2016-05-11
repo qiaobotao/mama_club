@@ -3,6 +3,7 @@
  */
 var laypage = require('laypage');
 var service = require('../../model/service/staffTrain');
+var consts = require('../../model/utils/consts');
 /**
  * 获取员工培训列表
  * @param req
@@ -25,7 +26,8 @@ module.exports.list = function (req, res,next) {
             results.courseName = courseName;
             results.teacherName = teacherName;
             results.classroomName = classroomName;
-            var courseDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+            //var courseDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
+            var courseDate = consts.COURSE_DATE;
             res.render('staffTrain/staffTrainList', {data : results,replytype:replytype,courseDate:courseDate, laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages})
             });

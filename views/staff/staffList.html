@@ -17,11 +17,16 @@
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
+        var defaultPage = '<%=data.totalPages%>';
+        function setDefault(){
+            defaultPage = "1";
+        }
+
         function search() {
             var name = document.getElementById('name').value;
             var serialNumber = document.getElementById('serialNumber').value;
             var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel;
+            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel+"&page="+defaultPage;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/staff_preEdit?id='+id;
@@ -44,9 +49,9 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/></td>
-                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
-                    <td> &nbsp;员工编号：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>"/></td>
-                    <td> &nbsp;电话：<input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>"/></td>
+                    <td>员工名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"  onchange="setDefault()" /></td>
+                    <td> &nbsp;员工编号：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>" onchange="setDefault()" /></td>
+                    <td> &nbsp;电话：<input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>" onchange="setDefault()" /></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

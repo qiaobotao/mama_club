@@ -20,11 +20,15 @@
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
+        var defaultPage = '<%=data.totalPages%>';
+        function setDefault(){
+            defaultPage = "1";
+        }
         function search() {
             var staffName = document.getElementById('staffName').value;
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
-            window.location.href = '/jinquan/performance_attendance_list?staffName='+staffName+'&startDate='+startDate+'&endDate='+endDate;
+            window.location.href = '/jinquan/performance_attendance_list?staffName='+staffName+'&startDate='+startDate+'&endDate='+endDate+"&page="+defaultPage;;
         }
         function preEdit (id,staffId,startDate,endDate) {
             window.location.href = '/jinquan/performance_search_list?attendance=attendance&pAttendanceId='+id+'&staffId='+staffId+'&performanceStartDate='+startDate+'&performanceEndDate='+endDate;
@@ -51,11 +55,11 @@
                         <!--
                         <input id="staffId" name="staffId" type="text" class="input5" value="<%=data.staffId%>"/>
                         -->
-                        <input id="staffName" name="staffName" type="text" class="input5" value="<%=data.staffName%>"/>
+                        <input id="staffName" name="staffName" type="text" class="input5" value="<%=data.staffName%>" onchange="setDefault()" />
                     </td>
                     <td> &nbsp;考核时间：
-                        <input id="startDate" name="startDate" type="text" class="input5" value="<%=data.startDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>~
-                        <input id="endDate" name="endDate" type="text" class="input5" value="<%=data.endDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})"/>
+                        <input id="startDate" name="startDate" type="text" class="input5" value="<%=data.startDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})" onchange="setDefault()" />~
+                        <input id="endDate" name="endDate" type="text" class="input5" value="<%=data.endDate%>" readonly onclick="laydate({format: 'YYYY-MM-DD'})" onchange="setDefault()" />
                     </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>

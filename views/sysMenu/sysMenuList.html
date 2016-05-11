@@ -17,10 +17,14 @@
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
+        var defaultPage = '<%=data.totalPages%>';
+        function setDefault(){
+            defaultPage = "1";
+        }
         //查询方法
         function search () {
             var textCh = document.getElementById('textCh').value;
-            window.location.href = '/jinquan/sys_menu_list?textCh='+textCh;
+            window.location.href = '/jinquan/sys_menu_list?textCh='+textCh+"&page="+defaultPage;
         }
 
         //跳转到编辑页面
@@ -49,7 +53,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td>菜单名称：<input name="textCh" id="textCh" type="text" class="input5" value="<%=data.textCh%>" /></td>
+                    <td>菜单名称：<input name="textCh" id="textCh" type="text" class="input5" value="<%=data.textCh%>" onchange="setDefault()"/></td>
                     <td><a href="javascript:search();" class="chaxun"></a></td>
                 </tr>
             </table>
