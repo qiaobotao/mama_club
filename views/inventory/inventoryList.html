@@ -34,7 +34,7 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td> 库房名称：<select id="sid" name="sid">
-                        <option value =""></option>
+                        <option value ="">全部</option>
                         <%for(var i=0;i<data.storerooms.length;i++){%>
                         <option value ="<%=data.storerooms[i].id%>" <%if(data.sid == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
                         <%}%>

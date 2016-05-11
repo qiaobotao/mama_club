@@ -21,40 +21,30 @@
         <tr>
             <td  class="regTd_l">商品名称：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.name%>" /></td>
-        </tr>
-        <tr>
             <td class="regTd_l">商品别名：</td>
             <td class="regTd_r"><input name="input" type="text" class="input5" readOnly="true" value="<%=wares.longname%>"/></td>
         </tr>
         <tr>
             <td class="regTd_l">商品售价：</td>
             <td class="regTd_r"><input id="price" name="price" class="input5" type="text" value="<%=wares.price%>"/></td>
-        </tr>
-        <tr>
             <td class="regTd_l">商品类别：</td>
             <td class="regTd_r"><input name="input" type="text" class="input5" readOnly="true" value="<%=wares.cname%>"/></td>
         </tr>
         <tr>
             <td class="regTd_l">商标：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.bname%>"/></td>
-        </tr>
-        <tr>
             <td class="regTd_l">规格：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.standard%>"/></td>
         </tr>
         <tr>
             <td class="regTd_l">序列号：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.serialNumber%>"/></td>
-        </tr>
-        <tr>
-            <td class="regTd_l">备注：</td>
-            <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19" disabled="true "><%=wares.remarks%></textarea></td>
+            <td class="regTd_l">优惠价格：</td>
+            <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.discountPrice%>"/></td>
         </tr>
         <tr>
             <td class="regTd_l">最低库存：</td>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.lowData%>"/></td>
-        </tr>
-        <tr>
             <td class="regTd_l">是否参加优惠：</td>
             <%if(wares.isDiscount == 1){%>
             <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="是"/></td>
@@ -63,8 +53,8 @@
             <%}%>
         </tr>
         <tr>
-            <td class="regTd_l">优惠价格：</td>
-            <td class="regTd_r"><input name="" type="text" class="input5" readOnly="true" value="<%=wares.discountPrice%>"/></td>
+            <td class="regTd_l">备注：</td>
+            <td class="regTd_r" colspan="3"><textarea id="remark" name="remark" rows="8" cols="80" disabled="true "><%=wares.remarks%></textarea></td>
         </tr>
 
     </table>

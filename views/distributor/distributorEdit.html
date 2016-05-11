@@ -52,8 +52,6 @@
             <tr>
                 <td class="regTd_l">名称：</td>
                 <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
                 <td class="regTd_l">分类：</td>
                 <td class="regTd_r"><select id="cid" name="cid">
                     <%for(var i=0;i<classifys.length;i++){%>
@@ -64,8 +62,6 @@
             <tr>
                 <td class="regTd_l">负责人：</td>
                 <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
                 <td class="regTd_l">电话：</td>
                 <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -75,7 +71,7 @@
             </tr>
             <tr>
                 <td class="regTd_l">备注：</td>
-                <td class="regTd_r"><textarea id="remark" name="remark" rows="8" cols="19"><%=data.remarks%></textarea></td>
+                <td class="regTd_r" colspan="3"><textarea id="remark" name="remark" rows="8" cols="90"><%=data.remarks%></textarea></td>
             </tr>
         </table>
     </form>
