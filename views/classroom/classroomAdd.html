@@ -61,18 +61,18 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('教室名称不能为空');
+                parent.layer.alert('教室名称不能为空');
                 return;
             }
             var serialNumber = document.getElementById("serialNumber").value;
             if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
+                parent.layer.alert('序列号不能为空');
                 return;
             }
 
             var oper = document.getElementById("oper").value;
             if (!oper || oper.length == 0) {
-                alert('操作人不能为空');
+                parent.layer.alert('操作人不能为空');
                 return;
             }
 

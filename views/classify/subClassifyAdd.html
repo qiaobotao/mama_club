@@ -12,7 +12,7 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('分类名称不能为空');
+                parent.layer.alert('分类名称不能为空');
                 return;
             }
             document.getElementById("myform").submit();

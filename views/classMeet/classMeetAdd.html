@@ -48,43 +48,43 @@
         function submitForm(){
             var memberId = document.getElementById("memberId").value;
             if (!memberId || memberId.length == 0) {
-                alert('会员名称不能为空');
+                parent.layer.alert('会员名称不能为空');
                 return;
             }
             var courseId = document.getElementById("courseId").value;
             if (!courseId || courseId.length == 0) {
-                alert('课程名称不能为空');
+                parent.layer.alert('课程名称不能为空');
                 return;
             }
 
             var childMonths = document.getElementById("childMonths").value;
             if (!childMonths || childMonths.length == 0) {
-                alert('宝宝月龄/预产期不能为空');
+                parent.layer.alert('宝宝月龄/预产期不能为空');
                 return;
             }
             var externPersons = document.getElementById("externPersons").value;
             if (!externPersons || externPersons.length == 0) {
-                alert('是否可带宝宝不能为空');
+                parent.layer.alert('是否可带宝宝不能为空');
                 return;
             }
             var remark = document.getElementById("remark").value;
             if (!remark || remark.length == 0) {
-                alert('备注不能为空');
+                parent.layer.alert('备注不能为空');
                 return;
             }
 //            var isRegisterSuccess = document.getElementById("isRegisterSuccess").value;
 //            if (!isRegisterSuccess || isRegisterSuccess.length == 0) {
-//                alert('是否报名成功不能为空');
+//                parent.layer.alert('是否报名成功不能为空');
 //                return;
 //            }
 //            var isPhoneConfirm = document.getElementById("isPhoneConfirm").value;
 //            if (!isPhoneConfirm || isPhoneConfirm.length == 0) {
-//                alert('课前电话确认不能为空');
+//                parent.layer.alert('课前电话确认不能为空');
 //                return;
 //            }
 //            var isSmConfirm = document.getElementById("isSmConfirm").value;
 //            if (!isSmConfirm || isSmConfirm.length == 0) {
-//                alert('课前电话确认不能为空');
+//                parent.layer.alert('课前电话确认不能为空');
 //                return;
 //            }
             document.getElementById("myform").submit();
@@ -94,12 +94,12 @@
 
             var memberId = $("#memberId").val();
             if (memberId == '') {
-                alert('请选择会员！');
+                parent.layer.alert('请选择会员！');
                 return;
             }
             var courseId = $("#courseId").val();
             if (courseId == '') {
-                alert('请选择报名课程！');
+                parent.layer.alert('请选择报名课程！');
                 return;
             }
 

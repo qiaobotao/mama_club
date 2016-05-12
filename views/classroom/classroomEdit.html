@@ -12,22 +12,22 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('门店名称不能为空');
+                parent.layer.alert('门店名称不能为空');
                 return;
             }
             var serialNumber = document.getElementById("serialNumber").value;
             if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
+                parent.layer.alert('序列号不能为空');
                 return;
             }
             var classCode = document.getElementById("classCode").value;
             if (!classCode || classCode.length == 0) {
-                alert('教室编码不能为空');
+                parent.layer.alert('教室编码不能为空');
                 return;
             }
             var remark = document.getElementById("remark").value;
             if(!remark || remark.length == 0) {
-                alert('说明不能为空');
+                parent.layer.alert('说明不能为空');
                 return;
             }
 

@@ -12,37 +12,37 @@
         function submitForm(){
             var serviceMeetId = document.getElementById("serviceMeetId").value;
             if (!serviceMeetId || serviceMeetId.length == 0) {
-                alert('服务单号不能为空');
+                parent.layer.alert('服务单号不能为空');
                 return;
             }
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('会员姓名不能为空');
+                parent.layer.alert('会员姓名不能为空');
                 return;
             }
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
-                alert('电话不能为空');
+                parent.layer.alert('电话不能为空');
                 return;
             }
             var complainPrincipal = document.getElementById("complainPrincipal").value;
             if(!complainPrincipal || complainPrincipal.length == 0) {
-                alert('投诉技师不能为空');
+                parent.layer.alert('投诉技师不能为空');
                 return;
             }
             var complainType = document.getElementById("complainType").value;
             if(!complainType || complainType.length == 0) {
-                alert('投诉类型不能为空');
+                parent.layer.alert('投诉类型不能为空');
                 return;
             }
             var dealPrincipal = document.getElementById("dealPrincipal").value;
             if (!dealPrincipal || dealPrincipal.length == 0) {
-                alert('解决人不能为空');
+                parent.layer.alert('解决人不能为空');
                 return;
             }
             var complainDetail = document.getElementById("complainDetail").value;
             if (!complainDetail || complainDetail.length == 0) {
-                alert('投诉详情不能为空');
+                parent.layer.alert('投诉详情不能为空');
                 return;
             }
 

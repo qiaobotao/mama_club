@@ -15,28 +15,28 @@
         function submitForm(){
             var activityName = document.getElementById("activityName").value;
             if (!activityName || activityName.length == 0) {
-                alert('活动名称不能为空');
+                parent.layer.alert('活动名称不能为空');
                 return;
             }
             var activityType = document.getElementById("activityType").value;
             if (!activityType || activityType.length == 0) {
-                alert('活动类型不能为空');
+                parent.layer.alert('活动类型不能为空');
                 return;
             }
 
             var effectiveTimeStart = document.getElementById("effectiveTimeStart").value;
             if (!effectiveTimeStart || effectiveTimeStart.length == 0) {
-                alert('有效时间不能为空');
+                parent.layer.alert('有效时间不能为空');
                 return;
             }
             var effectiveTimeEnd = document.getElementById("effectiveTimeEnd").value;
             if (!effectiveTimeEnd || effectiveTimeEnd.length == 0) {
-                alert('有效时间不能为空');
+                parent.layer.alert('有效时间不能为空');
                 return;
             }
             var status = document.getElementById("status").value;
             if(!status || status.length == 0) {
-                alert('状态不能为空');
+                parent.layer.alert('状态不能为空');
                 return;
             }
             document.getElementById("myform").submit();
