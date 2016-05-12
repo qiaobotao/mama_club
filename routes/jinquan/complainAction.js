@@ -24,6 +24,7 @@ module.exports.list = function (req, res,next) {
   // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
     service.fetchAllComplain(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
@@ -33,7 +34,7 @@ module.exports.list = function (req, res,next) {
             results.dealPrincipal = dealPrincipal;
             results.currentPage = currentPage;
             res.render('complain/complainList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

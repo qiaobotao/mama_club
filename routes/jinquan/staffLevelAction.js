@@ -15,13 +15,14 @@ module.exports.list = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.fetchAllStaffLevel(name,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
             res.render('staffLevel/staffLevelList', {data : results,replytype:replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             next();

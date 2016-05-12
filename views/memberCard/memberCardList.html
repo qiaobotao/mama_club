@@ -129,7 +129,10 @@ var replytype = '<%=replytype%>';
                 </tr>
             </table>
         </div>
-        <div class="but_0"><a href="javascript:toAdd()" class="bsty0"></a></div>
+        <%if(resourcesData["/to_member_card_add"] == "1"){
+            %><div class="but_0"><a href="javascript:toAdd()" class="bsty0"></a></div><%
+        }%>
+
     </div>
     <br/>
     <div class="tabCon">
@@ -166,8 +169,12 @@ var replytype = '<%=replytype%>';
                         <td>
                             <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                                 <tr>
-                                    <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
-                                    <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                                    <%if(resourcesData["/member_card_show"] == "1"){
+                                        %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                                    }%>
+                                    <%if(resourcesData["/to_member_card_edit"] == "1"){
+                                        %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td><%
+                                    }%>
                                     <!--<td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->
                                 </tr>
                             </table>
@@ -196,7 +203,10 @@ var replytype = '<%=replytype%>';
                             <td>
                                 <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                                     <tr>
-                                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
+                                        <%if(resourcesData["/member_card_show"] == "1"){
+                                            %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                                        }%>
+
                                         <!--
                                         <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td>
                                         -->
@@ -226,8 +236,12 @@ var replytype = '<%=replytype%>';
                         <td>
                             <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                                 <tr>
-                                    <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
-                                    <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td>
+                                    <%if(resourcesData["/member_card_show"] == "1"){
+                                        %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                                    }%>
+                                    <%if(resourcesData["/to_member_card_edit"] == "1"){
+                                        %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:update(<%=data.data[i].id%>)">编辑</a>]</div></td><%
+                                    }%>
                                     <!--<td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->
                                 </tr>
                             </table>

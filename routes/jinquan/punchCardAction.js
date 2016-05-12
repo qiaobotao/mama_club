@@ -19,6 +19,7 @@ module.exports.list = function (req, res, next) {
 
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.list(name,date,currentPage, function(err, results) {
 
@@ -27,7 +28,7 @@ module.exports.list = function (req, res, next) {
             results.name = name;
             results.date = date;
             res.render('punchCard/punchCardList', {data : results,replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             next();

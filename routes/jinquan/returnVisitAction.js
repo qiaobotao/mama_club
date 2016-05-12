@@ -12,6 +12,7 @@ module.exports.list = function (req, res,next) {
     var status = req.query.status ? req.query.status : '';
     currentPage =currentPage<1?1:currentPage;
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
@@ -22,7 +23,7 @@ module.exports.list = function (req, res,next) {
             results.status = status;
             results.currentPage =currentPage ;
             res.render('returnVisit/returnVisitList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

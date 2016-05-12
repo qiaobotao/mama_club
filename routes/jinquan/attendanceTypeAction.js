@@ -15,13 +15,14 @@ module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var categoryName = req.query.categoryName ? req.query.categoryName : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.fetchAllAttendanceType(categoryName,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.categoryName = categoryName;
             res.render('attendanceType/attendanceTypeList', {data : results, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

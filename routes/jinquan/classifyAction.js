@@ -17,13 +17,14 @@ module.exports.list = function (req, res,next) {
     var keywords = req.query.keywords ? req.query.keywords : '';
     var currentPage = req.query.page ? req.query.page : '1';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.getAllMainClassify(keywords,currentPage, function(err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.keywords = keywords;
             res.render('classify/mainClassifyList',{data : results, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             myUtils.printSystemLog(err)

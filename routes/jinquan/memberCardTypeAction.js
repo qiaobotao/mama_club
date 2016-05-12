@@ -20,6 +20,7 @@ module.exports.list = function (req, res,next) {
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,currentPage, function (err, results) {
         if (!err) {
@@ -28,7 +29,7 @@ module.exports.list = function (req, res,next) {
             results.zeroDiscounts = zeroDiscounts;
             results.currentPage = currentPage;
             res.render('memberCardType/memberCardTypeList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

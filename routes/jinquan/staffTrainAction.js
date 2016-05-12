@@ -19,6 +19,7 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.fetchAllStaffTrain(courseName,teacherName,classroomName,currentPage, function (err, results) {
         if (!err) {
@@ -29,7 +30,7 @@ module.exports.list = function (req, res,next) {
             //var courseDate = ['8:00','8:30','9:00','9:30','10:00','10:30','11:00','11:30','12:00','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00'];
             var courseDate = consts.COURSE_DATE;
             res.render('staffTrain/staffTrainList', {data : results,replytype:replytype,courseDate:courseDate, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             next();

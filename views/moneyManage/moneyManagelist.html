@@ -53,7 +53,7 @@
             window.location.href = '/jinquan/money_manage_del?id='+id+'&serviceId='+serviceId;
         }
         function browse (id) {
-            window.location.href = '/jinquan/shop_browse?id='+id;
+            window.location.href = '/jinquan/money_manage_view?id='+id;
         }
 
     </script>
@@ -103,7 +103,10 @@
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/money_manage_edit" class="bsty0"></a></div>
+        <%if(resourcesData["/money_manage_edit"] == "1"){
+            %><div class="but_0"><a href="/jinquan/money_manage_edit" class="bsty0"></a></div><%
+        }%>
+
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -171,9 +174,15 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td>
-                            <td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td>
-                            <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>,<%=data.data[i].serviceId%>)">删除</a>]</div></td>
+                            <%if(resourcesData["/money_manage_view"] == "1"){
+                                %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                            }%>
+                            <%if(resourcesData["/money_manage_edit"] == "1"){
+                                %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td><%
+                            }%>
+                            <%if(resourcesData["/money_manage_del"] == "1"){
+                                %><td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:del(<%=data.data[i].id%>,<%=data.data[i].serviceId%>)">删除</a>]</div></td><%
+                            }%>
                         </tr>
                     </table>
                 </td>

@@ -117,8 +117,12 @@
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td>
-                            <td><div align="center">[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</div></td>
+                            <%if(resourcesData["/return_visit_show"] == "1"){
+                                %><td><div align="center">[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                            }%>
+                            <%if(resourcesData["/return_visit_preEdit"] == "1"){
+                                %><td><div align="center">[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</div></td><%
+                            }%>
                             <!--<td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->
                         </tr>
                     </table>

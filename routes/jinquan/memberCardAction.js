@@ -60,6 +60,7 @@ module.exports.list = function (req, res,next) {
     var serialNumber=  req.query.serialNumber ? req.query.serialNumber : '';
     var currentPage = req.query.page ? req.query.page : '1';
     currentPage =currentPage<1?1:currentPage;
+    var resourcesData = req.session.user.resourcesData;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
@@ -119,7 +120,7 @@ module.exports.list = function (req, res,next) {
                     results.parameter9 = parameter9;
                     results.currentPage = currentPage;
                     res.render('memberCard/memberCardList', {memberCardTypes: datas, data: results, replytype : replytype, laypage: laypage({
-                        curr: currentPage,url: url,pages: results.totalPages})
+                        curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
                     });
                 }
                 else {

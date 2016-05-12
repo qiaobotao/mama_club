@@ -19,6 +19,7 @@ module.exports.list = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
     service.fetchAllAttendanceChange(staffName,attendanceType,startDate,endDate,currentPage, function (err, results) {
         if (!err) {
             results.staffName = staffName;
@@ -26,7 +27,7 @@ module.exports.list = function (req, res,next) {
             results.startDate = startDate;
             results.endDate = endDate;
             res.render('attendanceChange/attendanceChangeList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

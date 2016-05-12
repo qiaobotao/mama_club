@@ -17,6 +17,7 @@ module.exports.list = function (req, res) {
     var type = req.query.type ? req.query.type : '';
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
 
     service.fetchAllNotice(title,type,currentPage, function (err, results) {
         if (!err) {
@@ -24,7 +25,7 @@ module.exports.list = function (req, res) {
             results.title = title;
             results.type = type;
             res.render('notice/noticeList', {data : results,replytype:replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             next();

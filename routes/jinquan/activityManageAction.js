@@ -22,6 +22,7 @@ module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     service.fetchAllActivityManage(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage, function (err, results) {
@@ -33,7 +34,7 @@ module.exports.list = function (req, res,next) {
             results.status = status;
             results.currentPage = currentPage;
             res.render('activityManage/activityManageList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

@@ -31,6 +31,7 @@ module.exports.list = function (req, res,next) {
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
     service.fetchAllServiceMeet(tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
@@ -39,7 +40,7 @@ module.exports.list = function (req, res,next) {
             results.status = status;
             results.currentPage = currentPage;
             res.render('serviceMeet/serviceMeetList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);

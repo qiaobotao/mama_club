@@ -23,6 +23,7 @@ module.exports.list = function (req, res,next) {
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
+    var resourcesData = req.session.user.resourcesData;
     service.fetchAllNursService(name,principal,serviceDate,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
@@ -30,7 +31,7 @@ module.exports.list = function (req, res,next) {
             results.serviceDate = serviceDate;
             results.currentPage = currentPage;
             res.render('nursService/nursServiceList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages})
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
         } else {
             console.log(err.message);
