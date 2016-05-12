@@ -11,6 +11,7 @@
     <script language="JavaScript" type="text/javascript" src="../js/zTree/jquery.ztree.core.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="../js/zTree/jquery.ztree.excheck.min.js"></script>
     <script language="JavaScript" type="text/javascript" src="../js/qiehuan.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -153,7 +154,7 @@
             console.log($("#selectMenus").val());
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('角色不能为空');
+                parent.layer.alert('角色不能为空');
                 return;
             }
             document.getElementById("myform").submit();

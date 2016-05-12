@@ -36,7 +36,7 @@
             var  memberId = document.getElementById("memberId").value;
             memberId=  document.getElementById("memberId").value;
             if (!memberId || memberId.length == 0) {
-                alert('请选择会员');
+                parent.layer.alert('请选择会员',{icon: 2});
                 return;
             }
             var type = document.getElementById("type").value;
@@ -54,7 +54,7 @@
                 //会员卡类型
                 parameter1=  document.getElementById("parameter1").value;
                 if (!parameter1 || parameter1.length == 0) {
-                    alert('会员卡类型不能为空');
+                    parent.layer.alert('会员卡类型不能为空',{icon: 2});
                     return;
                 }
                 //当前金额/首次应缴费金额/首次应缴费金额
@@ -67,27 +67,27 @@
                 //可使用次数
                 parameter3= document.getElementById("parameter3").value;
                 if (!parameter3 || parameter3.length == 0) {
-                    alert('可使用次数不能为空');
+                    parent.layer.alert('可使用次数不能为空',{icon: 2});
                     return;
                 }
                 //已使用次数
                 parameter4=document.getElementById("parameter4").value;
                 if (!parameter4 || parameter4.length == 0) {
-                    alert('已使用次数不能为空');
+                    parent.layer.alert('已使用次数不能为空',{icon: 2});
                     return;
                 }
 
                 //首次应缴费金额
                 parameter5= document.getElementById("parameter5").value;
                 if (!parameter5 || parameter5.length == 0) {
-                    alert('首次应缴费金额不能为空');
+                    parent.layer.alert('首次应缴费金额不能为空',{icon: 2});
                     return;
                 }
                 //有效时间
                 parameter6= document.getElementById("parameter6").value;
 
                 if (!parameter6 || parameter6.length == 0) {
-                    alert('有效时间不能为空');
+                    parent.layer.alert('有效时间不能为空',{icon: 2});
                     return;
                 }
             }
@@ -96,19 +96,19 @@
                 //折扣力度
                 parameter7= document.getElementById("parameter7").value;
                 if (!parameter7 || parameter7.length == 0) {
-                    alert('折扣力度不能为空');
+                    parent.layer.alert('折扣力度不能为空',{icon: 2});
                     return;
                 }
                 //首次应缴费金额
                 parameter8= document.getElementById("parameter8").value;
                 if (!parameter8 || parameter8.length == 0) {
-                    alert('首次应缴费金额不能为空');
+                    parent.layer.alert('首次应缴费金额不能为空',{icon: 2});
                     return;
                 }
                 //有效时间
                 parameter9= document.getElementById("parameter9").value;
                 if (!parameter9 || parameter9.length == 0) {
-                    alert('有效时间不能为空');
+                    parent.layer.alert('有效时间不能为空',{icon: 2});
                     return;
                 }
             }
@@ -136,7 +136,7 @@
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown){
-                    alert("222222");
+                    parent.layer.alert("数据访问错误。",{icon: 2});
                 }
             });
 

@@ -12,18 +12,18 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('服务名称不能为空');
+                parent.layer.alert('服务名称不能为空',{icon: 2});
                 return;
             }
             var content = document.getElementById("content").value;
             if (!content || content.length == 0) {
-                alert('服务内容不能为空');
+                parent.layer.alert('服务内容不能为空',{icon: 2});
                 return;
             }
 
             var price = document.getElementById("price").value;
             if(!price || price.length == 0) {
-                alert('服务金额不能为空');
+                parent.layer.alert('服务金额不能为空',{icon: 2});
                 return;
             }
 

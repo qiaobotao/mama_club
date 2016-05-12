@@ -16,12 +16,12 @@
         {
 //            var memberName = document.getElementById("name").value;
 //            if (!memberName || memberName.length == 0) {
-//                alert('名称不能为空');
+//                parent.layer.alert('名称不能为空',{icon: 2});
 //                return;
 //            }
             var memberTel = document.getElementById("tel").value;
             if (!memberTel || memberTel.length == 0) {
-                alert('电话不能为空');
+                parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }
             $.ajax({
@@ -62,7 +62,7 @@
                     $("#serviceMeets  tr:not(:first)").empty("");
                     $("#nursServices  tr:not(:first)").empty("");
                     $("#complains  tr:not(:first)").empty("");
-                    alert("系统错误请系统管理员！")
+                    parent.layer.alert("系统错误请系统管理员！",{icon: 2});
                 }
             });
         }
@@ -152,37 +152,37 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('名称不能为空');
+                parent.layer.alert('名称不能为空',{icon: 2});
                 return;
             }
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
-                alert('电话不能为空');
+                parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }
 //            var age = document.getElementById("age").value;
 //            if (!age || age.length == 0) {
-//                alert('年龄不能为空');
+//                parent.layer.alert('年龄不能为空',{icon: 2});
 //                return;
 //            }
             var principal = document.getElementById("principal").value;
             if(!principal || principal.length == 0) {
-                alert('技师不能为空');
+                parent.layer.alert('技师不能为空',{icon: 2});
                 return;
             }
             var problemDescription = document.getElementById("problemDescription").value;
             if (!problemDescription || problemDescription.length == 0) {
-                alert('问题描述不能为空');
+                parent.layer.alert('问题描述不能为空',{icon: 2});
                 return;
             }
             var serviceType = document.getElementById("serviceType").value;
             if (!serviceType || serviceType.length == 0) {
-                alert('门店/上门不能为空');
+                parent.layer.alert('门店/上门不能为空',{icon: 2});
                 return;
             }
             var price = document.getElementById("price").value;
             if (!price || price.length == 0) {
-                alert('报价不能为空');
+                parent.layer.alert('报价不能为空',{icon: 2});
                 return;
             }
 

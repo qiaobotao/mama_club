@@ -12,32 +12,32 @@
         function submitForm(){
             var memberCardType = document.getElementById("memberCardType").value;
             if (!memberCardType || memberCardType.length == 0) {
-                alert('卡种不能为空');
+                parent.layer.alert('卡种不能为空',{icon: 2});
                 return;
             }
             var memberCardAmount = document.getElementById("memberCardAmount").value;
             if (!memberCardAmount || memberCardAmount.length == 0) {
-                alert('卡面金额不能为空');
+                parent.layer.alert('卡面金额不能为空',{icon: 2});
                 return;
             }
             var consumerLimit = document.getElementById("consumerLimit").value;
             if (!consumerLimit || consumerLimit.length == 0) {
-                alert('实际消费额度不能为空');
+                parent.layer.alert('实际消费额度不能为空',{icon: 2});
                 return;
             }
             var zeroDiscounts = document.getElementById("zeroDiscounts").value;
             if(!zeroDiscounts || zeroDiscounts.length == 0) {
-                alert('余额为0后折扣不能为空');
+                parent.layer.alert('余额为0后折扣不能为空',{icon: 2});
                 return;
             }
             var isManyPeopleUsed = document.getElementById("isManyPeopleUsed").value;
             if (!isManyPeopleUsed || isManyPeopleUsed.length == 0) {
-                alert('是否可以多人使用不能为空');
+                parent.layer.alert('是否可以多人使用不能为空',{icon: 2});
                 return;
             }
             var status = document.getElementById("status").value;
             if (!status || status.length == 0) {
-                alert('状态不能为空');
+                parent.layer.alert('状态不能为空',{icon: 2});
                 return;
             }
             document.getElementById("myform").submit();

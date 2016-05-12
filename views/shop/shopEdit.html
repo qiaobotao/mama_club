@@ -13,27 +13,27 @@
         function submitForm(){
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
-                alert('门店名称不能为空');
+                parent.layer.alert('门店名称不能为空',{icon: 2});
                 return;
             }
             var serialNumber = document.getElementById("serialNumber").value;
             if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
+                parent.layer.alert('序列号不能为空',{icon: 2});
                 return;
             }
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
-                alert('电话不能为空');
+                parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }
             var address = document.getElementById("address").value;
             if(!address || address.length == 0) {
-                alert('门店地址不能为空');
+                parent.layer.alert('门店地址不能为空',{icon: 2});
                 return;
             }
             var principal = document.getElementById("principal").value;
             if (!principal || principal.length == 0) {
-                alert('负责人不能为空');
+                parent.layer.alert('负责人不能为空',{icon: 2});
                 return;
             }
             document.getElementById("myform").submit();

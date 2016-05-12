@@ -13,16 +13,6 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
-            var name = document.getElementById("name").value;
-            if (!name || name.length == 0) {
-                alert('门店名称不能为空');
-                return;
-            }
-            var serialNumber = document.getElementById("serialNumber").value;
-            if (!serialNumber || serialNumber.length == 0) {
-                alert('序列号不能为空');
-                return;
-            }
             /*
              var tel = document.getElementById("tel").value;
              if (!tel || tel.length == 0) {
@@ -91,7 +81,6 @@
             var table=document.getElementById("qualificationsTableId");
             //获取当前行数
             qualificationsIndex = $("#qualificationsTableId tr").length;
-//            alert("qualificationsIndex="+qualificationsIndex);
             var row=table.insertRow(qualificationsIndex);
             var cell1=row.insertCell(0);//职业资质
             var cell2=row.insertCell(1);//获取证书时间
