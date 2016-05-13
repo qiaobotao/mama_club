@@ -38,13 +38,13 @@ module.exports.preadd = function (req, res, next) {
         if (!err) {
             obj.coursePlan = results;
             if (type == 1) {
-                res.render('coursePlan/coursePlanAdd_neixun', {result : obj,"courseDate":consts.COURSE_DATE});
+                res.render('coursePlan/coursePlanAdd_neixun', {result : obj,"courseDate":consts.COURSE_DATE,resourcesData:resourcesData});
             } else if (type == 2) {
-                res.render('coursePlan/coursePlanAdd_zhuanye', {result : obj,"courseDate":consts.COURSE_DATE});
+                res.render('coursePlan/coursePlanAdd_zhuanye', {result : obj,"courseDate":consts.COURSE_DATE,resourcesData:resourcesData});
             } else if (type == 3) {
-                res.render('coursePlan/coursePlanAdd_fumu', {result : obj,"courseDate":consts.COURSE_DATE});
+                res.render('coursePlan/coursePlanAdd_fumu', {result : obj,"courseDate":consts.COURSE_DATE,resourcesData:resourcesData});
             } else if (type == 4) {
-                res.render('coursePlan/coursePlanAdd_huiyi', {result : obj,"courseDate":consts.COURSE_DATE});
+                res.render('coursePlan/coursePlanAdd_huiyi', {result : obj,"courseDate":consts.COURSE_DATE,resourcesData:resourcesData});
             }
 
         } else {

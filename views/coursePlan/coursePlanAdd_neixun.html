@@ -380,7 +380,9 @@
             </form>
         </div>
         <div class="nx1" style="text-align:center; margin-top:55px;">
-            <button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <%if(resourcesData["/course_plan_add"] == "1"){
+                %><button type="button" value="保存"  class="button feise" onclick="submitForm()">保存</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%
+            }%>
             <button type="button"  value="取消" class="button gray" onclick="cancel()">取消</button>
 
         </div>

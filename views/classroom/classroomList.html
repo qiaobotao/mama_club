@@ -62,7 +62,9 @@
             </table>
 
         </div>
-        <div class="but_0"><a href="/jinquan/classroom_pre_add" class="bsty0"></a></div>
+        <%if(resourcesData["/classroom_pre_add"] == "1"){
+            %><div class="but_0"><a href="/jinquan/classroom_pre_add" class="bsty0"></a></div><%
+        }%>
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
@@ -88,9 +90,13 @@
                             <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">查看</a>]</div></td>
 
                         </tr>  -->
-                        <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">查看</a>]</div></td>
-                        <!--<td><div align="center"><img src="../../images/nav2.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">修改</a>]</div></td> -->
-                        <td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_predel?id=<%=data.data[i].id%>">删除</a>]</div></td>
+
+                        <%if(resourcesData["/classroom_browse"] == "1"){
+                            %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">查看</a>]</div></td><%
+                        }%>
+                        <%if(resourcesData["/classroom_predel"] == "1"){
+                            %><td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_predel?id=<%=data.data[i].id%>">删除</a>]</div></td><%
+                        }%>
                     </table>
                 </td>
             </tr>
