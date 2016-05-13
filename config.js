@@ -36,7 +36,7 @@ module.exports = {
         user     : 'root',
         password : 'q1w2e3',
         port     : 3306,
-        connectionLimit : 50
+        connectionLimit : 200
     },
 
     // 数据库连接池配置(开发版)
