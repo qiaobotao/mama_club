@@ -10,7 +10,10 @@
     </style>
     <script type="text/javascript">
         var replytype = '<%=replytype%>';
-        if (replytype == 'add') {
+        if (replytype == 'OK') {
+            parent.layer.msg('更新成功');
+            window.parent.location.href="/jinquan";
+        }else if (replytype == 'add') {
             parent.layer.msg('增加成功');
         } else if (replytype == 'del') {
             parent.layer.msg('删除成功');
