@@ -69,17 +69,12 @@ app.use(function(req, res, next){
                                     user.menus = menuAndResources.menusData;//拥有菜单
                                     //var resourcesDataList = menuAndResources.resourcesData;
                                     var resourcesObj = {};
-                                    if(menuAndResources.resourcesData[0].url == null){
-                                        user.resourcesData = {};
-                                    }else{
-                                        var resourcesDataList = menuAndResources.resourcesData[0].url.split(",");
-                                        for(var i = 0 ; i < resourcesDataList.length ; i ++){
-                                            var resourcesDataObj = resourcesDataList[i];
-                                            resourcesObj[resourcesDataObj] = "1";
-                                        }
-                                        user.resourcesData = resourcesObj;//拥有资源
+                                    for(var i = 0 ; i < menuAndResources.resourcesData.length ; i ++){
+                                        var resourcesDataObj = menuAndResources.resourcesData[i].url;
+                                        resourcesObj[resourcesDataObj] = "1";
                                     }
-                                    
+                                    user.resourcesData = resourcesObj;//拥有资源
+
                                     req.session.user = user;
                                     //res.locals.user = req.session.user;
                                     res.redirect('/jinquan');
