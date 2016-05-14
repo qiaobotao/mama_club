@@ -77,9 +77,9 @@ app.use(function(req, res, next){
                                             var resourcesDataObj = resourcesDataList[i];
                                             resourcesObj[resourcesDataObj] = "1";
                                         }
+                                        user.resourcesData = resourcesObj;//拥有资源
                                     }
-                                    user.resourcesData = resourcesObj;//拥有资源
-                                    //global.userMenus = resourcesObj;
+                                    
                                     req.session.user = user;
                                     //res.locals.user = req.session.user;
                                     res.redirect('/jinquan');

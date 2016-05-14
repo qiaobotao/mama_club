@@ -21,7 +21,9 @@ module.exports.index = function (req, res) {
 
 module.exports.Menu = function (req, res) {
 
-    res.render('welcome/left');
+    var menus = req.session.user.menus;
+    //res.render('welcome/left',{menusData:menusData});
+    res.render('welcome/left',{menusData:menus});
 
 }
 

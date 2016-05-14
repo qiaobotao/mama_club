@@ -87,7 +87,13 @@
                     nodesObj.id = menus[i].id;
                     nodesObj.pId = menus[i].parentId;
                     nodesObj.name = menus[i].textCh;
-                    nodesObj.nocheck = true;
+//                    nodesObj.nocheck = true;
+                    for(var mbr = 0 ; mbr < menusByRoleList.length ; mbr ++){
+                        if(menusByRoleList[mbr].menuId == menus[i].id){
+                            nodesObj.checked = true;
+                            break;
+                        }
+                    }
                     zNodes[index]= nodesObj;
                     index++;
                     for(var j = i ; j < menus.length ; j ++){

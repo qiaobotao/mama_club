@@ -93,6 +93,45 @@ html,body{height:100%;padding:0;margin:0;}
         <ul class="subClass">
             <li><a href="/jinquan/notice_user_list?page=1" target="mainFrame">最新公告</a></li>
         </ul>
+
+
+
+    <%
+        for(var i = 0 ; i < menusData.length ; i ++){
+            var parentMenu = menusData[i];
+            if(parentMenu.parentId == 0){//父菜单
+                %>
+
+        <div class="menucon">
+            <h1 class="bigClass">
+                <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
+                <div class="bigClass_r">
+                    <p><%=parentMenu.textCh%></p>
+                </div>
+            </h1>
+            <div class="content">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
+                    </tr>
+                </table>
+                <ul class="subClass">
+                    <%
+                        for(var j = 0 ; j < menusData.length ; j ++){
+                        var childMenu = menusData[j];
+                            if(childMenu.parentId == parentMenu.id){//找到子菜单
+                                %><li><a href="<%=childMenu.url%>?page=1" target="mainFrame"><%=childMenu.textCh%></a></li><%
+                            }
+                        }
+                    %>
+                </ul>
+            </div>
+        </div>
+        <%
+            }
+        }
+        %>
+        <!--
     <div class="menucon">
     <h1 class="bigClass">
     <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
@@ -153,9 +192,6 @@ html,body{height:100%;padding:0;margin:0;}
           <li><a href="/jinquan/punch_card_list?page=1" target="mainFrame">打卡记录</a></li>
           <li><a href="/jinquan/attendance_type_list?page=1" target="mainFrame">考勤类别</a></li>
           <li><a href="/jinquan/attendance_change_list?page=1" target="mainFrame">考勤变更</a></li>
-           <!--
-           <li><a href="/jinquan/attendance_search_list" target="mainFrame">查询考勤</a></li>
-           -->
            <li><a href="/jinquan/performance_search_list?page=1" target="mainFrame">绩效查询</a></li>
            <li><a href="/jinquan/performance_attendance_list?page=1" target="mainFrame">绩效考核</a></li>
         </ul>
@@ -275,6 +311,7 @@ html,body{height:100%;padding:0;margin:0;}
                 </ul>
             </div>
         </div>
+        -->
  <script type="text/javascript">
 		var contents = document.getElementsByClassName('content');
 		var toggles = document.getElementsByClassName('bigClass');

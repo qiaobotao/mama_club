@@ -314,6 +314,7 @@ module.exports.checkUser = function (shop,checkUser,cb) {
  */
 module.exports.getMenuAndResourcesByUserId = function(uId,cb) {
 
+    //var menusSql = "SELECT group_concat(url) from sysMenu m where m.id in (SELECT rm.menuId from sysUserRole r,sysRoleMenu rm where r.roleId = rm.roleId and r.userId = ?) ";
     var menusSql = "SELECT * from sysMenu m where m.id in (SELECT rm.menuId from sysUserRole r,sysRoleMenu rm where r.roleId = rm.roleId and r.userId = ?) ";
 
     //var resourcesSql = 'SELECT * from sysResources m where m.id in (SELECT rm.resourcesId from sysUserRole r,sysRoleResources rm where r.roleId = rm.roleId and r.userId = ?)';

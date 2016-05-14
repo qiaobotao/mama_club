@@ -192,14 +192,12 @@ module.exports.updateSysRole = function(id, name,describe,cb) {
  * @param name
  * @param cb
  */
-module.exports.addRoleByMenuAndResources = function(id,selectMenus,selectResources,cb) {
-    //添加角色与之对应的菜单关系
-    var addRoleMenuSql = 'insert into sysRoleMenu(roleId,menuId,dateline) VALUES (?,?,?)';
+module.exports.addRoleByResources = function(id,selectResources,cb) {
     //添加角色与之对应的资源关系
     var addRoleResourcesSql = 'insert into sysRoleResources(roleId,resourcesId,dateline) VALUES (?,?,?)';
-    //批量添加角色对应菜单
-    async.map(selectMenus, function(item, callback) {
-        db.query(addRoleMenuSql, [id,item.menuId,new Date().getTime()], function (cbData, err, rows, fields) {
+    //批量添加角色对应资源按钮
+    async.map(selectResources, function(item, callback) {
+        db.query(addRoleResourcesSql, [id,item.resourcesId,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -207,11 +205,22 @@ module.exports.addRoleByMenuAndResources = function(id,selectMenus,selectResourc
             }
         });
     }, function(err,results) {
-        //callback(err, results);
+        cb(err, results);
     });
-    //批量添加角色对应资源按钮
-    async.map(selectResources, function(item, callback) {
-        db.query(addRoleResourcesSql, [id,item.resourcesId,new Date().getTime()], function (cbData, err, rows, fields) {
+}
+
+/**
+ * 添加角色与菜单、资源之间的关系
+ * @param id
+ * @param name
+ * @param cb
+ */
+module.exports.addRoleByMenus = function(id,selectMenus,cb) {
+    //添加角色与之对应的菜单关系
+    var addRoleMenuSql = 'insert into sysRoleMenu(roleId,menuId,dateline) VALUES (?,?,?)';
+    //批量添加角色对应菜单
+    async.map(selectMenus, function(item, callback) {
+        db.query(addRoleMenuSql, [id,item.menuId,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
