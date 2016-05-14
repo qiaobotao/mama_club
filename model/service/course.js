@@ -6,6 +6,7 @@ var db = require('../../common/db');
 var async = require('async');
 var consts = require('../../model/utils/consts');
 var utils = require('../../common/utils');
+var myUtils = require('../../common/utils');
 
 
 module.exports.selectAllCourse = function(currentPage,cb) {
@@ -182,6 +183,8 @@ module.exports.getCourseList = function (shopId,classroom,courseType,date,curren
 
 module.exports.insertCourse_neixun = function (name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,arr_staff,teacher,cb) {
 
+    myUtils.printSystemLog('增加内训：'+name+'_'+classroomid+'_'+courseDate+'_'+startTime+'_'+endTime+'_'+courseType+'_'+scorse+'_'+content+'_'+arr_staff);
+
     var insert_sql = "INSERT INTO course (name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,content,dateline) VALUES (?,?,?,?,?,?,?,?,?)";
 
     db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType,scorse,content,new Date().getTime()],function(cbData, err, rows, fields) {
@@ -279,6 +282,7 @@ module.exports.browse_neixun = function (courseId, cb) {
 }
 
 module.exports.insertCourse_zhuanye = function (name,classroomid,courseDate,startTime,endTime,courseType,score,content,arr_teacher,cb) {
+    myUtils.printSystemLog('增加专业：'+name+'_'+classroomid+'_'+courseDate+'_'+startTime+'_'+endTime+'_'+courseType+'_'+score+'_'+content+'_'+arr_teacher);
 
     var insert_sql = 'INSERT INTO course(name,classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,scorse,content) VALUES (?,?,?,?,?,?,?,?)';
     db.query(insert_sql,[name,classroomid,courseDate,startTime,endTime,courseType,score,content],function(cbData, err, rows, fields) {
@@ -341,6 +345,9 @@ module.exports.browse_zhuanye = function (courseId,cb) {
 }
 
 module.exports.insertCourse_fumu = function(classroomId,courseDate,startTime,endTime,courseType,count,price,content,arr_fumu,cb) {
+
+    myUtils.printSystemLog('增加父母：'+classroomId+'_'+courseDate+'_'+startTime+'_'+endTime+'_'+courseType+'_'+content+'_'+arr_fumu);
+
     var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,memberCount,price,content) VALUES (?,?,?,?,?,?,?,?)';
     db.query(insert_sql,[classroomId,courseDate,startTime,endTime,courseType,count,price,content],function(cbData, err, rows, fields) {
 
@@ -401,6 +408,8 @@ module.exports.browse_fumu = function (courseId,cb) {
 }
 
 module.exports.insertCourse_huiyi = function(classroomId,courseDate,startTime,endTime,courseType,content,arr_huiyi,cb) {
+
+    myUtils.printSystemLog('增加会议：'+classroomId+'_'+courseDate+'_'+startTime+'_'+endTime+'_'+courseType+'_'+content+'_'+arr_huiyi);
 
     var insert_sql = 'INSERT INTO course(classroomId,courseDate,courseTimeStart,courseTimeEnd,courseType,content) VALUES (?,?,?,?,?,?)';
     db.query(insert_sql,[classroomId,courseDate,startTime,endTime,courseType,content],function(cbData, err, rows, fields) {
@@ -464,6 +473,9 @@ module.exports.browse_huiyi = function (courseId, cb) {
 }
 
 module.exports.editCourse_huiyi = function (courseId,startTime,endTime,content,arr_huiyi,cb) {
+
+    myUtils.printSystemLog('编辑会议：'+courseId+'_'+startTime+'_'+endTime+'_'+content+'_'+arr_huiyi);
+
     var update_sql = 'UPDATE course SET courseTimeStart=?,courseTimeEnd=?,content=? WHERE id= ?';
 
     db.query(update_sql, [startTime,endTime,content,courseId], function (cbData, err, rows, fields) {
@@ -504,6 +516,9 @@ module.exports.editCourse_huiyi = function (courseId,startTime,endTime,content,a
 }
 
 module.exports.editCourse_fumu = function (courseId,count,price,startTime,endTime,content,arr_fumu,cb) {
+
+    myUtils.printSystemLog('编辑父母：'+courseId+'_'+startTime+'_'+endTime+'_'+content+'_'+arr_fumu);
+
     var update_sql = 'UPDATE course SET courseTimeStart=?,courseTimeEnd=?,memberCount=?,price=?,content=? WHERE id=?';
     db.query(update_sql, [startTime,endTime,count,price,content,courseId], function (cbData, err, rows, fields) {
 
@@ -542,6 +557,9 @@ module.exports.editCourse_fumu = function (courseId,count,price,startTime,endTim
 }
 
 module.exports.editCourse_zhuanye = function (courseId,course,startTime,endTime,score,content,arr,cb) {
+
+    myUtils.printSystemLog('编辑专业：'+courseId+'_'+startTime+'_'+endTime+'_'+content+'_'+arr);
+
     var update_sql = 'UPDATE course SET name=?,courseTimeStart=?,courseTimeEnd=?,content=? WHERE id= ?';
     db.query(update_sql, [course,startTime,endTime,content,courseId], function(cbData, err, rows, fields) {
 
@@ -580,6 +598,9 @@ module.exports.editCourse_zhuanye = function (courseId,course,startTime,endTime,
 }
 
 module.exports.editCourse_neixun = function (courseId,name,startTime,endTime,scorse,content,arr_staff,teacherid,cb) {
+
+    myUtils.printSystemLog('编辑专业：'+courseId+'_'+startTime+'_'+endTime+'_'+content+'_'+arr_staff);
+
     var update_sql = 'UPDATE course SET name = ?,courseTimeStart=?,courseTimeEnd=?,scorse=?,content=? WHERE id = ?';
     db.query(update_sql, [name,startTime,endTime,scorse,content,courseId], function (cbData, err, rows, fields) {
 
@@ -687,6 +708,8 @@ module.exports.getPlan = function (classroomId,courseDate,cb) {
 }
 
 module.exports.delCourse = function (courseId,type,cb) {
+
+    myUtils.printSystemLog('删除课程：'+courseId);
 
     // 删除课表，先删除主表，然后从表每个表都删除一次
     var del = 'DELETE FROM course WHERE id = ?';

@@ -6,6 +6,7 @@
 var db = require('../../common/db');
 var mainWaresClassifyId = require('../../config').mainClassifyId.wares;
 var async = require('async');
+var myUtils = require('../../common/utils');
 /**
  * 增加商品
  * @param name
@@ -18,6 +19,8 @@ var async = require('async');
  * @param cb
  */
 module.exports.insertWares = function(name, longname, brand, standard, serialNumber, remarks, lowData, cid,price,isd,dprice, cb) {
+
+    myUtils.printSystemLog('添加商品：'+name+'_'+longname+'_'+brand+'_'+standard+'_'+serialNumber+'_'+remarks+'_'+lowData+'_'+cid+'_'+price+'_'+isd+'_'+dprice);
 
     var sql = 'INSERT INTO wares (name, longname, brand, standard, serialNumber, remarks, lowData, classify,price,isDiscount,discountPrice) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
     db.query(sql, [name, longname, brand, standard, serialNumber, remarks, lowData, cid, price, isd, dprice], function(cbData, err, rows, fields) {
@@ -94,6 +97,8 @@ module.exports.list = function(name,cid,currentPage, cb) {
  * @param cb
  */
 module.exports.updateWares = function(price,id, name, longname, brand, standard, serialNumber, remarks, lowData, cid,isd,dprice, cb) {
+
+    myUtils.printSystemLog('修改商品：'+id+'_'+name+'_'+longname+'_'+brand+'_'+standard+'_'+serialNumber+'_'+remarks+'_'+lowData+'_'+cid+'_'+price+'_'+isd+'_'+dprice);
 
     var sql = 'UPDATE wares SET price=?, name = ?, longname = ?, brand = ?, standard = ?, serialNumber = ?, remarks = ?, lowData = ?, classify = ?,isDiscount = ?,discountPrice =? WHERE id = ?';
     var par = [price,name, longname, brand, standard, serialNumber, remarks, lowData, cid,isd,dprice, id];

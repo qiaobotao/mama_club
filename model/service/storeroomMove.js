@@ -6,6 +6,7 @@ var db = require('../../common/db');
 var async = require('async');
 var moment = require('moment');
 var mainInTypeClassifyId = require('../../config').mainClassifyId.inType;
+var myUtils = require('../../common/utils');
 
 
 
@@ -73,6 +74,8 @@ module.exports.list = function (shopId,outId,oper,inId,moveDate,currentPage,cb) 
  */
 module.exports.insertMoveLog = function (oper,outId,inId,remarks,cb) {
 
+    myUtils.printSystemLog('移库入库操作'+oper+'_'+outId+'_'+inId+'_'+remarks);
+
     var sql = 'INSERT INTO storeroomMoveLog (oper,moveDate,outStoreroomId,inStoreroomId,remarks,dateline) VALUES (?,?,?,?,?,?)';
 
     db.query(sql,[oper,new Date(),outId,inId,remarks,new Date().getTime()],function(cbData, err, rows, fields) {
@@ -92,6 +95,8 @@ module.exports.insertMoveLog = function (oper,outId,inId,remarks,cb) {
  * @param cb
  */
 module.exports.insertMoveLogMX = function (mid,arr_obj,cb) {
+
+    myUtils.printSystemLog('移库入库明细操作'+mid+'_'+arr_obj);
 
     if (arr_obj.length == 0) {
         return;
@@ -120,6 +125,7 @@ module.exports.insertMoveLogMX = function (mid,arr_obj,cb) {
  */
 module.exports.updateInventory = function (sid_out,sid_in,arr_obj,cb) {
 
+    myUtils.printSystemLog('移库入库更新库存操作'+sid_out+'_'+sid_in+'_'+arr_obj);
     if (arr_obj.length == 0) {
         return;
     }

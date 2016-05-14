@@ -8,6 +8,8 @@ var async = require('async');
 var moment = require('moment');
 var mainInTypeClassifyId = require('../../config').mainClassifyId.inType;
 var mainBuyTypeClassifyId = require('../../config').mainClassifyId.buyType;
+var myUtils = require('../../common/utils');
+
 
 module.exports.list = function (shopId,buyer,buyType,buyDate,currentPage,cb) {
 
@@ -107,6 +109,8 @@ module.exports.getInTypeClassify = function (cb) {
  */
 module.exports.insertInLog = function (buyType,inType,buyer,buyDate,storeroomId,distributorId,remarks,cb) {
 
+    myUtils.printSystemLog('入库操作：'+buyType+'_'+inType+'_'+buyer+'_'+buyDate+'_'+storeroomId+'_'+distributorId+'_'+remarks);
+
     var sql = 'INSERT INTO storeroomInLog (buyType,inType,buyer,buyDate,storeroomId,distributorId,remarks,dateline) VALUES (?,?,?,?,?,?,?,?)';
 
     db.query(sql, [buyType,inType,buyer,buyDate,storeroomId,distributorId,remarks,new Date().getTime()], function (cbData, err, rows, fields) {
@@ -124,6 +128,8 @@ module.exports.insertInLog = function (buyType,inType,buyer,buyDate,storeroomId,
  * @param cb
  */
 module.exports.insertInLogMX = function (mid,arr_obj,cb) {
+
+    myUtils.printSystemLog('入库明细操作：'+mid+'_'+arr_obj);
 
     if (arr_obj.length == 0) {
         return;
@@ -150,6 +156,8 @@ module.exports.insertInLogMX = function (mid,arr_obj,cb) {
  * @param cb
  */
 module.exports.insertInventory = function (sid,arr_obj,cb) {
+
+    myUtils.printSystemLog('入库修改库存操作：'+sid+'_'+arr_obj);
 
     if (arr_obj.length == 0) {
         return;

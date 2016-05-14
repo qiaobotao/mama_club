@@ -7,7 +7,7 @@ var db = require('../../common/db');
 var async = require('async');
 var moment = require('moment');
 var mainOutTypeClassifyId = require('../../config').mainClassifyId.outType;
-
+var myUtils = require('../../common/utils');
 
 
 module.exports.list = function (shopId,outType,oper,outDate,currentPage,cb) {
@@ -90,6 +90,8 @@ module.exports.getOutTypeClassify = function (cb) {
  */
 module.exports.insertOutLog = function (oper,outType,outDate,storeroomId,remarks,address,consignee,consigneeTel,cb) {
 
+    myUtils.printSystemLog('出库操作'+oper+'_'+outType+'_'+outDate+'_'+storeroomId+'_'+remarks+'_'+address+'_'+consignee);
+
     var sql = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,remarks,dateline,address,consignee,consigneeTel) VALUES (?,?,?,?,?,?,?,?,?)';
 
     db.query(sql, [outType,oper,outDate,storeroomId,remarks,new Date().getTime(),address,consignee,consigneeTel], function (cbData, err, rows, fields) {
@@ -109,6 +111,8 @@ module.exports.insertOutLog = function (oper,outType,outDate,storeroomId,remarks
  * @param cb
  */
 module.exports.insertOutLogMX = function (mid,arr_obj,cb) {
+
+    myUtils.printSystemLog('出库明细操作'+mid+'_'+arr_obj);
 
     if (arr_obj.length == 0) {
         return;
@@ -137,8 +141,9 @@ module.exports.insertOutLogMX = function (mid,arr_obj,cb) {
  */
 module.exports.addClassroom = function(sid,oper,arr_obj,cb) {
 
+    myUtils.printSystemLog('添加教室形成出库单'+sid+'_'+oper+'_'+arr_obj);
+
     var insertOutLog = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,dateline) VALUES (?,?,?,?,?)';
-    var insertOutLogMX = 'INSERT INTO storeroomOutLogMX (outLogId,waresSerial,waresName,count,price,waresId) VALUES (?,?,?,?,?,?)';
 
     // 52 就是分类管理里面的创建教室的 id
     db.query(insertOutLog,['52',oper,new Date(),sid,new Date().getTime()],function(cbData, err, rows, fields) {
@@ -172,6 +177,8 @@ module.exports.addClassroom = function(sid,oper,arr_obj,cb) {
  * @param cb
  */
 module.exports.updateInventory = function (sid,arr_obj,cb) {
+
+    myUtils.printSystemLog('出库单修改库存'+sid+'_'+arr_obj);
 
     if (arr_obj.length == 0) {
         return;
@@ -296,6 +303,8 @@ module.exports.delOutLogMX = function (outLogId) {
 
 function addClassroom_ProMX(mid, arr, callback) {
 
+    myUtils.printSystemLog('天机教室出库单明细'+mid+'_'+arr);
+
     var sql = 'INSERT INTO storeroomOutLogMX (outLogId,waresSerial,waresName,count,price,waresId) VALUES (?,?,?,?,?,?)';
     async.map(arr, function(item, callback) {
 
@@ -313,6 +322,8 @@ function addClassroom_ProMX(mid, arr, callback) {
 
 
 function addClassroom_updateInventory (sid,arr_obj,cb) {
+
+    myUtils.printSystemLog('天机教室出库库存变化'+sid+'_'+arr_obj);
 
     var sql = 'UPDATE inventory SET count = count - ? WHERE storeroomId = ? AND waresId = ?';
 
