@@ -34,6 +34,7 @@ module.exports.preadd = function (req, res, next) {
     obj.courseId = courseId;
     obj.classRoomId = classRoomId;
     obj.date = date;
+    var resourcesData = req.session.user.resourcesData;
     service.getPlan(classRoomId,date,function (err, results) {
         if (!err) {
             obj.coursePlan = results;
