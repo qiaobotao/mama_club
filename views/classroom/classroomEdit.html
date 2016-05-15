@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加教室</title>
+    <title>编辑教室</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
@@ -33,6 +33,8 @@
 
             document.getElementById("myform").submit();
         }
+        <!--  -->
+
     </script>
 </head>
 
@@ -46,34 +48,37 @@
     <form method="post" id="myform" action="/jinquan/classroom_do_edit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td class="regTd_l">序列号：<input id="id" name="id" type="hidden" readonly="true" class="input5" value="<%=classroom.id%>"/></td>
-                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" readonly="true" class="input5" value="<%=classroom.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">* </span></td>
+                <td class="regTd_l">序列号：<input id="id" name="id" type="hidden" readonly="true" class="input5" value="<%=data.classroom.id%>"/></td>
+                <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" readonly="true" class="input5" value="<%=data.classroom.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">* </span></td>
             </tr>
 
             <tr>
                 <td  class="regTd_l">教室名称：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=classroom.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=data.classroom.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td  class="regTd_l">教室编码：</td>
-                <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5"  value="<%=classroom.classCode%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5"  value="<%=data.classroom.serialNumber%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td  class="regTd_l">操作人：</td>
+                <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5"  value="<%=data.classroom.oper%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">教室分类：</td>
                 <td class="regTd_r">
                     <select  id="classType" name="classType"   >
-                        <option  value="1" selected="<%=classroom.classType==1%>"><5人</option>
-                        <option  value="2" selected="<%=classroom.classType==2%>">5~10人</option>
-                        <option  value="3" selected="<%=classroom.classType==3%>">10~20人</option>
+                        <option  value="1" selected="<%=data.classroom.classType==1%>"><5人</option>
+                        <option  value="2" selected="<%=data.classroom.classType==2%>">5~10人</option>
+                        <option  value="3" selected="<%=data.classroom.classType==3%>">10~20人</option>
                     </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                       </td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>
-                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=classroom.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=data.classroom.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">教室物资： <input id="materialId" name="materialId" type="text" class="input5"  value="<%=classroom.materialId%>" /></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
@@ -81,11 +86,20 @@
                             <th>商品商标</th>
                             <th>商品规格</th>
                             <th>最低库存</th>
-                            <th>操作</th>
+                            <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
                         </tr>
 
-                        <tr>
-                         </tr>
+                        <%for(var i=0;i<data.detail.length;i++) {%>
+                        <tr id="qqq">
+                            <td><input    name="proname" type="text" class="input5 input_arr" value="<%=data.detail[i].waresName%>"  /></td>
+                            <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.detail[i].waresSerial%>" /></td>
+                            <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.detail[i].count%>" /></td>
+                            <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.detail[i].price%>" /></td>
+                            <td><input  name="proId" type="text" class="input5 input_arr" value="<%=data.detail[i].price%>" /></td>
+                            <a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>
+                        </tr>
+                        <%}%>
+
                     </table>
                 </td>
             </tr>

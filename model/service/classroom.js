@@ -36,12 +36,12 @@ module.exports.getClassroomClassify = function (cb) {
  * @param materialid
  * @param cb
  */
-module.exports.insertClassroom = function(shopId,serialNumber,name,classType,remark,materialId, cb) {
+module.exports.insertClassroom = function(shopId,serialNumber,name,classType,remark,materialId,sid,oper, cb) {
 
-    myUtils.printSystemLog('增加教室：'+shopId+'_'+serialNumber+'_'+name+'_'+classType+'_'+remark+'_'+materialId);
+    myUtils.printSystemLog('增加教室：'+shopId+'_'+serialNumber+'_'+name+'_'+classType+'_'+remark+'_'+materialId+'_'+sid+'_'+oper);
 
-    var sql = 'INSERT INTO classroom (serialNumber,name,classType,remark,outLogId,dateline,status,shopId) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,classType,remark,materialId,new Date().getTime(),'1',shopId], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO classroom (serialNumber,name,classType,remark,outLogId,dateline,status,shopId,oper,storeroomId) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,name,classType,remark,materialId,new Date().getTime(),'1',shopId,oper,sid], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -122,7 +122,7 @@ module.exports.fetchAllCLassRoom = function(shopId,className,classCode,currentPa
  */
 module.exports.detail = function (id, cb) {
 
-    var sql = 'SELECT c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc WHERE cc.id = c.classType AND c.id = ?';
+    var sql = 'SELECT c.oper,s.name AS storename,c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc, storeroom AS s WHERE cc.id = c.classType AND s.id = c.storeroomId AND c.id = ?';
 
     var detail_sql = 'SELECT * FROM storeroomOutLogMX WHERE outLogId = ?';
 
@@ -152,36 +152,35 @@ module.exports.detail = function (id, cb) {
 }
 
 /**
- * 修改教室，先将所有商品入库，
- * 点击修改后，在根据修改后的数据修改库存
  * @param id
  * @param cb
  */
-//module.exports.preEdit = function(id, cb) {
-//
-//    var sql = 'SELECT c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc WHERE cc.id = c.classType AND c.id = ?';
-//
-//    db.query(sql,[id],function(cbData, err, rows, fields) {
-//
-//        if (!err) {
-//            if (rows.length != 0) {
-//                var outLogId = rows[0].outLogId;
-//                var outSQl = 'SELECT * FROM storeroomOutLog WHERE id = ?';
-//                db.query(outSQl,[outLogId],function(cbData, err, rows, fields) {
-//                    if(!err) {
-//                        if(rows.length != 0) { // 出库单主表，查找出
-//
-//                        }
-//                    } else {
-//                        cb(err);
-//                    }
-//                });
-//            }
-//        } else {
-//            cb(err);
-//        }
-//    });
-//}
+module.exports.preEdit = function(id, cb) {
+
+    var sql = 'SELECT c.id, c.oper,s.name AS storename,c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc, storeroom AS s WHERE cc.id = c.classType AND s.id = c.storeroomId AND c.id = ?';
+
+    db.query(sql,[id],function(cbData, err, rows, fields) {
+
+        var data = {};
+        if (!err) {
+            if (rows.length != 0) {
+                data.classroom = rows[0];
+                var outLogId = rows[0].outLogId;
+                var outSQl = 'SELECT mx.* FROM storeroomOutLog m, storeroomOutLogMX mx WHERE m.id = ? AND m.id = mx.outLogId';
+                db.query(outSQl,[outLogId],function(cbData, err, rows, fields) {
+                    if(!err) {
+                       data.detail = rows;
+                        cb(err,data);
+                    } else {
+                        cb(err);
+                    }
+                });
+            }
+        } else {
+            cb(err);
+        }
+    });
+}
 
 module.exports.preDel = function(id,shopId, cb) {
 
@@ -323,6 +322,59 @@ module.exports.del = function(id,sid,shopId,userName, cb) {
     });
 }
 
+
+
+/**
+ * 修改教室
+ * @param id
+ * @param shopId
+ * @param serialNumber
+ * @param name
+ * @param classType
+ * @param remark
+ * @param materialId
+ * @param sid
+ * @param oper
+ * @param cb
+ */
+module.exports.updateClassroom = function (id,shopId,serialNumber,name,classType,remark,materialId,sid,oper, cb) {
+
+    myUtils.printSystemLog('更新教室：'+shopId+'-'+serialNumber+'-'+name+'-'+classType+'-'+remark+'-'+materialId+'-'+sid+'-'+oper);
+
+   var sql = 'UPDATE classroom SET serialNumber=?,name=?,classType=?,remark=?,outLogId=?,shopId=?,oper=?,storeroomId=? WHERE id = ?';
+
+    db.query(sql, [serialNumber,name,classType,remark,materialId,shopId,oper,sid,id], function(cbData, err, rows, fields){
+
+        if (!err) {
+            cb(null,rows);
+        } else {
+            cb(err);
+        }
+
+    });
+
+
+}
+
+/**
+ * 由于教室修改增加入库单
+ * 先根据outLogId查出原来出库单的数据，然后入库，同时更新库存
+ * @param outLogId
+ * @param cb
+ */
+module.exports.inLog_for_classroomUpdate = function (outLogId,oper,cb) {
+    // 根据outlogid 查出原来出库数据
+    var sql = 'SELECT * FROM storeroomOutLogMX WHERE outLogId = ?';
+    db.query(sql, [outLogId], function(cbData, err, rows, fields) {
+        if (!err) {
+            // TODO 现在有个问题 就是如果原来的仓库删掉了，无法入库的问题。
+
+        } else {
+            cb(err);
+        }
+    });
+}
+
 /**
  * 删除教室新增入库单
  */
@@ -408,3 +460,4 @@ function updateInventory (sid,arr,cb) {
     });
 
 }
+
