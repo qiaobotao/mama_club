@@ -194,19 +194,50 @@ module.exports.updateSysRole = function(id, name,describe,cb) {
  */
 module.exports.addRoleByResources = function(id,selectResources,cb) {
     //添加角色与之对应的资源关系
-    var addRoleResourcesSql = 'insert into sysRoleResources(roleId,resourcesId,dateline) VALUES (?,?,?)';
+    var addRoleResourcesSql = 'insert into sysRoleResources(roleId,resourcesId,dateline) VALUES ';
     //批量添加角色对应资源按钮
+    var valuesArr = [];
+    for(var i = 0 ; i < selectResources.length ; i ++){
+        if(i != 0){
+            addRoleResourcesSql += ",";
+        }
+        addRoleResourcesSql += "(?,?,?)";
+        valuesArr.push(id);
+        valuesArr.push(selectResources[i].resourcesId);
+        valuesArr.push(new Date().getTime());
+    }
+    db.query(addRoleResourcesSql, valuesArr, function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+    /*
     async.map(selectResources, function(item, callback) {
-        db.query(addRoleResourcesSql, [id,item.resourcesId,new Date().getTime()], function (cbData, err, rows, fields) {
+        //db.query(addRoleResourcesSql, [id,item.resourcesId,new Date().getTime()], function (cbData, err, rows, fields) {
+        //    if (!err) {
+        //        callback(null, rows);
+        //    } else {
+        //        callback(err);
+        //    }
+        //});
+
+        var conn = db.db_conn();
+        conn.query(addRoleResourcesSql, [id,item.resourcesId,new Date().getTime()],function(err,results) {
             if (!err) {
-                callback(null, rows);
-            } else {
-                callback(err);
+                console.log(err);
+                callback(null, results);
+            }else{
+                callback(null, err);
             }
+            console.log(results);
         });
+
     }, function(err,results) {
         cb(err, results);
     });
+    */
 }
 
 /**
@@ -217,19 +248,52 @@ module.exports.addRoleByResources = function(id,selectResources,cb) {
  */
 module.exports.addRoleByMenus = function(id,selectMenus,cb) {
     //添加角色与之对应的菜单关系
-    var addRoleMenuSql = 'insert into sysRoleMenu(roleId,menuId,dateline) VALUES (?,?,?)';
+    var addRoleMenuSql = 'insert into sysRoleMenu(roleId,menuId,dateline) VALUES ';
+    var valuesArr = [];
+    for(var i = 0 ; i < selectMenus.length ; i ++){
+        if(i != 0){
+            addRoleMenuSql += ",";
+        }
+        addRoleMenuSql += "(?,?,?)";
+        valuesArr.push(id);
+        valuesArr.push(selectMenus[i].menuId);
+        valuesArr.push(new Date().getTime());
+    }
+    db.query(addRoleMenuSql, valuesArr, function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+    /*
     //批量添加角色对应菜单
     async.map(selectMenus, function(item, callback) {
-        db.query(addRoleMenuSql, [id,item.menuId,new Date().getTime()], function (cbData, err, rows, fields) {
+
+        var conn = db.db_conn();
+        conn.query(addRoleMenuSql, [id,item.menuId,new Date().getTime()],function(err,results) {
             if (!err) {
-                callback(null, rows);
-            } else {
-                callback(err);
+                console.log(err);
+                callback(null, results);
+            }else{
+                callback(null, err);
             }
+            db.close(conn);
+            console.log(results);
         });
+
+
+        //db.query(addRoleMenuSql, [id,item.menuId,new Date().getTime()], function (cbData, err, rows, fields) {
+        //    if (!err) {
+        //        callback(null, rows);
+        //    } else {
+        //        callback(err);
+        //    }
+        //});
     }, function(err,results) {
         cb(err, results);
     });
+    */
 }
 
 /**

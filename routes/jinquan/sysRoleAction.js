@@ -152,7 +152,7 @@ module.exports.save = function (req, res,next) {
                                     if (!err) {
                                         //记录用户信息：用户id、用户所在门店、用户名称
                                         var resourcesObj = {};
-                                        if (menuAndResources.resourcesData[0].url == null) {
+                                        if (menuAndResources.resourcesData[0] == null) {
                                             user.resourcesData = {};
                                         } else {
                                             var resourcesDataList = menuAndResources.resourcesData[0].url.split(",");

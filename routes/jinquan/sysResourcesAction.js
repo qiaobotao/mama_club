@@ -13,19 +13,28 @@ var menuService = require('../../model/service/sysMenu');
 module.exports.list = function (req, res,next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var textCh = req.query.textCh ? req.query.textCh : '';
+    var menuId = req.query.menuId ? req.query.menuId : '';
 
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
 
-    service.fetchAllSysResources(textCh,currentPage, function (err, results) {
+    service.fetchAllSysResources(textCh,menuId,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.textCh = textCh;
-            res.render('sysResources/sysResourcesList', {data : results, replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
-            });
+            results.menuId = menuId;
+            menuService.fetchSysMenus(0,100,function(err, menuResults) {
+                if(!err) {
+                    res.render('sysResources/sysResourcesList', {data : results, replytype : replytype, laypage: laypage({
+                        curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData,menus:menuResults
+                    });
+                } else {
+                    console.log(err.message);
+                    res.render('error');
+                }
+            })
         } else {
             next();
         }

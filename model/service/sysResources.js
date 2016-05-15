@@ -66,9 +66,9 @@ module.exports.fetchSysResourcess = function(pages, count, cb) {
  * 获取所有资源
  * @param cb
  */
-module.exports.fetchAllSysResources = function(textCh,currentPage,cb) {
+module.exports.fetchAllSysResources = function(textCh,menuId,currentPage,cb) {
 
-    var parm = "WHERE textCh LIKE '%"+textCh+"%' ";
+    var parm = "WHERE textCh LIKE '%"+textCh+"%' and menuId like '%"+menuId+"%'";
 
     var sql_count = 'SELECT count(*) as count FROM sysResources '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
