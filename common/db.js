@@ -2,6 +2,9 @@
  * Created by qiaojoe on 15-9-29.
  */
 
+
+var config = require('../config');
+var mysql = require('mysql');
 /**
  * 创建数据库连接池
  * @param dbConfig {Object} 数据库连池参数
@@ -55,3 +58,46 @@ exports.query = function(sql, values, callback, callbackData, autoReleaseConnect
         }
     });
 };
+
+/** 当需要map处理sql，尤其是做事务操作的时候，可能由于nodejs原来的非阻塞的机制导致
+ *  数据库连接不能及时关闭，此情况可以用以下机制，手动关闭数据库。
+ **/
+
+var db_options ={
+    host: config.dbConfig.host,
+    user: config.dbConfig.user,
+    password: config.dbConfig.password,
+    database: config.dbConfig.database,
+    port: 3306
+};
+
+/**
+ * 单条sql，如 insert into tablename（file1,file2）Values(1,2);
+ * @returns {*}
+ */
+exports.db_conn = function () {
+    return   mysql.createConnection(db_options);
+
+}
+
+exports.close = function (conn) {
+    if (conn != null) {
+        conn.end();
+    }
+}
+
+/**
+ * 处理多条sql 如 insert into tablename（file1，file2）values（1，2）；insert into tablename（file1，file2）values（1，2）；
+ * 语句间用分号隔开
+ * @returns {*}
+ */
+exports.db_conn_multiple = function(){//处理多条sql语句
+
+    db_options.multipleStatements = true;
+
+    return mysql.createConnection(db_options);
+
+}
+
+
+

@@ -6,16 +6,28 @@
  * @param req
  * @param res
  */
+
+var handle_db = require('../../common/db');
+
 module.exports.layui = function (req, res,next) {
 
-    var time = '2016-04-10'.replace(/-/g,'/');
-    console.log(time);
-    var time2 = new Date(time).getTime();
+    /**
+     * 手动关闭数据库实例 开始
+     */
 
-    console.log(time2);
+    var insert_sql = 'INSERT INTO demoTable(file1,file2) VALUES(?,?)';
 
-    console.log(new Date().getTime());
-
+    var conn = handle_db.db_conn();
+    conn.query(insert_sql,[1,2],function(err,results) {
+        if (err) {
+            console.log(err);
+        }
+        handle_db.close(conn);
+        console.log(results);
+    });
+    /**
+     * 手动关闭数据库实例 结束
+     */
      res.locals.user = req.session.user;
     res.render('demo/layuiDemo');
 }
