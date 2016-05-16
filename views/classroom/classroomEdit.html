@@ -5,6 +5,7 @@
     <title>编辑教室</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -33,15 +34,88 @@
 
             document.getElementById("myform").submit();
         }
-        <!--  -->
+        //选择商品
+        function getWares(index){
 
+            var sid = document.getElementById('sid').value;
+            if (sid == '' || sid.length == 0) { //库房不能为空
+                parent.layer.alert('请先选择库房！',{icon: 2});
+                return;
+            }
+            //iframe层
+            iframIndex = parent.layer.open({
+
+                type: 2,
+                title: '选择商品',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/wares_select_in_storeroom?index='+index+'&sid='+sid, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+
+        //当前商品显示位置
+        var waresIndex = 0;
+        //table中增加需要添加的行信息
+        function addTr(){
+            //获取表格对象
+            var table=document.getElementById("waresTable");
+            //获取当前行数
+            waresIndex = $("#waresTable tr").length;
+            var row=table.insertRow(waresIndex);
+            var cell1=row.insertCell(0);//商品名称
+            var cell2=row.insertCell(1);//商品编号
+            var cell3=row.insertCell(2);//采购数量
+            var cell4=row.insertCell(3);//商品单价
+            var cell5=row.insertCell(4);//删除本行
+            var cell6=row.insertCell(5);//商品id
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="check('+waresIndex+')"/>';
+            cell4.innerHTML='<input id="bname'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
+            cell6.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+        }
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+        }
+
+        // 验证库存量
+        function check (index) {
+
+            var proId = $("#proId"+index).val();
+            if (proId == '') {
+                parent.layer.alert('请先选择商品！',{icon: 2});
+                document.getElementById("count"+index).value = '';
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/jinquan/storeroom_check",
+                data: {'storeroomId':$("#sid").val(),'waresId':$("#proId"+index).val(),'num':$("#count"+index).val()},
+                success: function (result) {
+                    if(!result.flag){
+                        document.getElementById("count"+index).value = '';
+                        parent.layer.alert('该商品库存不够！',{icon: 2});
+                    }
+                }
+            });
+        }
     </script>
 </head>
 
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：添加教室
+        当前位置：编辑教室
     </div>
 </div>
 <div class="center_con">
@@ -65,6 +139,15 @@
                 <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5"  value="<%=data.classroom.oper%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
+                <td class="regTd_l">出库库房：</td>
+                <td class="regTd_r">
+                    <select id="sid" name="sid">
+                        <%for(var i=0;i<storeroomData.length;i++){%>
+                        <option value ="<%=storeroomData[i].id%>" ><%=storeroomData[i].name%></option>
+                        <%}%>
+                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
                 <td class="regTd_l">教室分类：</td>
                 <td class="regTd_r">
                     <select  id="classType" name="classType"   >
@@ -78,31 +161,32 @@
                 <td class="regTd_l">说明：</td>
                 <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=data.classroom.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
-            <tr>
+        </table>
+
+        <!--商品信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
+        <br>
+        <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <th>商品名称</th>
+                <th>商品编号</th>
+                <th>使用数量</th>
+                <th>商标</th>
+                <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+            </tr>
+
+            <%for(var i=0;i<data.detail.length;i++) {%>
+            <tr id="qqq">
+                <td><input    name="proname" type="text" class="input5 input_arr" value="<%=data.detail[i].waresName%>"  /></td>
+                <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.detail[i].waresSerial%>" /></td>
+                <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.detail[i].count%>" /></td>
+                <td><input  name="bname" type="text" class="input5 input_arr" value="<%=data.detail[i].bname%>" /></td>
                 <td>
-                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
-                        <tr>
-                            <th>商品名称</th>
-                            <th>商品商标</th>
-                            <th>商品规格</th>
-                            <th>最低库存</th>
-                            <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
-                        </tr>
-
-                        <%for(var i=0;i<data.detail.length;i++) {%>
-                        <tr id="qqq">
-                            <td><input    name="proname" type="text" class="input5 input_arr" value="<%=data.detail[i].waresName%>"  /></td>
-                            <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.detail[i].waresSerial%>" /></td>
-                            <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.detail[i].count%>" /></td>
-                            <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.detail[i].price%>" /></td>
-                            <td><input  name="proId" type="text" class="input5 input_arr" value="<%=data.detail[i].price%>" /></td>
-                            <a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>
-                        </tr>
-                        <%}%>
-
-                    </table>
+                    <input  name="proId" type="hidden" class="input5 input_arr" value="<%=data.detail[i].proId%>" />
+                    <a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>
                 </td>
             </tr>
+            <%}%>
 
         </table>
     </form>

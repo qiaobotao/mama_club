@@ -206,10 +206,20 @@ module.exports.checkName = function (req, res, next) {
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var shopId = req.session.user.shopId;
 
     service.preEdit(id,function(err, results) {
         if(!err) {
-            res.render('classroom/classroomEdit',{data : results});
+            storeroomService.getAllStorerooms(shopId,function(err, storeroomResult) {
+                if (!err) {
+                    //data.storeroom = results;
+                    res.render('classroom/classroomEdit',{data : results,storeroomData:storeroomResult});
+                    //res.render('classroom/classroomAdd', {data : data});
+                } else {
+                    console.log(err);
+                    next();
+                }
+            });
         }else {
             myUtils.printSystemLog(err);
             next();
