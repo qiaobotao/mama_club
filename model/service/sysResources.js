@@ -68,16 +68,27 @@ module.exports.fetchSysResourcess = function(pages, count, cb) {
  */
 module.exports.fetchAllSysResources = function(textCh,menuId,currentPage,cb) {
 
-    var parm = "WHERE textCh LIKE '%"+textCh+"%' and menuId like '%"+menuId+"%'";
+    var parm = "WHERE textCh LIKE '%"+textCh+"%' ";
+
+    var parValueArr = [];
+    var parValueCountArr = [];
+    if(menuId != ""){
+        parm += " and menuId = ? ";
+        parValueArr.push(menuId);
+        parValueCountArr.push(menuId);
+    }
+
 
     var sql_count = 'SELECT count(*) as count FROM sysResources '+parm+'  ORDER BY dateline DESC';
     var start = (currentPage - 1) * 10;
     var end = 10;
     var sql_data = 'SELECT a.*,(select b.textCh from sysMenu b where a.menuId=b.id) as parentName FROM sysResources a '+parm+' ORDER BY dateline DESC LIMIT ?,?';
+    parValueArr.push(start);
+    parValueArr.push(end);
 
     async.series({
         totalPages : function(callback){
-            db.query(sql_count, [], function (cbData, err, rows, fields) {
+            db.query(sql_count, parValueCountArr, function (cbData, err, rows, fields) {
 
                 if (!err) {
                     var count = rows[0].count;
@@ -89,7 +100,7 @@ module.exports.fetchAllSysResources = function(textCh,menuId,currentPage,cb) {
             });
         },
         data : function(callback){
-            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+            db.query(sql_data, parValueArr, function (cbData, err, rows, fields) {
 
                 if (!err) {
                     callback(null,rows);

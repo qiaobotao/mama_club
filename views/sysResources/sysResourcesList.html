@@ -117,7 +117,7 @@
         } else if (replytype == 'update') {
             parent.layer.msg('修改成功');
         }
-        var defaultPage = '<%=data.totalPages%>';
+        var defaultPage = '<%=data.currentPage%>';
         //查询方法
         function search () {
             var textCh = document.getElementById('textCh').value;
@@ -158,7 +158,7 @@
                     <td class="regTd_r">
                         <input id="menuId" name="menuId" type="hidden" value="<%=data.menuId%>" />
                         <input id="menuName" name="menuName" type="text" class="input5" value="<%=data.menuId%>" readonly />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
-                        <a id="menuBtn" href="#" onclick="showMenu(); return false;">选择</a>
+                        <a id="menuBtn" href="#" onclick="showMenu(); return false;">选择 &nbsp; &nbsp;</a>
                         <div id="menuContent" class="menuContent" style="display:none; position: absolute;">
                             <ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>
                         </div>
