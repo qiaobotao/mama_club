@@ -37,31 +37,35 @@
 </script>
 <body>
 <frameset rows="81,*,29" cols="*" framespacing="0" frameborder="no" border="0">
-    <div id="top">
-        <table width="100%"  border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td width="296" ><div class="logo"><img src="images/logo.jpg" /></div> </td>
-                <td >
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td>
-                                <ul id="nav">
-                                </ul>
-                            </td>
-                            <td class="top_c" style="text-align:right">
-                                欢迎  <%=user.userName%>  使用金泉平台！
-                                <div class="zhuxiao"><a href="/" class="zx_sty"></a></div>
-                            </td>
-                        </tr>
-
-                    </table>
-                </td>
-
-            </tr>
-        </table>
-    </div>
     <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr height="100%">
+        <tr height="10%">
+            <td colspan="3">
+                <div id="top">
+                    <table width="100%"  border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="296" ><div class="logo"><img src="images/logo.jpg" /></div> </td>
+                            <td >
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td>
+                                            <ul id="nav">
+                                            </ul>
+                                        </td>
+                                        <td class="top_c" style="text-align:right">
+                                            欢迎  <%=user.userName%>  使用金泉平台！
+                                            <div class="zhuxiao"><a href="/" class="zx_sty"></a></div>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr height="85%">
             <td width="171" name="fmTitle" align="center" valign="top"  >
                 <iframe id="leftFrame" height="100%" width="171" src="jinquan/menu" border="0" frameborder="0"   scrolling="no"></iframe>
             </td>
@@ -70,17 +74,21 @@
                 <iframe id="rightFrame" height="100%" width="100%" src="jinquan/welcome" name="mainFrame" border="0" frameborder="0" ></iframe>
             </td>
         </tr>
-    </table>
-    <div id="bottom">
-        <table  width="100%" border="0"  cellspacing="0" cellpadding="0">
-            <tr>
-                <td  width="35%"><div class="sty1">客服电话： XXXXXXXXXX</div></td>
-                <td  width="45%"><div class="sty2">金泉平台</div></td>
-                <td width="20%"><div class="sty3">版权所有@2016</div></td>
-            </tr>
-        </table>
+        <tr height="5%">
+            <td colspan="3">
+                <div id="bottom">
+                    <table  width="100%" border="0"  cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td  width="35%"><div class="sty1">客服电话： XXXXXXXXXX</div></td>
+                            <td  width="45%"><div class="sty2">金泉平台</div></td>
+                            <td width="20%"><div class="sty3">版权所有@2016</div></td>
+                        </tr>
+                    </table>
 
-    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </frameset>
 </body>
 </html>

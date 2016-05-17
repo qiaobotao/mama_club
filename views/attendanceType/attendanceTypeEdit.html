@@ -93,7 +93,9 @@
                 <td>工作状态</td>
                 <td>上班时间</td>
                 <td>下班时间</td>
+                <!--
                 <td>工作小时数量</td>
+                -->
             </tr>
             <%
             if(attendanceTypeMx.length != 0){//有考勤记录，显示考勤记录
@@ -131,7 +133,9 @@
                                 %>
                             </select>
                         </td>
+                        <!--
                         <td><%=(attendanceTypeMx[i].endDate - attendanceTypeMx[i].startDate)*0.5%>小时</td>
+                        -->
                     </tr>
                     <%
                 }
@@ -175,7 +179,9 @@
                         %>
                     </select>
                 </td>
+                <!--
                 <td>3.5小时</td>
+                -->
             </tr>
             <%
             }
