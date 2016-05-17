@@ -5,11 +5,13 @@
 <title>无标题文档</title>
 <link href="../../css/global.css" rel="stylesheet" type="text/css" />
 <link href="../../css/index.css" rel="stylesheet" type="text/css" />
-<script language="JavaScript" type="text/javascript" src="../js/qiehuan.js"></script>
+<script type="text/javascript" src="../js/qiehuan.js"></script>
+<script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../../js/layer/layer.js"></script>
 <script src="../../js/prototype.lite.js" type="text/javascript"></script>
 <script src="../../js/moo.fx.js" type="text/javascript"></script>
 <script src="../../js/moo.fx.pack.js" type="text/javascript"></script>
-<style type="text/css"> 
+<style type="text/css">
 html,body{height:100%;padding:0;margin:0;}
 </style>
 
@@ -83,6 +85,24 @@ html,body{height:100%;padding:0;margin:0;}
 	text-decoration: none;
 }
 </style>
+    <script type="text/javascript">
+        function hrefRightPage(url){
+            //判断右侧是否为编辑页面，如果是给出提示，然后进行跳转
+            var mainFrameUrl = parent.mainFrame.location;
+//            alert(typeof(mainFrameUrl));
+            mainFrameUrl = mainFrameUrl.toString().toLowerCase();
+//            mainFrameUrl = "abcedit";
+            if(mainFrameUrl.indexOf("edit") > 0 || mainFrameUrl.indexOf("add") > 0){//询问框
+                if(confirm("是否放弃对本页面进行编辑?") == true){     //如果用户单击了确定按钮
+                    parent.mainFrame.location=url;
+                 }else{
+//                     alert("你是一个坏人");     //如果用户单击了取消按钮，就会输出：你是一个坏人
+                 }
+            }else{
+                parent.mainFrame.location=url;
+            }
+        }
+    </script>
 </head>
 <body>
 <table width="171" border="0" cellspacing="0" cellpadding="0" style="float:left;" >
@@ -119,7 +139,7 @@ html,body{height:100%;padding:0;margin:0;}
                         for(var j = 0 ; j < menusData.length ; j ++){
                         var childMenu = menusData[j];
                             if(childMenu.parentId == parentMenu.id){//找到子菜单
-                                %><li><a href="<%=childMenu.url%>?page=1" target="mainFrame"><%=childMenu.textCh%></a></li><%
+                                %><li><a href="javascript:void(0)" onclick="hrefRightPage('<%=childMenu.url%>?page=1')" target="mainFrame"><%=childMenu.textCh%></a></li><%
                             }
                         }
                     %>
@@ -130,169 +150,6 @@ html,body{height:100%;padding:0;margin:0;}
             }
         }
         %>
-        <!--
-    <div class="menucon">
-    <h1 class="bigClass">
-    <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-    <div class="bigClass_r">
-    <p>门店管理</p>
-    </div>
-    </h1>
-     <div class="content">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-          </tr>
-        </table>
-       <ul class="subClass">
-          <li><a href="/jinquan/shop_list?page=1" target="mainFrame">门店列表</a></li>
-        </ul>
-      </div>
-    </div>
-
-
-    <div class="menucon">
-        <h1 class="bigClass">
-            <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-            <div class="bigClass_r">
-                <p>教室及课程管理</p>
-            </div>
-        </h1>
-        <div class="content" >
-            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-                </tr>
-            </table>
-            <ul class="subClass">
-                <li><a href="/jinquan/classroom_list?page=1" target="mainFrame">教室管理</a></li>
-                <li><a href="/jinquan/course_plan?page=1" target="mainFrame">排课情况</a></li>
-                <li><a href="/jinquan/course_list?page=1" target="mainFrame">课程查询</a></li>
-            </ul>
-        </div>
-    </div>
-    
-   <div class="menucon">
-    <h1 class="bigClass">
-    <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-    <div class="bigClass_r">
-    <p >员工管理</p>
-    </div>
-    </h1>
-    <div class="content" >
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-          </tr>
-        </table>
-       <ul class="subClass">
-          <li><a href="/jinquan/staff_list?page=1" target="mainFrame">员工列表</a></li>
-          <li><a href="/jinquan/staff_train_list?page=1" target="mainFrame">员工培训</a></li>
-          <li><a href="/jinquan/punch_card_list?page=1" target="mainFrame">打卡记录</a></li>
-          <li><a href="/jinquan/attendance_type_list?page=1" target="mainFrame">考勤类别</a></li>
-          <li><a href="/jinquan/attendance_change_list?page=1" target="mainFrame">考勤变更</a></li>
-           <li><a href="/jinquan/performance_search_list?page=1" target="mainFrame">绩效查询</a></li>
-           <li><a href="/jinquan/performance_attendance_list?page=1" target="mainFrame">绩效考核</a></li>
-        </ul>
-      </div>
-    </div>
-   <div class="menucon">
-    <h1 class="bigClass">
-    <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-    <div class="bigClass_r">
-    <p >会员管理</p>
-    </div>
-    </h1>
-    <div class="content" >
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-          </tr>
-        </table>
-       <ul class="subClass">
-          <li><a href="/jinquan/member_card_type_list?page=1" target="mainFrame">充值卡类型</a></li>
-          <li><a href="/jinquan/member_card_list?page=1" target="mainFrame">会员卡管理</a></li>
-          <li><a href="/jinquan/activity_manage_list?page=1" target="mainFrame">活动管理</a></li>
-          <li><a href="/jinquan/member_list?page=1" target="mainFrame">会员列表</a></li>
-          <li><a href="/jinquan/service_meet_list?page=1" target="mainFrame">预约服务</a></li>
-          <li><a href="/jinquan/class_meet_list?page=1" target="mainFrame">课程报名</a></li>
-          <li><a href="/jinquan/nurs_service_list?page=1" target="mainFrame">护理服务</a></li>
-          <li><a href="/jinquan/money_manage_list?page=1" target="mainFrame">收银管理</a></li>
-          <li><a href="/jinquan/return_visit_list?page=1" target="mainFrame">回访信息</a></li>
-          <li><a href="/jinquan/complain_list?page=1" target="mainFrame">投诉信息</a></li>
-        </ul>
-      </div>
-    </div>
-        <div class="menucon">
-            <h1 class="bigClass">
-                <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-                <div class="bigClass_r">
-                    <p >进销存管理</p>
-                </div>
-            </h1>
-            <div class="content" >
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-                    </tr>
-                </table>
-                <ul class="subClass">
-                    <li><a href="/jinquan/wares_list?page=1" target="mainFrame">商品管理</a></li>
-                    <li><a href="/jinquan/brand_list?page=1" target="mainFrame">商标管理</a></li>
-                    <li><a href="/jinquan/storeroom_list?page=1" target="mainFrame">库房管理</a></li>
-                    <li><a href="/jinquan/distributor_list?page=1" target="mainFrame">经销商管理</a></li>
-                    <li><a href="/jinquan/storeroom_in_list?page=1" target="mainFrame">入库管理</a></li>
-                    <li><a href="/jinquan/storeroom_out_list?page=1" target="mainFrame">出库管理</a></li>
-                    <li><a href="/jinquan/storeroom_move_list?page=1" target="mainFrame">移库管理</a></li>
-                    <li><a href="/jinquan/storeroom_inventory?page=1" target="mainFrame">盘点库存</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="menucon">
-            <h1 class="bigClass">
-                <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-                <div class="bigClass_r">
-                    <p >权限管理</p>
-                </div>
-            </h1>
-            <div class="content" >
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-                    </tr>
-                </table>
-                <ul class="subClass">
-                    <li><a href="/jinquan/sys_resources_list?page=1" target="mainFrame">资源按钮管理</a></li>
-                    <li><a href="/jinquan/sys_menu_list?page=1" target="mainFrame">菜单管理</a></li>
-                    <li><a href="/jinquan/sys_role_list?page=1" target="mainFrame">角色管理</a></li>
-                    <li><a href="/jinquan/sys_user_list?page=1" target="mainFrame">系统用户管理</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="menucon">
-            <h1 class="bigClass">
-                <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-                <div class="bigClass_r">
-                    <p >系统设置</p>
-                </div>
-            </h1>
-            <div class="content" >
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-                    </tr>
-                </table>
-                <ul class="subClass">
-                    <li><a href="/jinquan/sys_user_set" target="mainFrame">个人设置</a></li>
-                    <li><a href="/jinquan/notice_list?page=1" target="mainFrame">公告管理</a></li>
-                    <li><a href="/jinquan/main_classify_list?page=1" target="mainFrame">分类管理</a></li>
-                    <li><a href="/jinquan/service_list?page=1" target="mainFrame">服务管理</a></li>
-                    <li><a href="/jinquan/staff_level_list?page=1" target="mainFrame">员工等级</a></li>
-                </ul>
-            </div>
-        </div>
-        -->
         <div class="menucon">
             <h1 class="bigClass">
                 <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
