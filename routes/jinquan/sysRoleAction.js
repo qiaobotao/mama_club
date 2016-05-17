@@ -155,10 +155,10 @@ module.exports.save = function (req, res,next) {
                                         if (menuAndResources.resourcesData[0] == null) {
                                             user.resourcesData = {};
                                         } else {
-                                            var resourcesDataList = menuAndResources.resourcesData[0].url.split(",");
+                                            var resourcesDataList = menuAndResources.resourcesData;
                                             for (var i = 0; i < resourcesDataList.length; i++) {
                                                 var resourcesDataObj = resourcesDataList[i];
-                                                resourcesObj[resourcesDataObj] = "1";
+                                                resourcesObj[resourcesDataObj.url] = "1";
                                             }
                                         }
                                         user.resourcesData = resourcesObj;//拥有资源

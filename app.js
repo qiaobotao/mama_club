@@ -70,8 +70,11 @@ app.use(function(req, res, next){
                                     //var resourcesDataList = menuAndResources.resourcesData;
                                     var resourcesObj = {};
                                     for(var i = 0 ; i < menuAndResources.resourcesData.length ; i ++){
-                                        var resourcesDataObj = menuAndResources.resourcesData[i].url;
-                                        resourcesObj[resourcesDataObj] = "1";
+                                        var resourcesDataObj = menuAndResources.resourcesData[i];
+                                        if(resourcesDataObj.url.indexOf("member_card_") > 0){
+                                            var a = "";
+                                        }
+                                        resourcesObj[resourcesDataObj.url] = "1";
                                     }
                                     user.resourcesData = resourcesObj;//拥有资源
 

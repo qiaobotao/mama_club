@@ -48,7 +48,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：充值卡类型列表
+        当前位置：充值卡类型列表<%=resourcesData["/to_member_card_type_add"]%>--
     </div>
 </div>
 <div class="center_con">
@@ -56,7 +56,7 @@
         <div class="sousuo">
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                <td>卡种：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                <td>卡种<%=resourcesData["/to_member_card_type_add"]%>：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                     <input ID="memberCardType" name="memberCardType" type="text" class="input5" VALUE="<%=data.memberCardType%>"/></td>
                 <td> &nbsp;卡面额度：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
                 <td> &nbsp;为0后折扣：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
@@ -65,7 +65,7 @@
             </table>
 
         </div>
-        <%if(resourcesData["/to_member_card_type_add"] == "1"){
+        <%if(resourcesData["/to_member_card_type_Add"] == "1"){
             %><div class="but_0"><a href="/jinquan/to_member_card_type_add" class="bsty0"></a></div><%
         }%>
 
