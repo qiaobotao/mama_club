@@ -187,7 +187,45 @@ module.exports.save = function (req, res,next) {
     }else{//添加
         service.insertSysRole(name,describe,function(err, results) {
             if(!err) {
-                res.redirect('/jinquan/sys_role_list?replytype=add');
+                //添加角色与菜单、资源之间的关系
+                //res.redirect('/jinquan/sys_role_list?replytype=update');
+                var roleId = results.insertId;
+                service.addRoleByMenus(roleId,selectMenusArr,function(err, results) {
+                    if(!err) {
+                        service.addRoleByResources(roleId,selectResourcesArr,function(err, results) {
+                            if (!err) {
+                                var user = req.session.user;
+                                sysUserService.getMenuAndResourcesByUserId(user.id,function(err,menuAndResources) {
+                                    if (!err) {
+                                        //记录用户信息：用户id、用户所在门店、用户名称
+                                        var resourcesObj = {};
+                                        if (menuAndResources.resourcesData[0] == null) {
+                                            user.resourcesData = {};
+                                        } else {
+                                            var resourcesDataList = menuAndResources.resourcesData;
+                                            for (var i = 0; i < resourcesDataList.length; i++) {
+                                                var resourcesDataObj = resourcesDataList[i];
+                                                resourcesObj[resourcesDataObj.url] = "1";
+                                            }
+                                        }
+                                        user.resourcesData = resourcesObj;//拥有资源
+                                        user.menus = menuAndResources.menusData;//拥有菜单
+                                        req.session.user = user;
+                                        res.redirect('/jinquan/sys_role_list?replytype=OK');
+                                        //res.redirect('/jinquan');
+                                    } else {
+                                        res.redirect("/");
+                                    }
+                                });
+                            }
+                        })
+
+                        //res.redirect('/jinquan/sys_role_list?replytype=update');
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
             } else {
                 console.log(err.message);
                 res.render('error');

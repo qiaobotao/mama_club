@@ -12,7 +12,7 @@ var async = require('async');
  */
 module.exports.insertSysRole = function(name,describe, cb) {
 
-    var sql = 'INSERT INTO sysRole (name,describe,dateline) VALUES (?,?,?)';
+    var sql = 'INSERT INTO sysRole (`name`,`describe`,`dateline`) VALUES (?,?,?)';
     db.query(sql, [name,describe,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
