@@ -8,6 +8,7 @@
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="application/javascript" src="../../js/layer/layer.js"></script>
     <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -47,20 +48,20 @@ var replytype = '<%=replytype%>';
             window.location.href = '/jinquan/member_card_list?type='+type+'&serialNumber='+serialNumber+'&page='+page+'&parameter3='+parameter3+'&parameter4='+parameter4+'&parameter6='+parameter6+'&parameter7='+parameter7 +'&parameter9='+parameter9;
         }
         function show (id) {
-            var type = <%=data.type%>;
+            var type = '<%=data.type%>';
             window.location.href = "/jinquan/member_card_show?type="+type+"&id="+id;
         }
         function update (id) {
-            var type = <%=data.type%>;
+            var type = '<%=data.type%>';
             window.location.href = "/jinquan/to_member_card_edit?type="+type+"&id="+id;
         }
         function del (id) {
-            var type = <%=data.type%>;
-            window.location.href = "/jinquan/member_card_del?type="+type+"&id="+id;
+            var type = '<%=data.type%>';
+            delData("/jinquan/member_card_del?type="+type+"&id="+id);
         }
         function toAdd()
         {
-            var type = <%=data.type%>;
+            var type = '<%=data.type%>';
             window.location.href = "/jinquan/to_member_card_add?type="+type;
 
         }

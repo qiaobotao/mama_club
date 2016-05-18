@@ -5,6 +5,9 @@
     <title>员工列表</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -32,7 +35,7 @@
             window.location.href = '/jinquan/staff_preEdit?id='+id;
         }
         function del (id) {
-            window.location.href = '/jinquan/staff_del?id='+id;
+            delData('/jinquan/staff_del?id='+id);
         }
     </script>
 </head>

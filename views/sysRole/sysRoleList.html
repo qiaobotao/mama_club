@@ -36,7 +36,9 @@
         }
         //跳转到删除页面
         function del (id) {
-            window.location.href = '/jinquan/sys_role_del?id='+id;
+            if(confirm("是否删除本条记录？删除后将不能恢复?") == true){
+                window.location.href = '/jinquan/sys_role_del?id='+id;
+            }
         }
         //跳转到查看页面
         function browse (id) {

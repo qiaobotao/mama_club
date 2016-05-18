@@ -27,3 +27,25 @@ function checkresources(resourcesData,resourceUrl){
 function checkresources1(userMenus,url){
     alert("1212"+userMenus[url]);
 }
+//校验手机号码
+function isMobil(s) {
+    var patrn = /^(13[0-9]{9})|(14[0-9])|(18[0-9])|(15[0-9][0-9]{8})$/;
+    if (!patrn.exec(s)) return false
+    return true
+}
+/**
+ * list页面点击删除按钮给出的提示弹出框
+ * @param url :点击确认删除后跳转的地址
+ */
+function delData(url){
+    parent.layer.confirm('是否删除本条记录？删除后将不能恢复！', {
+        btn: ['确认删除','取消'] //按钮
+    }, function(){
+        parent.layer.msg('正在删除', {
+            icon: 3,
+            time: 1000, //500毫秒后自动关闭
+        });
+        window.location.href=url;
+    }, function(){
+    });
+}

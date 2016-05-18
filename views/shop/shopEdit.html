@@ -5,6 +5,7 @@
     <title>修改门店</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -24,6 +25,10 @@
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
                 parent.layer.alert('电话不能为空',{icon: 2});
+                return;
+            }
+            if(!isMobil(tel)){
+                parent.layer.alert('请输入正确的手机号码。',{icon: 2});
                 return;
             }
             var address = document.getElementById("address").value;
