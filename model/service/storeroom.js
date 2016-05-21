@@ -213,10 +213,10 @@ module.exports.checkSeril = function(shopId,seril,cb) {
  * @param name
  * @param cb
  */
-module.exports.checkName = function(shopId,name, cb) {
+module.exports.checkName = function(storeroomId,name, cb) {
 
     var checkSql = 'SELECT * FROM storeroom WHERE name = ? AND shopId = ?';
-    db.query(checkSql, [name,shopId], function (cbData, err, rows, filelds) {
+    db.query(checkSql, [name,storeroomId], function (cbData, err, rows, filelds) {
         if(!err) {
             if (rows.length != 0) {
                 cb(null,false);
@@ -227,5 +227,62 @@ module.exports.checkName = function(shopId,name, cb) {
             cb(err);
         }
     });
+}
+
+/**
+ * 验证该库房是否能够删除
+ * @param storeroomId
+ * @param cb
+ */
+module.exports.check_del = function(storeroomId, cb) {
+
+    // 查出所有教室关联的outLogId
+    var sql = "SELECT outLogId FROM classroom";
+    // 根据outLogId 查出当时出库的库房id
+    var getstoreroomIdsSQL = "SELECT storeroomId FROM storeroomOutLog WHERE id in ";
+    db.query(sql,[],function(cbData, err, rows, filelds){
+        if(!err) {
+            if (rows.length == 0) { // 如果没有数据，直接返回true
+                cb(null,true);
+            } else {
+                var v = "(";
+                for (var i=0; i<rows.length; i++) {
+                     if (i!=rows.length -1) {
+                         v = v + "'"+rows[i].outLogId+"',";
+                     } else {
+                         v = v + "'"+rows[i].outLogId+"')";
+                     }
+                }
+                db.query(getstoreroomIdsSQL+v,[],function(cbData, err, rows, filelds){
+
+                      if(!err) {
+                          var arr = new Array();
+                          for (var i=0;i<rows.length;i++) {
+                             arr.push(rows[i].storeroomId);
+                          }
+                          cb(null,isContains(arr,storeroomId));
+                      } else {
+                         cb(err);
+                      }
+                });
+            }
+        } else {
+            cb(err);
+        }
+    });
+}
+
+
+function isContains(arr, temp) {
+
+    if (arr.length == 0) {
+        return false;
+    }
+    for (var i=0;i<arr.length;i++) {
+       if (arr[i] == temp){
+           return true;
+       }
+    }
+    return false;
 
 }

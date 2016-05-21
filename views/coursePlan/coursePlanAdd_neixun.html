@@ -72,7 +72,7 @@
             var startTime = document.getElementById('startTime').value;
             var endTime = document.getElementById('endTime').value;
             if(startTime >= endTime){
-                parent.layer.alert('所选时间段无效，请重新选择',{icon: 2});
+                parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
             }
             for(var i = 0 ; i < arr_selectedTime.length; i ++){
                 console.log(arr_selectedTime[i].courseTimeStart+'==='+startTime+"--"+arr_selectedTime[i].courseTimeEnd +"~"+ endTime);
@@ -98,11 +98,6 @@
                     return;
                 }
             }
-            if (startTime>=endTime) {
-                parent.layer.alert('开始时间不能大于结束时间',{icon: 2});
-                return;
-            }
-
 
 
             var score = document.getElementById('score').value;

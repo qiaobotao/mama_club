@@ -256,3 +256,25 @@ module.exports.checkName = function (req, res, next) {
         }
     })
 }
+
+/**
+ * 编辑教室的时候要形成一个入库单和一个出库单，
+ * 对用户是不可见的，防止用户在做教室编辑的时候
+ * 形成入库单而找不到原来的库，这里做删除限制，
+ * 如果有教室的出库单关联的库房不能做删除处理
+ * @param res
+ * @param req
+ * @param next
+ */
+module.exports.delCheck = function(req, res, next) {
+
+    var id = req.body.id ? req.body.id : '';
+    service.check_del(id,function(err, flag) {
+        if (!err) {
+            res.json({flag : flag});
+        } else {
+            myUtils.printSystemLog(err)
+            next();
+        }
+    });
+}

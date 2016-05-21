@@ -35,8 +35,21 @@
         var cid = document.getElementById('id').value;
         window.location.href = '/jinquan/storeroom_list?page='+selectPage+'&name='+name+'&id='+cid;
     }
+
     function del (id) {
-        delData('/jinquan/storeroom_del?id='+id);
+        $.ajax({
+            type: "post",
+            url: "/jinquan/storeroom_del_check",
+            data: {'id':id},
+            success: function (result) {
+                if(result.flag){
+                    parent.layer.alert('该库房有关联数据，不能执行此操作！',{icon: 2});
+                    return;
+                } else {
+                    delData('/jinquan/storeroom_del?id='+id);
+                }
+            }
+        });
     }
 </script>
 

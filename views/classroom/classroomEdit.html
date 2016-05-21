@@ -64,6 +64,7 @@
         var waresIndex = 0;
         //table中增加需要添加的行信息
         function addTr(){
+
             //获取表格对象
             var table=document.getElementById("waresTable");
             //获取当前行数
@@ -177,12 +178,12 @@
 
             <%for(var i=0;i<data.detail.length;i++) {%>
             <tr id="qqq">
-                <td><input    name="proname" type="text" class="input5 input_arr" value="<%=data.detail[i].waresName%>"  /></td>
-                <td><input  name="proNo" type="text" class="input5 input_arr" value="<%=data.detail[i].waresSerial%>" /></td>
-                <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.detail[i].count%>" /></td>
-                <td><input  name="bname" type="text" class="input5 input_arr" value="<%=data.detail[i].bname%>" /></td>
+                <td><input id="proname"+<%=i%>   name="proname" type="text" class="input5 input_arr" value="<%=data.detail[i].waresName%>"  readonly="true" /></td>
+                <td><input id="proNo"+<%=i%> name="proNo" type="text" class="input5 input_arr" value="<%=data.detail[i].waresSerial%>" readonly="true"/></td>
+                <td><input id="count"+<%=i%> name="count" type="text" class="input5 input_arr" value="<%=data.detail[i].count%>" onblur="check(<%=i%>)" /></td>
+                <td><input id="bname"+<%=i%> name="bname" type="text" class="input5 input_arr" value="<%=data.detail[i].price%>" readonly="true" /></td>
                 <td>
-                    <input  name="proId" type="hidden" class="input5 input_arr" value="<%=data.detail[i].proId%>" />
+                    <input id="proId"+<%=i%>  name="proId" type="hidden" class="input5 input_arr" value="<%=data.detail[i].proId%>" />
                     <a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>
                 </td>
             </tr>

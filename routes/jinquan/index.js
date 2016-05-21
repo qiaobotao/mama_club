@@ -82,6 +82,7 @@ router.all('/classroom_del',classroomAction.del);
 router.all('/classroom_update',classroomAction.update);
 
 
+
 // 排课情况
 router.all('/course_plan',coursePlanAction.list);
 router.all('/course_plan_pre_add',coursePlanAction.preadd);
@@ -281,6 +282,7 @@ router.all('/storeroom_del', storeroomAction.del);
 router.all('/storeroom_detail', storeroomAction.detail);
 router.all('/storeroom_checkseril', storeroomAction.checkseril);
 router.all('/storeroom_checkname',storeroomAction.checkName);
+router.all('/storeroom_del_check', storeroomAction.delCheck);
 
 // 经销商管理
 router.all('/distributor_list',distributorAction.list);
