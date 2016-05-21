@@ -8,6 +8,7 @@
     <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -29,7 +30,11 @@
             var name = document.getElementById('name').value;
             var serialNumber = document.getElementById('serialNumber').value;
             var tel = document.getElementById('tel').value;
-            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel+"&page="+defaultPage;
+            var highestEducation = $("#highestEducation").val();
+            var graduationSchool = $("#graduationSchool").val();
+            var startJobTimeStar = $("#startJobTimeStar").val();
+            var startJobTimeEnd = $("#startJobTimeEnd").val();
+            window.location.href = '/jinquan/staff_list?name='+name+'&serialNumber='+serialNumber+'&tel='+tel+"&highestEducation="+highestEducation+"&graduationSchool="+graduationSchool+"&startJobTimeStar="+startJobTimeStar+"&startJobTimeEnd="+startJobTimeEnd+"&page="+defaultPage;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/staff_preEdit?id='+id;
@@ -55,15 +60,23 @@
                     名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"  onchange="setDefault()" style="width: 80px;" />
                      &nbsp;编号：<input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=data.serialNumber%>" onchange="setDefault()" style="width: 80px;"  />
                      &nbsp;电话：<input id="tel" name="tel" type="text" class="input5" value="<%=data.tel%>" onchange="setDefault()"  style="width: 80px;" />
-                     &nbsp;学历：<input id="highestEducation" name="highestEducation" type="text" class="input5" value="<%=data.highestEducation%>" onchange="setDefault()"  style="width: 80px;" />
+                     &nbsp;学历：
+                        <select id="highestEducation" name="highestEducation">
+                            <option value="">请选择</option>
+                            <%
+                            for(var i = 0 ; i < data.educationData.length ; i ++){
+                                %><option value="<%=data.educationData[i].id%>" <%if(data.highestEducation == data.educationData[i].id){%>selected<%}%>><%=data.educationData[i].name%></option><%
+                            }
+                            %>
+                        </select>
                      &nbsp;毕业学校：<input id="graduationSchool" name="graduationSchool" type="text" class="input5" value="<%=data.graduationSchool%>" onchange="setDefault()"  style="width: 80px;" />&nbsp;&nbsp;&nbsp;</td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="float: left;">
                         入职时间：
-                        <input id="startJobTimeStar" name="startJobTimeStar" type="text" class="input5" value="<%=data.startJobTimeStar%>"  onchange="setDefault()"  style="width: 80px;" />~
-                        <input id="startJobTimeEnd" name="startJobTimeEnd" type="text" class="input5" value="<%=data.startJobTimeEnd%>"  onchange="setDefault()"  style="width: 80px;" />~
+                        <input id="startJobTimeStar" name="startJobTimeStar" type="text" class="input5" value="<%=data.startJobTimeStar%>"  onchange="setDefault()" readonly onclick="laydate()" style="width: 80px;" />~
+                        <input id="startJobTimeEnd" name="startJobTimeEnd" type="text" class="input5" value="<%=data.startJobTimeEnd%>"  onchange="setDefault()" readonly onclick="laydate()" style="width: 80px;" />
                     </td>
                 </tr>
             </table>
@@ -82,6 +95,8 @@
                 <th>电话</th>
                 <th>所属门店</th>
                 <th>邮箱</th>
+                <th>入职时间</th>
+                <th>毕业院校</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
@@ -91,6 +106,8 @@
                 <td><%=data.data[i].tel%></td>
                 <td><%=data.data[i].shopName%></td>
                 <td><%=data.data[i].email%></td>
+                <td><%=data.data[i].startJobTime%></td>
+                <td><%=data.data[i].graduationSchool%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

@@ -21,17 +21,25 @@ module.exports.list = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var tel = req.query.tel ? req.query.tel : '';
+    var highestEducation = req.query.highestEducation ? req.query.highestEducation : '';//学历
+    var graduationSchool = req.query.graduationSchool ? req.query.graduationSchool : '';//毕业院校
+    var startJobTimeStar = req.query.startJobTimeStar ? req.query.startJobTimeStar : '';//入职开始时间
+    var startJobTimeEnd = req.query.startJobTimeEnd ? req.query.startJobTimeEnd : '';//入职截止时间
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
 
-    service.fetchAllStaff(name,serialNumber,tel,currentPage, function (err, results) {
+    service.fetchAllStaff(name,serialNumber,tel,highestEducation,graduationSchool,startJobTimeStar,startJobTimeEnd,educationId,currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
             results.serialNumber = serialNumber;
             results.tel = tel;
+            results.highestEducation = highestEducation;
+            results.graduationSchool = graduationSchool;
+            results.startJobTimeStar = startJobTimeStar;
+            results.startJobTimeEnd = startJobTimeEnd;
             res.render('staff/staffList', {data : results, replytype : replytype, laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });

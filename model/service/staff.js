@@ -69,20 +69,47 @@ module.exports.fetchStaffs = function(pages, count, cb) {
  * 获取所有员工
  * @param cb
  */
-module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
+module.exports.fetchAllStaff = function(name,serialNumber,tel,highestEducation,graduationSchool,startJobTimeStar,startJobTimeEnd,educationId,currentPage,cb) {
 
-    var parm = "WHERE a.name LIKE '%"+name+"%' AND a.serialNumber LIKE '%"+serialNumber+"%' AND a.tel LIKE '%"+tel+"%' ";
+    //var parm = "WHERE a.name LIKE '%"+name+"%' AND a.serialNumber LIKE '%"+serialNumber+"%' AND a.tel LIKE '%"+tel+"%' ";
+    var parm = "WHERE 1=1 ";
 
-    var sql_count = 'SELECT count(a.id) as count FROM staff a,shop s ,staffLevel sl '+parm+' ' +
-        'AND a.shopId = s.id ' +
-        'AND sl.id = a.staffLevel' +
-        ' ORDER BY a.dateline DESC';
+    if(name != ""){
+        parm += " and a.name like '%"+name+"%' ";
+    }
+    if(serialNumber != ""){
+        parm += " and a.serialNumber like '%"+serialNumber+"%'  ";
+    }
+    if(tel != ""){
+        parm += " and a.tel like '%"+tel+"%' ";
+    }
+    if(highestEducation != ""){
+        parm += " and a.highestEducation =  "+highestEducation;
+    }
+    if(graduationSchool != ""){
+        parm += " and a.graduationSchool like '%"+graduationSchool+"%' ";
+    }
+    if(startJobTimeStar != ""){
+        parm += " and a.startJobTime >=  "+startJobTimeStar;
+    }
+    if(startJobTimeEnd != ""){
+        parm += " and a.startJobTime <=  "+startJobTimeEnd;
+    }
+
+
+    var sql_count = "SELECT count(a.id) as count FROM staff a,shop s ,staffLevel sl "+parm +
+        " AND a.shopId = s.id " +
+        " AND sl.id = a.staffLevel" +
+        " ORDER BY a.dateline DESC";
+    //sql_count = "SELECT count(a.id) as count FROM staff a "+parm ;
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT a.*,s.name as `shopName`,s.id as `shopId`,sl.`name` as `levelName`  FROM staff a,shop s ,staffLevel sl '+parm+' ' +
-        'AND a.shopId = s.id ' +
-        'AND sl.id = a.staffLevel' +
-        ' ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = "SELECT a.*,s.name as `shopName`,s.id as `shopId`,sl.`name` as `levelName`  FROM staff a,shop s ,staffLevel sl "+parm +
+        " AND a.shopId = s.id " +
+        " AND sl.id = a.staffLevel" +
+        " ORDER BY a.dateline DESC LIMIT ?,?";
+
+    var systemClassifySql = "SELECT * FROM systemClassify WHERE  parentId = ?";
 
     async.series({
         totalPages : function(callback){
@@ -98,7 +125,17 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,currentPage,cb) {
             });
         },
         data : function(callback){
-            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+            db.query(sql_data, [start,end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        educationData : function(callback){
+            db.query(systemClassifySql, [educationId], function (cbData, err, rows, fields) {
 
                 if (!err) {
                     callback(null,rows);
