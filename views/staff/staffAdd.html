@@ -8,29 +8,224 @@
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
         function submitForm(){
-            /*
+            //验证电话信息
              var tel = document.getElementById("tel").value;
              if (!tel || tel.length == 0) {
-             alert('电话不能为空');
-             return;
+                 parent.layer.alert('电话不能为空',{icon: 2});
+                 return;
              }
-             var address = document.getElementById("address").value;
-             if(!address || address.length == 0) {
-             alert('门店地址不能为空');
-             return;
+             if (!isMobil(tel)) {
+                 parent.layer.alert('电话不正确，请正确填写',{icon: 2});
+                 return;
              }
-             var principal = document.getElementById("principal").value;
-             if (!principal || principal.length == 0) {
-             alert('负责人不能为空');
-             return;
+            //验证身份证信息
+             var idCard = document.getElementById("idCard").value;
+             if (!idCard || idCard.length == 0) {
+                 parent.layer.alert('身份证号不能为空',{icon: 2});
+                 return;
              }
-             */
+             if (!isIdCard(idCard)) {
+                 parent.layer.alert('身份证号不正确，请正确填写',{icon: 2});
+                 return;
+             }
+            //最高学历不能为空
+            if($("#highestEducation").val() == ""){
+                parent.layer.alert('请选择学历',{icon: 2});
+                return;
+            }
+            //毕业院校不能为空
+            if($("#graduationSchool").val() == ""){
+                parent.layer.alert('请输入毕业院校。',{icon: 2});
+                return;
+            }
+            //配偶名称不能为空
+            if($("#spouseName").val() == ""){
+                parent.layer.alert('请输入配偶名称',{icon: 2});
+                return;
+            }
+            //联系电话不能为空
+            if($("#spouseTel").val() == ""){
+                parent.layer.alert('请输入联系电话。',{icon: 2});
+                return;
+            }
+             //验证邮箱信息
+             var email = document.getElementById("email").value;
+             if (!email || email.length == 0) {
+                 parent.layer.alert('邮箱不能为空',{icon: 2});
+                 return;
+             }
+             if (!isEmail(email)) {
+                 parent.layer.alert('邮箱不正确，请正确填写',{icon: 2});
+                 return;
+             }
+            //入职时间不能为空
+            if($("#startJobTime").val() == ""){
+                parent.layer.alert('请入职时间',{icon: 2});
+                return;
+            }
+            //如果有离职时间则入职时间应在离职时间之前
+            if($("#endJobTime").val() != ""){
+                if($("#startJobTime").val() > $("#endJobTime").val()){
+                    parent.layer.alert('离职时间应在入职时间之后。',{icon: 2});
+                    return;
+                }
+            }
+            //所属门店不能为空
+            if($("#shopId").val() == ""){
+                parent.layer.alert('请选择所属门店',{icon: 2});
+                return;
+            }
+            //打卡机编号不能为空
+            if($("#clockCode").val() == ""){
+                parent.layer.alert('请输入打卡机编号',{icon: 2});
+                return;
+            }
+            //员工级别不能为空
+            if($("#staffLevel").val() == ""){
+                parent.layer.alert('请员工级别',{icon: 2});
+                return;
+            }
+            //如果选择不在职，则需选择离职时间
+            var isJob = $("#isJob").val();
+            if(isJob == ""){
+                parent.layer.alert('请选择在职情况',{icon: 2});
+                return;
+            }
+            if(isJob == "否" && $("#endJobTime").val() == ""){
+                parent.layer.alert('请选择离职时间',{icon: 2});
+                return;
+            }
+            if(isJob == "是" && $("#endJobTime").val() != ""){
+                parent.layer.alert('请清空离职时间',{icon: 2});
+                return;
+            }
+            var thisDate = date2str(new Date(),'yyyy-MM-dd');//当前时间，用在考勤周期、子女生日
+            /*******************验证主表部分 end**********************/
+            var attendanceIdArr = $("select[name='attendanceId']");
+            var attendanceStartDateArr = $("input[name='attendanceStartDate']");
+            var attendanceEndDateArr = $("input[name='attendanceEndDate']");
+            if(attendanceIdArr.length == 0){
+                parent.layer.alert('请至少增加一条考勤周期',{icon: 2});
+                return;
+            }
+            for(var i = 0 ; i < attendanceIdArr.length ; i ++){
+                if(attendanceIdArr[i].value == ""){//没选择考勤名称
+                    parent.layer.alert('请为第'+(i+1)+'行选择考勤周期名称。',{icon: 2});
+                    return;
+                }
+                if(attendanceStartDateArr[i].value == ""){//没选择考勤开始时间
+                    parent.layer.alert('请为第'+(i+1)+'行选择考勤开始时间。',{icon: 2});
+                    return;
+                }
+                if(attendanceEndDateArr[i].value == ""){//没选择考勤截止时间
+                    parent.layer.alert('请为第'+(i+1)+'行选择考勤截止时间。',{icon: 2});
+                    return;
+                }
+                if(attendanceStartDateArr[i].value > attendanceEndDateArr[i].value){//没选择考勤截止时间
+                    parent.layer.alert('第'+(i+1)+'行考勤周期中开始时间应小于截止时间。',{icon: 2});
+                    return;
+                }
+                if(i == attendanceIdArr.length-1){//如果是最后一个考勤周期，则截止时间应大于当前时间
+                    if(thisDate >= attendanceEndDateArr[i].value){
+                        parent.layer.alert('考勤最后的截止日期应大于当前时间。。',{icon: 2});
+                        return;
+                    }
+                }
+            }
+            /*******************验证子表（考勤周期）部分 end**********************/
+            var childrenNameArr = $("input[name='childrenName']");
+            var childrenBirthArr = $("input[name='childrenBirth']");
+            var childrenSexArr = $("select[name='childrenSex']");
+            var childrenRankArr = $("input[name='childrenRank']");
+            if(childrenNameArr.length == 0){
+                parent.layer.alert('请至少增加一个子女信息。',{icon: 2});
+                return;
+            }
+            for(var i = 0 ; i < childrenNameArr.length ; i ++){
+                if(childrenNameArr[i].value == ""){//填写孩子名称
+                    parent.layer.alert('请为第'+(i+1)+'行输入孩子名称。',{icon: 2});
+                    return;
+                }
+                if(childrenBirthArr[i].value == ""){//填写孩子生日
+                    parent.layer.alert('请为第'+(i+1)+'行输入孩子生日。',{icon: 2});
+                    return;
+                }
+
+                if(thisDate < childrenBirthArr[i].value){
+                    parent.layer.alert('第'+(i+1)+'行孩子生日小于当前时间。',{icon: 2});
+                    return;
+                }
+                if(childrenSexArr[i].value == ""){//填写孩子性别
+                    parent.layer.alert('请为第'+(i+1)+'行输入孩子性别。',{icon: 2});
+                    return;
+                }
+                if(childrenRankArr[i].value == ""){//填写孩子排行
+                    parent.layer.alert('请为第'+(i+1)+'行输入孩子排行。',{icon: 2});
+                    return;
+                }
+            }
+            /*******************验证子表（子女信息）部分 end**********************/
+            var contractStartDateArr = $("input[name='contractStartDate']");
+            var contractEndDateArr = $("input[name='contractEndDate']");
+            if(contractStartDateArr.length == 0){
+                parent.layer.alert('请至少增加一条合同信息。',{icon: 2});
+                return;
+            }
+            for(var i = 0 ; i < contractStartDateArr.length ; i ++){
+                if(contractStartDateArr[i].value == ""){//填写合同开始时间
+                    parent.layer.alert('请为第'+(i+1)+'行合同开始时间。',{icon: 2});
+                    return;
+                }
+                if(contractEndDateArr[i].value == ""){//填写孩子生日
+                    parent.layer.alert('请为第'+(i+1)+'行合同截止时间。',{icon: 2});
+                    return;
+                }
+
+                if(contractStartDateArr[i].value > contractEndDateArr[i].value){
+                    parent.layer.alert('第'+(i+1)+'行开始时间应小于截止时间。',{icon: 2});
+                    return;
+                }
+            }
+            /*******************验证子表（合同信息）部分 end**********************/
+            var vocationalQualificationsArr = $("select[name='vocationalQualifications']");
+            var qualificationsTimeArr = $("input[name='qualificationsTime']");
+            var qualificationsImageArr = $("input[name='qualificationsImage']");
+            if(vocationalQualificationsArr.length == 0){
+                parent.layer.alert('请至少增加一条职业资质信息。',{icon: 2});
+                return;
+            }
+            for(var i = 0 ; i < vocationalQualificationsArr.length ; i ++){
+                if(vocationalQualificationsArr[i].value == ""){//填写资质名称
+                    parent.layer.alert('请为第'+(i+1)+'行选择职业资质。',{icon: 2});
+                    return;
+                }
+                if(qualificationsTimeArr[i].value == ""){//填写获取资质时间
+                    parent.layer.alert('请为第'+(i+1)+'行获取资质时间。',{icon: 2});
+                    return;
+                }
+
+                if(qualificationsImageArr[i].value == ""){
+                    parent.layer.alert('请为第'+(i+1)+'行上传职业资质照片。',{icon: 2});
+                    return;
+                }
+            }
+            /*******************验证子表（职业资质信息）部分 end**********************/
             document.getElementById("myform").submit();
+//            parent.layer.alert('全部通过，准备保存',{icon: 1});
+        }
+        function setBirthDate(){
+            var idCard = document.getElementById("idCard").value;
+            var year = idCard.substr(6, 4);
+            var month = idCard.substr(10, 2);
+            var day = idCard.substr(12, 2);
+            var birthDate = $("#birthDate").val(year+"-"+month+"-"+day);
+
         }
 
         //当前孩子显示位置
@@ -50,7 +245,7 @@
             var cell5=row.insertCell(4);//删除本行
             cell1.innerHTML = '<td><input name="childrenName" type="text" class="input5" /></td>';
             cell2.innerHTML='<td><input name="childrenBirth" type="text" class="input5" readonly onclick="laydate()"/></td>';
-            cell3.innerHTML='<td><select name="childrenSex"><option value="男">男</option><option value="女">女</option></select></td>';
+            cell3.innerHTML='<td><select name="childrenSex"><option value="">请选择</option><option value="男">男</option><option value="女">女</option></select></td>';
             cell4.innerHTML='<td><input name="childrenRank" type="text" class="input5" /></td>';
             cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(1,this)"><h1>-</h1></a></td>';
         }
@@ -77,6 +272,15 @@
         var qualificationsIndex = 0;
         //table中增加需要添加的行信息（职业资格）
         function addQualificationsTr(){
+
+
+            var vocationalQualificationList = '<%-JSON.stringify(vocationalQualificationList)%>';
+            vocationalQualificationList = JSON.parse(vocationalQualificationList);
+            var selectVocationalQualificationList = "<option value=''>请选择</option>";
+            for(var j = 0 ; j < vocationalQualificationList.length ; j ++){
+                selectVocationalQualificationList += "<option value='"+vocationalQualificationList[j].id+"'>"+vocationalQualificationList[j].name+"</option>";
+            }
+
             //获取表格对象
             var table=document.getElementById("qualificationsTableId");
             //获取当前行数
@@ -86,23 +290,38 @@
             var cell2=row.insertCell(1);//获取证书时间
             var cell3=row.insertCell(2);//说明
             var cell4=row.insertCell(3);//上传图片
-            var cell4=row.insertCell(4);//删除本行
-            cell1.innerHTML = '<td><input name="vocationalQualifications" type="text" class="input5" /></td>';
+            var cell5=row.insertCell(4);//删除本行
+//            cell1.innerHTML = '<td><input name="vocationalQualifications" type="text" class="input5" /></td>';
+            cell1.innerHTML = '<td><select name="vocationalQualifications">'+selectVocationalQualificationList+'</select></td>';
             cell2.innerHTML='<td><input name="qualificationsTime" type="text" class="input5"  readonly onclick="laydate()"/></td>';
-            cell2.innerHTML='<td><input name="qualificationsDescribe" type="text" class="input5" /></td>';
-            cell3.innerHTML='<td><input name="qualificationsImage" type="text" class="input5" /></td>';
-            cell4.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>';
+            cell3.innerHTML='<td><input name="qualificationsDescribe" type="text" class="input5" /></td>';
+            cell4.innerHTML='<td><input name="qualificationsImage" type="text" class="input5" /></td>';
+            cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>';
         }
         //table中增加需要添加的行信息（考勤周期）
         function addAttendanceTypesTr(){
             var attendanceList = '<%-JSON.stringify(attendanceList)%>';
             attendanceList = JSON.parse(attendanceList);
 
-            var selectAttendanceType = "";
+            var selectAttendanceType = "<option value=''>请选择</option>";
             for(var j = 0 ; j < attendanceList.length ; j ++){
                 selectAttendanceType += "<option value='"+attendanceList[j].id+"'>"+attendanceList[j].categoryName+"</option>";
             }
-
+            //找到考勤周期最后一行的开始时间+1，作为即将添加行的开始时间
+            var attendanceEndDateArr = $("input[name='attendanceEndDate']");
+            var endDateStr = "";
+            if(attendanceEndDateArr.length > 0){
+                endDateStr = attendanceEndDateArr[attendanceEndDateArr.length - 1].value;
+                if(endDateStr == ""){
+                    parent.layer.alert('请先选择考勤截止时间。',{icon: 2});
+                    return;
+                }
+            }
+            //将字符串转成时间
+            endDateStr = endDateStr.replace(/-/g,"/");
+            var endDate = new Date(endDateStr );
+            endDate.setDate(endDate.getDate()+1);//日期加一
+            endDateStr = date2str(endDate,'yyyy-MM-dd');//将时间转为字符串
             //获取表格对象
             var table=document.getElementById("attendanceTypesTableId");
             //获取当前行数
@@ -113,13 +332,17 @@
             var cell3=row.insertCell(2);//截止时间
             var cell4=row.insertCell(3);//状态
             var cell5=row.insertCell(4);//备注
-            var cell6=row.insertCell(5);//删除本行
+//            var cell6=row.insertCell(5);//删除本行
             cell1.innerHTML = '<td><select name="attendanceId">'+selectAttendanceType+'</select></td>';
-            cell2.innerHTML='<td><input name="attendanceStartDate" type="text" class="input5" readonly onclick="laydate()"/></td>';
+            if(endDateStr == ""){
+                cell2.innerHTML='<td><input name="attendanceStartDate" type="text" class="input5" readonly onclick="laydate()"/></td>';
+            }else{
+                cell2.innerHTML='<td><input name="attendanceStartDate" type="text" class="input5" readonly value="'+endDateStr+'"/></td>';
+            }
             cell3.innerHTML='<td><input name="attendanceEndDate" type="text" class="input5" readonly onclick="laydate()"/></td>';
-            cell4.innerHTML='<td>未启用</td>';
-            cell5.innerHTML='<td><input name="attendanceRank" type="text" class="input5"/></td>';
-            cell6.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(4,this)"><h1>-</h1></a></td>';
+            //cell4.innerHTML='<td>未启用</td>';
+            cell4.innerHTML='<td><input name="attendanceRank" type="text" class="input5"/></td>';
+            cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(4,this)"><h1>-</h1></a></td>';
         }
         //table中删除选中的行数据
         function delTr(tableId,delObj){
@@ -159,16 +382,28 @@
                 <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" value="<%=staff.serialNumber%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">电话：</td>
+                <td class="regTd_l">手机：</td>
                 <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=staff.tel%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">身份证：</td>
-                <td class="regTd_r"><input id="idCard" name="idCard" type="text" class="input5" value="<%=staff.idCard%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="idCard" name="idCard" type="text" class="input5" value="<%=staff.idCard%>" onblur="setBirthDate()" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出生日期：</td>
-                <td class="regTd_r"><input id="birthDate" name="birthDate" type="text" class="input5" value="<%=staff.birthDate%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="birthDate" name="birthDate" type="text" class="input5" value="<%=staff.birthDate%>" readonly/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">最高学历：</td>
-                <td class="regTd_r"><input id="highestEducation" name="highestEducation" type="text" class="input5" value="<%=staff.highestEducation%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <!--
+                    <input id="highestEducation" name="highestEducation" type="text" class="input5" value="<%=staff.highestEducation%>" />
+                    -->
+                    <select id="highestEducation" name="highestEducation" >
+                        <option value="">请选择</option>
+                        <%
+                        for(var e = 0 ; e < educationList.length ; e ++){
+                            %><option value="<%=educationList[e].id%>" <%if(staff.highestEducation == educationList[e].id){%>selected<%}%>><%=educationList[e].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">毕业院校：</td>
@@ -186,11 +421,18 @@
                 <td class="regTd_l">入职时间：</td>
                 <td class="regTd_r"><input id="startJobTime" name="startJobTime" type="text" class="input5" value="<%=staff.startJobTime%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否在职：</td>
-                <td class="regTd_r"><input id="isJob" name="isJob" type="text" class="input5" value="<%=staff.isJob%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select name="isJob" id="isJob">
+                        <option value="">请选择</option>
+                        <option value="是" <%if(staff.isJob == '是'){%>selected<%}%> >是</option>
+                        <option value="否" <%if(staff.isJob == '否'){%>selected<%}%> >否</option>
+                    </select>
+                    <span style="color:#FF0000;">*</span>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">离职时间：</td>
-                <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" value="<%=staff.endJobTime%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="endJobTime" name="endJobTime" type="text" class="input5" value="<%=staff.endJobTime%>" readonly onclick="laydate()"/>&nbsp;&nbsp;</td>
                 <td class="regTd_l">所属门店：</td>
                 <td class="regTd_r">
                     <select id="shopId" name="shopId">
@@ -221,7 +463,7 @@
             </tr>
             <tr>
                 <td class="regTd_l" >备注：</td>
-                <td class="regTd_r"><input id="remarks" name="remarks" type="text" class="input5" value="<%=staff.remarks%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r" colspan="3"><input id="remarks" name="remarks" type="text" class="input5" value="<%=staff.remarks%>" style="width: 80%;"/></td>
             </tr>
         </table>
         <!-- 考勤周期信息 start-->
@@ -232,7 +474,9 @@
                 <td>考勤名称</td>
                 <td>开始时间</td>
                 <td>截止时间</td>
+                <!--
                 <td>状态</td>
+                -->
                 <td>备注</td>
                 <td><a style="cursor: pointer" onclick="javaScript:addAttendanceTypesTr()"><h1>+</h1></a></td>
             </tr>
@@ -241,18 +485,18 @@
             %>
             <tr>
                 <td>
-                    <%
-                    for(var j = 0 ; j < attendanceList.length ; j ++){
-                        if(attendanceList[j].id == attendanceTypes[i].attendanceId){
-                            %><%=attendanceList[j].categoryName%><%
-                            break;
-                        }
-                    }
-                    %>
-                    <input name="attendanceId" type="hidden" value="<%=attendanceTypes[i].attendanceId%>"/>
+                    <select name="attendanceId">
+                        <option value="">请选择<%=attendanceTypes[i].attendanceId%></option>
+                        <%
+                            for(var j = 0 ; j < attendanceList.length ; j ++){
+                                %><option value="<%=attendanceList[j].id%>" <%if(attendanceList[j].id == attendanceTypes[i].attendanceId){%>selected<%}%>><%=attendanceList[j].categoryName%></option><%
+                            }
+                        %>
+                    </select>
                 </td>
                 <td><input name="attendanceStartDate" type="text" class="input5" value="<%=attendanceTypes[i].attendanceStartDate%>" readonly onclick="laydate()"/></td>
                 <td><input name="attendanceEndDate" type="text" class="input5" value="<%=attendanceTypes[i].attendanceEndDate%>" readonly onclick="laydate()"/></td>
+                <!--
                 <td>
                     <%
                     //如果当前考勤周期开始时间 < 当前时间：已执行
@@ -263,6 +507,7 @@
                     }
                     %>
                 </td>
+                -->
                 <td><input name="attendanceRank" type="text" class="input5" value="<%=attendanceTypes[i].attendanceRank%>" /></td>
                 <td><a style="cursor: pointer" onclick="javaScript:delTr(4,this)"><h1>-</h1></a></td>
             </tr>
@@ -289,7 +534,11 @@
                 <td><input name="childrenName" type="text" class="input5" value="<%=children[i].childrenName%>"/></td>
                 <td><input name="childrenBirth" type="text" class="input5" value="<%=children[i].childrenBirth%>" readonly onclick="laydate()"/></td>
                 <td>
-                    <select name="childrenSex"><option value="男" <%if(children[i].childrenSex == '男'){%>selected<%}%>>男</option><option value="女" <%if(children[i].childrenSex == '女'){%>selected<%}%>>女</option></select>
+                    <select name="childrenSex">
+                        <option value="">请选择</option>
+                        <option value="男" <%if(children[i].childrenSex == '男'){%>selected<%}%>>男</option>
+                        <option value="女" <%if(children[i].childrenSex == '女'){%>selected<%}%>>女</option>
+                    </select>
                 </td>
                 <td><input name="childrenRank" type="text" class="input5" value="<%=children[i].childrenRank%>" /></td>
                 <td><a style="cursor: pointer" onclick="javaScript:delTr(1,this)"><h1>-</h1></a></td>
@@ -338,7 +587,19 @@
             for(var i = 0 ; i< certificates.length ; i ++){
             %>
             <tr>
-                <td><input id="vocationalQualifications" name="vocationalQualifications" value="<%=certificates[i].vocationalQualifications%>" type="text" class="input5" /></td>
+                <td>
+                    <!--
+                    <input id="vocationalQualifications" name="vocationalQualifications" value="<%=certificates[i].vocationalQualifications%>" type="text" class="input5" />
+                    -->
+                    <select name="vocationalQualifications">
+                        <option value="">请选择</option>
+                        <%
+                        for(var v = 0 ; v < vocationalQualificationList.length ; v ++){
+                            %><option value="<%=vocationalQualificationList[v].id%>" <%if(vocationalQualificationList[v].id == certificates[i].vocationalQualifications){%>selected<%}%>><%=vocationalQualificationList[v].name%></option><%
+                        }
+                        %>
+                    </select>
+                </td>
                 <td><input id="qualificationsTime" name="qualificationsTime" type="text" value="<%=certificates[i].qualificationsTime%>" class="input5"  readonly onclick="laydate()"/></td>
                 <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" value="<%=certificates[i].qualificationsDescribe%>" class="input5" /></td>
                 <td><input id="qualificationsImage" name="qualificationsImage" type="text" value="<%=certificates[i].qualificationsImage%>" class="input5" /></td>

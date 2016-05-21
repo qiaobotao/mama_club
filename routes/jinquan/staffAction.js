@@ -7,6 +7,9 @@ var service = require('../../model/service/staff');//员工Server
 var shopService = require('../../model/service/shop');//门店Server
 var staffLevelService = require('../../model/service/staffLevel');//员工等级Server
 var attendanceTypeService = require('../../model/service/attendanceType');//考勤类型Server
+var classifyService = require('../../model/service/classify');//获取子分类信息
+var educationId = require('../../config').mainClassifyId.education;//学历id
+var vocationalQualificationId = require('../../config').mainClassifyId.vocationalQualification;//职业资格id
 /**
  * 获取员工列表
  * @param req
@@ -241,15 +244,32 @@ module.exports.preEdit = function(req, res, next) {
                             attendanceTypeService.fetchAttendanceTypes(0,50,function(err, results) {
                                 if (!err) {
                                     var attendanceList = results;
-                                    res.render('staff/staffAdd', {
-                                        staff : staff,//员工信息
-                                        shopList:shopList,//门店集合
-                                        staffLevelList:staffLevelList,//员工等级集合
-                                        children:children,//员工子女集合
-                                        contracts:contracts,//员工合同集合
-                                        attendanceTypes:attendanceTypes,//员工考勤类型集合（记录该员工历史考勤及未来考勤情况）
-                                        certificates:certificates,//员工职业资格集合
-                                        attendanceList:attendanceList//考勤类型集合
+                                    //获取学历、职业资格集合信息
+                                    classifyService.getSubcollectionById(educationId,function(err,result){
+                                        if (!err) {
+                                            var educationArr = result;
+                                            classifyService.getSubcollectionById(vocationalQualificationId,function(err,result){
+                                                if (!err) {
+                                                    var vocationalQualificationArr = result;
+                                                    res.render('staff/staffAdd', {
+                                                        staff : staff,//员工信息
+                                                        shopList:shopList,//门店集合
+                                                        staffLevelList:staffLevelList,//员工等级集合
+                                                        children:children,//员工子女集合
+                                                        contracts:contracts,//员工合同集合
+                                                        attendanceTypes:attendanceTypes,//员工考勤类型集合（记录该员工历史考勤及未来考勤情况）
+                                                        certificates:certificates,//员工职业资格集合
+                                                        attendanceList:attendanceList,//考勤类型集合
+                                                        educationList:educationArr,//学历
+                                                        vocationalQualificationList:vocationalQualificationArr//职业资格
+                                                    });
+                                                } else {
+                                                    next();
+                                                }
+                                            });
+                                        } else {
+                                            next();
+                                        }
                                     });
                                 } else {
                                     next();
