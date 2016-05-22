@@ -63,6 +63,18 @@ module.exports = {
         momReasons:21 ,
         babyReasons:20,
         otherReasons:22,
+        education:24,//学历
+        vocationalQualification:25,//职业资格
+        jobState:26,//工作状态
+        childbirthType:27,//分娩方式
+        childbirthWeek:35,//分娩时孕周
+        guardian:28,//参与育儿id（监护人）
+        secondChildExperience:29,//二胎经验
+        eatBreastMilkTime:30,//父母儿时母乳吃多久
+        eatBreastMilkReason:31,//母乳喂养理由
+        hospitalAddItems:32,//住院添加
+        auxiliaryTool:33,//辅助工具
+        specialNote:34,//特殊说明
         printSystemLogFlag:true
     }
 
