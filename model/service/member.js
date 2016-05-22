@@ -10,7 +10,7 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertMember = function(age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+module.exports.insertMember = function(shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
                                        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
@@ -19,11 +19,11 @@ module.exports.insertMember = function(age,memberCardType,memberName,tel,contact
 
     //memberCardType = "12";
 
-    var sql = 'INSERT INTO member (age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
+    var sql = 'INSERT INTO member (shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
         + 'deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,'
         + 'husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,'
-        + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,new Date().getTime()], function(cbData, err, rows, fields) {
@@ -56,9 +56,12 @@ module.exports.updateMember = function(id,age,memberCardType,memberName,tel,cont
         }
     });
 };
-module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage,cb) {
+module.exports.fetchAllMember = function(shopId,serialNumber,memberName,tel,currentPage,cb) {
 
     var parm = " on   (a.id=b.memberId)  where 1=1"
+    if (shopId != '')
+        parm += " and a.shopId like'%" + shopId + "%'";
+
     if (serialNumber != '')
         parm += " and b.serialNumber like'%" + serialNumber + "%'";
     if (memberName != '')
@@ -104,9 +107,11 @@ module.exports.fetchAllMember = function(serialNumber,memberName,tel,currentPage
         }
     });
 }
-module.exports.fetchAllMemberByCard = function(serialNumber,memberName,tel,currentPage,cb) {
+module.exports.fetchAllMemberByCard = function(shopId,serialNumber,memberName,tel,currentPage,cb) {
 
     var parm = " "
+    if (shopId != '')
+        parm += " and a.shopId like'%" + shopId + "%'";
     if (serialNumber != '')
         parm += " and b.serialNumber like'%" + serialNumber + "%'";
     if (memberName != '')
@@ -114,10 +119,10 @@ module.exports.fetchAllMemberByCard = function(serialNumber,memberName,tel,curre
     if (tel != '')
         parm += " and a.tel like'%" + tel + "%'";
 
-    var sql_count = 'SELECT count(*) as count FROM member  WHERE id NOT IN(SELECT memberId FROM memberCard WHERE memberId IS NOT NULL)';
+    var sql_count = 'SELECT count(*) as count FROM member a WHERE id NOT IN(SELECT memberId FROM memberCard WHERE memberId IS NOT NULL)';
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT * FROM member  WHERE id NOT IN(SELECT memberId FROM memberCard WHERE memberId IS NOT NULL)'+ parm +' LIMIT ?,?';
+    var sql_data = 'SELECT * FROM member a WHERE id NOT IN(SELECT memberId FROM memberCard WHERE memberId IS NOT NULL)'+ parm +' LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -192,10 +197,10 @@ module.exports.getMemberByNameTel_bak =function (memberName,tel , cb) {
  * @param tel
  * @param cb
  */
-module.exports.getMemberByNameTel =function (tel , cb) {
+module.exports.getMemberByNameTel =function (tel ,shopId, cb) {
 
-    var sql = 'SELECT * FROM member WHERE tel=?';
-    db.query(sql, [tel],  function(cbData, err, rows, fields) {
+    var sql = 'SELECT * FROM member WHERE tel=? and shopId=?';
+    db.query(sql, [tel,shopId ], function(cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);
