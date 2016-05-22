@@ -40,7 +40,8 @@ var replytype = '<%=replytype%>';
     }
 
     function show (id) {
-        window.location.href = '/jinquan/member_show?id='+id;
+//        window.location.href = '/jinquan/member_show?id='+id;
+        window.location.href = '/jinquan/member_preEdit?show=show&id='+id;
     }
     function preEdit (id) {
         window.location.href = '/jinquan/member_preEdit?id='+id;
@@ -73,7 +74,7 @@ var replytype = '<%=replytype%>';
 
         </div>
         <%if(resourcesData["/member_goAdd"] == "1"){
-            %><div class="but_0"><a href="/jinquan/member_goAdd" class="bsty0"></a></div><%
+            %><div class="but_0"><a href="/jinquan/member_preEdit" class="bsty0"></a></div><%
         }%>
 
     </div>
