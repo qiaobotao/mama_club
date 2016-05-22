@@ -173,8 +173,8 @@ module.exports.show = function(req, res, next) {
     var id = req.query.id ? req.query.id : '';
     service.fetchSingleMember(id, function(err, results) {
         if (!err) {
-            var member = results.length == 0 ? null : results[0];
-            res.render('member/memberDetail', {member : member});
+            var member = results.fetchSingData.length == 0 ? null : results.fetchSingData[0];
+            res.render('member/memberDetail', {member : member,data:results});
         } else {
             next();
         }
@@ -184,11 +184,15 @@ module.exports.show = function(req, res, next) {
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
 
     service.fetchSingleMember(id, function(err, results) {
         if (!err) {
             var member = results.fetchSingData.length == 0 ? null : results.fetchSingData[0];
-            res.render('member/memberEdit', {member : member});
+            if(member == null){
+                member = {};
+            }
+            res.render('member/memberEdit', {member : member,data:results,show:show});
         } else {
             next();
         }

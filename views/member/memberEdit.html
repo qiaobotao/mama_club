@@ -5,6 +5,10 @@
     <title>添加会员</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -23,17 +27,16 @@
             }
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
-                parent.layer.alert('电话不能为空',{icon: 2});
+                parent.layer.alert('手机不能为空',{icon: 2});
+                return;
+            }
+            if (!isMobil(tel)) {
+                parent.layer.alert('手机不正确，请正确填写',{icon: 2});
                 return;
             }
             var contact = document.getElementById("contact").value;
             if (!contact || contact.length == 0) {
                 parent.layer.alert('联系人不能为空',{icon: 2});
-                return;
-            }
-            var address = document.getElementById("address").value;
-            if (!address || address.length == 0) {
-                parent.layer.alert('居住地址不能为空',{icon: 2});
                 return;
             }
             var workStatus = document.getElementById("workStatus").value;
@@ -49,6 +52,11 @@
             var fatherEducation = document.getElementById("fatherEducation").value;
             if (!fatherEducation || fatherEducation.length == 0) {
                 parent.layer.alert('爸爸学历不能为空',{icon: 2});
+                return;
+            }
+            var address = document.getElementById("address").value;
+            if (!address || address.length == 0) {
+                parent.layer.alert('居住地址不能为空',{icon: 2});
                 return;
             }
             var deliveryMode = document.getElementById("deliveryMode").value;
@@ -121,31 +129,39 @@
                 parent.layer.alert('出生日期不能为空',{icon: 2});
                 return;
             }
-            var hospitalization = document.getElementById("hospitalization").value;
-            if (!hospitalization || hospitalization.length == 0) {
-                parent.layer.alert('住院添加不能为空',{icon: 2});
-                return;
+            //处理医院添加 start
+            var hospitalizationArr = $("input[name='hospitalizationArr']:checked");
+            var hospitalizationStr = "";
+            for(var i = 0 ; i < hospitalizationArr.length ; i ++){
+                if(i != 0){
+                    hospitalizationStr +=","
+                }
+                hospitalizationStr += hospitalizationArr[i].value;
             }
-            var hospitalizationReason = document.getElementById("hospitalizationReason").value;
-            if (!hospitalizationReason || hospitalizationReason.length == 0) {
-                parent.layer.alert('住院原因不能为空',{icon: 2});
-                return;
+            $("#hospitalization").val(hospitalizationStr);
+            //处理医院添加 end
+            //辅助工具添加 start
+            var assistantToolArr = $("input[name='assistantToolArr']:checked");
+            var assistantToolStr = "";
+            for(var i = 0 ; i < assistantToolArr.length ; i ++){
+                if(i != 0){
+                    assistantToolStr +=","
+                }
+                assistantToolStr += assistantToolArr[i].value;
             }
-            var assistantTool = document.getElementById("assistantTool").value;
-            if (!assistantTool || assistantTool.length == 0) {
-                parent.layer.alert('辅助工具不能为空',{icon: 2});
-                return;
+            $("#assistantTool").val(assistantToolStr);
+            //辅助工具添加 end
+            //特殊说明添加 start
+            var specialInstructionsArr = $("input[name='specialInstructionsArr']:checked");
+            var specialInstructionsStr = "";
+            for(var i = 0 ; i < specialInstructionsArr.length ; i ++){
+                if(i != 0){
+                    specialInstructionsStr +=","
+                }
+                specialInstructionsStr += specialInstructionsArr[i].value;
             }
-            var useToolReason = document.getElementById("useToolReason").value;
-            if (!useToolReason || useToolReason.length == 0) {
-                parent.layer.alert('使用工具原因不能为空',{icon: 2});
-                return;
-            }
-            var specialInstructions = document.getElementById("specialInstructions").value;
-            if (!specialInstructions || specialInstructions.length == 0) {
-                parent.layer.alert('特殊说明不能为空',{icon: 2});
-                return;
-            }
+            $("#specialInstructions").val(specialInstructionsStr);
+            //特殊说明添加 end
             document.getElementById("myform").submit();
         }
     </script>
@@ -171,22 +187,49 @@
                 <td class="regTd_r"><input id="memberName" name="memberName" type="text" class="input5" value="<%=member.memberName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">电话（可增加）：</td>
+                <td class="regTd_l">手机：</td>
                 <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=member.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">联系人：</td>
                 <td class="regTd_r"><input id="contact" name="contact" type="text" class="input5" value="<%=member.contact%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td  class="regTd_l">年龄：</td>
-                <td class="regTd_r"><input id="age" name="age" type="text" class="input5" value="<%=member.age%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="age" name="age" type="text" class="input5" value="<%=member.age%>" onchange="isOnlyNum(this)"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">工作状态：</td>
-                <td class="regTd_r"><input id="workStatus" name="workStatus" type="text" class="input5" readonly="true" value="<%=member.workStatus%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="workStatus" name="workStatus">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.jobStateArr.length ; i ++){
+                        %><option value="<%=data.jobStateArr[i].id%>" <%if(member.workStatus==data.jobStateArr[i].id){%>selected<%}%>><%=data.jobStateArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈学历：</td>
-                <td class="regTd_r"><input id="motherEducation" name="motherEducation" type="text" class="input5" value="<%=member.motherEducation%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="motherEducation" name="motherEducation">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.educationArr.length ; i ++){
+                            %><option value="<%=data.educationArr[i].id%>" <%if(member.motherEducation==data.educationArr[i].id){%>selected<%}%>><%=data.educationArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">爸爸学历：</td>
-                <td class="regTd_r"><input id="fatherEducation" name="fatherEducation" type="text" class="input5" value="<%=member.fatherEducation%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="fatherEducation" name="fatherEducation">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.educationArr.length ; i ++){
+                        %><option value="<%=data.educationArr[i].id%>" <%if(member.fatherEducation==data.educationArr[i].id){%>selected<%}%>><%=data.educationArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l" >居住地址：</td>
@@ -198,31 +241,94 @@
             </tr>
             <tr>
                 <td class="regTd_l">分娩方式：</td>
-                <td class="regTd_r"><input id="deliveryMode" name="deliveryMode" type="text" class="input5" value="<%=member.deliveryMode%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="deliveryMode" name="deliveryMode">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.childbirthTypeArr.length ; i ++){
+                        %><option value="<%=data.childbirthTypeArr[i].id%>" <%if(member.deliveryMode==data.childbirthTypeArr[i].id){%>selected<%}%>><%=data.childbirthTypeArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">分娩时孕周：</td>
-                <td class="regTd_r"><input id="deliveryWeeks" name="deliveryWeeks" type="text" class="input5" value="<%=member.deliveryWeeks%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="deliveryWeeks" name="deliveryWeeks">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.childbirthWeekArr.length ; i ++){
+                        %><option value="<%=data.childbirthWeekArr[i].id%>" <%if(member.deliveryWeeks==data.childbirthWeekArr[i].id){%>selected<%}%>><%=data.childbirthWeekArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">分娩医院：</td>
                 <td class="regTd_r"><input id="deliveryHospital" name="deliveryHospital" type="text" class="input5" value="<%=member.deliveryHospital%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">参与育儿：</td>
-                <td class="regTd_r"><input id="parentTraining" name="parentTraining" type="text" class="input5" value="<%=member.parentTraining%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="parentTraining" name="parentTraining">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.guardianArr.length ; i ++){
+                        %><option value="<%=data.guardianArr[i].id%>" <%if(member.parentTraining==data.guardianArr[i].id){%>selected<%}%>><%=data.guardianArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">二胎经验：</td>
-                <td class="regTd_r"><input id="secondChildExperience" name="secondChildExperience" type="text" class="input5" value="<%=member.secondChildExperience%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="secondChildExperience" name="secondChildExperience">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.secondChildExperienceArr.length ; i ++){
+                        %><option value="<%=data.secondChildExperienceArr[i].id%>" <%if(member.secondChildExperience==data.secondChildExperienceArr[i].id){%>selected<%}%>><%=data.secondChildExperienceArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">二胎经验备注：</td>
                 <td class="regTd_r"><input id="secondChildExperienceRemark" name="secondChildExperienceRemark" type="text" class="input5" value="<%=member.secondChildExperienceRemark%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妻子儿时母乳多久：</td>
-                <td class="regTd_r"><input id="wifeBreastfeedTime" name="wifeBreastfeedTime" type="text" class="input5" value="<%=member.wifeBreastfeedTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="wifeBreastfeedTime" name="wifeBreastfeedTime">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.eatBreastMilkTimeArr.length ; i ++){
+                        %><option value="<%=data.eatBreastMilkTimeArr[i].id%>" <%if(member.wifeBreastfeedTime==data.eatBreastMilkTimeArr[i].id){%>selected<%}%>><%=data.eatBreastMilkTimeArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">丈夫儿时母乳多久：</td>
-                <td class="regTd_r"><input id="husbandBreastfeedTime" name="husbandBreastfeedTime" type="text" class="input5" value="<%=member.husbandBreastfeedTime%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="husbandBreastfeedTime" name="husbandBreastfeedTime">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.eatBreastMilkTimeArr.length ; i ++){
+                        %><option value="<%=data.eatBreastMilkTimeArr[i].id%>" <%if(member.husbandBreastfeedTime==data.eatBreastMilkTimeArr[i].id){%>selected<%}%>><%=data.eatBreastMilkTimeArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">母乳喂养理由：</td>
-                <td class="regTd_r" colspan="3"><input id="breastfeedReason" name="breastfeedReason" type="text" class="input5" style="width: 70%;" value="<%=member.breastfeedReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r" colspan="3">
+                    <select id="breastfeedReason" name="breastfeedReason">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < data.eatBreastMilkReasonArr.length ; i ++){
+                        %><option value="<%=data.eatBreastMilkReasonArr[i].id%>" <%if(member.breastfeedReason==data.eatBreastMilkReasonArr[i].id){%>selected<%}%>><%=data.eatBreastMilkReasonArr[i].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
 
             <!-- 宝宝信息 -->
@@ -233,17 +339,24 @@
                 <td class="regTd_l">宝宝姓名：</td>
                 <td class="regTd_r"><input id="childName" name="childName" type="text" class="input5" value="<%=member.childName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">宝宝性别：</td>
-                <td class="regTd_r"><input id="childSex" name="childSex" type="text" class="input5" value="<%=member.childSex%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+
+                    <select id="childSex" name="childSex">
+                        <option value="">请选择</option>
+                        <option value="男" <%if(member.childSex == '男'){%>selected<%}%>>男</option>
+                        <option value="女" <%if(member.childSex == '女'){%>selected<%}%>>女</option>
+                    </select>
             </tr>
             <tr>
                 <td class="regTd_l">出生身高：</td>
-                <td class="regTd_r"><input id="childHeight" name="childHeight" type="text" class="input5" value="<%=member.childHeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="childHeight" name="childHeight" type="text" class="input5" value="<%=member.childHeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>cm&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">出生体重：</td>
-                <td class="regTd_r"><input id="childWeight" name="childWeight" type="text" class="input5" value="<%=member.childWeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childWeight" name="childWeight" type="text" class="input5" value="<%=member.childWeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>Kg&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出生日期：</td>
-                <td class="regTd_r"><input id="childBirthday" name="childBirthday" type="text" class="input5" value="<%=member.childBirthday%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childBirthday" name="childBirthday" type="text" class="input5" value="<%=member.childBirthday%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">如何知道金泉：</td>
                 <td class="regTd_r">
                     <input id="friendsIntroduce" name="understandJinQuanChannel" type="checkbox" value="friendsIntroduce" <%if(member.understandJinQuanChannel == 'friendsIntroduce'){%>checked<%}%>>朋友介绍
@@ -251,28 +364,61 @@
                     <input id="wechat" name="understandJinQuanChannel" type="checkbox"  value="wechat" <%if(member.understandJinQuanChannel == 'wechat'){%>checked<%}%>>微信
                     <input id="forum" name="understandJinQuanChannel" type="checkbox"  value="forum" <%if(member.understandJinQuanChannel == 'forum'){%>checked<%}%>>论坛/社区
                     <input id="QQ" name="understandJinQuanChannel" type="checkbox"  value="QQ" <%if(member.understandJinQuanChannel == 'QQ'){%>checked<%}%>>Q群
-                    <span style="color:#FF0000;">*</span></td>
+                    </td>
             </tr>
             <tr>
                 <td class="regTd_l">住院添加：</td>
-                <td class="regTd_r"><input id="hospitalization" name="hospitalization" type="text" class="input5" value="<%=member.hospitalization%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input type="hidden" id="hospitalization" name="hospitalization"/>
+                    <%
+                    var memberHospitalization = member.hospitalization;
+                    memberHospitalization = memberHospitalization == null ? "" : memberHospitalization;
+                    for(var i = 0 ; i < data.hospitalAddItemsArr.length ; i ++){
+                        %><input name="hospitalizationArr" type="checkbox" value="<%=data.hospitalAddItemsArr[i].id%>" <%if(memberHospitalization.indexOf(data.hospitalAddItemsArr[i].id )>-1){%>checked<%}%>><%=data.hospitalAddItemsArr[i].name%>&nbsp;<%
+                    }
+                    %>
+                </td>
                 <td class="regTd_l">住院原因：</td>
-                <td class="regTd_r"><input id="hospitalizationReason" name="hospitalizationReason" type="text" class="input5" style="widows:70%;" value="<%=member.hospitalizationReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加医院) </td>
+                <td class="regTd_r"><input id="hospitalizationReason" name="hospitalizationReason" type="text" class="input5" style="widows:70%;" value="<%=member.hospitalizationReason%>"/>&nbsp;&nbsp;</td>
             </tr>
             <tr>
                 <td class="regTd_l">辅助工具：</td>
-                <td class="regTd_r"><input id="assistantTool" name="assistantTool" type="text" class="input5" value="<%=member.assistantTool%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加工具）</td>
+                <td class="regTd_r">
+                    <input type="hidden" id="assistantTool" name="assistantTool"/>
+                    <%
+                    var memberAssistantTool = member.assistantTool;
+                    memberAssistantTool = memberAssistantTool == null ? "":memberAssistantTool;
+                    for(var i = 0 ; i < data.auxiliaryToolArr.length ; i ++){
+                        %><input name="assistantToolArr" type="checkbox" value="<%=data.auxiliaryToolArr[i].id%>" <%if(memberAssistantTool.indexOf(data.auxiliaryToolArr[i].id) > -1){%>checked<%}%>><%=data.auxiliaryToolArr[i].name%>&nbsp;<%
+                    }
+                    %>
+                    </td>
                 <td class="regTd_l">使用工具原因：</td>
-                <td class="regTd_r"><input id="useToolReason" name="useToolReason" type="text" class="input5" style="widows:70%;" value="<%=member.useToolReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span> (添加原因) </td>
+                <td class="regTd_r">
+                    <input id="useToolReason" name="useToolReason" type="text" class="input5" style="widows:70%;" value="<%=member.useToolReason%>"/>
+                    &nbsp;&nbsp;</td>
             </tr>
             <tr>
                 <td class="regTd_l">特殊说明：</td>
-                <td class="regTd_r" colspan="3"><input id="specialInstructions" name="specialInstructions" type="text" class="input5" style="width: 70%" value="<%=member.specialInstructions%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>（添加说明）</td>
+                <td class="regTd_r" colspan="3">
+                    <input type="hidden" id="specialInstructions" name="specialInstructions"/>
+                    <%
+                    var memberSpecialInstructions = member.specialInstructions;
+                    memberSpecialInstructions = memberSpecialInstructions == null?"":memberSpecialInstructions;
+                    for(var i = 0 ; i < data.specialNoteArr.length ; i ++){
+                    %><input name="specialInstructionsArr" type="checkbox" value="<%=data.specialNoteArr[i].id%>" <%if(memberSpecialInstructions.indexOf(data.specialNoteArr[i].id) > -1){%>checked<%}%>><%=data.specialNoteArr[i].name%>&nbsp;<%
+                    }
+                    %>
+                </td>
             </tr>
         </table>
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <%
+        if(show == ''){
+            %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
         <div class="rb_l"><a href="/jinquan/member_list" class="close"></a></div>
     </div>
 

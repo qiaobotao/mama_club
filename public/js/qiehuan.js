@@ -54,7 +54,7 @@ function delData(url){
     });
 }
 /**
- * 校验手机号码
+ * 校验手机号码（电话）
  * @param s
  * @returns {boolean}  false：手机号不正确
  */
@@ -117,4 +117,15 @@ function dateToString(date) {
 function isEmail(str){
     var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
     return reg.test(str);
+}
+function isOnlyNum(obj){
+    var objF = parseFloat(obj.value);   //returns   22.34
+    if(objF < 0){
+        parent.layer.msg('请输入正确数值！');
+        obj.value='';
+    }else if(objF > 100){
+        parent.layer.msg('请输入正确数值！');
+        obj.value='';
+    }
+    obj.value = objF;
 }
