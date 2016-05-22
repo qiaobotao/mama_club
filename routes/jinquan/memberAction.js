@@ -183,7 +183,7 @@ module.exports.preEdit = function(req, res, next) {
 
     service.fetchSingleMember(id, function(err, results) {
         if (!err) {
-            var member = results.length == 0 ? null : results[0];
+            var member = results.fetchSingData.length == 0 ? null : results.fetchSingData[0];
             res.render('member/memberEdit', {member : member});
         } else {
             next();

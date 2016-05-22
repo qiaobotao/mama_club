@@ -9,6 +9,17 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var educationId = require('../../config').mainClassifyId.education;//学历id
+var jobStateId = require('../../config').mainClassifyId.jobState;//工作状态id
+var childbirthTypeId = require('../../config').mainClassifyId.childbirthType;//分娩方式id
+var childbirthWeekId = require('../../config').mainClassifyId.childbirthWeek;//分娩时孕周id
+var guardianId = require('../../config').mainClassifyId.guardian;//参与育儿id（监护人）
+var secondChildExperienceId = require('../../config').mainClassifyId.secondChildExperience;//二胎经验id
+var eatBreastMilkTimeId = require('../../config').mainClassifyId.eatBreastMilkTime;//父母儿时母乳吃多久id
+var eatBreastMilkReasonId = require('../../config').mainClassifyId.eatBreastMilkReason;//母乳喂养理由id
+var hospitalAddItemsId = require('../../config').mainClassifyId.hospitalAddItems;//住院添加id
+var auxiliaryToolId = require('../../config').mainClassifyId.auxiliaryTool;//辅助工具id
+var specialNoteId = require('../../config').mainClassifyId.specialNote;//特殊说明id
 
 module.exports.insertMember = function(age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
@@ -154,15 +165,102 @@ module.exports.fetchAllMemberByCard = function(serialNumber,memberName,tel,curre
 
 module.exports.fetchSingleMember =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.serialNumber FROM member a LEFT JOIN memberCard b ON b.memberId=a.id  WHERE a.id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    var fetchSingSql = 'SELECT a.*,b.serialNumber FROM member a LEFT JOIN memberCard b ON b.memberId=a.id  WHERE a.id = ?';
+    var classificationPare = educationId +","+
+        jobStateId +","+
+        childbirthTypeId +","+
+        childbirthWeekId +","+
+        guardianId +","+
+        secondChildExperienceId +","+
+        eatBreastMilkTimeId +","+
+        eatBreastMilkReasonId +","+
+        hospitalAddItemsId +","+
+        auxiliaryToolId +","+specialNoteId;
+    var classificationSql = 'select * from systemClassify where parentId in ('+classificationPare+')';
+
+
+
+    async.series({
+        //活动详情列表
+        fetchSingData : function(callback){
+            db.query(fetchSingSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //当前活动信息
+        classificationData : function(callback){
+            db.query(classificationSql, [], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
         if (!err) {
-            cb(null, rows);
+            //为字典表所需数据分别定义对象集合
+            var educationArr = new Array();
+            var jobStateArr = new Array();
+            var childbirthTypeArr = new Array();
+            var childbirthWeekArr = new Array();
+            var guardianArr = new Array();
+            var secondChildExperienceArr = new Array();
+            var eatBreastMilkTimeArr = new Array();
+            var eatBreastMilkReasonArr = new Array();
+            var hospitalAddItemsArr = new Array();
+            var auxiliaryToolArr = new Array();
+            var specialNoteArr = new Array();
+            for(var i = 0 ; i < results.classificationData.length ; i ++){
+                var classification = results.classificationData[i];
+                if(educationId == classification.parentId){
+                    educationArr.push(classification);
+                }else if(jobStateId == classification.parentId){
+                    jobStateArr.push(classification);
+                }else if(childbirthTypeId == classification.parentId){
+                    childbirthTypeArr.push(classification);
+                }else if(childbirthWeekId == classification.parentId){
+                    childbirthWeekArr.push(classification);
+                }else if(guardianId == classification.parentId){
+                    guardianArr.push(classification);
+                }else if(secondChildExperienceId == classification.parentId){
+                    secondChildExperienceArr.push(classification);
+                }else if(eatBreastMilkTimeId == classification.parentId){
+                    eatBreastMilkTimeArr.push(classification);
+                }else if(eatBreastMilkReasonId == classification.parentId){
+                    eatBreastMilkReasonArr.push(classification);
+                }else if(hospitalAddItemsId == classification.parentId){
+                    hospitalAddItemsArr.push(classification);
+                }else if(auxiliaryToolId == classification.parentId){
+                    auxiliaryToolArr.push(classification);
+                }else if(specialNoteId == classification.parentId){
+                    specialNoteArr.push(classification);
+                }
+            }
+            results.educationArr = educationArr;
+            results.jobStateArr = jobStateArr;
+            results.childbirthTypeArr = childbirthTypeArr;
+            results.childbirthWeekArr = childbirthWeekArr;
+            results.guardianArr = guardianArr;
+            results.secondChildExperienceArr = secondChildExperienceArr;
+            results.eatBreastMilkTimeArr = eatBreastMilkTimeArr;
+            results.eatBreastMilkReasonArr = eatBreastMilkReasonArr;
+            results.hospitalAddItemsArr = hospitalAddItemsArr;
+            results.auxiliaryToolArr = auxiliaryToolArr;
+            results.specialNoteArr = specialNoteArr;
+
+            cb (null, results);
         } else {
             cb(err);
         }
     });
+
+
 }
 module.exports.delMember= function (id, cb) {
 
