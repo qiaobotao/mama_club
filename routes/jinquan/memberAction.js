@@ -16,6 +16,8 @@ var nursservice = require('../../model/service/nursservice');
 //投诉
 var complain = require('../../model/service/complain');
 module.exports.list = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     //res.render('member/memberList');
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
@@ -25,7 +27,7 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
+    service.fetchAllMember(shopId,serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
@@ -51,6 +53,8 @@ module.exports.goAdd = function (req, res,next) {
 }
 
 module.exports.add = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var age = req.body.age ? req.body.age : 0;
     var memberName = req.body.memberName ? req.body.memberName : '';
@@ -94,7 +98,7 @@ module.exports.add = function (req, res,next) {
         understandJinQuanChannelVal = understandJinQuanChannel;
     }
 
-    service.insertMember(age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+    service.insertMember(shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -205,12 +209,14 @@ module.exports.del = function (req, res, next) {
 
 }
 module.exports.select = function (req, res, next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
 
-    service.fetchAllMemberByCard(serialNumber,memberName,tel,currentPage, function (err, results) {
+    service.fetchAllMemberByCard(shopId,serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
@@ -231,8 +237,9 @@ module.exports.selectAll = function (req, res, next) {
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
-
-    service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+    service.fetchAllMember(shopId,serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
@@ -252,8 +259,9 @@ module.exports.getMemberByNameTel = function(req, res, next) {
     var tel = req.body.memberTel ? req.body.memberTel : '';
     var result={} ;
     result.flag= false;
-
-    service.getMemberByNameTel(tel ,function(err, results) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+    service.getMemberByNameTel(tel ,shopId ,function(err, results) {
         if (!err) {
                 var member = results.length == 0 ? null : results[0];
                 if(member!=null)
@@ -296,13 +304,15 @@ module.exports.getMemberByNameTel = function(req, res, next) {
 
 module.exports.selectForActivity = function (req, res, next) {
     //res.render('member/memberList');
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
     var index = req.query.index ? req.query.index : '';
 
-    service.fetchAllMember(serialNumber,memberName,tel,currentPage, function (err, results) {
+    service.fetchAllMember(shopId,serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
             results.serialNumber = serialNumber;
             results.memberName = memberName;
