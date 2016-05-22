@@ -196,6 +196,22 @@ module.exports.checkResidue = function (req, res, next) {
 }
 
 /**
+ * 编辑教室的时候验证库存
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.checkResidueEditClassroom = function(req, res, next) {
+
+    var classroomId = req.body.classroomId ? req.body.classroomId : '';
+    var proId = req.body.proId ? req.body.proId : '';
+    var num = req.body.num ? req.body.num : '';
+
+
+
+}
+
+/**
  * 出库详情
  * @param req
  * @param res

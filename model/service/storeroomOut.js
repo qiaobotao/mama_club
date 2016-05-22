@@ -233,6 +233,43 @@ module.exports.checkResidue = function (storeroomId, waresId, num, cb) {
 }
 
 /**
+ * @param classroomId  教室id
+ * @param proId 需要验证产品id
+ * @param num   当前填写的数量
+ * @param cb
+ */
+module.exports.checkResidueEditClassroom = function (classroomId, proId, num, cb) {
+
+    var getOutLogId = 'SELECT outLogId,storeroomId FROM classroom WHERE id = ?';
+    var getOriginalNum = 'SELECT mx.count FROM storeroomOutLog out, storeroomOutLogMX mx WHERE out.id = mx.outLogId AND out.storeroomId = ? AND mx.waresId = ? AND out.id = ?';
+
+    db.query(getOutLogId,[classroomId],function(cbData, err, rows, fields) {
+
+        if (!err) {
+            if (rows.length == 0) {
+                cb(null,false);
+                return;
+            }
+            var outLogId = rows[1].outLogId;
+            var storeroomId = rows[1].storeroomId;
+            db.query(getOriginalNum, [storeroomId,proId,outLogId], function(cbData, err, rows, fields) {
+                if (!err) {
+                    if(rows.length == 0) {
+                       cb(null,false);
+                        return;
+                    }
+                    // 这里比较出库单中的count 和 更新后输入框中的 num 如果 count 大于或者等于 num，返回true，如果num大于count，求出差值，然后在验证目前库存的数量
+                } else {
+                    cb(err);
+                }
+            });
+        } else {
+           cb(err);
+        }
+    });
+}
+
+/**
  * 获取出库表详情
  * @param outLogId
  * @param cb

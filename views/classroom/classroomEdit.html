@@ -89,7 +89,9 @@
             $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
         }
 
-        // 验证库存量
+        // 验证库存量，
+        // 宽爷 这里验证库存和添加的时候不一样，
+        //要先得到原来的数据，和变更后的数据对比，得出结果
         function check (index) {
 
             var proId = $("#proId"+index).val();
@@ -100,7 +102,7 @@
             }
             $.ajax({
                 type: "post",
-                url: "/jinquan/storeroom_check",
+                url: "/jinquan/storeroom_check_editclassroom",
                 data: {'storeroomId':$("#sid").val(),'waresId':$("#proId"+index).val(),'num':$("#count"+index).val()},
                 success: function (result) {
                     if(!result.flag){

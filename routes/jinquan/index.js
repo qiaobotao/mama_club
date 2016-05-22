@@ -282,7 +282,7 @@ router.all('/storeroom_del', storeroomAction.del);
 router.all('/storeroom_detail', storeroomAction.detail);
 router.all('/storeroom_checkseril', storeroomAction.checkseril);
 router.all('/storeroom_checkname',storeroomAction.checkName);
-router.all('/storeroom_del_check', storeroomAction.delCheck);
+
 
 // 经销商管理
 router.all('/distributor_list',distributorAction.list);
