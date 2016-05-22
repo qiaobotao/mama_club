@@ -14,6 +14,8 @@ var consts = require('../../model/utils/consts');
 
 
 module.exports.list = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var activityName = req.query.activityName ? req.query.activityName : '';
     var activityType = req.query.activityType ? req.query.activityType : '';
     var effectiveTimeStart = req.query.effectiveTimeStart ? req.query.effectiveTimeStart : '';
@@ -25,7 +27,7 @@ module.exports.list = function (req, res,next) {
     var resourcesData = req.session.user.resourcesData;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
-    service.fetchAllActivityManage(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage, function (err, results) {
+    service.fetchAllActivityManage(shopId,activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage, function (err, results) {
         if (!err) {
             results.activityName = activityName;
             results.activityType = activityType;
@@ -53,6 +55,9 @@ module.exports.goAdd = function (req, res,next) {
 
 
 module.exports.add = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     var activityName = req.body.activityName ? req.body.activityName : '';
     var activityType = req.body.activityType ? req.body.activityType : '';
     var memberCardTypeArray = req.body.memberCardType ? req.body.memberCardType : '';
@@ -145,7 +150,7 @@ module.exports.add = function (req, res,next) {
         serviceIds=  serviceIdArray;
 
     }
-    service.insertActivityManage(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, function (err, results) {
+    service.insertActivityManage(shopId,proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, function (err, results) {
             if (!err) {
                 var activityId = results.insertId;
                 service.insertActivityMX(activityId,arr,function (err, results) {

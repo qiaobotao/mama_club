@@ -4,6 +4,8 @@ var service = require('../../model/service/returnvisit');
 var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res,next) {
     //res.render('returnVisit/returnVisitList');
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
 
     var serviceMeetId = req.query.serviceMeetId ? req.query.serviceMeetId : '';
     var returnVisitDate = req.query.returnVisitDate ? req.query.returnVisitDate : '';
@@ -15,7 +17,7 @@ module.exports.list = function (req, res,next) {
     var resourcesData = req.session.user.resourcesData;
 // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
-    service.fetchAllReturnVisit(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
+    service.fetchAllReturnVisit(shopId,serviceMeetId,returnVisitDate,returnVisitType,status,currentPage, function (err, results) {
         if (!err) {
             results.serviceMeetId = serviceMeetId;
             results.returnVisitDate = returnVisitDate;
@@ -37,6 +39,10 @@ module.exports.goAdd = function (req, res,next) {
 }
 
 module.exports.add = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -48,7 +54,7 @@ module.exports.add = function (req, res,next) {
     var isReturnVisit = req.body.isReturnVisit ? req.body.isReturnVisit : '';
     var returnVisitReason = req.body.returnVisitReason ? req.body.returnVisitReason : '';
     var status = req.body.status ? req.body.status : '0';
-    service.insertReturnVisit(status,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    service.insertReturnVisit(shopId,status,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason, function (err, results) {
             if (!err) {
                 //修改服务单状态 4，已做回访

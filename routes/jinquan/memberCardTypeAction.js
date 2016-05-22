@@ -11,7 +11,8 @@ var consts = require('../../model/utils/consts');
  * @param res
  */
 module.exports.list = function (req, res,next) {
-
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var memberCardType = req.query.memberCardType ? req.query.memberCardType : '';
     var memberCardAmount = req.query.memberCardAmount ? req.query.memberCardAmount : '';
     var zeroDiscounts = req.query.zeroDiscounts ? req.query.zeroDiscounts : '';
@@ -22,7 +23,7 @@ module.exports.list = function (req, res,next) {
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
 
-    service.fetchAllMemberCardType(memberCardType,memberCardAmount,zeroDiscounts,currentPage, function (err, results) {
+    service.fetchAllMemberCardType(shopId,memberCardType,memberCardAmount,zeroDiscounts,currentPage, function (err, results) {
         if (!err) {
             results.memberCardType = memberCardType;
             results.memberCardAmount = memberCardAmount;
@@ -73,6 +74,11 @@ module.exports.goEdit = function(req, res,next) {
  * @param res
  */
 module.exports.addOrEdit = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
+
+
     var id = req.body.id ? req.body.id : '';
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var memberCardAmount = req.body.memberCardAmount ? req.body.memberCardAmount : '';
@@ -82,7 +88,7 @@ module.exports.addOrEdit = function (req, res,next) {
     var status = req.body.status ? req.body.status : '1';
     if(id=='')
     {
-        service.insertMemberCardType(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
+        service.insertMemberCardType(shopId,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_type_list?replytype=add');
             } else {

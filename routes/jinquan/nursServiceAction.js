@@ -14,7 +14,9 @@ var serviceMeetService = require('../../model/service/servicemeet');
  */
 module.exports.list = function (req, res,next) {
     //res.render('nursService/nursServiceList');
+    // 从session 中获取门店id
 
+    var shopId = req.session.user.shopId;
     var name = req.query.name ? req.query.name : '';
     var principal = req.query.principal ? req.query.principal : '';
     var serviceDate = req.query.serviceDate ? req.query.serviceDate : '';
@@ -24,7 +26,7 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllNursService(name,principal,serviceDate,currentPage, function (err, results) {
+    service.fetchAllNursService(shopId,name,principal,serviceDate,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
             results.principal = principal;
@@ -62,6 +64,9 @@ module.exports.goAdd = function (req, res,next) {
 }
 
 module.exports.add = function (req, res,next) {
+    // 从session 中获取门店id
+
+    var shopId = req.session.user.shopId;
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var serviceDate = req.body.serviceDate ? req.body.serviceDate : '';
     var name = req.body.name ? req.body.name : '';
@@ -180,7 +185,8 @@ module.exports.add = function (req, res,next) {
     }
     //生成出库单信息
     if(arr.length>0){
-        storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+        var address="";var consignee="";var consigneeTel="";
+        storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,address,consignee,consigneeTel,function(err, results) {
 
             if (!err) {
 
@@ -192,7 +198,7 @@ module.exports.add = function (req, res,next) {
                         storeroomOutService.updateInventory(storeroom,arr,function(err, results) {
                             if (!err) {
                                 //生成护理信息
-                                service.insertNursService(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+                                service.insertNursService(shopId,outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                     bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                     milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
                                     diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
@@ -226,7 +232,7 @@ module.exports.add = function (req, res,next) {
     }
     else{
         var outLogId="";
-        service.insertNursService(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+        service.insertNursService(shopId,outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
             bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
             milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
             diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
@@ -372,7 +378,8 @@ module.exports.doEdit = function (req, res,next) {
         storeroomOutService.delOutLogMX(outLogId);
     }
     if(arr.length>0){
-        storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,function(err, results) {
+        var address="";var consignee="";var consigneeTel="";
+        storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,address,consignee,consigneeTel,function(err, results) {
 
             if (!err) {
 

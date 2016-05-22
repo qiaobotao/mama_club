@@ -5,12 +5,12 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertClassMeet = function(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
+module.exports.insertClassMeet = function(shopId,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
                                           isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, cb) {
 
-    var sql = 'INSERT INTO classMeet (dateline,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome) '
-        + ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [new Date().getTime(),memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
+    var sql = 'INSERT INTO classMeet (shopId,dateline,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome) '
+        + ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,new Date().getTime(),memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
         isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -35,12 +35,15 @@ module.exports.updateClassMeet = function(id,memberId,courseId,childMonths,exter
     });
 };
 
-module.exports.fetchAllClassMeet = function(memberName,courseName,courseTimeStart,currentPage,cb) {
+module.exports.fetchAllClassMeet = function(shopId,memberName,courseName,courseTimeStart,currentPage,cb) {
 
     var parm = " on (a.memberId=b.id and a.courseId=c.id and a.courseId=d.courseId  AND f.id=d.teacherId)"
     parm += " where  b.memberName like '%" + memberName + "%'";
     parm += " and c.name like '%" + courseName + "%'";
     parm += " and c.courseDate like '%" + courseTimeStart + "%'";
+    if(shopId!=''){
+        parm += " and a.shopId='" + shopId + "'";
+    }
 
     var sql_count = 'SELECT count(1) as  count FROM classMeet a inner join member b inner join course c inner join courseTeacher d  INNER JOIN staff f '+ parm +' ORDER BY a.dateline DESC ';
 

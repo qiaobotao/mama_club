@@ -35,18 +35,18 @@ module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,cb){
  * 此方法以后将不被使用：业务上，由收费功能生成护理服务单；护理服务单可以自行修改
  * @param cb
  */
-module.exports.insertNursService = function(outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+module.exports.insertNursService = function(shopId,outLogId,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
                                        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
                                        isLeadTrainee,whetherAppointmentAgain,traineeName, cb) {
 
-    var sql = 'INSERT INTO nursService(outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,'
+    var sql = 'INSERT INTO nursService(shopId,outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,'
         + 'bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,'
         + 'milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,'
         + 'diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,'
-        + 'isLeadTrainee,whetherAppointmentAgain,traineeName,dateLine) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
+        + 'isLeadTrainee,whetherAppointmentAgain,traineeName,dateLine) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
@@ -84,11 +84,13 @@ module.exports.updateNursService = function(outLogId,id,serviceMeetId,serviceDat
     });
 };
 
-module.exports.fetchAllNursService = function(name,principal,serviceDate,currentPage,cb) {
+module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,currentPage,cb) {
 
     var parm = " where  (a.serviceMeetId=b.id)"
     if (name != '')
         parm += " and b.name like'%" + name + "%'";
+    if (shopId != '')
+        parm += " and b.shopId ='" + shopId + "'";
     if (principal != '')
         parm += " and b.principal like'%" + principal + "%'";
     if (serviceDate != '')

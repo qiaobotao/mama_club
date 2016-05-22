@@ -22,10 +22,10 @@ var consts = require('../../model/utils/consts');
  * @param cb
  * 添加会员卡时，启用状态，默认为未启用状态（在交费处修改）
  */
-module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,cb) {
+module.exports.insertMemberCard = function(shopId,serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,cb) {
 
-    var sql = 'INSERT INTO memberCard (serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,isActivation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,consts.STATE_DISABLE], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCard (shopId,serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,isActivation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,consts.STATE_DISABLE], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -43,7 +43,7 @@ module.exports.insertMemberCard = function(serialNumber  ,createDate  ,dateline 
  * @param materialid
  * @param cb
  */
-module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage,cb) {
+module.exports.fetchAllMemberCard = function(shopId,serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage,cb) {
 
     var parm = "  where a.serialNumber like '%" + serialNumber + "%' and a.type like '%" + type
         + "%' and a.parameter1 like '%" + parameter1 +"%' and a.parameter2 like '%"+ parameter2
@@ -51,8 +51,11 @@ module.exports.fetchAllMemberCard = function(serialNumber  ,  type , parameter1 
         + "%' and a.parameter5 like '%"+ parameter5 + "%' and a.parameter6 like '%"+ parameter6
         + "%' and a.parameter7 like '%"+ parameter7 + "%' and a.parameter8 like '%"+ parameter8
         + "%' and a.parameter9 like '%"+ parameter9  +"%'";
-
-    var sql_count = 'SELECT count(*) as count FROM memberCard a  ';
+    if(shopId!='')
+    {
+        parm+= " and a.shopId='"+shopId+"'";
+    }
+    var sql_count = 'SELECT count(*) as count FROM memberCard a  '+parm;
     var sql_data = 'SELECT * FROM memberCard a '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;

@@ -1,4 +1,4 @@
-/**
+ /**
  * Created by Administrator on 2016/1/31.
  */
 /**
@@ -10,10 +10,10 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertActivityManage = function(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, cb) {
+module.exports.insertActivityManage = function(shopId,proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status, cb) {
 
-    var sql = 'INSERT INTO activityManage(proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,`describe`,`status`,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO activityManage(shopId,proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,`describe`,`status`,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,proIds,courseIds,memberIds,serviceIds,activityName,activityType,memberCardType,effectiveTimeStart,effectiveTimeEnd,describe,status,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -54,9 +54,9 @@ module.exports.updateActivityManage = function(id,activityName,activityType,memb
         }
     });
 };
-module.exports.fetchAllActivityManage = function(activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage,cb) {
+module.exports.fetchAllActivityManage = function(shopId,activityName,activityType,effectiveTimeStart,effectiveTimeEnd,status,currentPage,cb) {
 
-    var parm = 'WHERE 1=1';
+    var parm = 'WHERE 1=1 '
     if (activityName != '')
         parm += " and" +
             " activityName like '%" + activityName + "%'";
@@ -68,6 +68,9 @@ module.exports.fetchAllActivityManage = function(activityName,activityType,effec
         parm += " and effectiveTimeEnd <= '" + effectiveTimeEnd + "'";
     if (status != ''&& status != '-1')
         parm += " and status = '" + status + "'";
+    if (shopId != '' )
+        parm += " and shopId = '" + shopId + "'";
+
 
     var sql_count ="SELECT  count(1) as count  FROM activityManage "+ parm +' ORDER BY dateline DESC ';
 

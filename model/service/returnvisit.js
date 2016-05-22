@@ -5,12 +5,12 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertReturnVisit = function(serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+module.exports.insertReturnVisit = function(shopId,serviceMeetId,name,tel,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
                                             isReturnVisit,returnVisitReason, cb) {
 
-    var sql = 'INSERT INTO returnVisit (status,dateline,serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
-        + 'isReturnVisit,returnVisitReason) VALUES (?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [status,new Date().getTime(),serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
+    var sql = 'INSERT INTO returnVisit (shopId,status,dateline,serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,'
+        + 'isReturnVisit,returnVisitReason) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,status,new Date().getTime(),serviceMeetId,returnVisitDate,returnVisitType,returnVisitResult,serviceComment,advice,
         isReturnVisit,returnVisitReason], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -35,7 +35,7 @@ module.exports.updateReturnVisit = function(status,dateline,id,serviceMeetId,nam
     });
 };
 
-module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,returnVisitType,status,currentPage,cb) {
+module.exports.fetchAllReturnVisit = function(shopId,serviceMeetId,returnVisitDate,returnVisitType,status,currentPage,cb) {
 
     var parm = " where  (a.serviceMeetId=b.id and b.id=c.serviceMeetId)"
     if (serviceMeetId != ''){
@@ -54,7 +54,10 @@ module.exports.fetchAllReturnVisit = function(serviceMeetId,returnVisitDate,retu
         parm += " and a.status like'%" + status + "%'";
     }
 
-
+    if (shopId != '' )
+    {
+        parm += " and a.shopId ='" + shopId + "'";
+    }
 
     var sql_count = 'SELECT count(1) as count FROM returnVisit a , serviceMeet b , nursService c'+ parm +'  ORDER BY a.dateline DESC   ';
     var start = (currentPage - 1) * 10;

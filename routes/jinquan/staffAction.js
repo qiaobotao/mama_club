@@ -329,8 +329,14 @@ module.exports.selectForTrain = function (req, res, next) {
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var tel = req.query.tel ? req.query.tel : '';
     var index = req.query.index ? req.query.index : '';
+    var highestEducation = req.query.highestEducation ? req.query.highestEducation : '';
+    var graduationSchool = req.query.graduationSchool ? req.query.graduationSchool : '';
+    var startJobTimeStar= req.query.index ? req.query.index : '';
+    var startJobTimeEnd= req.query.startJobTimeEnd ? req.query.startJobTimeEnd : '';
+    var educationId= req.query.educationId ? req.query.educationId : '';
 
-    service.fetchAllStaff(name,serialNumber,tel,currentPage, function (err, results) {
+    service.fetchAllStaff(name,serialNumber,tel,highestEducation,graduationSchool,startJobTimeStar,startJobTimeEnd,educationId,currentPage ,function (err, results) {
+
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
@@ -350,8 +356,12 @@ module.exports.selectForServiceMeet = function (req, res, next) {
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var tel = req.query.tel ? req.query.tel : '';
     var index = req.query.index ? req.query.index : '';
-
-    service.fetchAllStaff(name,serialNumber,tel,currentPage, function (err, results) {
+    var highestEducation = req.query.highestEducation ? req.query.highestEducation : '';
+    var graduationSchool = req.query.graduationSchool ? req.query.graduationSchool : '';
+    var startJobTimeStar= req.query.startJobTimeStar ? req.query.startJobTimeStar : '';
+    var startJobTimeEnd= req.query.startJobTimeEnd ? req.query.startJobTimeEnd : '';
+    var educationId= req.query.educationId ? req.query.educationId : '';
+    service.fetchAllStaff(name,serialNumber,tel,highestEducation,graduationSchool,startJobTimeStar,startJobTimeEnd,educationId,currentPage ,function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;

@@ -13,7 +13,8 @@ var service = require('../../model/service/complain');
 var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res,next) {
    // res.render('complain/complainList');
-
+// 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var name = req.query.name ? req.query.name : '';
     var complainPrincipal = req.query.complainPrincipal ? req.query.complainPrincipal : '';
     var complainTimeStart = req.query.complainTimeStart ? req.query.complainTimeStart : '';
@@ -25,7 +26,7 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllComplain(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
+    service.fetchAllComplain(shopId,name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
         if (!err) {
             results.name = name;
             results.complainPrincipal = complainPrincipal;
@@ -53,6 +54,8 @@ module.exports.goAdd = function (req, res,next) {
 
 
 module.exports.add = function (req, res, next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
     var name = req.body.name ? req.body.name : '';
     var tel = req.body.tel ? req.body.tel : '';
@@ -61,7 +64,7 @@ module.exports.add = function (req, res, next) {
     var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
     var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
     var staffId = req.body.staffId ? req.body.staffId : '';
-    service.insertComplain(staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
+    service.insertComplain(shopId,staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
             if (!err) {
                 if (!err) {
                     //修改服务单状态 4，已做回访
@@ -139,13 +142,15 @@ module.exports.del = function (req, res, next) {
 
 }
 module.exports.select = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
 
-    serviceMeetService.getByStatuServiceMeet(tel,name,meetTime,4,currentPage, function (err, results) {
+    serviceMeetService.getByStatuServiceMeet(shopId,tel,name,meetTime,1,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;

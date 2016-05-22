@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertServiceMeet = function(specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
+module.exports.insertServiceMeet = function(shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO serviceMeet (shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -32,7 +32,7 @@ module.exports.insertServiceMeet = function(specified,staffId,tel,name,age,princ
 };
 module.exports.updateServiceMeet = function(specified,staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
 
-    var sql = 'UPDATE   serviceMeet SET specified=? staffId=?, tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
+    var sql = 'UPDATE   serviceMeet SET specified=?, staffId=?, tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
     db.query(sql, [specified,staffId,tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -50,13 +50,17 @@ module.exports.updateServiceMeet = function(specified,staffId,id,tel,name,age,pr
  * @param currentPage
  * @param cb
  */
-module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPage,cb) {
+module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,currentPage,cb) {
 
     var myDate = new Date();
     var parm = "where sm.tel like '%" + tel + "%' and sm.name like '%" + name+ "%'" +
         " and sm.meetTime like '%" + meetTime + "%'" +
         " and sm.serviceId = s.id " ;
 
+    if(shopId!="")
+    {
+        parm+=" and sm.shopId = " + shopId ;
+    }
     if(status!="")
     {
         parm+=" and sm.status = " + status ;
@@ -116,7 +120,7 @@ module.exports.fetchAllServiceMeet = function(tel,name,meetTime,status,currentPa
  * @param currentPage
  * @param cb
  */
-module.exports.getByStatuServiceMeet = function(tel,name,meetTime,status,currentPage,cb) {
+module.exports.getByStatuServiceMeet = function(shopId,tel,name,meetTime,status,currentPage,cb) {
 
     var myDate = new Date();
     var parm = "where tel like '%" + tel + "%' and name like '%" + name
@@ -125,6 +129,10 @@ module.exports.getByStatuServiceMeet = function(tel,name,meetTime,status,current
     if(status!="")
     {
         parm+=" and status >= " + status ;
+    }
+    if(shopId!="")
+    {
+        parm+=" and shopId  = " + shopId ;
     }
     var sql_count = 'SELECT count(*) as count FROM serviceMeet '+parm;
     var start = (currentPage - 1) * 10;

@@ -5,13 +5,13 @@
 var db = require('../../common/db');
 var async = require('async');
 
-module.exports.insertComplain = function(staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
+module.exports.insertComplain = function(shopId,staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
 
     var complainTime = new Date();
     complainTime = complainTime.toLocaleDateString();
-    var sql = 'INSERT INTO complain (staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail, complainTime,dateLine) '
-        + ' VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail,complainTime,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO complain (shopId,staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail, complainTime,dateLine) '
+        + ' VALUES (?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail,complainTime,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -32,7 +32,7 @@ module.exports.updateComplain = function(staffId,id,serviceMeetId,name,tel,compl
     });
 };
 
-module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage,cb) {
+module.exports.fetchAllComplain = function(shopId,name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage,cb) {
 
     var parm = " where (a.serviceMeetId=b.id)"
     if (name != '')
@@ -45,7 +45,8 @@ module.exports.fetchAllComplain = function(name,complainPrincipal,complainTimeSt
         parm += " and a.complainTime <='" + complainTimeEnd + "'";
     if (dealPrincipal != '')
         parm += " and a.dealPrincipal like '%" + dealPrincipal + "%'";
-
+    if (shopId != '')
+        parm += " and a.shopId = '" + shopId + "'";
     var sql_count = 'SELECT count(1) as count FROM complain a , serviceMeet b '+ parm +' order by a.dateline  ';
     var start = (currentPage - 1) * 10;
     var end = 10;

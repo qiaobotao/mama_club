@@ -12,6 +12,8 @@ var service = require('../../model/service/classMeet');
 var consts = require('../../model/utils/consts');
 
 module.exports.list = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var memberName = req.query.memberName ? req.query.memberName : '';
     var courseName = req.query.courseName ? req.query.courseName : '';
     var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';
@@ -21,7 +23,7 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllClassMeet(memberName,courseName,courseTimeStart,currentPage, function (err, results) {
+    service.fetchAllClassMeet(shopId,memberName,courseName,courseTimeStart,currentPage, function (err, results) {
         if (!err) {
             results.memberName = memberName;
             results.courseName = courseName;
@@ -47,6 +49,9 @@ module.exports.goAdd = function (req, res,next) {
 }
 
 module.exports.add = function (req, res) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     var memberId = req.body.memberId ? req.body.memberId : '';
     var courseId = req.body.courseId ? req.body.courseId : '';
     var childMonths = req.body.childMonths ? req.body.childMonths : '';
@@ -61,7 +66,7 @@ module.exports.add = function (req, res) {
     service.check(courseId ,function(err, results) {
         if (!err) {
             isRegisterSuccess = results;
-            service.insertClassMeet(memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
+            service.insertClassMeet(shopId,memberId,courseId,childMonths,externPersons,weatherLeadBaby,remark,
                 isRegisterSuccess,isPhoneConfirm,isSmConfirm,courseConfirm,ReasonForNotCome, function (err, results) {
                     if (!err) {
                         res.redirect('/jinquan/class_meet_list?replytype=add');
@@ -176,6 +181,8 @@ module.exports.checkIsSelectCourse = function (req, res, next) {
  * @param res
  */
 module.exports.classMeetSelectList = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var memberName = req.query.memberName ? req.query.memberName : '';
     var courseName = req.query.courseName ? req.query.courseName : '';
     var courseTimeStart = req.query.courseTimeStart ? req.query.courseTimeStart : '';
@@ -185,7 +192,7 @@ module.exports.classMeetSelectList = function (req, res,next) {
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
-    service.fetchAllClassMeet(memberName,courseName,courseTimeStart,currentPage, function (err, results) {
+    service.fetchAllClassMeet(shopId,memberName,courseName,courseTimeStart,currentPage, function (err, results) {
         if (!err) {
             results.memberName = memberName;
             results.courseName = courseName;

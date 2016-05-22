@@ -46,6 +46,8 @@ module.exports.select = function (req, res, next) {
  * @param res
  */
 module.exports.list = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
 
     var parameter1= '';
     var parameter2=  '';
@@ -93,7 +95,7 @@ module.exports.list = function (req, res,next) {
         parameter9= req.query.parameter9 ? req.query.parameter9 : '';
     }
     var status=  req.query.status ? req.query.status : '1';
-    service.fetchAllMemberCard(serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage, function (err, results) {
+    service.fetchAllMemberCard(shopId,serialNumber  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,currentPage, function (err, results) {
         if (err) {
             console.log(err.message);
             next();
@@ -105,7 +107,7 @@ module.exports.list = function (req, res,next) {
                     results.data[i].createDate = temp;
                 }
             }
-            service1.fetchMembercardtypeByStatus(status, function (err, datas) {
+            service1.fetchMembercardtypeByStatus(shopId,status, function (err, datas) {
                 if (!err && datas.length != 0) {
                     results.serialNumber = serialNumber;
                     results.type = type;
@@ -137,11 +139,12 @@ module.exports.list = function (req, res,next) {
  * @param res
  */
 module.exports.goAdd = function(req, res,next) {
-
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var status=  req.query.status ? req.query.status : '1';
     var type=  req.query.type ? req.query.type : '1';
 
-    service1.fetchMembercardtypeByStatus(status, function (err, results) {
+    service1.fetchMembercardtypeByStatus(shopId,status, function (err, results) {
         if (!err) {
             results.type = type;
             res.render('memberCard/memberCardAdd' , {data : results,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
@@ -160,10 +163,12 @@ module.exports.goAdd = function(req, res,next) {
 module.exports.goEdit = function(req, res,next) {
     var id = req.query.id ? req.query.id : '';
     var type = req.query.type ? req.query.type : '';
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var status=  req.query.status ? req.query.status : '1';
     service.fetchSingleMembercard(id,type, function(err, results) {
         if (!err) {
-            service1.fetchMembercardtypeByStatus(status, function (err, datas) {
+            service1.fetchMembercardtypeByStatus(shopId,status, function (err, datas) {
                 if (!err && datas.length != 0) {
                     var memberCard = results.length == 0 ? null : results[0];
                     res.render('memberCard/memberCardEdit', {memberCard: memberCard, data: datas,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
@@ -185,6 +190,9 @@ module.exports.goEdit = function(req, res,next) {
  * @param res
  */
 module.exports.addOrEdit = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
+
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.memberCardNumber ? req.body.memberCardNumber : '';
     var type= req.body.type ? req.body.type : '';
@@ -230,7 +238,7 @@ module.exports.addOrEdit = function (req, res,next) {
     {
         var createDate= new Date().getTime();
         var dateline= new Date().getTime();
-        service.insertMemberCard( serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
+        service.insertMemberCard( shopId,serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list?replytype=add');
             } else {

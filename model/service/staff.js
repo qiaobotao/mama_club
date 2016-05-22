@@ -74,25 +74,25 @@ module.exports.fetchAllStaff = function(name,serialNumber,tel,highestEducation,g
     //var parm = "WHERE a.name LIKE '%"+name+"%' AND a.serialNumber LIKE '%"+serialNumber+"%' AND a.tel LIKE '%"+tel+"%' ";
     var parm = "WHERE 1=1 ";
 
-    if(name != ""){
+    if(name != "" && name !='undefined'){
         parm += " and a.name like '%"+name+"%' ";
     }
-    if(serialNumber != ""){
+    if(serialNumber != ""&& serialNumber !='undefined'){
         parm += " and a.serialNumber like '%"+serialNumber+"%'  ";
     }
-    if(tel != ""){
+    if(tel != ""&& tel !='undefined'){
         parm += " and a.tel like '%"+tel+"%' ";
     }
-    if(highestEducation != ""){
+    if(highestEducation != ""&& highestEducation !='undefined'){
         parm += " and a.highestEducation =  "+highestEducation;
     }
-    if(graduationSchool != ""){
+    if(graduationSchool != ""&& graduationSchool !='undefined'){
         parm += " and a.graduationSchool like '%"+graduationSchool+"%' ";
     }
-    if(startJobTimeStar != ""){
+    if(startJobTimeStar != ""&& startJobTimeStar !='undefined'){
         parm += " and a.startJobTime >=  "+startJobTimeStar;
     }
-    if(startJobTimeEnd != ""){
+    if(startJobTimeEnd != ""&& startJobTimeEnd !='undefined'){
         parm += " and a.startJobTime <=  "+startJobTimeEnd;
     }
 

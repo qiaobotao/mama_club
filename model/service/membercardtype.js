@@ -19,10 +19,10 @@ var async = require('async');
  * @param materialid
  * @param cb
  */
-module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
+module.exports.insertMemberCardType = function(shopId,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status, cb) {
 
-    var sql = 'INSERT INTO memberCardType (memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status,dateline) VALUES (?,?,?,?,?,?,?)';
-    db.query(sql, [memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCardType (shopId,memberCardType,memberCardAmount,consumerLimit,zeroDiscounts,isManyPeopleUsed,status,dateline) VALUES (?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,memberCardType, memberCardAmount, consumerLimit, zeroDiscounts, isManyPeopleUsed, status,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -40,11 +40,14 @@ module.exports.insertMemberCardType = function(memberCardType,memberCardAmount,c
  * @param materialid
  * @param cb
  */
-module.exports.fetchAllMemberCardType = function(memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
+module.exports.fetchAllMemberCardType = function(shopId,memberCardType, memberCardAmount, zeroDiscounts, currentPage, cb) {
 
     var parm = "where memberCardType like '%" + memberCardType + "%' and memberCardAmount like '%" + memberCardAmount
         + "%' and zeroDiscounts like '%" + zeroDiscounts + "%'";
-
+    if(shopId!='')
+    {
+        parm+= " and  shopId='"+shopId+"'";
+    }
     var sql_count = 'SELECT count(*) as count FROM memberCardType '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;
@@ -186,10 +189,10 @@ module.exports.setStatus = function (id, status, cb) {
  * @param id
  * @param cb
  */
-module.exports.fetchMembercardtypeByStatus =function (status, cb) {
+module.exports.fetchMembercardtypeByStatus =function (shopId,status, cb) {
 
-    var sql = 'SELECT * FROM memberCardType WHERE status = ?';
-    db.query(sql, [status],  function(cbData, err, rows, fields) {
+    var sql = 'SELECT * FROM memberCardType WHERE status = ? and shopid=?';
+    db.query(sql, [ status,shopId],  function(cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);

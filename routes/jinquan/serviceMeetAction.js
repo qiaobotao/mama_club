@@ -18,6 +18,8 @@ var complain = require('../../model/service/complain');
  * @param res
  */
 module.exports.list = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
@@ -32,7 +34,7 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllServiceMeet(tel,name,meetTime,status,currentPage, function (err, results) {
+    service.fetchAllServiceMeet(shopId,tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
@@ -60,6 +62,8 @@ module.exports.goAdd = function (req, res,next) {
 }
 
 module.exports.add = function (req, res,next) {
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     var tel = req.body.tel ? req.body.tel : '';
     var name = req.body.name ? req.body.name : '';
     var memberId = req.body.memberId ? req.body.memberId : '';
@@ -74,7 +78,7 @@ module.exports.add = function (req, res,next) {
     var staffId = req.body.staffId ? req.body.staffId : '';
     var specified = req.body.specified ? req.body.specified : '';
 
-    service.insertServiceMeet(specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
+    service.insertServiceMeet(shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list?replytype=add');
         } else {
@@ -112,21 +116,21 @@ module.exports.doEdit = function (req, res,next) {
 
 module.exports.show = function(req, res, next) {
     var id = req.query.id ? req.query.id : '';
-
+    // 从session 中获取门店id
+    var shopId = req.session.user.shopId;
     service.fetchSingleServiceMeet(id, function(err, results) {
         if (!err) {
             var service_meet = results.length == 0 ? null : results[0];
-            var memberName =service_meet.name;
             var tel =service_meet.tel;
             var result={};
-            memberService.getMemberByNameTel(memberName,tel ,function(err, results) {
+            memberService.getMemberByNameTel( tel ,shopId,function(err, results) {
                 if (!err) {
                     var member = results.length == 0 ? null : results[0];
                     if(member!=null)
                     {
                         result.member=member;
                         //预约服务单
-                        servicemeet.getTop3ServiceMeet(member.id,memberName,tel,function(err, services) {
+                        servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
                             result.serviceMeets=services;
 
                             var serviceMeetIds="";
@@ -160,7 +164,7 @@ module.exports.show = function(req, res, next) {
     })
 }
 module.exports.preEdit = function(req, res, next) {
-
+    var shopId = req.session.user.shopId;
     var id = req.query.id ? req.query.id : '';
 
     service.fetchSingleServiceMeet(id, function(err, results) {
@@ -169,14 +173,14 @@ module.exports.preEdit = function(req, res, next) {
             var memberName =service_meet.name;
             var tel =service_meet.tel;
             var result={};
-            memberService.getMemberByNameTel(memberName,tel ,function(err, results) {
+            memberService.getMemberByNameTel(tel ,shopId ,function(err, results) {
                 if (!err) {
                     var member = results.length == 0 ? null : results[0];
                     if(member!=null)
                     {
                         result.member=member;
                         //预约服务单
-                        servicemeet.getTop3ServiceMeet(member.id,memberName,tel,function(err, services) {
+                        servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
                             result.serviceMeets=services;
 
                             var serviceMeetIds="";
@@ -228,13 +232,14 @@ module.exports.del = function (req, res, next) {
  * @param res
  */
 module.exports.select = function (req, res,next) {
+    var shopId = req.session.user.shopId;
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
 
-    service.fetchAllServiceMeet(tel,name,meetTime,1,currentPage, function (err, results) {
+    service.fetchAllServiceMeet(shopId,tel,name,meetTime,1,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
