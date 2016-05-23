@@ -155,18 +155,21 @@ module.exports.subList = function (req, res,next) {
 
     var keywords = req.query.keywords ? req.query.keywords : '';
     var currentPage = req.query.page ? req.query.page : '1';
+    var url = '/jinquan'+req.url;
 
     service.getAllSubcollection(pid, keywords, currentPage, function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.keywords = keywords;
             results.pid = pid;
-            res.render('classify/subClassifyList', {data : results});
+            res.render('classify/subClassifyList', {data : results, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})});
         } else {
             myUtils.printSystemLog(err)
             next();
         }
     });
+
 
 }
 
