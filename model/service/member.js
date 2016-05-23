@@ -71,7 +71,7 @@ module.exports.fetchAllMember = function(shopId,serialNumber,memberName,tel,curr
 
     var parm = " on   (a.id=b.memberId)  where 1=1"
     if (shopId != '')
-        parm += " and a.shopId like'%" + shopId + "%'";
+        parm += " and a.shopId ='" + shopId + "'";
 
     if (serialNumber != '')
         parm += " and b.serialNumber like'%" + serialNumber + "%'";
@@ -122,7 +122,7 @@ module.exports.fetchAllMemberByCard = function(shopId,serialNumber,memberName,te
 
     var parm = " "
     if (shopId != '')
-        parm += " and a.shopId like'%" + shopId + "%'";
+        parm += " and a.shopId ='" + shopId + "'";
     if (serialNumber != '')
         parm += " and b.serialNumber like'%" + serialNumber + "%'";
     if (memberName != '')
