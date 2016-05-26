@@ -77,8 +77,9 @@ router.all('/classroom_browse',classroomAction.detail);
 router.all('/classroom_checkseril',classroomAction.checkSeril);
 router.all('/classroom_checkname',classroomAction.checkName);
 router.all('/classroom_preedit',classroomAction.preEdit);
-router.all('/classroom_predel',classroomAction.preDel);
+router.all('/classroom_checkdel',classroomAction.checkdel);
 router.all('/classroom_del',classroomAction.del);
+router.all('/classroom_del_goods',classroomAction.delGoods);
 router.all('/classroom_update',classroomAction.update);
 
 

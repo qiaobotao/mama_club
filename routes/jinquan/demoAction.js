@@ -8,6 +8,8 @@
  */
 
 var handle_db = require('../../common/db');
+var async = require('async');
+
 
 module.exports.layui = function (req, res,next) {
 
@@ -15,16 +17,30 @@ module.exports.layui = function (req, res,next) {
      * 手动关闭数据库实例 开始
      */
 
-    var insert_sql = 'INSERT INTO demoTable(file1,file2) VALUES(?,?)';
+    //var insert_sql = 'INSERT INTO demoTable(file1,file2) VALUES(?,?)';
+    //
+    //var conn = handle_db.db_conn();
+    //var arr = new Array();
+    //for(var i=0;i<1000;i++) {
+    //    arr.push(i);
+    //}
+    //console.log(arr.length);
+    //async.map(arr, function(item, callback) {
+    //    conn.query(insert_sql,[1,2],function(err,results) {
+    //
+    //        if (!err) {
+    //            callback(null, results);
+    //        } else {  // 有记录
+    //            handle_db.close(conn);
+    //            callback(err);
+    //        }
+    //    });
+    //
+    //}, function(err,results) {
+    //    console.log('over');
+    //    handle_db.close(conn);
+    //});
 
-    var conn = handle_db.db_conn();
-    conn.query(insert_sql,[1,2],function(err,results) {
-        if (err) {
-            console.log(err);
-        }
-        handle_db.close(conn);
-        console.log(results);
-    });
     /**
      * 手动关闭数据库实例 结束
      */

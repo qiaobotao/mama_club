@@ -139,35 +139,42 @@ module.exports.insertOutLogMX = function (mid,arr_obj,cb) {
  * @param arr_obj
  * @param cb
  */
-module.exports.addClassroom = function(sid,oper,arr_obj,cb) {
+module.exports.addClassroom_AddOutLog = function(classroomName,classroomId,arr_obj,cb) {
 
-    myUtils.printSystemLog('添加教室形成出库单'+sid+'_'+oper+'_'+arr_obj);
+    myUtils.printSystemLog('添加教室形成出库单'+classroomName+'_'+arr_obj+'_'+classroomId);
 
-    var insertOutLog = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,dateline) VALUES (?,?,?,?,?)';
+    var insertOutLog = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,dateline,serviceId) VALUES (?,?,?,?,?,?)';
 
-    // 52 就是分类管理里面的创建教室的 id
-    db.query(insertOutLog,['52',oper,new Date(),sid,new Date().getTime()],function(cbData, err, rows, fields) {
+    for (var i=0;i<arr_obj.length; i++) {
 
-        if(!err) {
-            var mid = rows.insertId;
-            addClassroom_ProMX(mid,arr_obj,function(err, results) {
-                 if (!err) {
-                     addClassroom_updateInventory(sid,arr_obj,function(err, results){
-                         if(!err) {
-                             cb(null, mid);  // 返回主表id
-                         } else {
+        if (arr_obj[i].data.length != 0) {  // 数组中结果不为0，则有数据要插入
+
+            var arr = arr_obj[i].data; // 数据结构 [[],[],....]
+            var storeroomId = arr_obj[i].storeroomId;
+            // 52 就是分类管理里面的创建教室的 id
+            db.query(insertOutLog,['52',classroomName,new Date(),storeroomId,new Date().getTime(),classroomId],function(cbData, err, rows, fields) {
+
+                if(!err) {
+                    var mid = rows.insertId;
+                    addClassroom_ProMX(mid,arr,function(err, results) {
+                        if (!err) {
+                            addClassroom_updateInventory(storeroomId,arr,function(err, results){
+                                if(!err) {
+                                    cb(null, mid);  // 返回主表id
+                                } else {
+                                    cb(err);
+                                }
+                            })
+                        } else {
                             cb(err);
-                         }
-                     })
-                 } else {
-                     var del = 'DELETE FROM storeroomOutLog WHERE id = ?';
-                     db.query(del,[mid],function(err,results){});
-                 }
+                        }
+                    });
+                } else {
+                    cb(err);
+                }
             });
-        } else {
-            cb(err);
         }
-    });
+    }
 }
 
 /**
@@ -343,16 +350,19 @@ function addClassroom_ProMX(mid, arr, callback) {
     myUtils.printSystemLog('天机教室出库单明细'+mid+'_'+arr);
 
     var sql = 'INSERT INTO storeroomOutLogMX (outLogId,waresSerial,waresName,count,price,waresId) VALUES (?,?,?,?,?,?)';
+    var conn = db.db_conn();
     async.map(arr, function(item, callback) {
 
-        db.query(sql, [mid,item.proSerial,item.proName,item.count,item.price,item.proId], function (cbData, err, rows, fields) {
+        conn.query(sql, [mid,item.proSerial,item.proName,item.count,item.bname,item.proId], function (err,results) {
             if (!err) {
-                callback(null, rows);
+                callback(null, results);
             } else {
+                db.close(conn);
                 callback(err);
             }
         });
     }, function(err,results) {
+        db.close(conn);
         callback(err, results);
     });
 }
@@ -363,21 +373,23 @@ function addClassroom_updateInventory (sid,arr_obj,cb) {
     myUtils.printSystemLog('天机教室出库库存变化'+sid+'_'+arr_obj);
 
     var sql = 'UPDATE inventory SET count = count - ? WHERE storeroomId = ? AND waresId = ?';
-
+    var conn = db.db_conn();
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [item.count,sid,item.proId],function(cbData, err, rows, fields) {
+        conn.query(sql, [item.count,sid,item.proId],function(cbData, err, rows, fields) {
 
             if (!err) {
 
                 callback(null, rows);
 
             } else {  // 有记录
+                db.close(conn);
                 callback(err);
             }
         });
 
     }, function(err,results) {
+        db.close(conn);
         cb(err, results);
     });
 

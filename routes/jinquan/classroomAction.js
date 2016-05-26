@@ -85,7 +85,6 @@ module.exports.Add = function (req, res,next) {
     var name = req.body.name ? req.body.name : '';
     var classType = req.body.cid ? req.body.cid : '';
     var remark = req.body.remark ? req.body.remark : '';
-    var sid = req.body.sid ? req.body.sid : '';  // 库房id
     var oper = req.body.oper ? req.body.oper : ''; // 操作人
 
     // 数组
@@ -93,7 +92,8 @@ module.exports.Add = function (req, res,next) {
     var arr_proname = req.body.proname ? req.body.proname :'';
     var arr_proNo = req.body.proNo ? req.body.proNo : '';
     var arr_count = req.body.count ? req.body.count : '';
-    var arr_price = req.body.price ? req.body.price : '';
+    var arr_bname = req.body.price ? req.body.price : '';
+    var arr_storeroomId = req.body.storeroomId ? req.body.storeroomId : '';
 
     // 处理数据
     var arr = new Array();
@@ -105,7 +105,8 @@ module.exports.Add = function (req, res,next) {
             obj.proName = arr_proname[i];
             obj.proSerial = arr_proNo[i];
             obj.count = arr_count[i];
-            obj.price = arr_price[i];
+            obj.bname = arr_bname[i];
+            obj.storeroom = arr_storeroomId[i];
             arr.push(obj);
         }
     } else {
@@ -114,28 +115,62 @@ module.exports.Add = function (req, res,next) {
         obj.proName = arr_proname;
         obj.proSerial = arr_proNo;
         obj.count = arr_count;
-        obj.price = arr_price;
+        obj.bname = arr_bname;
+        obj.storeroom = arr_storeroomId;
         arr.push(obj);
     }
 
-    sotreroomOutService.addClassroom(sid,oper,arr,function(err, mid) {
-        if (!err) {
+    // 添加教室，首先要添加教室的表头和教室物资明细
+    // 然后形成出库单，从多个库中选择商品，涉及多少个仓库就形成多少个出库单
 
-            service.insertClassroom(shopId,serialNumber,name,classType,remark,mid,sid,oper,function(err, results) {
-                if(!err) {
-                    res.redirect('/jinquan/classroom_list?replytype=add');
+    storeroomService.getAllStorerooms(shopId,function(err, results) { // 查出所有仓库，然后跟传上来的仓库对比，
+        if (!err) {
+           var arr_total = new Array(); // 数据结构 [{storeroomId,[obj,obj,obj]},{storeroomId,[obj,obj,obj]}.....]
+           for (var i=0;i<results.length;i++) { // 处理仓库结果集
+               var sameStoreroom_obj = {}; // 相同storeroomId 对象
+               var arr_obj = new Array();
+               sameStoreroom_obj.storeroomId = results[i].id;
+               for (var n=0;n<arr.length;n++) {
+                   if (results[i].id == arr[i].storeroom) {
+                       arr_obj.push(arr[i]);
+                   }
+               }
+               sameStoreroom_obj.data = arr_obj;
+               arr_total.push(sameStoreroom_obj);
+           }
+            // arr_total 有多少个结果，就生成多少个出库单
+
+            service.insertClassroom(shopId, serialNumber,name,classType,remark,oper,function(err, results) {
+
+                if (!err) {
+                    var classroomId = results.insertId; // 新增教室的iD
+                    // 插入明细表
+                    service.insertClassroomMX(classroomId,arr,function(err, results) {
+                        if (!err) {
+                            // 形成出库单 ,及库存变化
+                            storeroomService.addClassroom_AddOutLog(name,classroomId,arr_total,function(err, results) {
+                                if (!err) {
+                                    res.redirect('/jinquan/classroom_list?replytype=add');
+                                } else {
+                                    myUtils.printSystemLog(err);
+                                    next();
+                                }
+                            });
+                        } else {
+                            myUtils.printSystemLog(err);
+                            next();
+                        }
+                    });
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err);
                     next();
                 }
-            })
+            });
         } else {
             myUtils.printSystemLog(err);
             next();
         }
     });
-
-
 };
 
 module.exports.set = function (req, res, next) {
@@ -227,26 +262,19 @@ module.exports.preEdit = function(req, res, next) {
     });
 }
 
-module.exports.preDel = function(req, res, next) {
+/**
+ * 如果教室里有物品是不能删除的
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.checkdel = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
 
-    var shopId = req.session.user.shopId;
-
-    storeroomService.getAllStorerooms(shopId,function(err, storerooms){
-        var data = {};
-        data.id = id;
+    service.checkDel(id,function(err, flag) {
         if(!err) {
-            data.storerooms = storerooms;
-            service.preDel(id,shopId,function(err, results) {
-               if (!err) {
-                   data.detail = results;
-                   res.render('classroom/classroomDel', {data : data});
-               } else {
-                   myUtils.printSystemLog(err);
-                   next();
-               }
-            })
+            res.json({flag:flag});
         } else {
             myUtils.printSystemLog(err);
             next();
@@ -257,11 +285,9 @@ module.exports.preDel = function(req, res, next) {
 module.exports.del = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
-    var sid = req.query.sid ? req.query.sid : '';
     var shopId = req.session.user.shopId;
-    var userName = req.session.user.userName;
 
-    service.del(id,sid,shopId,userName,function(err, results){
+    service.del(id,shopId,function(err, results){
          if(!err) {
             res.redirect('/jinquan/classroom_list?replytype=del');
          } else {
@@ -269,6 +295,29 @@ module.exports.del = function(req, res, next) {
              next();
          }
     });
+}
+
+/**
+ * 教室删除物资
+ * 需要删除明细表数据，还要形成入库单，更新库存
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.delGoods = function(req, res, next) {
+
+    var storeroomId = req.body.storeroomId ? req.body.storeroomId : '';
+    var mxids = req.body.mxids ? req.body.mxids : ''; // 逗号相隔
+    var classroomId = req.body.classroomId ? req.body.classroomId : '';
+
+
+
+
+
+
+
+
+
 }
 
 module.exports.update = function(req, res, next) {
