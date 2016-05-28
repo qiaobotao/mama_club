@@ -446,7 +446,6 @@
                 <td>选购数量</td>
                 <td>商品单价</td>
                 <td>小计</td>
-                <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
             <%
             if(data!=null && data.logmx!=null){
@@ -459,7 +458,6 @@
                 <td><input  name="count" type="text" class="input5 input_arr" value="<%=data.logmx[i].count%>" readonly="true"/></td>
                 <td><input  name="price" type="text" class="input5 input_arr" value="<%=data.logmx[i].price%>" readonly="true"/></td>
                 <td><input  type="text" class="input5 input_arr" value="<%=data.logmx[i].count * data.logmx[i].price %>" readonly="true"</td>
-               <td><a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a></td>
             </tr>
             <%}}%>
         </table>

@@ -37,11 +37,11 @@
         //选择商品
         function getWares(index){
 
-            var sid = document.getElementById('sid').value;
-            if (sid == '' || sid.length == 0) { //库房不能为空
-                parent.layer.alert('请先选择库房！',{icon: 2});
-                return;
-            }
+//            var sid = document.getElementById('sid').value;
+//            if (sid == '' || sid.length == 0) { //库房不能为空
+//                parent.layer.alert('请先选择库房！',{icon: 2});
+//                return;
+//            }
             //iframe层
             iframIndex = parent.layer.open({
 
@@ -50,7 +50,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/wares_select_in_storeroom?index='+index+'&sid='+sid, //iframe的url
+                content: '/jinquan/wares_select_in_storeroom?index='+index+'&sid=', //iframe的url
                 success: function(layero, index){
 
                 },
@@ -112,6 +112,21 @@
                 }
             });
         }
+
+        //显示删除按钮或显示提交按钮
+        function showDelBt(){
+            var delProValue =[];
+            $('input[name="delProId"]:checked').each(function(){
+                delProValue.push($(this).val());
+            });
+            if(delProValue.length==0){
+                $("#saveBt").show();
+                $("#delBt").hide();
+            }else{
+                $("#saveBt").show();
+                $("#delBt").hide();
+            }
+        }
     </script>
 </head>
 
@@ -127,30 +142,17 @@
             <tr>
                 <td class="regTd_l">序列号：<input id="id" name="id" type="hidden" readonly="true" class="input5" value="<%=data.classroom.id%>"/></td>
                 <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" readonly="true" class="input5" value="<%=data.classroom.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">* </span></td>
-            </tr>
-
-            <tr>
                 <td  class="regTd_l">教室名称：</td>
                 <td class="regTd_r"><input id="name" name="name" type="text" class="input5"  value="<%=data.classroom.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td  class="regTd_l">教室编码：</td>
                 <td class="regTd_r"><input id="classCode" name="classCode" type="text" class="input5"  value="<%=data.classroom.serialNumber%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
                 <td  class="regTd_l">操作人：</td>
                 <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5"  value="<%=data.classroom.oper%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">出库库房：</td>
-                <td class="regTd_r">
-                    <select id="sid" name="sid">
-                        <%for(var i=0;i<storeroomData.length;i++){%>
-                        <option value ="<%=storeroomData[i].id%>" ><%=storeroomData[i].name%></option>
-                        <%}%>
-                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
+
                 <td class="regTd_l">教室分类：</td>
                 <td class="regTd_r">
                     <select  id="classType" name="classType"   >
@@ -159,8 +161,6 @@
                         <option  value="3" selected="<%=data.classroom.classType==3%>">10~20人</option>
                     </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                       </td>
-            </tr>
-            <tr>
                 <td class="regTd_l">说明：</td>
                 <td class="regTd_r"><input id="remark" name="remark" type="text" class="input5"  value="<%=data.classroom.remark%>" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -191,10 +191,21 @@
             </tr>
             <%}%>
 
+            <tr id="qqq">
+                <td><input id="proname" name="proname" type="text" class="input5 input_arr" value="乐扣水杯"  readonly="true" /></td>
+                <td><input id="proNo" name="proNo" type="text" class="input5 input_arr" value="123" readonly="true"/></td>
+                <td><input id="count" name="count" type="text" class="input5 input_arr" value="3" onblur="" /></td>
+                <td><input id="bname" name="bname" type="text" class="input5 input_arr" value="444" readonly="true" /></td>
+                <td><input id="proId"  name="proId" type="hidden" class="input5 input_arr" value="" />
+                    <input type="checkbox" name="delProId" value="id" onchange="showDelBt()"/>
+                </td>
+            </tr>
+
         </table>
     </form>
-    <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+    <div class="reg_but" style="width: 300px;">
+        <div id="saveBt" class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div id="delBt" class="rb_l" style="display:none"><a href="javascript:;" onclick="submitForm()" class="bsty5"></a></div>
         <div class="rb_l"><a href="/jinquan/classroom_list" class="close"></a></div>
     </div>
 

@@ -75,6 +75,7 @@
                 <th>商品分类</th>
                 <th>最低库存</th>
                 <th>目前库存</th>
+                <th>所在库房</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
@@ -88,6 +89,7 @@
                 <%} else {%>
                 <td><span style="color:#FF0000;"><%=data.data[i].count%>(超出最低库存)</span></td>
                 <%}%>
+                <td><%=data.data[i].storeRoomName%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>

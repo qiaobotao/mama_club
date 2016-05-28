@@ -189,7 +189,8 @@ module.exports.detail = function (id, cb) {
  */
 module.exports.preEdit = function(id, cb) {
 
-    var sql = 'SELECT c.id, c.oper,s.name AS storename,c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc, storeroom AS s WHERE cc.id = c.classType AND s.id = c.storeroomId AND c.id = ?';
+    //var sql = 'SELECT c.id, c.oper,s.name AS storename,c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc, storeroom AS s WHERE cc.id = c.classType AND s.id = c.storeroomId AND c.id = ?';
+    var sql = 'SELECT c.* FROM classroom AS c  WHERE c.id = ?';
 
     db.query(sql,[id],function(cbData, err, rows, fields) {
 
