@@ -103,6 +103,18 @@ module.exports.add = function (req, res,next) {
         diagnosis=  diagnosisTemp;
 
     }
+    var dealTemp = req.body.deal ? req.body.deal : '';
+    var deal="" ;
+    if (dealTemp instanceof Array) {
+        for (var i=0;i<dealTemp.length;i++)
+        {
+            deal +=dealTemp[i]+',';
+        }
+        deal =deal.substr(0,deal.length-1);
+    }else{
+        deal=  dealTemp;
+
+    }
 
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
     var childReasonTemp = req.body.childReason ? req.body.childReason : '';
@@ -266,7 +278,7 @@ module.exports.doEdit = function (req, res,next) {
     var address = req.body.address ? req.body.address : '';
     var serviceNeeds = req.body.serviceNeeds ? req.body.serviceNeeds : '';
     var bowelFrequenc = req.body.bowelFrequenc ? req.body.bowelFrequenc : '';
-    var deal = req.body.deal ? req.body.deal : '';
+    //var deal = req.body.deal ? req.body.deal : '';
     var shape = req.body.shape ? req.body.shape : '';
     var feedSituation = req.body.feedSituation ? req.body.feedSituation : '';
     var urination = req.body.urination ? req.body.urination : '';
@@ -277,9 +289,22 @@ module.exports.doEdit = function (req, res,next) {
     var childCurrentHeight = req.body.childCurrentHeight ? req.body.childCurrentHeight : '';
     var milkAmount = req.body.milkAmount ? req.body.milkAmount : '';
     var childCurrentWeight = req.body.childCurrentWeight ? req.body.childCurrentWeight : '';
-    var breastpumpBrand = req.body.breastpumpBrand ? req.body.breastpumpBrand : '';
     var isCarefulNurse = req.body.isCarefulNurse ? req.body.isCarefulNurse : '';
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
+    var breastpumpBrandTemp = req.body.breastpumpBrand ? req.body.breastpumpBrand : '';var diagnosis="" ;
+    var breastpumpBrand = "";
+    if (breastpumpBrandTemp instanceof Array) {
+        for (var i=0;i<breastpumpBrandTemp.length;i++)
+        {
+            breastpumpBrand +=breastpumpBrandTemp[i]+',';
+        }
+        breastpumpBrand =breastpumpBrand.substr(0,breastpumpBrand.length-1);
+    }else{
+        breastpumpBrand=  breastpumpBrandTemp;
+
+    }
+
+
     var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
     var diagnosis="" ;
     if (diagnosisTemp instanceof Array) {
@@ -290,6 +315,18 @@ module.exports.doEdit = function (req, res,next) {
         diagnosis =diagnosis.substr(0,diagnosis.length-1);
     }else{
         diagnosis=  diagnosisTemp;
+
+    }
+    var dealTemp = req.body.deal ? req.body.deal : '';
+    var deal="" ;
+    if (dealTemp instanceof Array) {
+        for (var i=0;i<dealTemp.length;i++)
+        {
+            deal +=dealTemp[i]+',';
+        }
+        deal =deal.substr(0,deal.length-1);
+    }else{
+        deal=  dealTemp;
 
     }
 
@@ -372,11 +409,25 @@ module.exports.doEdit = function (req, res,next) {
         obj.price = arr_price;
         arr.push(obj);
     }
+    /*
     if(outLogId!="")
     {
         storeroomOutService.delOutLog(outLogId);
         storeroomOutService.delOutLogMX(outLogId);
     }
+    */
+    service.updateNursService(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
+        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
+        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+        isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
+            if (!err) {
+                res.redirect('/jinquan/nurs_service_list?replytype=update');
+            } else {
+                next();
+            }
+        });
+    /*
     if(arr.length>0){
         var address="";var consignee="";var consigneeTel="";
         storeroomOutService.insertOutLog(oper,outType,new Date(),storeroom,remarks,address,consignee,consigneeTel,function(err, results) {
@@ -433,6 +484,7 @@ module.exports.doEdit = function (req, res,next) {
                 }
             });
     }
+    */
 
 }
 

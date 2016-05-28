@@ -71,19 +71,19 @@ module.exports.insertNursService = function(shopId,outLogId,serviceMeetId,servic
     });
 };
 
-module.exports.updateNursService = function(outLogId,id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
+module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                             bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                             milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
                                             diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
                                             isLeadTrainee,whetherAppointmentAgain,traineeName, cb) {
 
-    var sql = 'UPDATE nursService set outLogId=?,serviceMeetId=?,serviceDate=?,startTime=?,endTime=?,serviceType=?,address=?,serviceNeeds=?,'
+    var sql = 'UPDATE nursService set serviceMeetId=?,serviceDate=?,startTime=?,endTime=?,serviceType=?,address=?,serviceNeeds=?,'
         + ' bowelFrequenc=?,deal=?,shape=?,feedSituation=?,urination=?,feedRemark=?,milkSituation=?,childCurrentMonths=?,'
         + ' milkNumber=?,childCurrentHeight=?,milkAmount=?,childCurrentWeight=?,breastpumpBrand=?,isCarefulNurse=?,referralAdvise=?,'
         + ' diagnosis=?,specialInstructions=?,childReason=?,breastExplain=?,motherReason=?,leaveAdvise=?,otherReason=?,'
         + ' isLeadTrainee=?,whetherAppointmentAgain=?,traineeName=?,dateLine=?'
         + ' where id=?';
-    db.query(sql, [outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
+    db.query(sql, [serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
