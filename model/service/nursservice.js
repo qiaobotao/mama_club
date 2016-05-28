@@ -13,6 +13,18 @@ var mainDiagnosticResultClassifyId = require('../../config').mainClassifyId.diag
 var mainMomReasonsClassifyId = require('../../config').mainClassifyId.momReasons;
 var mainBabyResultClassifyId = require('../../config').mainClassifyId.babyReasons;
 var mainOtherReasonsClassifyId = require('../../config').mainClassifyId.otherReasons;
+var serverEvaluateId = require('../../config').mainClassifyId.serverEvaluate;//服务效果评价
+var isViewLactationId = require('../../config').mainClassifyId.isViewLactation;//是否观察哺乳
+var breastPumpBrandId = require('../../config').mainClassifyId.breastPumpBrand;//吸奶器品牌
+var milkTotalId = require('../../config').mainClassifyId.milkTotal;//挤奶总量
+var milkNumId = require('../../config').mainClassifyId.milkNum;//挤奶次数
+var milkSituationId = require('../../config').mainClassifyId.milkSituation;//挤奶情况
+var urineVolumeId = require('../../config').mainClassifyId.urineVolume;//尿量
+var shapeId = require('../../config').mainClassifyId.shape;//形状
+var feedingConditionId = require('../../config').mainClassifyId.feedingCondition;//喂养情况
+var treatmentMethodId = require('../../config').mainClassifyId.treatmentMethod;//做过何种处理
+var serverDemandId = require('../../config').mainClassifyId.serverDemand;//服务需求
+
 
 /**
  * 在收费单中生成护理服务单信息
@@ -136,11 +148,117 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
 
 module.exports.fetchSingleNursService =function (id, cb) {
 
-    var sql = 'SELECT a.*,b.tel,b.name,b.address FROM nursService a inner join serviceMeet b on (a.serviceMeetId=b.id) WHERE a.id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    var nursServicesql = 'SELECT a.*,b.tel,b.name,b.address FROM nursService a inner join serviceMeet b on (a.serviceMeetId=b.id) WHERE a.id = ?';
+
+    var classificationPare = mainDiagnosticResultClassifyId +","+
+        mainMomReasonsClassifyId +","+
+        mainBabyResultClassifyId +","+
+        mainOtherReasonsClassifyId +","+
+        serverEvaluateId +","+
+        isViewLactationId +","+
+        breastPumpBrandId +","+
+        milkTotalId +","+
+        milkNumId +","+
+        milkSituationId +","+
+        urineVolumeId+","+
+        shapeId+","+
+        feedingConditionId+","+
+        treatmentMethodId+","+
+        serverDemandId;
+    var classificationSql = 'select * from systemClassify where parentId in ('+classificationPare+')';
+
+
+    async.series({
+        //活动详情列表
+        nursService : function(callback){
+            db.query(nursServicesql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //当前活动信息
+        classificationData : function(callback){
+            db.query(classificationSql, [], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
         if (!err) {
-            cb(null, rows);
+
+            //为字典表所需数据分别定义对象集合
+            var diagnosticResultArr = new Array();
+            var momReasonsArr = new Array();
+            var babyReasonsArr = new Array();
+            var otherReasonsArr = new Array();
+            var serverEvaluateArr = new Array();
+            var isViewLactationArr = new Array();
+            var breastPumpBrandArr = new Array();
+            var milkTotalArr = new Array();
+            var milkNumArr = new Array();
+            var milkSituationArr = new Array();
+            var urineVolumeArr = new Array();
+            var shapeArr = new Array();
+            var feedingConditionArr = new Array();
+            var treatmentMethodArr = new Array();
+            var serverDemandArr = new Array();
+            for(var i = 0 ; i < results.classificationData.length ; i ++){
+                var classification = results.classificationData[i];
+                if(mainDiagnosticResultClassifyId == classification.parentId){
+                    diagnosticResultArr.push(classification);
+                }else if(mainMomReasonsClassifyId == classification.parentId){
+                    momReasonsArr.push(classification);
+                }else if(mainBabyResultClassifyId == classification.parentId){
+                    babyReasonsArr.push(classification);
+                }else if(mainOtherReasonsClassifyId == classification.parentId){
+                    otherReasonsArr.push(classification);
+                }else if(serverEvaluateId == classification.parentId){
+                    serverEvaluateArr.push(classification);
+                }else if(isViewLactationId == classification.parentId){
+                    isViewLactationArr.push(classification);
+                }else if(breastPumpBrandId == classification.parentId){
+                    breastPumpBrandArr.push(classification);
+                }else if(milkTotalId == classification.parentId){
+                    milkTotalArr.push(classification);
+                }else if(milkNumId == classification.parentId){
+                    milkNumArr.push(classification);
+                }else if(milkSituationId == classification.parentId){
+                    milkSituationArr.push(classification);
+                }else if(urineVolumeId == classification.parentId){
+                    urineVolumeArr.push(classification);
+                }else if(shapeId == classification.parentId){
+                    shapeArr.push(classification);
+                }else if(feedingConditionId == classification.parentId){
+                    feedingConditionArr.push(classification);
+                }else if(treatmentMethodId == classification.parentId){
+                    treatmentMethodArr.push(classification);
+                }else if(serverDemandId == classification.parentId){
+                    serverDemandArr.push(classification);
+                }
+            }
+            results.diagnosticResultArr = diagnosticResultArr;
+            results.momReasonsArr = momReasonsArr;
+            results.babyReasonsArr = babyReasonsArr;
+            results.otherReasonsArr = otherReasonsArr;
+            results.serverEvaluateArr = serverEvaluateArr;
+            results.isViewLactationArr = isViewLactationArr;
+            results.breastPumpBrandArr = breastPumpBrandArr;
+            results.milkTotalArr = milkTotalArr;
+            results.milkNumArr = milkNumArr;
+            results.milkSituationArr = milkSituationArr;
+            results.urineVolumeArr = urineVolumeArr;
+            results.shapeArr = shapeArr;
+            results.feedingConditionArr = feedingConditionArr;
+            results.treatmentMethodArr = treatmentMethodArr;
+            results.serverDemandArr = serverDemandArr;
+            cb (null, results);
         } else {
             cb(err);
         }

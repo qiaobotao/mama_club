@@ -63,6 +63,7 @@ module.exports = {
         momReasons:21 ,
         babyReasons:20,
         otherReasons:22,
+        /**********应用在会员信息中 start**********/
         education:24,//学历
         vocationalQualification:25,//职业资格
         jobState:26,//工作状态
@@ -75,6 +76,23 @@ module.exports = {
         hospitalAddItems:32,//住院添加
         auxiliaryTool:33,//辅助工具
         specialNote:34,//特殊说明
+        /**********应用在会员信息中 end**********/
+
+        /**********应用在护理服务信息中 start**********/
+        serverEvaluate:36,//服务效果评价
+        isViewLactation:37,//是否观察哺乳
+        breastPumpBrand:38,//吸奶器品牌
+        milkTotal:39,//挤奶总量
+        milkNum:40,//挤奶次数
+        milkSituation:41,//挤奶情况
+        urineVolume:42,//尿量
+        shape:43,//形状
+        feedingCondition:44,//喂养情况
+        treatmentMethod:45,//做过何种处理
+        serverDemand:46,//服务需求
+        /**********应用在护理服务信息中 end**********/
+
+
         printSystemLogFlag:true
     }
 

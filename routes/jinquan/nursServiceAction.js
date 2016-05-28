@@ -471,17 +471,21 @@ module.exports.preEdit = function(req, res, next) {
 
     service.fetchSingleNursService(id, function(err, results) {
         if (!err) {
-            var nursService = results.length == 0 ? null : results[0];
+            var nursService = results.nursService.length == 0 ? null : results.nursService[0];
             var outLogId =nursService.outLogId;
+            var dictData = results;
             storeroomOutService.detail(outLogId,function(err, results) {
                 if (!err) {
+                    res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,dictData : dictData});
+                    /*
                     service.getnursserviceClassify(function (err, results1) {
                         if (!err) {
-                            res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,data1 : results1});
+                            //res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,data1 : results1});
                         } else {
                             next();
                         }
                     });
+                    */
                 } else {
                     next();
                 }

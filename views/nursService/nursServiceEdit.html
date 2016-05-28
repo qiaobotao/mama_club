@@ -18,11 +18,6 @@
                 alert('服务单号不能为空');
                 return;
             }
-//            var buyer = document.getElementById("buyer").value;
-//            if (!buyer || buyer.length == 0) {
-//                parent.layer.alert('采购人不能为空',{icon: 2});
-//                return;
-//            }
             var arr_proname = document.getElementsByName('proname');
             for (var i=0;i<arr_proname.length;i++) {
                 if(arr_proname[i].value == '') {
@@ -193,7 +188,7 @@
                 <td class="regTd_l">预约服务单号：</td>
                 <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId"  type="text" class="input5" value="<%=nursService.serviceMeetId%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
-                <td class="regTd_r"><input id="serviceDate" name="serviceDate"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="serviceDate" name="serviceDate" readonly onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">姓名：</td>
@@ -275,11 +270,11 @@
             <tr>
                 <td class="regTd_l">诊断结果：</td>
                 <td class="regTd_r">
-                    <%for(var i=0;i<data1.ClassifyId1.length;i++){
+                    <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
                     var diagnosisId ='diagnosis'+i;
                     %>
-                    <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=data1.ClassifyId1[i].id%>"/>
-                    <%=data1.ClassifyId1[i].name%>
+                    <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=dictData.diagnosticResultArr[i].id%>"/>
+                    <%=dictData.diagnosticResultArr[i].name%>
                     <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊说明：</td>
@@ -288,11 +283,11 @@
             <tr>
                 <td class="regTd_l">宝宝原因：</td>
                 <td class="regTd_r">
-                    <%for(var i=0;i<data1.ClassifyId3.length;i++){
+                    <%for(var i=0;i<dictData.babyReasonsArr.length;i++){
                     var childReasonId='childReason'+i;
                     %>
-                    <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=data1.ClassifyId3[i].id%>"/>
-                    <%=data1.ClassifyId3[i].name%>
+                    <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=dictData.babyReasonsArr[i].id%>"/>
+                    <%=dictData.babyReasonsArr[i].name%>
                     <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">乳房示意图说明：</td>
@@ -301,11 +296,11 @@
             <tr>
                 <td class="regTd_l">妈妈原因：</td>
                 <td class="regTd_r">
-                    <%for(var i=0;i<data1.ClassifyId2.length;i++){
+                    <%for(var i=0;i<dictData.momReasonsArr.length;i++){
                     var motherReasonId='motherReason'+i;
                     %>
-                    <input id="<%=motherReasonId%>" name="motherReason" type="checkbox" value ="<%=data1.ClassifyId2[i].id%>"/>
-                    <%=data1.ClassifyId2[i].name%>
+                    <input id="<%=motherReasonId%>" name="motherReason" type="checkbox" value ="<%=dictData.momReasonsArr[i].id%>"/>
+                    <%=dictData.momReasonsArr[i].name%>
                     <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">离店建议：</td>
@@ -314,11 +309,11 @@
             <tr>
                 <td class="regTd_l">其他原因：</td>
                 <td class="regTd_r">
-                    <%for(var i=0;i<data1.ClassifyId4.length;i++){
+                    <%for(var i=0;i<dictData.otherReasonsArr.length;i++){
                     var otherReasonId='otherReason'+i;
                     %>
-                    <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=data1.ClassifyId4[i].id%>"/>
-                    <%=data1.ClassifyId4[i].name%>
+                    <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=dictData.otherReasonsArr[i].id%>"/>
+                    <%=dictData.otherReasonsArr[i].name%>
                     <%}%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">是否带实习技师：</td>
