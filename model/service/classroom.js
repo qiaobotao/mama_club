@@ -64,16 +64,19 @@ module.exports.insertClassroomMX = function (classroomId, arr, cb){
     var conn = db.db_conn();
 
     async.map(arr, function(item, callback) {
-        conn.query(sql, [classroomId,item.proName,item.count,item.bname,item.proSerial,item.proId],function(err, results) {
+        if(item.proId != '') {
+            conn.query(sql, [classroomId,item.proName,item.count,item.bname,item.proSerial,item.proId],function(err, results) {
 
-            if (!err) {
-                callback(null, results);
-            } else {  // 有记录
-                db.close(conn);
-                callback(err);
-            }
-        });
-
+                if (!err) {
+                    callback(null, results);
+                } else {  // 有记录
+                    db.close(conn);
+                    callback(err);
+                }
+            });
+        } else {
+            callback(null,null);
+        }
     }, function(err,results) {
         db.close(conn);
         cb(err, results);
@@ -154,9 +157,9 @@ module.exports.fetchAllCLassRoom = function(shopId,className,classCode,currentPa
  */
 module.exports.detail = function (id, cb) {
 
-    var sql = 'SELECT c.oper,s.name AS storename,c.serialNumber,c.name,c.remark,c.status,cc.name AS cname,c.outLogId FROM classroom AS c, systemClassify  AS cc, storeroom AS s WHERE cc.id = c.classType AND s.id = c.storeroomId AND c.id = ?';
+    var sql = 'SELECT c.oper,c.serialNumber,c.name,c.remark,c.status,cc.name AS cname FROM classroom AS c, systemClassify  AS cc WHERE cc.id = c.classType  AND c.id = ?';
 
-    var detail_sql = 'SELECT * FROM storeroomOutLogMX WHERE outLogId = ?';
+    var detail_sql = 'SELECT * FROM classroomMX WHERE classroomId = ?';
 
     db.query(sql,[id],function (cbData, err, rows, fields) {
 
@@ -165,9 +168,7 @@ module.exports.detail = function (id, cb) {
 
                 var data = {};
                 data.classroom = rows[0];
-                var outLogId = rows[0].outLogId;
-
-                db.query(detail_sql, [outLogId], function (cbData, err, rows, fields) {
+                db.query(detail_sql, [id], function (cbData, err, rows, fields) {
 
                     if (!err) {
                         data.detail = rows;

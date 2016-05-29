@@ -93,7 +93,7 @@ module.exports.Add = function (req, res,next) {
     var arr_proNo = req.body.proNo ? req.body.proNo : '';
     var arr_count = req.body.count ? req.body.count : '';
     var arr_bname = req.body.price ? req.body.price : '';
-    var arr_storeroomId = req.body.storeroomId ? req.body.storeroomId : '';
+    var arr_storeroomId = req.body.sids ? req.body.sids : '';
 
     // 处理数据
     var arr = new Array();
@@ -131,8 +131,8 @@ module.exports.Add = function (req, res,next) {
                var arr_obj = new Array();
                sameStoreroom_obj.storeroomId = results[i].id;
                for (var n=0;n<arr.length;n++) {
-                   if (results[i].id == arr[i].storeroom) {
-                       arr_obj.push(arr[i]);
+                   if (results[i].id == arr[n].storeroom) {
+                       arr_obj.push(arr[n]);
                    }
                }
                sameStoreroom_obj.data = arr_obj;
@@ -148,7 +148,7 @@ module.exports.Add = function (req, res,next) {
                     service.insertClassroomMX(classroomId,arr,function(err, results) {
                         if (!err) {
                             // 形成出库单 ,及库存变化
-                            storeroomService.addClassroom_AddOutLog(name,classroomId,arr_total,function(err, results) {
+                            sotreroomOutService.addClassroom_AddOutLog(name,classroomId,arr_total,function(err, results) {
                                 if (!err) {
                                     res.redirect('/jinquan/classroom_list?replytype=add');
                                 } else {

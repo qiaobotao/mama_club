@@ -28,6 +28,7 @@
     }
     //选择该商品
     function select(id,name,seril,bname){
+        var sid = document.getElementById('sid').value;
         var index = document.getElementById("index").value;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proId'+index).value=id;
         window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('proname'+index).value=name;
@@ -38,6 +39,9 @@
         }
         if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index)) {
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index).value = bname;
+        }
+        if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('sids'+index)) {
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('sids'+index).value = sid;
         }
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭

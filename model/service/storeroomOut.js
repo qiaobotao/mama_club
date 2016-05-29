@@ -145,13 +145,14 @@ module.exports.addClassroom_AddOutLog = function(classroomName,classroomId,arr_o
 
     var insertOutLog = 'INSERT INTO storeroomOutLog (outType,oper,outDate,storeroomId,dateline,serviceId) VALUES (?,?,?,?,?,?)';
 
-    for (var i=0;i<arr_obj.length; i++) {
 
-        if (arr_obj[i].data.length != 0) {  // 数组中结果不为0，则有数据要插入
+    async.map(arr_obj, function(item, finalCB) {
 
-            var arr = arr_obj[i].data; // 数据结构 [[],[],....]
-            var storeroomId = arr_obj[i].storeroomId;
-            // 52 就是分类管理里面的创建教室的 id
+        var arr = item.data; // 数据结构 [[],[],....]
+        var storeroomId = item.storeroomId;
+
+        if (arr.length != 0) {
+               // 52 就是分类管理里面的创建教室的 id
             db.query(insertOutLog,['52',classroomName,new Date(),storeroomId,new Date().getTime(),classroomId],function(cbData, err, rows, fields) {
 
                 if(!err) {
@@ -160,21 +161,25 @@ module.exports.addClassroom_AddOutLog = function(classroomName,classroomId,arr_o
                         if (!err) {
                             addClassroom_updateInventory(storeroomId,arr,function(err, results){
                                 if(!err) {
-                                    cb(null, mid);  // 返回主表id
+                                    finalCB(null, mid);  // 返回主表id
                                 } else {
-                                    cb(err);
+                                    finalCB(err);
                                 }
                             })
                         } else {
-                            cb(err);
+                            finalCB(err);
                         }
                     });
                 } else {
-                    cb(err);
+                    finalCB(err);
                 }
             });
+        } else {
+            finalCB(null,null);
         }
-    }
+    },function(err, results) {
+        cb(err,results);
+    });
 }
 
 /**
@@ -345,7 +350,7 @@ module.exports.delOutLogMX = function (outLogId) {
 }
 
 
-function addClassroom_ProMX(mid, arr, callback) {
+function addClassroom_ProMX(mid, arr, cb) {
 
     myUtils.printSystemLog('天机教室出库单明细'+mid+'_'+arr);
 
@@ -363,7 +368,7 @@ function addClassroom_ProMX(mid, arr, callback) {
         });
     }, function(err,results) {
         db.close(conn);
-        callback(err, results);
+        cb(err, results);
     });
 }
 
@@ -376,11 +381,11 @@ function addClassroom_updateInventory (sid,arr_obj,cb) {
     var conn = db.db_conn();
     async.map(arr_obj, function(item, callback) {
 
-        conn.query(sql, [item.count,sid,item.proId],function(cbData, err, rows, fields) {
+        conn.query(sql, [item.count,sid,item.proId],function(err,results) {
 
             if (!err) {
 
-                callback(null, rows);
+                callback(null, results);
 
             } else {  // 有记录
                 db.close(conn);
