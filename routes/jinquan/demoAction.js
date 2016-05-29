@@ -41,6 +41,14 @@ module.exports.layui = function (req, res,next) {
     //    handle_db.close(conn);
     //});
 
+    var sql = "SELECT * FROM demoTable WHERE file1 like '%?%'";
+    var conn = handle_db.db_conn();
+    conn.query(sql,[5],function(err, results) {
+
+        console.log(results);
+
+    });
+
     /**
      * 手动关闭数据库实例 结束
      */

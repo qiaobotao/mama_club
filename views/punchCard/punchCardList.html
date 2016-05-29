@@ -12,8 +12,10 @@
 <script type="text/javascript">
 
     var replytype = '<%=replytype%>';
+    var insert = '<%=insert%>';
+    var duplicate = '<%=duplicate%>';
     if (replytype == 'success') {
-        parent.layer.msg('导入成功');
+        parent.layer.msg('导入'+insert+'条,重复'+duplicate+'条');
     }
 
     var defaultPage = '<%=data.currentPage%>';

@@ -74,17 +74,42 @@ module.exports.insertExcelData = function (arr, cb) {
         obj.cardNumber = arr[i][7];
         arr_res.push(obj);
     }
+
+    var conn = db.db_conn();
+    var obj = {};
+    var insertData = 0;
+    var duplicateData = 0;
+    var check_sql = 'SELECT * FROM punchCardRecord WHERE date = ? AND recordNumber = ?';
+
     var sql = 'INSERT INTO punchCardRecord (department,name,recordNumber,date,macid,serialNumber,compareType,cardNumber,shopId) VALUES (?,?,?,?,?,?,?,?,?)';
+
     async.map(arr_res, function(item, callback) {
 
-        db.query(sql, [item.department,item.name,item.recordNumber,item.date,item.macid,item.serialNumber,item.compareType,item.cardNumber,''], function (cbData, err, rows, fields) {
-            if (!err) {
-                callback(null, rows);
-            } else {
+        conn.query(check_sql,[item.date,item.recordNumber],function(err, results){
+            if (err) {
+                db.close(conn);
                 callback(err);
+            } else {
+                if (results.length == 0) {
+                    conn.query(sql, [item.department,item.name,item.recordNumber,item.date,item.macid,item.serialNumber,item.compareType,item.cardNumber,''], function (err, results) {
+                        insertData = Number(insertData) + Number(1);
+                        if(err) {
+                            db.close(conn);
+                            callback(err);
+                        } else {
+                            callback(null,results);
+                        }
+                    });
+                } else {
+                    duplicateData = Number(duplicateData) + Number(1);
+                    callback(null,null);
+                }
             }
         });
     }, function(err,results) {
-        cb(err, results);
+        db.close(conn);
+        obj.insertData = insertData;
+        obj.duplicateData = duplicateData;
+        cb(err, obj);
     });
 }

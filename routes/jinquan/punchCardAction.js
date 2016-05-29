@@ -18,6 +18,8 @@ module.exports.list = function (req, res, next) {
     var currentPage = req.query.page ? req.query.page : '1';
 
     var replytype = req.query.replytype ? req.query.replytype : '';
+    var insert = req.query.insert ? req.query.insert : '0';
+    var duplicate = req.query.duplicate ? req.query.duplicate : '0';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
 
@@ -28,7 +30,7 @@ module.exports.list = function (req, res, next) {
             results.name = name;
             results.date = date;
             res.render('punchCard/punchCardList', {data : results,replytype : replytype, laypage: laypage({
-                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
+                curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData,insert:insert,duplicate : duplicate
             });
         } else {
             next();
@@ -57,7 +59,7 @@ module.exports.import = function (req, res, next) {
             } else {
                 service.insertExcelData(obj[0].data, function(err, results) {
                     if (!err) {
-                        res.redirect('/jinquan/punch_card_list?replytype=success');
+                        res.redirect('/jinquan/punch_card_list?replytype=success&insert='+results.insertData+'&duplicate='+results.duplicateData);
                     } else {
                         res.redirect('/jinquan/punch_pre_import?replytype=error');
                     }
