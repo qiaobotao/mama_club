@@ -134,17 +134,20 @@ module.exports.insertInLogMX = function (mid,arr_obj,cb) {
     if (arr_obj.length == 0) {
         return;
     }
+    var conn = db.db_conn();
     var sql = 'INSERT INTO storeroomInLogMX (inLogId,waresName,waresSerial,count,price) VALUES (?,?,?,?,?)';
     async.map(arr_obj, function(item, callback) {
 
-        db.query(sql, [mid,item.proName,item.proSerial,item.count,item.price], function (cbData, err, rows, fields) {
+        conn.query(sql, [mid,item.proName,item.proSerial,item.count,item.price], function (err, results) {
             if (!err) {
-                callback(null, rows);
+                callback(null, results);
             } else {
+                db.close(conn);
                 callback(err);
             }
         });
     }, function(err,results) {
+            db.close(conn);
           cb(err, results);
     });
 }
@@ -168,39 +171,43 @@ module.exports.insertInventory = function (sid,arr_obj,cb) {
     var sql = 'INSERT INTO inventory (storeroomId,waresId,count) VALUES (?,?,?)';
 
     var update_sql = 'UPDATE inventory SET count = ? WHERE storeroomId = ? AND waresId = ?';
-
+    var conn = db.db_conn();
     async.map(arr_obj, function(item, callback) {
 
-        db.query(check_sql, [sid,item.proId],function(cbData, err, rows, fields) {
+        conn.query(check_sql, [sid,item.proId],function(err,results) {
 
             if (!err) {
 
-                if (rows.length == 0) {  // 原来没有记录
+                if (results.length == 0) {  // 原来没有记录
 
-                    db.query(sql, [sid,item.proId,item.count], function (cbData, err, rows, fields) {
+                    conn.query(sql, [sid,item.proId,item.count], function (err, results) {
 
                         if (!err) {
-                            callback(null, rows);
+                            callback(null, results);
                         } else {
+                            db.close(conn);
                             callback(err);
                         }
                     });
                 } else {  // 有记录
-                    var old_count = rows[0].count;
-                    db.query(update_sql,[Number(item.count)+Number(old_count),sid,item.proId],function(cbData, err, rows, fields){
+                    var old_count = results[0].count;
+                    conn.query(update_sql,[Number(item.count)+Number(old_count),sid,item.proId],function(err, results){
                         if (!err) {
-                            callback(null, rows);
+                            callback(null, results);
                         } else {
+                            db.close(conn);
                             callback(err);
                         }
                     });
                 }
             } else {
+                db.close(conn);
                 callback(err);
             }
         });
 
     }, function(err,results) {
+        db.close(conn);
         cb(err, results);
     });
 
