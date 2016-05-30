@@ -270,7 +270,7 @@ module.exports.preEdit = function(req, res, next) {
  */
 module.exports.checkdel = function(req, res, next) {
 
-    var id = req.query.id ? req.query.id : '';
+    var id = req.body.id ? req.body.id : '';
 
     service.checkDel(id,function(err, flag) {
         if(!err) {

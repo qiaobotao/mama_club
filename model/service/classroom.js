@@ -267,10 +267,10 @@ module.exports.checkDel = function(id,cb) {
     db.query(sql, [id], function(cbData, err, rows, filelds) {
          if (!err) {
               if (rows.length != 0) {
-                  cb(null,true);
+                  cb(null,false);
                   return;
               }
-             cb(null,false);
+             cb(null,true);
          } else {
              cb(err);
          }
