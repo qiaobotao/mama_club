@@ -68,19 +68,34 @@ module.exports.save = function (req, res, next) {
     var content = req.query.content ? req.query.content : '';
     var createUser = req.session.user.userName;
     var thisDate = new Date();
-    var updateDate = thisDate.getFullYear()+"-"+(thisDate.getMonth() < 10 ? "0"+thisDate.getMonth() :thisDate.getMonth())+"-"+thisDate.getDate();
+    var thisMonth = thisDate.getMonth()+1;
+    var updateDate = thisDate.getFullYear()+"-"+(thisMonth < 10 ? "0"+thisMonth :thisMonth)+"-"+thisDate.getDate();
 
+    var filename = "";
+    var fileurl = "";
     var form = new multiparty.Form({uploadDir: './public/files/'});
     form.parse(req, function(err, fields, files) {
         if (!err) {
+            for(var f = 0 ; f<files.recordfile.length ; f ++){
+                var inputFile = files.recordfile[f];
+                if(f != 0){
+                    filename += ";";
+                    fileurl += ";";
+                }
+                if (inputFile.originalFilename != '' && inputFile.size != 0) {
+                    filename += inputFile.originalFilename;
+                    fileurl += inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+                }
+
+            }
+            /*
             var inputFile1 = files.recordfile[0];
             var inputFile2 = files.recordfile[1];
-            // var uploadedPath = inputFile.path;
             console.log(inputFile1);
             console.log(inputFile2);
             var filename1 = '';
             var filename2 = '';
-            var baseUrl = req.headers.origin;
+            var baseUrl = "";//保存相对目录
             if (inputFile1.originalFilename != '' && inputFile1.size != 0) {
                 filename1 = baseUrl + inputFile1.path.substr(inputFile1.path.indexOf('/'),inputFile1.path.length);;
             }
@@ -88,9 +103,10 @@ module.exports.save = function (req, res, next) {
             if (inputFile1.originalFilename != '' && inputFile1.size != 0) {
                 filename2 = baseUrl + inputFile2.path.substr(inputFile2.path.indexOf('/'),inputFile2.path.length);
             }
+            */
 
             if(id!=''){//修改
-                service.updateNotice(id,title,startDate,endDate,content,type,updateDate,filename1,filename2,function(err, results) {
+                service.updateNotice(id,title,startDate,endDate,content,type,updateDate,filename,fileurl,function(err, results) {
                     if(!err) {
                         res.redirect('/jinquan/notice_list?replytype=update');
                     } else {

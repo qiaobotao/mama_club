@@ -231,11 +231,11 @@ module.exports.fetchAllNoticeByUser = function(userId,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateNotice = function(id, title,startDate,endDate,content,type,updateDate,filesName1,filesName2, cb) {
+module.exports.updateNotice = function(id, title,startDate,endDate,content,type,updateDate,fileName,fileUrl, cb) {
 
 
-    var sql = 'UPDATE notice SET `title` = ?, `startDate` = ? , `endDate` = ? , `content` = ?, type = ?,updateDate=?,filesName1=?,filesName2=? WHERE id = ?';
-    var par = [title,startDate,endDate,content,type, updateDate,filesName1,filesName2,id];
+    var sql = 'UPDATE notice SET `title` = ?, `startDate` = ? , `endDate` = ? , `content` = ?, type = ?,updateDate=?,filesName=?,filesUrl=? WHERE id = ?';
+    var par = [title,startDate,endDate,content,type, updateDate,fileName,fileUrl,id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {

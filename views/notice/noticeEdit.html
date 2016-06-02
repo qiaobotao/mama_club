@@ -37,6 +37,34 @@
             document.getElementById("myform").action = "/jinquan/notice_save?id="+id+'&title='+title+'&content='+content+'&type='+type+'&startDate='+startDate+'&endDate='+endDate;
             document.getElementById("myform").submit();
         }
+
+        function addrow(){
+            var tableId = 'noticeTalbeId';
+            //获取表格对象
+            var table=document.getElementById("noticeTalbeId");
+            //获取当前行数
+            childIndex = $("#noticeTalbeId tr").length;
+            if(childIndex == 8){//最多可以上传5个附件（上传附件之前有3行数据）
+                parent.layer.alert('最多可以上传5个附件。',{icon: 2});
+                return;
+            }
+            var row=table.insertRow(childIndex);
+            var cell1=row.insertCell(0);//占位列
+            var cell2=row.insertCell(1);//上传文件列
+            cell1.className="regTd_l";
+            cell1.innerHTML = '';
+            cell2.className="regTd_r";
+            cell2.colSpan = 3;
+            cell2.innerHTML='文件路径：<input  name="recordfile" type="file" multiple="mutiple" class="input5"/>' +
+                                '<a style="cursor: pointer;font-size: 22px" onclick="javaScript:delTr(this)">-</a>';
+            return null;
+        }
+
+        //table中删除选中的行数据
+        function delTr(delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $('#noticeTalbeId tr:eq('+deltr.rowIndex+')').remove();
+        }
     </script>
 </head>
 
@@ -51,7 +79,7 @@
     <form enctype="multipart/form-data" method="post" id="myform" >
 
         <!-- <form method="post" id="myform" action="/jinquan/notice_save">  -->
-        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="noticeTalbeId" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">标题：</td>
                 <td class="regTd_r">
@@ -85,14 +113,30 @@
                     <textarea rows="10" cols="120" id="content" name="content"><%=notice.content%></textarea>
                 </td>
             </tr>
-            <tr>
-                <td class="regTd_l">上传文件：</td>
-                <td class="regTd_r" colspan="3">文件路径：<input  name="recordfile" type="file" multiple='mutiple' class="input5"/></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">上传文件2：</td>
-                <td class="regTd_r" colspan="3">文件路径：<input name="recordfile" type="file" multiple='mutiple' class="input5"/></td>
-            </tr>
+            <%
+            if(notice.filesName != "" && notice.filesName != null){
+                var filesNames = notice.filesName.split(";");
+                var filesUrls = notice.filesUrl.split(";");
+                for(var i = 0 ; i < filesNames.length ; i ++){
+                %>
+                <tr>
+                    <td class="regTd_l">上传文件：</td>
+                    <td class="regTd_r" colspan="3">
+                        文件路径：<input  name="recordfile" type="file" multiple='mutiple' value="<%=filesUrls[i]%>" class="input5"/>
+                        <a href="../<%=filesUrls[i]%>"><%=filesNames[i]%></a>
+                        <%
+                        if(i == 0){
+                            %><span onclick="addrow()" style="cursor: pointer;font-size: 22px;">+</span><%
+                        }else{
+                            %><a style="cursor: pointer;font-size: 22px" onclick="javaScript:delTr(this)">-</a><%
+                        }
+                        %>
+                    </td>
+                </tr>
+                <%
+                }
+            }
+            %>
         </table>
     </form>
     <div class="reg_but">
