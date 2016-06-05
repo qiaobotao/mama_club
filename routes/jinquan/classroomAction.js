@@ -247,11 +247,16 @@ module.exports.preEdit = function(req, res, next) {
         if(!err) {
             storeroomService.getAllStorerooms(shopId,function(err, storeroomResult) {
                 if (!err) {
-                    //data.storeroom = results;
-                    res.render('classroom/classroomEdit',{data : results,storeroomData:storeroomResult});
-                    //res.render('classroom/classroomAdd', {data : data});
+                    service.getClassroomClassify(function(err, classroomClassfiy) {
+                        if (!err) {
+                            res.render('classroom/classroomEdit',{data : results,storeroomData:storeroomResult,classify:classroomClassfiy});
+                        } else {
+                            myUtils.printSystemLog(err);
+                            next();
+                        }
+                    })
                 } else {
-                    console.log(err);
+                    myUtils.printSystemLog(err);
                     next();
                 }
             });
@@ -297,79 +302,128 @@ module.exports.del = function(req, res, next) {
     });
 }
 
-/**
- * 教室删除物资
- * 需要删除明细表数据，还要形成入库单，更新库存
- * @param req
- * @param res
- * @param next
- */
-module.exports.delGoods = function(req, res, next) {
-
-    var storeroomId = req.body.storeroomId ? req.body.storeroomId : '';
-    var mxids = req.body.mxids ? req.body.mxids : ''; // 逗号相隔
-    var classroomId = req.body.classroomId ? req.body.classroomId : '';
-
-
-
-
-
-
-
-
-
-}
 
 module.exports.update = function(req, res, next) {
 
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
+    // 先判断是删除还是添加物资
+    var sub_type = req.body.sub_type ? req.body.sub_type : ''; // 请求方式
 
-    var id = req.body.id ? req.body.id : '';
-    var outId = req.body.outId ? req.body.outId : '';
 
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
-    var name = req.body.name ? req.body.name : '';
+    // 主表数据
+    var id = req.body.id ? req.body.id : '';   // 教室id
+    var name = req.body.name ? req.body.name : ''; // 名称
     var classType = req.body.cid ? req.body.cid : '';
     var remark = req.body.remark ? req.body.remark : '';
-    var sid = req.body.sid ? req.body.sid : '';  // 库房id
     var oper = req.body.oper ? req.body.oper : ''; // 操作人
 
-    // 数组
-    var arr_proId = req.body.proId ? req.body.proId : '';
-    var arr_proname = req.body.proname ? req.body.proname :'';
-    var arr_proNo = req.body.proNo ? req.body.proNo : '';
-    var arr_count = req.body.count ? req.body.count : '';
-    var arr_price = req.body.price ? req.body.price : '';
+    service.updateClassroom(id,shopId,name,classType,remark,oper,function(err,results){
+        if (!err) {
+            if (sub_type == "del") {  // 删除物资
+                myUtils.printSystemLog("删除物资开始--------------");
+                // 入库库房
+                var d_sid = req.body.d_sid ? req.body.d_sid : '';
+                // 删除数据 proid , 如果选中了一个也要变成数组
+                var delProId = req.body.delProId ? req.body.delProId : '';
+                var arr_delProId = new Array();
+                if(!delProId instanceof Array) {
+                    arr_delProId.push(delProId);
+                } else {
+                    arr_delProId = delProId;
+                }
 
-    // 处理数据
-    var arr = new Array();
+                service.inStoreroomForDelWares(id,oper,d_sid,arr_delProId,function(err, results) {
+                    if(!err) {
 
-    if (arr_proId instanceof Array) {
-        for (var i=0;i<arr_proId.length;i++) {
-            var obj = {};
-            obj.proId = arr_proId[i];
-            obj.proName = arr_proname[i];
-            obj.proSerial = arr_proNo[i];
-            obj.count = arr_count[i];
-            obj.price = arr_price[i];
-            arr.push(obj);
+                        res.redirect('/jinquan/classroom_list?replytype=update');
+
+                    } else {
+                        myUtils.printSystemLog(err);
+                        next();
+                    }
+                });
+            } else if (sub_type == "add") { // 添加物资
+                myUtils.printSystemLog("添加物资开始--------------");
+
+                // 数组
+                var arr_proId = req.body.proId ? req.body.proId : '';
+                var arr_proname = req.body.proname ? req.body.proname :'';
+                var arr_proNo = req.body.proNo ? req.body.proNo : '';
+                var arr_count = req.body.count ? req.body.count : '';
+                var arr_price = req.body.price ? req.body.price : '';
+                var arr_sids = req.body.sids ? req.body.sids : '';
+
+                // 处理数据
+                var arr = new Array();
+
+                if (arr_proId instanceof Array) {
+                    for (var i=0;i<arr_proId.length;i++) {
+                        var obj = {};
+                        obj.proId = arr_proId[i];
+                        obj.proName = arr_proname[i];
+                        obj.proSerial = arr_proNo[i];
+                        obj.count = arr_count[i];
+                        obj.bname = arr_price[i];
+                        obj.storeroom = arr_sids[i];
+                        arr.push(obj);
+                    }
+                } else {
+                    var obj = {};
+                    obj.proId = arr_proId;
+                    obj.proName = arr_proname;
+                    obj.proSerial = arr_proNo;
+                    obj.count = arr_count;
+                    obj.bname = arr_price;
+                    obj.storeroom = arr_sids
+                    arr.push(obj);
+                }
+
+                storeroomService.getAllStorerooms(shopId,function(err, results) { // 查出所有仓库，然后跟传上来的仓库对比，
+                    if (!err) {
+                        var arr_total = new Array(); // 数据结构 [{storeroomId,[obj,obj,obj]},{storeroomId,[obj,obj,obj]}.....]
+                        for (var i=0;i<results.length;i++) { // 处理仓库结果集
+                            var sameStoreroom_obj = {}; // 相同storeroomId 对象
+                            var arr_obj = new Array();
+                            sameStoreroom_obj.storeroomId = results[i].id;
+                            for (var n=0;n<arr.length;n++) {
+                                if (results[i].id == arr[n].storeroom) {
+                                    arr_obj.push(arr[n]);
+                                }
+                            }
+                            sameStoreroom_obj.data = arr_obj;
+                            arr_total.push(sameStoreroom_obj);
+                        }
+                        // arr_total 有多少个结果，就生成多少个出库单
+
+                                // 插入明细表
+                        service.insertClassroomMX(id,arr,function(err, results) {
+                            if (!err) {
+                                  // 形成出库单 ,及库存变化
+                                sotreroomOutService.addClassroom_AddOutLog(name,id,arr_total,function(err, results) {
+                                    if (!err) {
+                                        res.redirect('/jinquan/classroom_list?replytype=update');
+                                    } else {
+                                        myUtils.printSystemLog(err);
+                                        next();
+                                    }
+                                });
+                            } else {
+                                myUtils.printSystemLog(err);
+                                next();
+                            }
+                        });
+                    } else {
+                        myUtils.printSystemLog(err);
+                        next();
+                    }
+                });
+            }
+        } else {
+            myUtils.printSystemLog(err);
+            next();
         }
-    } else {
-        var obj = {};
-        obj.proId = arr_proId;
-        obj.proName = arr_proname;
-        obj.proSerial = arr_proNo;
-        obj.count = arr_count;
-        obj.price = arr_price;
-        arr.push(obj);
-    }
-
-
-
-
-
-
+    });
 }
 
 

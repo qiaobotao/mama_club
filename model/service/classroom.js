@@ -199,9 +199,8 @@ module.exports.preEdit = function(id, cb) {
         if (!err) {
             if (rows.length != 0) {
                 data.classroom = rows[0];
-                var outLogId = rows[0].outLogId;
-                var outSQl = 'SELECT mx.* FROM storeroomOutLog m, storeroomOutLogMX mx WHERE m.id = ? AND m.id = mx.outLogId';
-                db.query(outSQl,[outLogId],function(cbData, err, rows, fields) {
+                var mxSQL = 'SELECT * FROM classroomMX where classroomId = ?';
+                db.query(mxSQL,[id],function(cbData, err, rows, fields) {
                     if(!err) {
                        data.detail = rows;
                         cb(err,data);
@@ -337,60 +336,22 @@ module.exports.del = function(id,shopId,cb) {
 }
 
 /**
- * 删除教室物资
- * @param classroomId
- * @param arr_ids
- * @param storeroomId
- * @param cb
- */
-module.exports.delGoods = function(classroomId,arr_ids,storeroomId,cb) {
-    myUtils.printSystemLog('删除教室：'+classroomId+'-'+arr_ids+'-'+storeroomId);
-    // 为空判断前端来做
-    var mxids = "('";
-    for (var i=0;i<arr_ids.length;i++) {
-         if(i != arr_ids.length -1) {
-             mxids = mxids + "',";
-         } else {
-             mxids = mxids + "')";
-         }
-    }
-
-    var getGoodsMXSQL = 'SELECT * FROM classroomMX WHERE id in ('+mxids+')';
-    var delGoodsMXSQL = 'DELETE FROM classroomMX WHERE id in ('+mxids+')';
-
-    db.query(getGoodsMXSQL,[],function(cbData, err, rows, fields) {
-
-        if(!err) { // 查出要删除的物品，然后入库，
-
-
-        } else {
-           cb(err);
-        }
-    });
-}
-
-
-
-/**
- * 修改教室
+ *
  * @param id
  * @param shopId
- * @param serialNumber
  * @param name
  * @param classType
  * @param remark
- * @param materialId
- * @param sid
  * @param oper
  * @param cb
  */
-module.exports.updateClassroom = function (id,shopId,serialNumber,name,classType,remark,materialId,sid,oper, cb) {
+module.exports.updateClassroom = function (id,shopId,name,classType,remark,oper, cb) {
 
-    myUtils.printSystemLog('更新教室：'+shopId+'-'+serialNumber+'-'+name+'-'+classType+'-'+remark+'-'+materialId+'-'+sid+'-'+oper);
+    myUtils.printSystemLog('更新教室：'+shopId+'-'+name+'-'+classType+'-'+remark+'-'+oper);
 
-   var sql = 'UPDATE classroom SET serialNumber=?,name=?,classType=?,remark=?,outLogId=?,shopId=?,oper=?,storeroomId=? WHERE id = ?';
+   var sql = 'UPDATE classroom SET name=?,classType=?,remark=?,shopId=?,oper=? WHERE id = ?';
 
-    db.query(sql, [serialNumber,name,classType,remark,materialId,shopId,oper,sid,id], function(cbData, err, rows, fields){
+    db.query(sql, [name,classType,remark,shopId,oper,id], function(cbData, err, rows, fields){
 
         if (!err) {
             cb(null,rows);
@@ -399,38 +360,65 @@ module.exports.updateClassroom = function (id,shopId,serialNumber,name,classType
         }
 
     });
-
-
 }
 
 /**
  * 删除教室新增入库单
  */
-function inStoreroom (oper,sid,arr,cb) {
+module.exports.inStoreroomForDelWares = function (cid,oper,sid,arr,cb) {
 
-    myUtils.printSystemLog('删除教室新增入库单数据：'+oper+'-'+sid+'-'+arr)
+    // 先把删除的物资入库，然后在删除操作
 
-    var sql = 'INSERT INTO storeroomInLog (buyer,buyDate,storeroomId,dateline,inType,buyType,distributorId) VALUES (?,?,?,?,?,?,?)';
+    myUtils.printSystemLog('删除教室新增入库单数据：'+cid+'-'+sid+'-'+arr);
 
-    // 教室物品 id 53
-    db.query(sql,[oper,new Date(),sid,new Date().getTime(),'53','30','3'],function(cbData, err, rows, filelds) {
+    // 拼接串
+    var temp = "(";
+    for (var i=0;i<arr.length;i++) {
+        if(i != arr.length - 1) {
+            temp = temp + arr[i] + ","
+        } else {
+            temp = temp + arr[i] +")";
+        }
+    }
+    // 查出要删除的数据
+    var getWaresSQL = "SELECT * FROM classroomMX WHERE classroomId = ? AND waresId in  "+temp;
+    db.query(getWaresSQL,[cid],function(cbData, err, rows, filelds){
+        if (!err) {
+            var wares = rows;
+            if(wares.length == 0) {
+                cb(null,null);
+                return;
+            }
+            // 处理入库单
+            var sql = 'INSERT INTO storeroomInLog (buyer,buyDate,storeroomId,dateline,inType,buyType,distributorId) VALUES (?,?,?,?,?,?,?)';
+            // 教室物品 id 53
+            db.query(sql,[oper,new Date(),sid,new Date().getTime(),'53','30','3'],function(cbData, err, rows, filelds) {
 
-        if(!err) {
-            var inLogId = rows.insertId;
-            var sql_mx = 'INSERT INTO storeroomInLogMX (inLogId,waresName,count,price,waresSerial,waresId) VALUES (?,?,?,?,?,?)';
-            async.map(arr, function(item, callback) {
+                if(!err) {
+                    var inLogId = rows.insertId;
+                    var sql_mx = 'INSERT INTO storeroomInLogMX (inLogId,waresName,count,price,waresSerial,waresId) VALUES (?,?,?,?,?,?)';
+                    var handle_db = db.db_conn();
+                    async.map(wares, function(item, callback) {
 
-                db.query(sql_mx, [inLogId,item.waresName,item.waresSerial,item.count,item.price,item.waresId], function (cbData, err, rows, fields) {
-                    if (!err) {
-                        callback(null, rows);
-                    } else {
-                        callback(err);
-                    }
-                });
-            }, function(err,results) {
-                cb(err, results);
+                        handle_db.query(sql_mx, [inLogId,item.waresName,item.count,item.bname,item.waresSerial,item.waresId], function (err,results) {
+                            if (!err) {
+                                callback(null, results);
+                            } else {
+                                db.close(handle_db);
+                                callback(err);
+                            }
+                        });
+                    }, function(err,results) {
+                        updateInventoryForDelete(sid,wares);
+                        delClassroomMX(cid,arr);
+                        cb(err, results);
+                    });
+                }else {
+                    cb(err);
+                }
             });
-        }else {
+
+        } else {
             cb(err);
         }
     });
@@ -441,7 +429,11 @@ function inStoreroom (oper,sid,arr,cb) {
  * @param arr
  * @param cb
  */
-function updateInventory (sid,arr,cb) {
+function updateInventoryForDelete (sid,arr) {
+
+    if(arr.length == 0) {
+        return;
+    }
 
     myUtils.printSystemLog('删除或者添加教室库存更改：'+sid+'-'+arr)
 
@@ -452,39 +444,71 @@ function updateInventory (sid,arr,cb) {
 
     var update_sql = 'UPDATE inventory SET count = ? WHERE storeroomId = ? AND waresId = ?';
 
+    var handle_db = db.db_conn();
     async.map(arr, function(item, callback) {
 
-        db.query(check_sql, [sid,item.waresId],function(cbData, err, rows, fields) {
+        handle_db.query(check_sql, [sid,item.waresId],function(err, results) {
 
             if (!err) {
 
-                if (rows.length == 0) {  // 原来没有记录
+                if (results.length == 0) {  // 原来没有记录
 
-                    db.query(sql, [sid,item.waresId,item.count], function (cbData, err, rows, fields) {
+                    handle_db.query(sql, [sid,item.waresId,item.count], function (err,results) {
 
                         if (!err) {
-                            callback(null, rows);
+                            callback(null, results);
                         } else {
+                            db.close(handle_db);
                             callback(err);
                         }
                     });
                 } else {  // 有记录
-                    var old_count = rows[0].count;
-                    db.query(update_sql,[Number(item.count)+Number(old_count),sid,item.waresId],function(cbData, err, rows, fields){
+                    var old_count = results[0].count;
+                    handle_db.query(update_sql,[Number(item.count)+Number(old_count),sid,item.waresId],function(err, results){
                         if (!err) {
-                            callback(null, rows);
+                            callback(null, results);
                         } else {
+                            db.close(handle_db);
                             callback(err);
                         }
                     });
                 }
             } else {
+                db.close(handle_db);
                 callback(err);
             }
         });
 
     }, function(err,results) {
-        cb(err, results);
+        db.close(handle_db);
+    });
+
+}
+
+
+function delClassroomMX(id,arr) {
+
+    if(arr.length == 0) {
+        return;
+    }
+    // 拼接串
+    var temp = "(";
+    for (var i=0;i<arr.length;i++) {
+        if(i != arr.length - 1) {
+            temp = temp + arr[i] + ","
+        } else {
+            temp = temp + arr[i] +")";
+        }
+    }
+
+    var del = "DELETE FROM classroomMX WHERE classroomId = ? AND waresId in  " +temp;
+
+    db.query(del,[id],function(cbData, err, rows, filelds) {
+
+        if(err) {
+            console.log(err);
+        }
+
     });
 
 }

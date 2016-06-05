@@ -58,9 +58,6 @@
             });
         }
 
-        function douniwan () {
-            parent.layer.alert('奋斗了一晚上也没完成这个功能，下次，下次吧',{icon: 2});
-        }
 
     </script>
 </head>
@@ -116,7 +113,7 @@
                             %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_browse?id=<%=data.data[i].id%>">查看</a>]</div></td><%
                         }%>
                         <%if(resourcesData["/classroom_preedit"] == "1"){
-                            %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:void(0)" onclick="douniwan()">编辑</a>]</div></td><%
+                            %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="/jinquan/classroom_preedit?id=<%=data.data[i].id%>">编辑</a>]</div></td><%
                         }%>
                         <%if(resourcesData["/classroom_predel"] == "1"){
                             %><td><div align="center"><img src="../../images/delete.gif" width="9" height="9" />&nbsp;[<a href="javascript:void(0)" onclick="checkDel('<%=data.data[i].id%>')">删除</a>]</div></td><%
