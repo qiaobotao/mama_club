@@ -34,7 +34,22 @@
             var endDate = $('#endDate').val();
             var id = $('#id').val();
 
-            document.getElementById("myform").action = "/jinquan/notice_save?id="+id+'&title='+title+'&content='+content+'&type='+type+'&startDate='+startDate+'&endDate='+endDate;
+            var filesNames = "";
+            $("input[name^='filesNames']").each(function(i, o){
+                if(i != 0 ){
+                    filesNames += ",";
+                }
+                filesNames += $(o).val();
+            });
+            var filesUrls = "";
+            $("input[name^='filesUrls']").each(function(i, o){
+                if(i != 0 ){
+                    filesUrls += ",";
+                }
+                filesUrls += $(o).val();
+            });
+
+            document.getElementById("myform").action = "/jinquan/notice_save?id="+id+'&title='+title+'&content='+content+'&type='+type+'&startDate='+startDate+'&endDate='+endDate+'&filesNames='+filesNames+'&filesUrls='+filesUrls;
             document.getElementById("myform").submit();
         }
 
@@ -124,6 +139,8 @@
                     <td class="regTd_r" colspan="3">
                         文件路径：<input  name="recordfile" type="file" multiple='mutiple' value="<%=filesUrls[i]%>" class="input5"/>
                         <a href="../<%=filesUrls[i]%>"><%=filesNames[i]%></a>
+                        <input type="hidden" name="filesNames" value="<%=filesNames[i]%>"/>
+                        <input type="hidden" name="filesUrls" value="<%=filesUrls[i]%>"/>
                         <%
                         if(i == 0){
                             %><span onclick="addrow()" style="cursor: pointer;font-size: 22px;">+</span><%
@@ -135,6 +152,16 @@
                 </tr>
                 <%
                 }
+            }else{
+            %>
+            <tr>
+                <td class="regTd_l">上传文件：</td>
+                <td class="regTd_r" colspan="3">
+                    文件路径：<input  name="recordfile" type="file" multiple='mutiple' class="input5"/>
+                    <span onclick="addrow()" style="cursor: pointer;font-size: 22px;">+</span>
+                </td>
+            </tr>
+            <%
             }
             %>
         </table>

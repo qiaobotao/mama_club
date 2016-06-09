@@ -85,8 +85,15 @@
         </tr>
         <tr>
             <td class="lineSty3  ggSty">
-                <%if(notice.filesName1 != ''){%><span><a href="<%=notice.filesName1%>">附件一下载</a></span><%}%>
-                <%if(notice.filesName2 != ''){%><span><a href="<%=notice.filesName2%>">附件一下载</a></span><%}%>
+                <%
+                if(notice.filesName != "" && notice.filesName != null){
+                    var filesNames = notice.filesName.split(";");
+                    var filesUrls = notice.filesUrl.split(";");
+                    for(var i = 0 ; i < filesNames.length ; i ++){
+                        %><span><a href="../<%=filesUrls[i]%>"><%=filesNames[i]%></a></span><%
+                    }
+                }
+                %>
             </td>
         </tr>
     </table>
