@@ -131,12 +131,12 @@
             var cell2=row.insertCell(1);//商品编号
             var cell3=row.insertCell(2);//采购数量
             var cell4=row.insertCell(3);//商品id
-            var cell5=row.insertCell(4);//删除本行
+//            var cell5=row.insertCell(4);//删除本行
             cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
             cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="check('+waresIndex+')"/>';
-            cell4.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
-            cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+            cell4.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" /><a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
+//            cell5.innerHTML='';
         }
         //table中删除选中的行数据
         function delTr(delObj){
@@ -187,7 +187,7 @@
                 <td>商品名称</td>
                 <td>商品编号</td>
                 <td>出库数量</td>
-                <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
             </tr>
         </table>
     </form>

@@ -272,7 +272,7 @@
                         <td>员工级别</td>
                         <td>电话</td>
                         <td>邮箱</td>
-                        <td><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
+                        <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addTr()"><h1>+</h1></a></td>
                     </tr>
                     <%for(var i=0;i<result.users.length;i++) {%>
                     <tr>
@@ -280,8 +280,10 @@
                         <td><input id="staffLevel<%=i%>" name="staffLevel" type="text" class="input5 input_arr" value="<%=result.users[i].staffLevel%>" /></td>
                         <td><input id="tel<%=i%>" name="tel" type="text" class="input5 input_arr" value="<%=result.users[i].tel%>" /></td>
                         <td><input id="email<%=i%>" name="email" type="text" class="input5 input_arr" value="<%=result.users[i].email%>" /></td>
-                        <td><input id="staffId<%=i%>" name="staffId" type="hidden" class="input5 input_arr" value="<%=result.users[i].userId%>"/></td>
-                        <td><a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a></td>
+                        <td>
+                            <input id="staffId<%=i%>" name="staffId" type="hidden" class="input5 input_arr" value="<%=result.users[i].userId%>"/>
+                            <a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>
+                        </td>
                     </tr>
                     <%}%>
                 </table>
