@@ -175,7 +175,7 @@ module.exports.insertSysUserRole = function(userId,roleIds, cb) {
 
     var sql = 'INSERT INTO sysUserRole (userId,roleId,dateline) VALUES (?,?,?)';
     async.map(roleIds, function(item, callback) {
-        db.query(sql, [userId,item,new Date().getTime()], function (cbData, err, rows, fields) {
+        db.query(sql, [userId,item.roleId,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {

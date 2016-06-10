@@ -112,6 +112,20 @@ module.exports.save = function (req, res,next) {
     var roleId = req.body.roleId ? req.body.roleId : '';
     var activity = req.body.activity ? req.body.activity : '';
 
+    var roleIdArr = new Array();
+    if (roleId instanceof Array) {
+        for (var i=0;i<roleId.length;i++) {
+            var obj = {};
+            obj.roleId = roleId[i];
+            roleIdArr.push(obj);
+        }
+    } else {
+        var obj = {};
+        obj.roleId = roleId;
+        roleIdArr.push(obj);
+    }
+
+
     var shopIdsArr = new Array();
     if (shopIds instanceof Array) {
         for (var i=0;i<shopIds.length;i++) {
@@ -131,7 +145,7 @@ module.exports.save = function (req, res,next) {
             if(!err) {
                 service.deleteRoleByUserId(id,function(err, results) {
                     if(!err) {//删除用户——角色关联表成功
-                        service.insertSysUserRole(id,roleId,function(err, results) {
+                        service.insertSysUserRole(id,roleIdArr,function(err, results) {
                             if(!err) {//添加用户——角色关联表成功
                                 service.insertSysUserShop(id,shopIdsArr,function(err, results) {
                                     if(!err) {//添加用户——角色关联表成功
