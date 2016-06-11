@@ -463,7 +463,11 @@
         </table>
     </form>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <%
+        if(show == ''){
+            %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
         <div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div>
     </div>
 
