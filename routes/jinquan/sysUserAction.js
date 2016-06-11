@@ -176,7 +176,7 @@ module.exports.save = function (req, res,next) {
                 id = results.insertId;
                 service.deleteRoleByUserId(id,function(err, results) {
                     if(!err) {//删除用户——角色关联表成功
-                        service.insertSysUserRole(id,roleId,function(err, results) {
+                        service.insertSysUserRole(id,roleIdArr,function(err, results) {
                             if(!err) {//添加用户——角色关联表成功
                                 service.insertSysUserShop(id,shopIdsArr,function(err, results) {
                                     if(!err) {//添加用户——角色关联表成功
