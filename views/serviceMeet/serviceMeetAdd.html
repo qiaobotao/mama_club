@@ -264,6 +264,34 @@
                 <td class="regTd_r"><input id="problemDescription" name="problemDescription" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
+                <td class="regTd_l">服务需求：</td>
+                <td class="regTd_r">
+                    <select id="serviceNeeds" name="serviceNeeds">
+                        <option value="">请选择</option>
+                        <%for(var i=0;i<dictData.serverDemandArr.length;i++){
+                        %><option value="<%=dictData.serverDemandArr[i].id%>" <%if(nursService.serviceNeeds ==dictData.serverDemandArr[i].id ){%>selected<%}%>><%=dictData.serverDemandArr[i].name%></option><%
+                        }%>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">做过何种处理：</td>
+                <td class="regTd_r">
+
+                    <%
+                    var dealStr = nursService.deal == null ? "" :nursService.deal;
+                    for(var i=0;i<dictData.treatmentMethodArr.length;i++){
+                    var treatmentMethodId='deal'+i;
+                    %>
+                    <input id="<%=treatmentMethodId%>" name="deal" type="checkbox" value ="<%=dictData.treatmentMethodArr[i].id%>"
+                    <%if(dealStr.indexOf(dictData.treatmentMethodArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.treatmentMethodArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
+                    }%>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
                 <td class="regTd_l">服务位置：</td>
                 <td class="regTd_r">
                     <select id="serviceType" name="serviceType" >

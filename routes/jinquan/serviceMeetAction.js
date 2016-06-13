@@ -9,6 +9,8 @@ var servicemeet = require('../../model/service/servicemeet');
 var nursservice = require('../../model/service/nursservice');
 //投诉
 var complain = require('../../model/service/complain');
+//公用数据
+var consts = require('../../model/utils/consts');
 /**
  * Created by kuanchang on 16/1/17.
  */
@@ -56,10 +58,12 @@ module.exports.list = function (req, res,next) {
  * @param req
  * @param res
  */
+/*
 module.exports.goAdd = function (req, res,next) {
 
     res.render('serviceMeet/serviceMeetAdd');
 }
+*/
 
 module.exports.add = function (req, res,next) {
     // 从session 中获取门店id
@@ -166,18 +170,32 @@ module.exports.show = function(req, res, next) {
 module.exports.preEdit = function(req, res, next) {
     var shopId = req.session.user.shopId;
     var id = req.query.id ? req.query.id : '';
+    var userId = req.session.user.id;//用户id
 
-    service.fetchSingleServiceMeet(id, function(err, results) {
+    service.fetchSingleServiceMeet(userId,id, function(err, results) {
         if (!err) {
-            var service_meet = results.length == 0 ? null : results[0];
+            var service_meet = results.serviceMeetService.length == 0 ? {} : results.serviceMeetService[0];
             var memberName =service_meet.name;
             var tel =service_meet.tel;
+            var treatmentMethodArr = results.treatmentMethodArr;
+            var serverDemandArr = results.serverDemandArr;
+            var shopArr = results.shopsByUserIdData;
             var result={};
             memberService.getMemberByNameTel(tel ,shopId ,function(err, results) {
                 if (!err) {
                     var member = results.length == 0 ? null : results[0];
-                    if(member!=null)
-                    {
+                    member == null ? {} : member;
+                    if(1==1){
+                        res.render('servicemeet/serviceMeetEdit', {
+                            service_meet : service_meet,
+                            datas:{},
+                            treatmentMethodArr:treatmentMethodArr,
+                            serverDemandArr:serverDemandArr,
+                            shopArr:shopArr,
+                            areaNames:consts.AREA_NAMES,
+                            areaCodes:consts.AREA_CODES});
+                    }else{
+
                         result.member=member;
                         //预约服务单
                         servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
@@ -194,14 +212,18 @@ module.exports.preEdit = function(req, res, next) {
                                 result.nursServices=nursServices;
                                 complain.getTop3Complain(serviceMeetIds,function(err, complains) {
                                     result.complains=complains;
-                                   var datas = JSON.stringify(result);
-                                    res.render('servicemeet/serviceMeetEdit', {service_meet : service_meet,datas:datas});
+                                    var datas = JSON.stringify(result);
+                                    res.render('servicemeet/serviceMeetEdit', {
+                                        service_meet : service_meet,
+                                        datas:datas,
+                                        treatmentMethodArr:treatmentMethodArr,
+                                        serverDemandArr:serverDemandArr,
+                                        shopArr:shopArr,
+                                        areaNames:consts.AREA_NAMES,
+                                        areaCodes:consts.AREA_CODES});
                                 });
                             })
                         });
-                    }
-                    else{
-                        res.render('servicemeet/serviceMeetEdit', {service_meet : service_meet,datas:null});
                     }
                 }else{
                     next();

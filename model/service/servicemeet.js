@@ -9,6 +9,11 @@
 
 var db = require('../../common/db');
 var async = require('async');
+
+var treatmentMethodId = require('../../config').mainClassifyId.treatmentMethod;//做过何种处理
+var serverDemandId = require('../../config').mainClassifyId.serverDemand;//服务需求
+
+
 /**
  * 添加教室
  * @param serialNumber
@@ -188,12 +193,62 @@ module.exports.delServiceMeet= function (id, cb) {
     });
 };
 
-module.exports.fetchSingleServiceMeet =function (id, cb) {
-    var sql = 'SELECT a.*,b.id as serviceId,b.name AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  and a.id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+module.exports.fetchSingleServiceMeet =function (userId,id, cb) {
+    var serviceMeetSql = 'SELECT a.*,b.id as serviceId,b.name AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  and a.id = ?';
+
+    var classificationPare = treatmentMethodId+","+ serverDemandId;
+    var classificationSql = 'select * from systemClassify where parentId in ('+classificationPare+')';
+    var shopsByUserIdSql = 'select s.* from shop s , sysUserShop us where s.id = us.shopId and us.userId = ?';
+
+    async.series({
+        //活动详情列表
+        serviceMeetService : function(callback){
+            db.query(serviceMeetSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //当前活动信息
+        classificationData : function(callback){
+            db.query(classificationSql, [], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //当前用户可以所可以查看的门店列表
+        shopsByUserIdData : function(callback){
+            db.query(shopsByUserIdSql, [userId], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
 
         if (!err) {
-            cb(null, rows);
+
+            //为字典表所需数据分别定义对象集合
+            var treatmentMethodArr = new Array();
+            var serverDemandArr = new Array();
+            for(var i = 0 ; i < results.classificationData.length ; i ++){
+                var classification = results.classificationData[i];
+                if(treatmentMethodId == classification.parentId){
+                    treatmentMethodArr.push(classification);
+                }else if(serverDemandId == classification.parentId){
+                    serverDemandArr.push(classification);
+                }
+            }
+            results.treatmentMethodArr = treatmentMethodArr;
+            results.serverDemandArr = serverDemandArr;
+            cb (null, results);
         } else {
             cb(err);
         }

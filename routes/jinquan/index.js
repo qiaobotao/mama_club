@@ -183,7 +183,7 @@ router.all('/member_select_activity',memberAction.selectForActivity);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);
 router.all('/service_meet_add',serviceMeetAction.add);
-router.all('/service_meet_goadd',serviceMeetAction.goAdd);
+//router.all('/service_meet_goadd',serviceMeetAction.goAdd);
 router.all('/service_meet_show',serviceMeetAction.show);
 router.all('/service_meet_preEdit',serviceMeetAction.preEdit);
 router.all('/service_meet_doEdit',serviceMeetAction.doEdit);
