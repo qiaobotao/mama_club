@@ -5,6 +5,8 @@
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/geo.js"></script>
+    <script type="text/javascript" src="../../js/py.js"></script>
     <script type="text/javascript">
         var iframIndex ;
         alert('<%=user.id%>');
@@ -51,9 +53,19 @@
             });
         }
 
+        function promptinfo()
+        {
+            var address = document.getElementById('address').value;
+            var s1 = document.getElementById('s1').value;
+            var s2 = document.getElementById('s2').value;
+            var s3 = document.getElementById('s3').value;
+            address=""+s1+ s2 + s3;
+            return address;
+        }
+
     </script>
 </head>
-<body>
+<body onload="setup();preselect('北京市');promptinfo();">
     <table width="90%" border="0">
         <tr>
             <td>提示信息：</td>
@@ -105,5 +117,33 @@
             <td>选择商品、会员、员工、课程、服务单等的列表页面</td>
         </tr>
     </table >
+    <form name="shareip" action="" method="post">
+        <select class="select" name="province" id="s1">
+            <option></option>
+        </select>
+        <select class="select" name="city" id="s2">
+            <option></option>
+        </select>
+        <select class="select" name="town" id="s3">
+            <option></option>
+        </select>
+        <input id="address" name="address" type="hidden" value="" />
+        <input onclick="alert(promptinfo())" type="submit" value="提交" />
+    </form>
+
+    <tr>
+        <td align="right">
+            程序测试:
+        </td>
+        <td>
+            <span>请输入中文字符串:</span>
+            <input type="text" id="txtChinese" size="20" value=""
+                   onblur="query()" />
+            <span>拼音码:</span>
+            <select name="select11" id="select11" style="width: 150px;">
+                <option />
+            </select>
+        </td>
+    </tr>
 </body>
 </html>
