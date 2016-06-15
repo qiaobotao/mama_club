@@ -54,14 +54,14 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td>出库库房：<select id="outId" name="outId">
-                        <option value =""></option>
+                        <option value ="">全部</option>
                         <%for(var i=0;i<data.storerooms.length;i++){%>
                         <option value ="<%=data.storerooms[i].id%>" <%if(data.outId == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
                         <%}%>
                     </select></td>
                     <td> &nbsp;经手人：<input id="oper" name="oper" type="text" class="input5" value="<%=data.oper%>" /></td>
                     <td> &nbsp;入库库房：<select id="inId" name="inId">
-                        <option value =""></option>
+                        <option value ="">全部</option>
                         <%for(var i=0;i<data.storerooms.length;i++){%>
                         <option value ="<%=data.storerooms[i].id%>" <%if(data.inId == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
                         <%}%>

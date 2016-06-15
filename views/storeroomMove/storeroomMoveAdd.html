@@ -98,7 +98,7 @@
 
             var arr_proname = document.getElementsByName('proname');
             for (var i=0;i<arr_proname.length;i++) {
-                if(arr_proname[i].value == '') {
+                if(arr_proname[i].value == '' ) {
                     var n = i+1;
                     parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
                     return;
@@ -107,14 +107,16 @@
 
             var arr_count = document.getElementsByName('count');
             for (var i=0;i<arr_count.length;i++) {
-                if(arr_count[i].value == '') {
+                if(arr_count[i].value == '' || isNaN(arr_count[i].value) || arr_count[i].value == '0') {
                     var n = i+1;
-                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    parent.layer.alert('商品详情第'+n+'行商品数量格式错误',{icon: 2});
                     return;
                 }
             }
 
-            document.getElementById("myform").submit();
+            if(confirm("保存后将不可修改，请确认是否保存?")){
+                document.getElementById("myform").submit();
+            }
         }
 
 
@@ -143,6 +145,16 @@
             var deltr = delObj.parentNode.parentNode;
             $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
         }
+
+        function clearWares() {
+            var waresIndex = $("#waresTable tr").length;
+            for (var i=1;i<=waresIndex;i++) {
+                var deltr = document.getElementById("proId"+i).parentNode.parentNode;
+                $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
+            }
+
+        }
+
     </script>
 </head>
 
@@ -157,7 +169,7 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">出库库房：</td>
-                <td class="regTd_r"><select id="outId" name="outId">
+                <td class="regTd_r"><select id="outId" name="outId" onchange="clearWares()">
                     <%for(var i=0;i<data.length;i++){%>
                     <option value ="<%=data[i].id%>" ><%=data[i].name%></option>
                     <%}%>
@@ -171,7 +183,7 @@
             </tr>
             <tr>
                 <td class="regTd_l">经办人：</td>
-                <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>

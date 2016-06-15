@@ -67,9 +67,9 @@
 
             var arr_count = document.getElementsByName('count');
             for (var i=0;i<arr_count.length;i++) {
-                if(arr_count[i].value == '') {
+                if(arr_count[i].value == '' || isNaN(arr_count[i].value) || arr_count[i].value == '0') {
                     var n = i+1;
-                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    parent.layer.alert('商品详情第'+n+'行商品数量格式错误',{icon: 2});
                     return;
                 }
             }
@@ -83,8 +83,9 @@
                 }
             }
 
-            document.getElementById("myform").submit();
-
+            if(confirm("保存后将不可修改，请确认是否保存?")){
+                document.getElementById("myform").submit();
+            }
         }
 
         //当前商品显示位置
@@ -102,10 +103,10 @@
             var cell4=row.insertCell(3);//商品单价
             var cell5=row.insertCell(4);//删除本行
             var cell6=row.insertCell(5);//商品id
-            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
+            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr"  onfocus="getWares('+waresIndex+')"/>';
             cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
             cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" />';
-            cell4.innerHTML='<input id="bname'+waresIndex+'" name="price" type="text" class="input5 input_arr" />';
+            cell4.innerHTML='<input id="bname'+waresIndex+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
             cell6.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
             cell5.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
         }
@@ -128,7 +129,7 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">采购人：</td>
-                <td class="regTd_r"><input id="buyer" name="buyer" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="buyer" name="buyer" type="text" class="input5" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">采购方式：</td>
                 <td class="regTd_r"><select id="buyType" name="buyType">
                     <%for(var i=0;i<data.buyTypeClassify.length;i++){%>

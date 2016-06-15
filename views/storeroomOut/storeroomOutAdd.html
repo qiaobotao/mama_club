@@ -114,9 +114,9 @@
 
             var arr_count = document.getElementsByName('count');
             for (var i=0;i<arr_count.length;i++) {
-                if(arr_count[i].value == '') {
+                if(arr_count[i].value == '' || isNaN(arr_count[i].value) || arr_count[i].value == '0') {
                     var n = i+1;
-                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+                    parent.layer.alert('商品详情第'+n+'行商品数量格式错误',{icon: 2});
                     return;
                 }
             }
@@ -129,9 +129,9 @@
                     return;
                 }
             }
-
-            document.getElementById("myform").submit();
-
+            if(confirm("保存后将不可修改，请确认是否保存?")){
+                document.getElementById("myform").submit();
+            }
         }
 
         //当前商品显示位置
@@ -176,7 +176,7 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">领取人：</td>
-                <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="oper" name="oper" type="text" class="input5" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">出库方式：</td>
                 <td class="regTd_r"><select id="outType" name="outType">
                     <%for(var i=0;i<data.outTypeClassify.length;i++){%>
@@ -184,7 +184,7 @@
                     <%}%>
                 </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">收货人：</td>
-                <td class="regTd_r"><input id="consignee" name="consignee" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="consignee" name="consignee" type="text" class="input5" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">出库库房：</td>
@@ -194,9 +194,9 @@
                     <%}%>
                 </select>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">发货地址：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">收货人电话：</td>
-                <td class="regTd_r"><input id="consigneeTel" name="consigneeTel" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="consigneeTel" name="consigneeTel" type="text" class="input5"  onkeyup="this.value=this.value.replace(/[, ]/g,'')" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">说明：</td>

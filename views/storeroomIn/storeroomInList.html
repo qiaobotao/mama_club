@@ -52,7 +52,7 @@
                 <tr>
                     <td>采购人：<input id="buyer" name="buyer" type="text" class="input5" value="<%=data.par_buyer%>"/></td>
                     <td> &nbsp;采购方式：<select id="buyType" name="buyType">
-                        <option value =""></option>
+                        <option value ="">全部</option>
                         <%for(var i=0;i<data.buyTypeClassify.length;i++){%>
                         <option value ="<%=data.buyTypeClassify[i].id%>" <%if(data.par_buyType == data.buyTypeClassify[i].id){%>selected<%}%> ><%=data.buyTypeClassify[i].name%></option>
                         <%}%>
