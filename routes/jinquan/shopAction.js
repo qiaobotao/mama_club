@@ -5,6 +5,8 @@
 var laypage = require('laypage');
 var service = require('../../model/service/shop');
 var myUtils = require('../../common/utils');
+//公用数据
+var consts = require('../../model/utils/consts');
 /**
  * 获取门店列表
  * @param req
@@ -44,7 +46,9 @@ module.exports.list = function (req, res, next) {
  */
 module.exports.preAdd = function (req, res) {
 
-    res.render('shop/shopAdd');
+    res.render('shop/shopAdd', {
+        areaNames:consts.AREA_NAMES,
+        areaCodes:consts.AREA_CODES});
 
 }
 
@@ -56,13 +60,15 @@ module.exports.preAdd = function (req, res) {
 module.exports.add = function(req, res, next) {
 
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
+    var code = req.body.code ? req.body.code : '';
     var name = req.body.name ? req.body.name : '';
     var principal = req.body.principal ? req.body.principal : '';
     var tel = req.body.tel ? req.body.tel : '';
+    var city_district = req.body.city_district ? req.body.city_district : '';//所属区县
     var address = req.body.address ? req.body.address : '';
     var remark = req.body.remark ? req.body.remark : '';
 
-   service.insertShop(serialNumber,name,principal,tel,address,remark,function(err, results) {
+   service.insertShop(serialNumber,code,name,principal,tel,city_district,address,remark,function(err, results) {
        if (!err) {
            res.redirect('/jinquan/shop_list?replytype=add');
        } else {
@@ -136,7 +142,9 @@ module.exports.preEdit = function(req, res, next) {
     service.fetchSingleShop(id, function(err, results) {
         if (!err) {
             var shop = results.length == 0 ? null : results[0];
-            res.render('shop/shopEdit', {shop : shop});
+            res.render('shop/shopEdit', {shop : shop,
+                areaNames:consts.AREA_NAMES,
+                areaCodes:consts.AREA_CODES});
         } else {
             myUtils.printSystemLog('编辑门店'+err)
             next();
@@ -154,12 +162,14 @@ module.exports.update = function(req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
     var name = req.body.name ? req.body.name : '';
+    var code = req.body.code ? req.body.code : '';//门店编码
     var principal = req.body.principal ? req.body.principal : '';
     var tel = req.body.tel ? req.body.tel : '';
+    var city_district = req.body.city_district ? req.body.city_district : '';//所在区县
     var address = req.body.address ? req.body.address : '';
     var remark = req.body.remark ? req.body.remark : '';
 
-    service.updateShop(id, serialNumber,  name, address, principal, tel, remark, function(err, results) {
+    service.updateShop(id, serialNumber, code, name,city_district, address, principal, tel, remark, function(err, results) {
         if (!err) {
             res.redirect('/jinquan/shop_list?replytype=update');
         } else {

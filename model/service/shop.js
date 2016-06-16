@@ -16,12 +16,12 @@ var myUtils = require('../../common/utils');
  * @param remark
  * @param cb
  */
-module.exports.insertShop = function(serialNumber,name,principal,tel,address,remark, cb) {
+module.exports.insertShop = function(serialNumber,code,name,principal,tel,city_district,address,remark, cb) {
 
-    myUtils.printSystemLog('增加门店:'+serialNumber+'-'+name+'-'+principal+'-'+tel+'-'+address+'-'+remark);
+    myUtils.printSystemLog('增加门店:'+serialNumber+'-'+code+'-'+name+'-'+principal+'-'+tel+'-'+city_district+'-'+address+'-'+remark);
 
-    var sql = 'INSERT INTO shop (serialNumber,name,principal,tel,address,remark,dateline,status) VALUES (?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,name,principal,tel,address,remark, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO shop (serialNumber,code,name,principal,tel,city_district,address,remark,dateline,status) VALUES (?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,code,name,principal,tel,city_district,address,remark, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -135,12 +135,12 @@ module.exports.fetchAllShop = function(name,principal,number,currentPage,cb) {
  * @param principal
  * @param cb
  */
-module.exports.updateShop = function(id, serialNumber,  name, address, principal, tel, remark, cb) {
+module.exports.updateShop = function(id, serialNumber,  code, name,city_district, address, principal, tel, remark, cb) {
 
-    myUtils.printSystemLog('修改门店：'+id+'-'+serialNumber+'-'+name+'-'+address+'-'+principal+'-'+tel+'-'+remark)
+    myUtils.printSystemLog('修改门店：'+id+'-'+serialNumber+'-'+code+'-'+name+'-'+city_district,+'-'+address+'-'+principal+'-'+tel+'-'+remark)
 
-    var sql = 'UPDATE shop SET serialNumber = ?, name = ?, tel = ?, address = ?, principal = ?, remark = ? WHERE id = ?';
-    var par = [serialNumber, name, tel, address, principal, remark, id];
+    var sql = 'UPDATE shop SET serialNumber = ?,code=?, name = ?, tel = ?,city_district=? ,address = ?, principal = ?, remark = ? WHERE id = ?';
+    var par = [serialNumber,code, name, tel,city_district, address, principal, remark, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
