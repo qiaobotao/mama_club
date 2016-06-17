@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>添加会员</title>
+    <title>编辑会员</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
@@ -20,18 +20,17 @@
                 parent.layer.alert('姓名不能为空',{icon: 2});
                 return;
             }
-            var age = document.getElementById("age").value;
-            if (!age || age.length == 0) {
-                parent.layer.alert('年龄不能为空',{icon: 2});
+            if($("#birthYearMonth").val() == ''){
+                parent.layer.alert('出生年月不能为空',{icon: 2});
                 return;
             }
             var tel = document.getElementById("tel").value;
             if (!tel || tel.length == 0) {
-                parent.layer.alert('手机不能为空',{icon: 2});
+                parent.layer.alert('联系电话不能为空',{icon: 2});
                 return;
             }
             if (!isMobil(tel)) {
-                parent.layer.alert('手机不正确，请正确填写',{icon: 2});
+                parent.layer.alert('联系电话不正确，请正确填写',{icon: 2});
                 return;
             }
             var contact = document.getElementById("contact").value;
@@ -104,19 +103,9 @@
                 parent.layer.alert('母乳喂养理由不能为空',{icon: 2});
                 return;
             }
-            var childName = document.getElementById("childName").value;
-            if (!childName || childName.length == 0) {
-                parent.layer.alert('宝宝姓名不能为空',{icon: 2});
-                return;
-            }
             var childSex = document.getElementById("childSex").value;
             if (!childSex || childSex.length == 0) {
                 parent.layer.alert('宝宝性别不能为空',{icon: 2});
-                return;
-            }
-            var childHeight = document.getElementById("childHeight").value;
-            if (!childHeight || childHeight.length == 0) {
-                parent.layer.alert('出生身高不能为空',{icon: 2});
                 return;
             }
             var childWeight = document.getElementById("childWeight").value;
@@ -129,6 +118,19 @@
                 parent.layer.alert('出生日期不能为空',{icon: 2});
                 return;
             }
+
+            var understandJinQuanChannelStr = "";
+            $("input[name='understandJinQuanChannel']").each(function(){
+                if($(this).attr("checked") == true){
+                    understandJinQuanChannelStr +=$(this).val() + ",";
+                }
+            });
+            if(understandJinQuanChannelStr == ''){
+                parent.layer.alert('如何知道金泉不能为空',{icon: 2});
+                return;
+            }
+
+
             //处理医院添加 start
             var hospitalizationArr = $("input[name='hospitalizationArr']:checked");
             var hospitalizationStr = "";
@@ -170,7 +172,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：添加会员
+        当前位置：编辑会员
     </div>
 </div>
 <div class="center_con">
@@ -187,14 +189,14 @@
                 <td class="regTd_r"><input id="memberName" name="memberName" type="text" class="input5" value="<%=member.memberName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">手机：</td>
+                <td class="regTd_l">联系电话：</td>
                 <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" value="<%=member.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">联系人：</td>
                 <td class="regTd_r"><input id="contact" name="contact" type="text" class="input5" value="<%=member.contact%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td  class="regTd_l">年龄：</td>
-                <td class="regTd_r"><input id="age" name="age" type="text" class="input5" value="<%=member.age%>" onchange="isOnlyNum(this)"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td  class="regTd_l">出生年月：</td>
+                <td class="regTd_r"><input id="birthYearMonth" name="birthYearMonth" type="text" class="input5" value="<%=member.birthYearMonth%>" readonly onclick="laydate({istime: true, format: 'YYYY-MM'})"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">工作状态：</td>
                 <td class="regTd_r">
                     <select id="workStatus" name="workStatus">
@@ -337,7 +339,7 @@
             </tr>
             <tr>
                 <td class="regTd_l">宝宝姓名：</td>
-                <td class="regTd_r"><input id="childName" name="childName" type="text" class="input5" value="<%=member.childName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="childName" name="childName" type="text" class="input5" value="<%=member.childName%>"/>&nbsp;&nbsp;</td>
                 <td class="regTd_l">宝宝性别：</td>
                 <td class="regTd_r">
 
@@ -350,7 +352,7 @@
             <tr>
                 <td class="regTd_l">出生身高：</td>
                 <td class="regTd_r">
-                    <input id="childHeight" name="childHeight" type="text" class="input5" value="<%=member.childHeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>cm&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    <input id="childHeight" name="childHeight" type="text" class="input5" value="<%=member.childHeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>cm&nbsp;&nbsp;</td>
                 <td class="regTd_l">出生体重：</td>
                 <td class="regTd_r"><input id="childWeight" name="childWeight" type="text" class="input5" value="<%=member.childWeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>Kg&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -364,7 +366,9 @@
                     <input id="wechat" name="understandJinQuanChannel" type="checkbox"  value="wechat" <%if(member.understandJinQuanChannel == 'wechat'){%>checked<%}%>>微信
                     <input id="forum" name="understandJinQuanChannel" type="checkbox"  value="forum" <%if(member.understandJinQuanChannel == 'forum'){%>checked<%}%>>论坛/社区
                     <input id="QQ" name="understandJinQuanChannel" type="checkbox"  value="QQ" <%if(member.understandJinQuanChannel == 'QQ'){%>checked<%}%>>Q群
-                    </td>
+                    <input name="understandJinQuanChannelDes" type="text"  />
+                    <span style="color:#FF0000;">*</span>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">住院添加：</td>

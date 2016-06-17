@@ -21,7 +21,7 @@ var hospitalAddItemsId = require('../../config').mainClassifyId.hospitalAddItems
 var auxiliaryToolId = require('../../config').mainClassifyId.auxiliaryTool;//辅助工具id
 var specialNoteId = require('../../config').mainClassifyId.specialNote;//特殊说明id
 
-module.exports.insertMember = function(shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
                                        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
@@ -30,7 +30,7 @@ module.exports.insertMember = function(shopId,age,memberCardType,memberName,tel,
 
     //memberCardType = "12";
 
-    var sql = 'INSERT INTO member (shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
+    var sql = 'INSERT INTO member (shopId,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
         + 'deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,'
         + 'husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,'
         + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
@@ -46,19 +46,19 @@ module.exports.insertMember = function(shopId,age,memberCardType,memberName,tel,
     });
 };
 
-module.exports.updateMember = function(id,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+module.exports.updateMember = function(id,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
-                                       husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
+                                       husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,understandJinQuanChannelDes,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
 
-    var sql = 'UPDATE member set age=?, memberCardType=?,memberName=?,tel=?,contact=?,address=?,workStatus=?,motherEducation=?,fatherEducation=?,deliveryMode=?,'
+    var sql = 'UPDATE member set birthYearMonth=?, memberCardType=?,memberName=?,tel=?,contact=?,address=?,workStatus=?,motherEducation=?,fatherEducation=?,deliveryMode=?,'
         + ' deliveryWeeks=?,deliveryHospital=?,parentTraining=?,secondChildExperience=?,secondChildExperienceRemark=?,wifeBreastfeedTime=?,'
-        + ' husbandBreastfeedTime=?,breastfeedReason=?,childName=?,childSex=?,childHeight=?,childWeight=?,childBirthday=?,understandJinQuanChannel=?,'
+        + ' husbandBreastfeedTime=?,breastfeedReason=?,childName=?,childSex=?,childHeight=?,childWeight=?,childBirthday=?,understandJinQuanChannel=?,understandJinQuanChannelDes=?,'
         + ' hospitalization=?,hospitalizationReason=?,assistantTool=?,useToolReason=?,specialInstructions=?'
         + ' where id=?';
-    db.query(sql, [age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+    db.query(sql, [birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
-        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
+        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,understandJinQuanChannelDes,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
