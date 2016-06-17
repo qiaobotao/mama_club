@@ -21,7 +21,7 @@ var hospitalAddItemsId = require('../../config').mainClassifyId.hospitalAddItems
 var auxiliaryToolId = require('../../config').mainClassifyId.auxiliaryTool;//辅助工具id
 var specialNoteId = require('../../config').mainClassifyId.specialNote;//特殊说明id
 
-module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
                                        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
@@ -30,11 +30,11 @@ module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memb
 
     //memberCardType = "12";
 
-    var sql = 'INSERT INTO member (shopId,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
+    var sql = 'INSERT INTO member (shopId,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
         + 'deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,'
         + 'husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,'
-        + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [shopId,age,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,age,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,new Date().getTime()], function(cbData, err, rows, fields) {
@@ -46,17 +46,17 @@ module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memb
     });
 };
 
-module.exports.updateMember = function(id,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+module.exports.updateMember = function(id,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
                                        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,understandJinQuanChannelDes,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
 
-    var sql = 'UPDATE member set birthYearMonth=?, memberCardType=?,memberName=?,tel=?,contact=?,address=?,workStatus=?,motherEducation=?,fatherEducation=?,deliveryMode=?,'
+    var sql = 'UPDATE member set birthYearMonth=?, memberCardType=?,memberName=?,tel=?,contact=?,city_district=?,address=?,workStatus=?,motherEducation=?,fatherEducation=?,deliveryMode=?,'
         + ' deliveryWeeks=?,deliveryHospital=?,parentTraining=?,secondChildExperience=?,secondChildExperienceRemark=?,wifeBreastfeedTime=?,'
         + ' husbandBreastfeedTime=?,breastfeedReason=?,childName=?,childSex=?,childHeight=?,childWeight=?,childBirthday=?,understandJinQuanChannel=?,understandJinQuanChannelDes=?,'
         + ' hospitalization=?,hospitalizationReason=?,assistantTool=?,useToolReason=?,specialInstructions=?'
         + ' where id=?';
-    db.query(sql, [birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+    db.query(sql, [birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,understandJinQuanChannelDes,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,id], function(cbData, err, rows, fields) {

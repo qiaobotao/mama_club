@@ -121,7 +121,7 @@
 
             var understandJinQuanChannelStr = "";
             $("input[name='understandJinQuanChannel']").each(function(){
-                if($(this).attr("checked") == true){
+                if($(this).attr("checked") == 'checked'){
                     understandJinQuanChannelStr +=$(this).val() + ",";
                 }
             });
@@ -235,7 +235,17 @@
             </tr>
             <tr>
                 <td class="regTd_l" >居住地址：</td>
-                <td class="regTd_r" colspan="3"><input id="address" name="address" type="text" class="input5"   value="<%=member.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r" colspan="3">
+                    <select name="city_district" id="city_district">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < areaNames.length ; i ++){
+                        %><option value="<%=areaCodes[i]%>" <%if(member.city_district == areaCodes[i]){%>selected<%}%>><%=areaNames[i]%></option><%
+                        }
+                        %>
+                    </select>
+                    <input id="address" name="address" type="text" class="input5"   value="<%=member.address%>"/>&nbsp;&nbsp;
+                    <span style="color:#FF0000;">*</span></td>
             </tr>
             <!-- 孕产信息 -->
             <tr>

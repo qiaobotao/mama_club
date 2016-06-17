@@ -120,6 +120,9 @@ function isEmail(str){
 }
 function isOnlyNum(obj){
     var objF = parseFloat(obj.value);   //returns   22.34
+    if(objF == 'NaN'){
+        return "";
+    }
     if(objF < 0){
         parent.layer.msg('请输入正确数值！');
         obj.value='';

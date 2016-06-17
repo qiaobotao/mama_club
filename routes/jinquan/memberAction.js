@@ -15,6 +15,9 @@ var servicemeet = require('../../model/service/servicemeet');
 var nursservice = require('../../model/service/nursservice');
 //投诉
 var complain = require('../../model/service/complain');
+//公用数据
+var consts = require('../../model/utils/consts');
+
 module.exports.list = function (req, res,next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
@@ -120,6 +123,7 @@ module.exports.doEdit = function (req, res,next) {
     var tel = req.body.tel ? req.body.tel : '';
     var contact = req.body.contact ? req.body.contact : '';
     var address = req.body.address ? req.body.address : '';
+    var city_district = req.body.city_district ? req.body.city_district : '';//居住地址：区县~
     var workStatus = req.body.workStatus ? req.body.workStatus : '';
     var motherEducation = req.body.motherEducation ? req.body.motherEducation : '';
     var fatherEducation = req.body.fatherEducation ? req.body.fatherEducation : '';
@@ -158,7 +162,7 @@ module.exports.doEdit = function (req, res,next) {
         understandJinQuanChannelVal = understandJinQuanChannel;
     }
     if(id != ""){
-        service.updateMember(id,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        service.updateMember(id,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
             husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,understandJinQuanChannelDes,
             hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -170,7 +174,7 @@ module.exports.doEdit = function (req, res,next) {
             });
     }else{
         var shopId = req.session.user.shopId;
-        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
             husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
             hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -206,7 +210,13 @@ module.exports.preEdit = function(req, res, next) {
             if(member == null){
                 member = {};
             }
-            res.render('member/memberEdit', {member : member,data:results,show:show});
+            res.render('member/memberEdit', {
+                member : member,
+                data:results,
+                show:show,
+                areaNames:consts.AREA_NAMES,
+                areaCodes:consts.AREA_CODES
+            });
         } else {
             next();
         }
