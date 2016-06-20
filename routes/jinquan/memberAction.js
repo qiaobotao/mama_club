@@ -161,8 +161,21 @@ module.exports.doEdit = function (req, res,next) {
     }else{
         understandJinQuanChannelVal = understandJinQuanChannel;
     }
+
+    //如果tel为多个，将多选的值用分号隔开
+    var telVal = "";
+    if (tel instanceof Array) {
+        for (var i = 0; i < tel.length; i++) {
+            if(i != 0){
+                telVal += ";";
+            }
+            telVal += tel[i];
+        }
+    }else{
+        telVal = tel;
+    }
     if(id != ""){
-        service.updateMember(id,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        service.updateMember(id,birthYearMonth,memberCardType,memberName,telVal,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
             husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,understandJinQuanChannelDes,
             hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -174,7 +187,7 @@ module.exports.doEdit = function (req, res,next) {
             });
     }else{
         var shopId = req.session.user.shopId;
-        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,tel,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,telVal,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
             husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
             hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
