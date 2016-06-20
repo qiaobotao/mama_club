@@ -271,6 +271,7 @@ router.all('/brand_browse', brandAction.browse);
 router.all('/brand_del', brandAction.del);
 router.all('/brand_update',brandAction.update);
 router.all('/brand_pre_update', brandAction.preUpdate);
+router.all('/brand_del_check',brandAction.checkDel);
 
 // 库房管理
 router.all('/storeroom_list',storeroomAction.list);

@@ -28,6 +28,16 @@
         }
 
         function del (id) {
+            $.ajax({
+                type: "post",
+                url: "/jinquan/brand_del_check",
+                data: {'bid':id},
+                success: function (result) {
+                    if(!result.flag){
+                        parent.layer.alert('此商标正在使用不能删除！',{icon: 2});
+                    }
+                }
+            });
             delData('/jinquan/brand_del?id='+id);
         }
 

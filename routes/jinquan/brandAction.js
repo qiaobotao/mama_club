@@ -149,3 +149,20 @@ module.exports.update = function(req, res, next) {
         }
     })
 }
+
+module.exports.checkDel = function(req, res, next) {
+
+    var id = req.body.bid ? req.body.bid : '';
+
+    service.checkDel(id, function(err, results){
+
+        if (!err) {
+            res.json({flag:results});
+        } else {
+            myUtils.printSystemLog(err)
+            next();
+        }
+
+    });
+
+}

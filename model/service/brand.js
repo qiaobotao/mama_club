@@ -156,3 +156,22 @@ module.exports.getAllBrands = function (cb) {
         }
     });
 }
+
+module.exports.checkDel = function(id,cb) {
+
+    var sql = "SELECT * FROM wares WHERE brand = ?";
+
+    db.query(sql ,[id], function(cbData, err, rows, fields) {
+
+        if (!err) {
+            if (rows.length != 0) {
+                cb(null,false);
+            } else {
+                cb(null,true);
+            }
+        } else {
+            cb(err);
+        }
+    });
+
+}
