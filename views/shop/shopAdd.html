@@ -7,6 +7,8 @@
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <script type="text/javascript" src="../../js/geo.js"></script>
+    <script type="text/javascript" src="../../js/py.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -19,6 +21,7 @@
             }
         });
         function submitForm(){
+
             var name = document.getElementById("name").value;
             if (!name || name.length == 0) {
                 parent.layer.alert('门店名称不能为空',{icon: 2});
@@ -42,13 +45,15 @@
                 parent.layer.alert('请输入正确的手机号码。',{icon: 2});
                 return;
             }
-            if($("#city_district").val() == ""){
-                parent.layer.alert('请选择区县。',{icon: 2});
+
+            if($("#s2").val() == '地级市' || $("#s3").val() == '市、县级市、县') {
+                parent.layer.alert('请选择相应的市级单位！',{icon: 2});
                 return;
             }
+
             var address = document.getElementById("address").value;
             if(!address || address.length == 0) {
-                parent.layer.alert('门店地址不能为空',{icon: 2});
+                parent.layer.alert('门店详细地址不能为空',{icon: 2});
                 return;
             }
             var principal = document.getElementById("principal").value;
@@ -87,21 +92,49 @@
                 }
             });
         }
+        function initCode() {
+            alert();
+            $.ajax({
+                type: "post",
+                url: "/jinquan/shop_count",
+                data: {},
+                success: function (result) {
+                    var count = parseInt(result.count)+parseInt(1);
+                    var num = '001';
+                    if (parseInt(0)<parseInt(count) && parseInt(count)<=parseInt(9)) {
+                        num = '00'+count;
+                    }
+                    if(parseInt(10)<=parseInt(count) && parseInt(count)<=parseInt(99)) {
+                        num = '0'+count;
+                    }
+                    if(parseInt(100)<=parseInt(count) && parseInt(count)<=parseInt(999)) {
+                        num = count;
+                    }
+                    var str = document.getElementById("s1").value.trim();
+                    if(str == "") return;
+                    var arrRslt = makePy(str);
+                    for(var j=0;j<arrRslt.length;j++){
+                        document.getElementById("mycode").value = arrRslt[j] + num;
+                    }
+                }
+            });
+        }
+
     </script>
 </head>
 
-<body>
+<body onload="setup();preselect('北京市');initCode()">
 <div class="r_top">
     <div class="weizhi">
         当前位置：添加门店
     </div>
 </div>
 <div class="center_con">
-    <form method="post" id="myform" action="/jinquan/shop_add">
+    <form method="post"  id="myform" action="/jinquan/shop_add">
     <table width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td class="regTd_l">序列号：</td>
-            <td class="regTd_r"><input id="serialNumber" name="serialNumber" type="text" class="input5" onblur="checkSeri()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            <td class="regTd_r"><input id="mycode" name="serialNumber" type="text" class="input5" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             <td  class="regTd_l">门店名称：</td>
             <td class="regTd_r">
                 <input id="name" name="name" type="text" class="input5" onblur="checkName()" />
@@ -120,13 +153,14 @@
         <tr>
             <td class="regTd_l">详细地址：</td>
             <td class="regTd_r" colspan="3">
-                <select id="city_district" name="city_district">
-                    <option value="">请选择</option>
-                    <%
-                    for(var i = 0 ; i < areaNames.length ; i ++){
-                    %><option value="<%=areaCodes[i]%>"><%=areaNames[i]%></option><%
-                    }
-                    %>
+                <select class="select" name="province" id="s1" onchange="initCode()">
+                    <option></option>
+                </select>
+                <select class="select" name="city" id="s2">
+                    <option></option>
+                </select>
+                <select class="select" name="town" id="s3">
+                    <option></option>
                 </select>
                 <input id="address" name="address" type="text" class="input5" style="width: 500px" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
         </tr>

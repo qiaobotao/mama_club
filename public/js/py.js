@@ -95,4 +95,8 @@ function query(){
         option.vaule = arrRslt[j];
         first.appendChild(option);
     }
+    document.getElementById("mycode").value = "";
+    for(var j=0;j<arrRslt.length;j++){
+        document.getElementById("mycode").value = arrRslt[j];
+    }
 }

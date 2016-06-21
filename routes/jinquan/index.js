@@ -66,6 +66,7 @@ router.all('/shop_pre_edit',shopAction.preEdit);//编辑门店
 router.all('/shop_update',shopAction.update);//修改门店
 router.all('/check_shopseril',shopAction.checkSeril);//检查门店号是否重复
 router.all('/check_shopname', shopAction.checkName);//检查门店名称是否重复
+router.all('/shop_count',shopAction.shopCount);
 
 /*********************教室及课程管理****************************/
 // 教室管理

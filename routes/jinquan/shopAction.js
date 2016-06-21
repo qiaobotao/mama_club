@@ -64,11 +64,13 @@ module.exports.add = function(req, res, next) {
     var name = req.body.name ? req.body.name : '';
     var principal = req.body.principal ? req.body.principal : '';
     var tel = req.body.tel ? req.body.tel : '';
-    var city_district = req.body.city_district ? req.body.city_district : '';//所属区县
+    var province = req.body.province ? req.body.province : '';
+    var city = req.body.city ? req.body.city : '';
+    var town = req.body.town ? req.body.town : '';
     var address = req.body.address ? req.body.address : '';
     var remark = req.body.remark ? req.body.remark : '';
 
-   service.insertShop(serialNumber,code,name,principal,tel,city_district,address,remark,function(err, results) {
+   service.insertShop(serialNumber,code,name,principal,tel,province,city,town,address,remark,function(err, results) {
        if (!err) {
            res.redirect('/jinquan/shop_list?replytype=add');
        } else {
@@ -219,5 +221,20 @@ module.exports.checkName = function (req, res, next) {
             next();
         }
     })
+}
+
+module.exports.shopCount = function (req, res, next) {
+
+    service.shopCount(function(err, results) {
+
+        if(!err) {
+            res.json({count:results});
+        }  else {
+            myUtils.printSystemLog('生成序列号'+err)
+            next();
+        }
+
+    });
+
 }
 

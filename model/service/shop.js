@@ -16,12 +16,12 @@ var myUtils = require('../../common/utils');
  * @param remark
  * @param cb
  */
-module.exports.insertShop = function(serialNumber,code,name,principal,tel,city_district,address,remark, cb) {
+module.exports.insertShop = function(serialNumber,code,name,principal,tel,province,city,town,address,remark, cb) {
 
-    myUtils.printSystemLog('增加门店:'+serialNumber+'-'+code+'-'+name+'-'+principal+'-'+tel+'-'+city_district+'-'+address+'-'+remark);
+    myUtils.printSystemLog('增加门店:'+serialNumber+'-'+code+'-'+name+'-'+principal+'-'+tel+'-'+province+city+town+'-'+address+'-'+remark);
 
-    var sql = 'INSERT INTO shop (serialNumber,code,name,principal,tel,city_district,address,remark,dateline,status) VALUES (?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [serialNumber,code,name,principal,tel,city_district,address,remark, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO shop (serialNumber,code,name,principal,tel,province,city,town,address,remark,dateline,status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [serialNumber,code,name,principal,tel,province,city,town,address,remark, new Date().getTime(),'1'], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -225,6 +225,20 @@ module.exports.checkName = function (name, cb) {
             } else {
                 cb(null,true);
             }
+        } else {
+            cb(err);
+        }
+    });
+
+}
+
+module.exports.shopCount = function (cb) {
+
+    var sql = 'SELECT count(*) AS count FROM shop';
+
+    db.query(sql, [], function (cbData, err, rows, filelds) {
+        if(!err) {
+            cb(null, rows[0].count);
         } else {
             cb(err);
         }
