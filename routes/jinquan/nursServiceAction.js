@@ -113,7 +113,6 @@ module.exports.add = function (req, res,next) {
         deal =deal.substr(0,deal.length-1);
     }else{
         deal=  dealTemp;
-
     }
 
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';

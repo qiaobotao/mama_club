@@ -35,10 +35,15 @@ module.exports.insertServiceMeet = function(shopId,specified,staffId,tel,name,ag
         }
     });
 };
-module.exports.updateServiceMeet = function(specified,staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, cb) {
+module.exports.updateServiceMeet = function(id,memberId,name,tel,meetTime,specialRemarks,serviceType,address,price,serverShopId,specified,principal,
+                                            staffId,status,nursServiceId,serviceTime,deal,serviceNeeds, cb) {
 
-    var sql = 'UPDATE   serviceMeet SET specified=?, staffId=?, tel  =  ? ,  name  =  ? , meetTime  =  ? , age  =  ? ,   principal  =  ? ,   problemDescription  =  ? ,   serviceType  =  ? ,   address  =  ? ,   price  =  ? ,   memberId  =  ?  ,   serviceId  =  ? WHERE  id  =  ?  ';
-    db.query(sql, [specified,staffId,tel,name,meetTime,age,principal,problemDescription,serviceType,address,price,memberId,serviceId,id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE serviceMeet SET ' +
+        ' memberId = ?,name = ?,tel = ?,meetTime = ?,specialRemarks = ?,serviceType = ?,address = ?,price = ?,serverShopId = ?,specified = ?,principal = ?,' +
+        ' staffId = ?,status = ?,nursServiceId = ?,serviceTime = ?,deal = ?,serviceNeeds = ? ' +
+        'WHERE  id  =  ?  ';
+    db.query(sql, [memberId,name,tel,meetTime,specialRemarks,serviceType,address,price,serverShopId,specified,principal,
+        staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -47,7 +52,7 @@ module.exports.updateServiceMeet = function(specified,staffId,id,tel,name,age,pr
     });
 };
 /**
- * 添加教室
+ * 查询预约单信息
  * @param tel
  * @param name
  * @param meetTime
@@ -59,9 +64,7 @@ module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,cu
 
     var myDate = new Date();
     var parm = "where sm.tel like '%" + tel + "%' and sm.name like '%" + name+ "%'" +
-        " and sm.meetTime like '%" + meetTime + "%'" +
-        " and sm.serviceId = s.id " ;
-
+        " and sm.meetTime like '%" + meetTime + "%'";
     if(shopId!="")
     {
         parm+=" and sm.shopId = " + shopId ;
@@ -73,7 +76,8 @@ module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,cu
     var sql_count = 'SELECT count(*) as count FROM serviceMeet sm ,service s '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = "SELECT " +
+    /*
+    var sql_data1 = "SELECT " +
         "sm.*,s.name as 'serviceName',s.content as 'serviceContent' , " +
         "s.price as 'servicePrice'," +
         "s.id as 'serviceId'," +
@@ -83,6 +87,15 @@ module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,cu
         "(" +
         "select m.memberName from member m where m.id = sm.memberId " +
         ") as memberName FROM serviceMeet sm ,service s "+parm+"  ORDER BY sm.dateline DESC   LIMIT ?,?";
+    */
+    var sql_data = "SELECT " +
+        "sm.*, " +
+        "(" +
+        "   select s.name from staff s where s.id = sm.staffId" +
+        ") as staffName," +
+        "(" +
+        "select m.memberName from member m where m.id = sm.memberId " +
+        ") as memberName FROM serviceMeet sm "+parm+"  ORDER BY sm.dateline DESC   LIMIT ?,?";
 
     async.series({
         totalPages : function(callback){
@@ -194,7 +207,7 @@ module.exports.delServiceMeet= function (id, cb) {
 };
 
 module.exports.fetchSingleServiceMeet =function (userId,id, cb) {
-    var serviceMeetSql = 'SELECT a.*,b.id as serviceId,b.name AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  and a.id = ?';
+    var serviceMeetSql = 'SELECT a.* FROM serviceMeet a WHERE a.id = ?';
 
     var classificationPare = treatmentMethodId+","+ serverDemandId;
     var classificationSql = 'select * from systemClassify where parentId in ('+classificationPare+')';

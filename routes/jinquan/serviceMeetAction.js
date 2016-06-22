@@ -93,23 +93,49 @@ module.exports.add = function (req, res,next) {
 
 
 module.exports.doEdit = function (req, res,next) {
-    var id = req.body.id ? req.body.id : '';
-    var tel = req.body.tel ? req.body.tel : '';
-    var name = req.body.name ? req.body.name : '';
-    var age = req.body.age ? req.body.age : '';
-    var principal = req.body.principal ? req.body.principal : '';
-    var meetTime = req.body.meetTime ? req.body.meetTime : '';
-    var problemDescription = req.body.problemDescription ? req.body.problemDescription : '';
-    var serviceType = req.body.serviceType ? req.body.serviceType : '';
-    var address = req.body.address ? req.body.address : '';
-    var price = req.body.price ? req.body.price : '';
-    var memberId = req.body.memberId ? req.body.memberId : '';
-    var serviceId = req.body.serviceId ? req.body.serviceId : '';
+    var id = req.body.id ? req.body.id : '';//预约单id
+    var memberId = req.body.memberId ? req.body.memberId : '';//会员id
+    var name = req.body.name ? req.body.name : '';//会员名称
+    var tel = req.body.tel ? req.body.tel : '';//电话id
+    var meetTime = req.body.meetTime ? req.body.meetTime : '';//预约时间
+    var specialRemarks = req.body.specialRemarks ? req.body.specialRemarks : '';//特殊备注
+    var serviceType = req.body.serviceType ? req.body.serviceType : '';//服务位置：到店、上门
+    var address = req.body.address ? req.body.address : '';//上门时选择的地址
+    var price = req.body.price ? req.body.price : '';//报价
+    var serverShopId = req.body.serverShopId ? req.body.serverShopId : '';//接受服务的门店id
+    var specified = req.body.specified ? req.body.specified : '';//是否指定技师
+    var principal = req.body.principal ? req.body.principal : '';//所选技师名称
+    var staffId = req.body.staffId ? req.body.staffId : '';//技师ID
+    var status = req.body.status ? req.body.status : '';//当前状态
+    var nursServiceId = req.body.nursServiceId ? req.body.nursServiceId : '';//护理服务单号
+    var serviceTime = req.body.serviceTime ? req.body.serviceTime : '';//服务开始时间
 
-    var staffId = req.body.staffId ? req.body.staffId : '';
-
-    var specified = req.body.specified ? req.body.specified : '';
-    service.updateServiceMeet(specified,staffId,id,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
+    //做过何种处理
+    var dealTemp = req.body.deal ? req.body.deal : '';
+    var deal="" ;
+    if (dealTemp instanceof Array) {
+        for (var i=0;i<dealTemp.length;i++)
+        {
+            deal +=dealTemp[i]+',';
+        }
+        deal =deal.substr(0,deal.length-1);
+    }else{
+        deal=  dealTemp;
+    }
+    //服务需求
+    var serviceNeedsTemp = req.body.serviceNeeds ? req.body.serviceNeeds : '';
+    var serviceNeeds="" ;
+    if (serviceNeedsTemp instanceof Array) {
+        for (var i=0;i<serviceNeedsTemp.length;i++)
+        {
+            serviceNeeds +=serviceNeedsTemp[i]+',';
+        }
+        serviceNeeds =serviceNeeds.substr(0,serviceNeeds.length-1);
+    }else{
+        serviceNeeds=  serviceNeedsTemp;
+    }
+    service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,address,price,serverShopId,specified,principal,
+        staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list?replytype=update');
         } else {

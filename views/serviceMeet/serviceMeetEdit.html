@@ -92,7 +92,7 @@
                 }
                 else if(serviceMeets[i].status==2)
                 {
-                    zhuangtai="已接受服务";
+                    zhuangtai="上门预约";
                 }
                 else if(serviceMeets[i].status==3)
                 {
@@ -172,15 +172,54 @@
                 parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }
-            var principal = document.getElementById("principal").value;
-            if(!principal || principal.length == 0) {
-                parent.layer.alert('技师不能为空',{icon: 2});
+            if($('#meetTimeYMD').val() == ""){
+                parent.layer.alert('预约时间不能为空。',{icon: 2});
                 return;
             }
-            var serviceType = document.getElementById("serviceType").value;
-            if (!serviceType || serviceType.length == 0) {
-                parent.layer.alert('门店/上门不能为空',{icon: 2});
+            if($('#meetTimeHH').val() == ""){
+                parent.layer.alert('预约时间小时不能为空。',{icon: 2});
                 return;
+            }
+            if($('#meetTimeSS').val() == ""){
+                parent.layer.alert('预约时间分钟不能为空。',{icon: 2});
+                return;
+            }
+            $('#meetTime').val($('#meetTimeYMD').val() +" "+$('#meetTimeHH').val()+":"+$('#meetTimeSS').val());
+            if($("#serviceType").val() == 1){//到店
+                if($("#serverShopId").val() == ""){//需选择门店
+                    parent.layer.alert('请选择门店。',{icon: 2});
+                    return;
+                }
+            }else{//上门
+                if($("#price").val() == ""){//需填写报价
+                    parent.layer.alert('报价不能为空',{icon: 2});
+                    return;
+                }
+                if($("#cityId").val() == ""){//需选择详细地址
+                    parent.layer.alert('请选择详细地址。',{icon: 2});
+                    return;
+                }
+            }
+            if($("#specified").val() == 2){//指定了技师，技师及报价不能为空
+                if($("#principal").val() == ""){
+                    parent.layer.alert('技师不能为空',{icon: 2});
+                    return;
+                }
+            }
+            if($("#status").val() == 3){//如果预约单状态改为“已接受服务”则服务技师、服务时间、服务单号都不能为空
+                if($("#nursServiceId").val() == ''){
+                    parent.layer.alert('请填写护理服务单。',{icon: 2});
+                    return;
+                }
+                if($("#serviceTimeHH").val() == ''){
+                    parent.layer.alert('请填写护理开始小时。',{icon: 2});
+                    return;
+                }
+                if($("#serviceTimeSS").val() == ''){
+                    parent.layer.alert('请填写护理开始分钟。',{icon: 2});
+                    return;
+                }
+                $("#serviceTime").val( $("#serviceTimeHH").val() +":"+$("#serviceTimeSS").val());
             }
             document.getElementById("myform").submit();
         }
@@ -214,11 +253,13 @@
                 $("#memberAddressText").hide();
                 $("#serviceCode1").show();
                 $("#serviceCode2").show();
+                $("#priceSpanId").hide();//到店时报价隐藏
             }else{//上门
                 $("#shopAddress").hide();
                 $("#memberAddress").show();
                 $("#shopAddressText").hide();
                 $("#memberAddressText").show();
+                $("#priceSpanId").show();//上门时报价隐藏
             }
         }
 
@@ -226,12 +267,29 @@
          * 当状态改变时，且状态变更为：已接受服务时，需要输入服务单号+开始服务时间
          */
         function changeStatus(){
-            if($("#status").val() == 2){
+            if($("#status").val() == 3){
                 $("#serviceCode1").show();
                 $("#serviceCode2").show();
             }else{
                 $("#serviceCode1").hide();
                 $("#serviceCode2").hide();
+            }
+        }
+        /**
+         * 当切换是否指定技师
+         * 指定时：可以选择技师；
+         * 未指定时：不可以选择技师
+         */
+        function changeSpecified(){
+            if($("#specified").val() == 1){
+                $("#staffId").val("");//技师id为空
+                $("#price").val("");//标价设为空
+                $("#principal").val("");
+                $("#principal").attr("disabled","disabled");//设为不可用
+                $("#price").attr("disabled","disabled");//标价设为不可用
+            }else{
+                $("#principal").removeAttr("disabled");//取消不可用的设置
+                $("#price").removeAttr("disabled");//取消不可用的设置
             }
         }
 
@@ -261,35 +319,46 @@
             <tr>
                 <td class="regTd_l">预约时间：</td>
                 <td class="regTd_r">
-                    <input id="meetTime" name="meetTime" type="text" class="input5" style="width: 70px" onclick="laydate()"  value="<%=service_meet.meetTime%>" />
-                    <select>
-                        <option>08</option>
-                        <option>09</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
+                    <%
+                        var meetTimeStr = service_meet.meetTime;
+                        meetTimeStr = meetTimeStr == null?"":meetTimeStr;
+                        var meetTimeStrYMD = "";
+                        var meetTimeStrHH = "";
+                        var meetTimeStrSS = "";
+                        if(meetTimeStr != ""){
+                            meetTimeStrYMD = meetTimeStr.split(" ")[0];
+                            meetTimeStrHH = meetTimeStr.split(" ")[1].split(":")[0];
+                            meetTimeStrSS = meetTimeStr.split(" ")[1].split(":")[1];
+                        }
+                    %>
+                    <input id="meetTimeYMD" name="meetTimeYMD" type="text" class="input5" style="width: 70px" onclick="laydate()"  value="<%=meetTimeStrYMD%>" />
+                    <input id="meetTime" name="meetTime" type="hidden" value="<%=service_meet.meetTime%>" />
+                    <select id="meetTimeHH">
+                        <option value="">请选择</option>
+                        <%
+                            for(var i = 0 ; i < 12 ; i ++){
+                                var timeHHVal = i+8;
+                                if(timeHHVal < 10){
+                                    timeHHVal = "0"+timeHHVal;
+                                }
+                                %><option value="<%=timeHHVal%>" <%if(meetTimeStrHH == timeHHVal){%>selected<%}%>><%=timeHHVal%></option><%
+                            }
+                        %>
                     </select>:
-                    <select>
+                    <select id="meetTimeSS">
+                        <option value="">请选择</option>
                         <%
                         var miao = "";
                         for(var i = 5 ; i <= 60 ; i += 5 ){
                             miao = i == 5 ? "0"+i:i;
-                            %><option><%=miao%></option><%
+                            %><option value="<%=miao%>" <%if(meetTimeStrSS == miao){%>selected<%}%>><%=miao%></option><%
                         }
                         %>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊备注：</td>
                 <td class="regTd_r">
-                    <input id="serviceName" name="serviceName" type="text" class="input5"  value="<%=service_meet.serviceName%>"  onfocus="getServices()"/>
-                    <input id="serviceId" name="serviceId" value="<%=service_meet.serviceId%>" type="hidden" class="input5" />
+                    <input id="specialRemarks" name="specialRemarks" value="<%=service_meet.specialRemarks%>" type="text" class="input5" />
                 </td>
             </tr>
             <tr>
@@ -300,6 +369,9 @@
                     <option value="1" <%if(service_meet.serviceType == '1'){%>selected<%}%>>到店</option>
                     <option value="2" <%if(service_meet.serviceType == '2'){%>selected<%}%>>上门</option>
                 </select>
+                <span id="priceSpanId">
+                    报价：<input id="price" name="price" type="text" class="input5" style="width: 50px;" value="<%=service_meet.price%>" />&nbsp;元&nbsp;
+                </span>
                 &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             <td class="regTd_l">
                 <span id="shopAddressText">选择门店：</span>
@@ -307,17 +379,17 @@
             </td><!-- 服务位置如果是：上门，则选择区县及填写详细地址；到店：选择该员工管理的门店信息 -->
             <td class="regTd_r">
                 <span id="shopAddress" style='display:none;'>
-                    <select>
+                    <select id="serverShopId" name="serverShopId">
                         <option value="">请选择</option>
                         <%
                             for(var i = 0 ; i < shopArr.length ; i ++){
-                                %><option value="<%=shopArr[i].id%>"><%=shopArr[i].name%></option><%
+                                %><option value="<%=shopArr[i].id%>" <%if(service_meet.serverShopId == shopArr[i].id){%>selected<%}%>><%=shopArr[i].name%></option><%
                             }
                         %>
                     </select>
                 </span>
                 <span id="memberAddress" style='display:none;'>
-                    <select>
+                    <select id="cityId" name="cityId">
                         <option value="">请选择</option>
                         <%
                         for(var i = 0 ; i < areaNames.length ; i ++){
@@ -333,19 +405,15 @@
             <tr>
                 <td class="regTd_l">是否指定技师：</td>
                 <td class="regTd_r">
-
-                    <select id="specified" name="specified" >
-
-                        <option value="1" <%if(service_meet.specified == '0'){%>selected<%}%>>未指定</option>
-                        <option value="2" <%if(service_meet.specified == '1'){%>selected<%}%>>指定</option>
+                    <select id="specified" name="specified"  onchange="changeSpecified()">
+                        <option value="1" <%if(service_meet.specified == '1'){%>selected<%}%>>未指定</option>
+                        <option value="2" <%if(service_meet.specified == '2'){%>selected<%}%>>指定</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">技师：</td>
                 <td class="regTd_r">
                     <input id="staffId" name="staffId" type="hidden"  value="<%=service_meet.staffId%>"  class="input5" />
-                    <input id="principal" name="principal" type="text" value="<%=service_meet.principal%>" class="input5" onfocus="getmembers()" />&nbsp;
-                    报价：
-                    <input id="price" name="price" type="text" class="input5" style="width: 50px;" value="<%=service_meet.price%>" />&nbsp;元&nbsp;</td>
+                    <input id="principal" name="principal" type="text" value="<%=service_meet.principal%>" class="input5" onfocus="getmembers()" />&nbsp;</td>
             </tr>
             <tr style="border:solid 1px #f56394;">
                 <td class="regTd_l">做过何种处理：</td>
@@ -389,35 +457,44 @@
                 <td class="regTd_l">当前状态：</td>
                 <td class="regTd_r">
                     <select name="status" id="status" onchange="changeStatus()">
-                        <option value="1">预约成功</option>
-                        <option value="2">已接受服务</option>
-                        <option value="3">取消预约</option>
+                        <option value="1" <%if(service_meet.status == 1){%>selected<%}%>>预约成功</option>
+                        <option value="2" <%if(service_meet.status == 2){%>selected<%}%>>上门预约</option>
+                        <option value="3" <%if(service_meet.status == 3){%>selected<%}%>>已接受服务</option>
+                        <option value="4" <%if(service_meet.status == 4){%>selected<%}%>>取消预约</option>
                     </select>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l" id="serviceCode1">护理服务单号：</td>
                 <td class="regTd_r" id="serviceCode2">
-                    <input type="text" id=""/>&nbsp;&nbsp;
+                    <input type="text" id="nursServiceId" name="nursServiceId" value="<%=service_meet.nursServiceId%>"/>&nbsp;&nbsp;
                     服务开始时间
-                    <select>
-                        <option>08</option>
-                        <option>09</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                        <option>16</option>
-                        <option>17</option>
-                        <option>18</option>
-                        <option>19</option>
+                    <input type="hidden" id="serviceTime" name="serviceTime" value="<%=service_meet.serviceTime%>"/>
+                    <select id="serviceTimeHH">
+                        <option value="">请选择</option>
+                        <%
+                            var serviceTimeStr = service_meet.serviceTime;
+                            serviceTimeStr = serviceTimeStr == null?"":serviceTimeStr;
+                            var serviceTimeStrHH = "";
+                            var serviceTimeStrSS = "";
+                            if(serviceTimeStr != ""){
+                                serviceTimeStrHH = serviceTimeStr.split(":")[0];
+                                serviceTimeStrSS = serviceTimeStr.split(":")[1];
+                            }
+                            for(var i = 0 ; i < 12 ; i ++){
+                                var timeHHVal = i+8;
+                                if(timeHHVal < 10){
+                                    timeHHVal = "0"+timeHHVal;
+                                }
+                                %><option value="<%=timeHHVal%>" <%if(serviceTimeStrHH == timeHHVal){%>selected<%}%>><%=timeHHVal%></option><%
+                            }
+                        %>
                     </select>:
-                    <select>
+                    <select id="serviceTimeSS">
+                        <option value="">请选择</option>
                         <%
                         var miao = "";
                         for(var i = 5 ; i <= 60 ; i += 5 ){
                         miao = i == 5 ? "0"+i:i;
-                        %><option><%=miao%></option><%
+                        %><option value="<%=miao%>"  <%if(serviceTimeStrSS == miao){%>selected<%}%>><%=miao%></option><%
                         }
                         %>
                     </select>
