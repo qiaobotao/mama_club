@@ -42,13 +42,13 @@
                 parent.layer.alert('请输入正确的手机号码。',{icon: 2});
                 return;
             }
-            if($("#city_district").val() == ""){
-                parent.layer.alert('请选择区县。',{icon: 2});
+            if($("#s2").val() == '地级市' || $("#s3").val() == '市、县级市、县') {
+                parent.layer.alert('请选择相应的市级单位！',{icon: 2});
                 return;
             }
             var address = document.getElementById("address").value;
             if(!address || address.length == 0) {
-                parent.layer.alert('门店地址不能为空',{icon: 2});
+                parent.layer.alert('门店详细地址不能为空',{icon: 2});
                 return;
             }
             var principal = document.getElementById("principal").value;
@@ -83,7 +83,7 @@
                     <input id="name" name="name" type="text" class="input5" value="<%=shop.name%>" readonly/>
                     代码
                     <select id="code" name="code" disabled>
-                        <option value="">请选择</option>
+                        <option value="<%=shop.code%>">请选择</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -96,16 +96,16 @@
             <tr>
                 <td class="regTd_l">详细地址：</td>
                 <td class="regTd_r" colspan="3">
-                    <select name="city_district" id="city_district">
-                        <option value="">请选择</option>
-                        <%
-                        for(var i = 0 ; i < areaNames.length ; i ++){
-                        %><option value="<%=areaCodes[i]%>" <%if(shop.city_district == areaCodes[i]){%>selected<%}%>><%=areaNames[i]%></option><%
-                        }
-                        %>
+                    <select class="select" name="province" id="s1" disabled>
+                        <option value="<%=shop.province%>"><%=shop.province%></option>
                     </select>
-                    <input id="address" name="address" type="text" class="input5" value="<%=shop.address%>" style="width: 600px;"/>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    <select class="select" name="city" id="s2" disabled>
+                        <option value="<%=shop.city%>"><%=shop.city%></option>
+                    </select>
+                    <select class="select" name="town" id="s3" disabled>
+                        <option value="<%=shop.town%>"><%=shop.town%></option>
+                    </select>
+                    <input id="address" name="address" type="text" class="input5" style="width: 500px" value="<%=shop.address%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">备注：</td>

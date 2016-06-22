@@ -28,6 +28,12 @@
                 <td class="regTd_r"><input id="name" name="name" type="text" class="input5" value="<%=data.name%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
+                <td  class="regTd_l">代码：</td>
+                <td class="regTd_r"><select id="code" name="code" disabled>
+                    <option value=""><%=data.code%></option>
+                </select></td>
+            </tr>
+            <tr>
                 <td class="regTd_l">负责人：</td>
                 <td class="regTd_r"><input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -37,7 +43,15 @@
             </tr>
             <tr>
                 <td class="regTd_l">详细地址：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" value="<%=data.address%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><select class="select" name="province" id="s1" disabled>
+                    <option><%=data.province%></option>
+                </select>
+                    <select class="select" name="city" id="s2" disabled>
+                        <option><%=data.city%></option>
+                    </select>
+                    <select class="select" name="town" id="s3" disabled>
+                        <option><%=data.town%></option>
+                    </select><input id="address" name="address" type="text" class="input5" value="<%=data.address%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">备注：</td>

@@ -164,14 +164,12 @@ module.exports.update = function(req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
     var name = req.body.name ? req.body.name : '';
-    var code = req.body.code ? req.body.code : '';//门店编码
     var principal = req.body.principal ? req.body.principal : '';
     var tel = req.body.tel ? req.body.tel : '';
-    var city_district = req.body.city_district ? req.body.city_district : '';//所在区县
     var address = req.body.address ? req.body.address : '';
     var remark = req.body.remark ? req.body.remark : '';
 
-    service.updateShop(id, serialNumber, code, name,city_district, address, principal, tel, remark, function(err, results) {
+    service.updateShop(id, serialNumber, name,address, principal, tel, remark, function(err, results) {
         if (!err) {
             res.redirect('/jinquan/shop_list?replytype=update');
         } else {
