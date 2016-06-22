@@ -71,9 +71,13 @@ module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,cu
     }
     if(status!="")
     {
-        parm+=" and sm.status = " + status ;
+        if(status.indexOf(",")> -1 ){
+            parm+=" and sm.status in (" + status +")";
+        }else{
+            parm+=" and sm.status = " + status ;
+        }
     }
-    var sql_count = 'SELECT count(*) as count FROM serviceMeet sm ,service s '+parm;
+    var sql_count = 'SELECT count(*) as count FROM serviceMeet sm '+parm;
     var start = (currentPage - 1) * 10;
     var end = 10;
     /*

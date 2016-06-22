@@ -286,14 +286,18 @@ module.exports.select = function (req, res,next) {
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
+    var url = '/jinquan'+req.url;
 
-    service.fetchAllServiceMeet(shopId,tel,name,meetTime,1,currentPage, function (err, results) {
+    //根据条件查询所有预约单信息，其中状态必须是预约成功的状态：1：已预约；2：上门预约
+    service.fetchAllServiceMeet(shopId,tel,name,meetTime,"1,2",currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
             results.meetTime = meetTime;
             results.currentPage = currentPage;
-            res.render('serviceMeet/serviceMeetSelect', {data : results});
+            res.render('serviceMeet/serviceMeetSelect', {data : results, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})});
+
         } else {
             console.log(err.message);
             res.render('error', {error : err});

@@ -15,16 +15,17 @@
             var phone = document.getElementById('phone').value;
             var name = document.getElementById('name').value;
             var meetTime = document.getElementById('meetTime').value;
-            var status = document.getElementById('status').value;
-            window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&name='+name+ '&meetTime='+meetTime+ '&status='+status ;
+            //var status = document.getElementById('status').value;
+//            window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&name='+name+ '&meetTime='+meetTime+ '&status='+status ;
+            window.location.href = '/jinquan/service_meet_select?phone='+phone+'&page='+selectPage+'&name='+name+ '&meetTime='+meetTime ;
         }
         function pageturning (selectPage) {
 
             var phone = document.getElementById('phone').value;
             var name = document.getElementById('name').value;
             var meetTime = document.getElementById('meetTime').value;
-            var status = document.getElementById('status').value;
-            window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&customerName='+name+ '&meetStartTime='+meetTime ;
+//            var status = document.getElementById('status').value;
+            window.location.href = '/jinquan/service_meet_select?phone='+phone+'&page='+selectPage+'&customerName='+name+ '&meetStartTime='+meetTime ;
         }
         //选择该商品
         function select(serviceMeet){
@@ -157,8 +158,7 @@
             </tr>
             <%}%>
         </table>
-
-        <%- include ../pagination.html -%>
+        <%- laypage %>
     </div>
 </div>
 
