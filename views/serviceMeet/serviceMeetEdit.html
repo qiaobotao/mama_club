@@ -220,11 +220,21 @@
                     return;
                 }
                 $("#serviceTime").val( $("#serviceTimeHH").val() +":"+$("#serviceTimeSS").val());
+
+                var serviceStaffNameStr = "";
+                $("input[name='serviceStaffName']").each(function(){
+                    serviceStaffNameStr += ",";
+                });
+                if(serviceStaffNameStr == ""){
+                    parent.layer.alert('请选择服务技师。',{icon: 2});
+                    return;
+                }
             }
             document.getElementById("myform").submit();
         }
         var iframIndex ;
         function getmembers(index){
+            index = index == null ? "" :index;
             //iframe层
             memberIndex = parent.layer.open({
                 type: 2,
@@ -232,7 +242,7 @@
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/staff_select_servicemeet?index='+'', //iframe的url
+                content: '/jinquan/staff_select_servicemeet?index='+index, //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
@@ -270,9 +280,11 @@
             if($("#status").val() == 3){
                 $("#serviceCode1").show();
                 $("#serviceCode2").show();
+                $("#serviceStaffTrId").show();
             }else{
                 $("#serviceCode1").hide();
                 $("#serviceCode2").hide();
+                $("#serviceStaffTrId").hide();
             }
         }
         /**
@@ -293,6 +305,44 @@
             }
         }
 
+        var serviceStaffIndex = 1;
+        /**
+         * 追加护理服务的技师
+         */
+        function appendServiceStaff(){
+            serviceStaffIndex ++;
+            //增加一个技师id（hidden）
+            var staffIdHidden = document.createElement("input");
+            staffIdHidden.setAttribute("type","hidden");
+            staffIdHidden.setAttribute("id","staffId"+serviceStaffIndex);
+            staffIdHidden.setAttribute("name","serviceStaffId");
+            //增加一个技师名称（文本框）
+            var principalText = document.createElement("input");
+            principalText.setAttribute("type","text");
+            principalText.setAttribute("id","principal"+serviceStaffIndex);
+            principalText.setAttribute("name","serviceStaffName");
+            principalText.setAttribute("class","input5");
+            principalText.setAttribute('onfocus',"getmembers("+serviceStaffIndex+")");
+            //添加一个span标签，删除对应的技师信息
+            var serviceStaffSpan = document.createElement("span");
+            serviceStaffSpan.setAttribute("id","serviceStaffSpan"+serviceStaffIndex);
+            serviceStaffSpan.setAttribute("style","font-size:20px;cursor: pointer");
+            serviceStaffSpan.setAttribute('onclick',"delServiceStaff("+serviceStaffIndex+")");
+            serviceStaffSpan.innerHTML = "-";
+
+            var div = document.getElementById("serviceStaffDivId");
+            div.appendChild(staffIdHidden);
+            div.appendChild(principalText);
+            div.appendChild(serviceStaffSpan);
+        }
+        /**
+         * 删除护理服务的技师
+         */
+        function delServiceStaff(delIndex){
+            $("#staffId"+delIndex).remove();
+            $("#principal"+delIndex).remove();
+            $("#serviceStaffSpan"+delIndex).remove();
+        }
     </script>
 </head>
 
@@ -499,6 +549,36 @@
                         %>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr id="serviceStaffTrId">
+                <td class="regTd_l">预约技师：</td>
+                <td class="regTd_r" colspan="3">
+                    <span id="serviceStaffDivId">
+                        <%
+                        var serviceStaffIdStr = service_meet.serviceStaffIds;
+                        var serviceStaffNameStr = service_meet.serviceStaffNames;
+                        serviceStaffIdStr = serviceStaffIdStr == null ? "" : serviceStaffIdStr;
+                        serviceStaffNameStr = serviceStaffNameStr == null ? "" : serviceStaffNameStr;
+                        var serviceStaffIdArr = serviceStaffIdStr.split(",");
+                        var serviceStaffNameArr = serviceStaffNameStr.split(",");
+                        if(serviceStaffIdArr.length > 0){
+                            for(var i = 0 ; i < serviceStaffIdArr.length ; i ++){
+                                %>
+                                <input id="staffId<%=(i+1)%>" name="serviceStaffId" type="hidden"  value="<%=serviceStaffIdArr[i]%>"  class="input5" />
+                                <input id="principal<%=(i+1)%>" name="serviceStaffName" type="text" value="<%=serviceStaffNameArr[i]%>" class="input5" onfocus="getmembers(<%=(i+1)%>)" />&nbsp;
+                                <span id="serviceStaffSpan<%=(i+1)%>" style="font-size:20px;cursor: pointer" onclick="delServiceStaff(<%=(i+1)%>)">-</span>
+                                <%
+                            }
+                        }else{
+                            %>
+                            <input id="staffId1" name="serviceStaffId" type="hidden"  value="<%=service_meet.serviceStaffIds%>"  class="input5" />
+                            <input id="principal1" name="serviceStaffName" type="text" value="<%=service_meet.serviceStaffNames%>" class="input5" onfocus="getmembers(1)" />&nbsp;
+                            <%
+                        }
+                        %>
+                    </span>
+                    <span style="font-size:20px;cursor: pointer" onclick="appendServiceStaff()">+</span>
+                    <span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
         <!-- 预约情况 -->

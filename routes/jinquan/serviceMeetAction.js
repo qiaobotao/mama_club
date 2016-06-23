@@ -134,8 +134,32 @@ module.exports.doEdit = function (req, res,next) {
     }else{
         serviceNeeds=  serviceNeedsTemp;
     }
+    //提供服务的技师ID
+    var serviceStaffIdsTemp = req.body.serviceStaffId ? req.body.serviceStaffId : '';//护理服务技师ID
+    var serviceStaffIds="" ;
+    if (serviceStaffIdsTemp instanceof Array) {
+        for (var i=0;i<serviceStaffIdsTemp.length;i++)
+        {
+            serviceStaffIds +=serviceStaffIdsTemp[i]+',';
+        }
+        serviceStaffIds =serviceStaffIds.substr(0,serviceStaffIds.length-1);
+    }else{
+        serviceStaffIds=  serviceStaffIdsTemp;
+    }
+    //提供服务的技师名称
+    var serviceStaffNamesTemp = req.body.serviceStaffName ? req.body.serviceStaffName : '';//护理服务技师名称
+    var serviceStaffNames="" ;
+    if (serviceStaffNamesTemp instanceof Array) {
+        for (var i=0;i<serviceStaffNamesTemp.length;i++)
+        {
+            serviceStaffNames +=serviceStaffNamesTemp[i]+',';
+        }
+        serviceStaffNames =serviceStaffNames.substr(0,serviceStaffNames.length-1);
+    }else{
+        serviceStaffNames=  serviceStaffNamesTemp;
+    }
     service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,address,price,serverShopId,specified,principal,
-        staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,function (err, results) {
+        staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
         if (!err) {
             res.redirect('/jinquan/service_meet_list?replytype=update');
         } else {
