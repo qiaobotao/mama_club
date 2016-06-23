@@ -185,8 +185,11 @@
             </tr>
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
-                <td class="regTd_l">预约服务单号：</td>
-                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId"  type="text" class="input5" value="<%=nursService.serviceMeetId%>" readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">服务单号：</td>
+                <td class="regTd_r">
+
+                    <input id="serviceMeetId" name="serviceMeetId"  type="text" class="input5" value="<%=nursService.serviceMeetId%>" readonly="true"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
                 <td class="regTd_r"><input id="serviceDate" name="serviceDate" readonly onclick="laydate({istime: true, format: 'YYYY-MM-DD'})" type="text" class="input5"  value="<%=nursService.serviceDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -219,12 +222,30 @@
             <tr>
                 <td class="regTd_l">服务需求：</td>
                 <td class="regTd_r">
+                    <!--
                     <select id="serviceNeeds" name="serviceNeeds">
                         <option value="">请选择</option>
                         <%for(var i=0;i<dictData.serverDemandArr.length;i++){
                         %><option value="<%=dictData.serverDemandArr[i].id%>" <%if(nursService.serviceNeeds ==dictData.serverDemandArr[i].id ){%>selected<%}%>><%=dictData.serverDemandArr[i].name%></option><%
                         }%>
                     </select>
+                    -->
+
+                    <%
+                    var serviceNeedsStr = nursService.serviceNeeds == null ? "" :nursService.serviceNeeds;
+                    for(var i=0;i<dictData.serverDemandArr.length;i++){
+                    var serviceNeedsId='serviceNeeds'+i;
+                    %>
+                    <input id="<%=serviceNeedsId%>" name="serviceNeeds" type="checkbox" value ="<%=dictData.serverDemandArr[i].id%>"
+                    <%if(serviceNeedsStr.indexOf(dictData.serverDemandArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.serverDemandArr[i].name%>
+                    <%
+                    if((i+1)%2 == 0){
+                    %><br><%
+                    }
+                    }%>
+
+
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">做过何种处理：</td>
                 <td class="regTd_r">

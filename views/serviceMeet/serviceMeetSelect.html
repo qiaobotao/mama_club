@@ -74,6 +74,9 @@
             if(window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal && typeof(window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal)=="function"){//前台价格
                 window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal();
             }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId')){//护理服务单id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId').value=serviceMeet.nursServiceId;
+            }
 
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭

@@ -3,6 +3,7 @@ var laypage = require('laypage');
 var service = require('../../model/service/nursservice');
 var storeroomOutService = require('../../model/service/storeroomOut');
 var serviceMeetService = require('../../model/service/servicemeet');
+var commonUtil = require('../../model/utils/common');
 
 /**
  * Created by kuanchang on 16/1/18.
@@ -113,6 +114,7 @@ module.exports.add = function (req, res,next) {
         deal =deal.substr(0,deal.length-1);
     }else{
         deal=  dealTemp;
+
     }
 
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
@@ -275,7 +277,6 @@ module.exports.doEdit = function (req, res,next) {
     var endTime = req.body.endTime ? req.body.endTime : '';
     var serviceType = req.body.serviceType ? req.body.serviceType : '';
     var address = req.body.address ? req.body.address : '';
-    var serviceNeeds = req.body.serviceNeeds ? req.body.serviceNeeds : '';
     var bowelFrequenc = req.body.bowelFrequenc ? req.body.bowelFrequenc : '';
     //var deal = req.body.deal ? req.body.deal : '';
     var shape = req.body.shape ? req.body.shape : '';
@@ -290,88 +291,35 @@ module.exports.doEdit = function (req, res,next) {
     var childCurrentWeight = req.body.childCurrentWeight ? req.body.childCurrentWeight : '';
     var isCarefulNurse = req.body.isCarefulNurse ? req.body.isCarefulNurse : '';
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
-    var breastpumpBrandTemp = req.body.breastpumpBrand ? req.body.breastpumpBrand : '';var diagnosis="" ;
-    var breastpumpBrand = "";
-    if (breastpumpBrandTemp instanceof Array) {
-        for (var i=0;i<breastpumpBrandTemp.length;i++)
-        {
-            breastpumpBrand +=breastpumpBrandTemp[i]+',';
-        }
-        breastpumpBrand =breastpumpBrand.substr(0,breastpumpBrand.length-1);
-    }else{
-        breastpumpBrand=  breastpumpBrandTemp;
-
-    }
-
-
-    var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
-    var diagnosis="" ;
-    if (diagnosisTemp instanceof Array) {
-        for (var i=0;i<diagnosisTemp.length;i++)
-        {
-            diagnosis +=diagnosisTemp[i]+',';
-        }
-        diagnosis =diagnosis.substr(0,diagnosis.length-1);
-    }else{
-        diagnosis=  diagnosisTemp;
-
-    }
-    var dealTemp = req.body.deal ? req.body.deal : '';
-    var deal="" ;
-    if (dealTemp instanceof Array) {
-        for (var i=0;i<dealTemp.length;i++)
-        {
-            deal +=dealTemp[i]+',';
-        }
-        deal =deal.substr(0,deal.length-1);
-    }else{
-        deal=  dealTemp;
-
-    }
-
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
-    var childReasonTemp = req.body.childReason ? req.body.childReason : '';
-    var childReason ="" ;
-    if (childReasonTemp instanceof Array) {
-        for (var i=0;i<childReasonTemp.length;i++)
-        {
-            childReason +=childReasonTemp[i]+',';
-        }
-        childReason =childReason.substr(0,childReason.length-1);
-    }else{
-        childReason=  childReasonTemp;
-
-    }
-
     var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
-    var motherReasonTemp = req.body.motherReason ? req.body.motherReason : '';
-    var motherReason ="" ;
-    if (motherReasonTemp instanceof Array) {
-        for (var i=0;i<motherReasonTemp.length;i++)
-        {
-            motherReason +=motherReasonTemp[i]+',';
-        }
-        motherReason =motherReason.substr(0,motherReason.length-1);
-    }else{
-        motherReason=  motherReasonTemp;
-
-    }
     var leaveAdvise = req.body.leaveAdvise ? req.body.leaveAdvise : '';
-    var otherReasonTemp = req.body.otherReason ? req.body.otherReason : '';
-    var otherReason="" ;
-    if (otherReasonTemp instanceof Array) {
-        for (var i=0;i<otherReasonTemp.length;i++)
-        {
-            otherReason +=otherReasonTemp[i]+',';
-        }
-        otherReason =otherReason.substr(0,otherReason.length-1);
-    }else{
-        otherReason=  otherReasonTemp;
-
-    }
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
+
+    var serviceNeedsTemp = req.body.serviceNeeds ? req.body.serviceNeeds : '';//服务需求可以是多选的
+    var serviceNeeds = commonUtil.array2Str(serviceNeedsTemp,",");
+
+    var breastpumpBrandTemp = req.body.breastpumpBrand ? req.body.breastpumpBrand : '';
+    var breastpumpBrand = commonUtil.array2Str(breastpumpBrandTemp,",");
+
+    var diagnosisTemp = req.body.diagnosis ? req.body.diagnosis : '';
+    var diagnosis = commonUtil.array2Str(diagnosisTemp,",");
+
+
+    var dealTemp = req.body.deal ? req.body.deal : '';
+    var deal = commonUtil.array2Str(dealTemp,",");
+
+    var childReasonTemp = req.body.childReason ? req.body.childReason : '';
+    var childReason = commonUtil.array2Str(childReasonTemp,",");
+
+    var motherReasonTemp = req.body.motherReason ? req.body.motherReason : '';
+    var motherReason = commonUtil.array2Str(motherReasonTemp,",");
+
+    var otherReasonTemp = req.body.otherReason ? req.body.otherReason : '';
+    var otherReason = commonUtil.array2Str(otherReasonTemp,",");
+
 
     // 获取
     var oper = req.body.principalId ? req.body.principalId : '';

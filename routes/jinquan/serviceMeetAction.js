@@ -309,11 +309,12 @@ module.exports.select = function (req, res,next) {
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
     var currentPage = req.query.page ? req.query.page : 1;
+    var status = req.query.status ? req.query.status : "1,2";
     currentPage =currentPage<1?1:currentPage;
     var url = '/jinquan'+req.url;
 
     //根据条件查询所有预约单信息，其中状态必须是预约成功的状态：1：已预约；2：上门预约
-    service.fetchAllServiceMeet(shopId,tel,name,meetTime,"1,2",currentPage, function (err, results) {
+    service.fetchAllServiceMeet(shopId,tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
