@@ -361,13 +361,18 @@ module.exports.selectForServiceMeet = function (req, res, next) {
     var startJobTimeStar= req.query.startJobTimeStar ? req.query.startJobTimeStar : '';
     var startJobTimeEnd= req.query.startJobTimeEnd ? req.query.startJobTimeEnd : '';
     var educationId= req.query.educationId ? req.query.educationId : '';
+
+    var url = '/jinquan'+req.url;
+
     service.fetchAllStaff(name,serialNumber,tel,highestEducation,graduationSchool,startJobTimeStar,startJobTimeEnd,educationId,currentPage ,function (err, results) {
         if (!err) {
             results.currentPage = currentPage;
             results.name = name;
             results.serialNumber = serialNumber;
             results.tel = tel;
-            res.render('staff/staffSelectServiceMeet', {data : results,index:index});
+            res.render('staff/staffSelectServiceMeet', {data : results,index:index, laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})});
+
         } else {
             next();
         }
