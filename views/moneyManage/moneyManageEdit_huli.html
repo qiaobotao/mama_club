@@ -411,6 +411,24 @@
             }
             getSubtotal();//计算每个商品的费用
         }
+        /**
+         * 当开始服务时间变化时，动态变更下拉框显示信息
+         */
+        function changeServiceTime(){
+            var serviceTime = $("#serviceTime").val();
+            var serviceStartTimeHH = serviceTime.split(":")[0];
+            var serviceStartTimeSS = serviceTime.split(":")[1];
+            $("#serviceStartTimeHH option").each(function() {
+                if ($(this).text() == serviceStartTimeHH) {
+                    $(this).attr("selected", "selected");
+                }
+            });
+            $("#serviceStartTimeSS option").each(function() {
+                if ($(this).text() == serviceStartTimeSS) {
+                    $(this).attr("selected", "selected");
+                }
+            });
+        }
     </script>
 </head>
 
@@ -459,11 +477,54 @@
             <tr>
                 <td  class="regTd_l">服务开始时间：</td>
                 <td class="regTd_r">
-                    <input id="startService" type="text" name="meetTime"/>
+                    <input id="serviceTime" type="hidden" onchange="changeServiceTime()" value=""/>
+                    <select id="serviceStartTimeHH" disabled>
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < 12 ; i ++){
+                        var timeHHVal = i+8;
+                        if(timeHHVal < 10){
+                        timeHHVal = "0"+timeHHVal;
+                        }
+                        %><option value="<%=timeHHVal%>"><%=timeHHVal%></option><%
+                        }
+                        %>
+                    </select>:
+                    <select id="serviceStartTimeSS" disabled>
+                        <option value="">请选择</option>
+                        <%
+                        var miao = "";
+                        for(var i = 5 ; i <= 60 ; i += 5 ){
+                        miao = i == 5 ? "0"+i:i;
+                        %><option value="<%=miao%>"><%=miao%></option><%
+                        }
+                        %>
+                    </select>
                 </td>
                 <td  class="regTd_l">服务截止时间：</td>
                 <td class="regTd_r">
-                    <input id="endService" type="text" name="meetTime"/>
+                    <select id="serviceEndTimeHH">
+                        <option value="">请选择</option>
+                        <%
+                        for(var i = 0 ; i < 12 ; i ++){
+                        var timeHHVal = i+8;
+                        if(timeHHVal < 10){
+                        timeHHVal = "0"+timeHHVal;
+                        }
+                        %><option value="<%=timeHHVal%>"><%=timeHHVal%></option><%
+                        }
+                        %>
+                    </select>:
+                    <select id="serviceEndTimeSS">
+                        <option value="">请选择</option>
+                        <%
+                        var miao = "";
+                        for(var i = 5 ; i <= 60 ; i += 5 ){
+                        miao = i == 5 ? "0"+i:i;
+                        %><option value="<%=miao%>"><%=miao%></option><%
+                        }
+                        %>
+                    </select>
                 </td>
             </tr>
             <!--

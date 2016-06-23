@@ -77,6 +77,10 @@
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId')){//护理服务单id
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId').value=serviceMeet.nursServiceId;
             }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime')){//开始服务时间
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime').value = serviceMeet.serviceTime;
+                window.parent.document.getElementById("rightFrame").contentWindow.changeServiceTime();
+            }
 
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭

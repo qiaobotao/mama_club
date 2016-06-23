@@ -11,6 +11,9 @@ var nursservice = require('../../model/service/nursservice');
 var complain = require('../../model/service/complain');
 //公用数据
 var consts = require('../../model/utils/consts');
+//公用方法
+var commonUtil = require('../../model/utils/common');
+
 /**
  * Created by kuanchang on 16/1/17.
  */
@@ -112,52 +115,16 @@ module.exports.doEdit = function (req, res,next) {
 
     //做过何种处理
     var dealTemp = req.body.deal ? req.body.deal : '';
-    var deal="" ;
-    if (dealTemp instanceof Array) {
-        for (var i=0;i<dealTemp.length;i++)
-        {
-            deal +=dealTemp[i]+',';
-        }
-        deal =deal.substr(0,deal.length-1);
-    }else{
-        deal=  dealTemp;
-    }
+    var deal = commonUtil.array2Str(dealTemp,",");
     //服务需求
     var serviceNeedsTemp = req.body.serviceNeeds ? req.body.serviceNeeds : '';
-    var serviceNeeds="" ;
-    if (serviceNeedsTemp instanceof Array) {
-        for (var i=0;i<serviceNeedsTemp.length;i++)
-        {
-            serviceNeeds +=serviceNeedsTemp[i]+',';
-        }
-        serviceNeeds =serviceNeeds.substr(0,serviceNeeds.length-1);
-    }else{
-        serviceNeeds=  serviceNeedsTemp;
-    }
+    var serviceNeeds = commonUtil.array2Str(serviceNeedsTemp,",");
     //提供服务的技师ID
     var serviceStaffIdsTemp = req.body.serviceStaffId ? req.body.serviceStaffId : '';//护理服务技师ID
-    var serviceStaffIds="" ;
-    if (serviceStaffIdsTemp instanceof Array) {
-        for (var i=0;i<serviceStaffIdsTemp.length;i++)
-        {
-            serviceStaffIds +=serviceStaffIdsTemp[i]+',';
-        }
-        serviceStaffIds =serviceStaffIds.substr(0,serviceStaffIds.length-1);
-    }else{
-        serviceStaffIds=  serviceStaffIdsTemp;
-    }
+    var serviceStaffIds = commonUtil.array2Str(serviceStaffIdsTemp,",");
     //提供服务的技师名称
     var serviceStaffNamesTemp = req.body.serviceStaffName ? req.body.serviceStaffName : '';//护理服务技师名称
-    var serviceStaffNames="" ;
-    if (serviceStaffNamesTemp instanceof Array) {
-        for (var i=0;i<serviceStaffNamesTemp.length;i++)
-        {
-            serviceStaffNames +=serviceStaffNamesTemp[i]+',';
-        }
-        serviceStaffNames =serviceStaffNames.substr(0,serviceStaffNames.length-1);
-    }else{
-        serviceStaffNames=  serviceStaffNamesTemp;
-    }
+    var serviceStaffNames = commonUtil.array2Str(serviceStaffNamesTemp,",");
     service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,address,price,serverShopId,specified,principal,
         staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
         if (!err) {
