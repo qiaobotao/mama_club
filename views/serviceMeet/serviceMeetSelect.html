@@ -81,6 +81,13 @@
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime').value = serviceMeet.serviceTime;
                 window.parent.document.getElementById("rightFrame").contentWindow.changeServiceTime();
             }
+            if(serviceMeet.serviceStaffIds != null && serviceMeet.serviceStaffIds != ""){//开始服务时间
+                var serviceStaffIdArr = serviceMeet.serviceStaffIds.split(",");
+                var serviceStaffNameArr = serviceMeet.serviceStaffNames.split(",");
+                for(var i = 0 ; i < serviceStaffIdArr.length ; i ++){
+                    window.parent.document.getElementById("rightFrame").contentWindow.addServicesTr(serviceStaffIdArr[i],serviceStaffNameArr[i]);
+                }
+            }
 
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭

@@ -66,6 +66,23 @@
                 }
             });
         }
+        //选择技师
+        function getmembers(index){
+            index = index == null ? "" :index;
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择技师',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_servicemeet?index='+index, //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
         //提交表单
         function submitForm(){
 
@@ -150,7 +167,11 @@
             cell8.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
         }
         //table中增加需要添加的行信息
-        function addServicesTr(){
+        function addServicesTr(staffId,staffName){
+            if(staffId == "" && staffName == ""){
+                parent.layer.alert('请先选择服务单：）',{icon: 2});
+                return;
+            }
             //获取表格对象
             var table=document.getElementById("servicesTable");
             //获取当前行数
@@ -164,14 +185,20 @@
             var cell6=row.insertCell(5);//优惠价格
             var cell7=row.insertCell(6);//删除服务
             var cell8=row.insertCell(7);//服务id
-            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'"  name="serviceName" type="text" class="input5 input_arr" onfocus="getServices('+serviceIndex+')"  readonly/>';
-            cell2.innerHTML='<input id="serviceContent'+serviceIndex+'" name="serviceContent" type="text" class="input5 input_arr" readonly="true"/>';
-            cell3.innerHTML='<input id="serviceCount'+serviceIndex+'" name="serviceCount" type="text" class="input5 input_arr" onblur="getSubtotal()"/>';
-            cell4.innerHTML='<input id="servicePrice'+serviceIndex+'" name="servicePrice" type="text" class="input5 input_arr" readonly="true"/>';
-            cell5.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" name="serviceSubtotal" type="text" class="input5 input_arr" readonly="true"/>';
-            cell6.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" name="serviceLessMoney" type="text" class="input5 input_arr" readonly="true"/>';
-            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
-            cell8.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
+            var cell9=row.insertCell(8);//服务id
+            var cell10=row.insertCell(9);//服务id
+            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'"  name="serviceName" type="text" class="input5 input_arr"  style="width: 90px;" onfocus="getServices('+serviceIndex+')"  readonly/>';
+            cell2.innerHTML='<input id="serviceContent'+serviceIndex+'" name="serviceContent" type="text" class="input5 input_arr" style="width: 90px;" readonly="true"/>';
+            cell3.innerHTML='<input id="servicePrice'+serviceIndex+'" name="servicePrice" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
+            cell4.innerHTML='<input id="serviceCount'+serviceIndex+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" onblur="getSubtotal()"/>';
+            cell5.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+            cell6.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+            cell7.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+')" />' +
+                            '<input id="serviceStaffId'+serviceIndex+'" name="serviceStaffId" type="hidden" class="input5 input_arr" readonly="true" value="'+staffId+'"/>';
+            cell8.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+')" />' +
+                    '<input id="serviceTraineeId'+serviceIndex+''+serviceIndex+'" name="serviceTraineeId" type="hidden" class="input5 input_arr" readonly="true"/>';
+            cell9.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
+            cell10.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
 
         }
         /**
@@ -563,26 +590,17 @@
         <!--服务信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;"><h3>服务信息</h3></span>
         <br>
-        <table id="servicesTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+        <table id="servicesTable" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>服务名称</td>
-                <td>服务描述</td>
-                <td>采购数量</td>
-                <td>商品单价</td>
-                <td>小计</td>
-                <td>减免费用</td>
-                <td><a style="cursor: pointer" onclick="javaScript:addServicesTr()"><h1>+</h1></a></td>
-            </tr>
-            <tr>
-                <td><input id="serviceName1"  name="serviceName" type="text" class="input5 input_arr"readonly/></td>
-                <td><input id="serviceContent1" name="serviceContent" type="text" class="input5 input_arr" readonly="true"/></td>
-                <td><input id="serviceCount1" name="serviceCount" type="text" class="input5 input_arr" onblur="getSubtotal('+waresIndex+')"/></td>
-                <td><input id="servicePrice1" name="servicePrice" type="text" class="input5 input_arr" readonly="true"/></td>
-                <td><input id="serviceSubtotal1" name="serviceSubtotal" type="text" class="input5 input_arr" readonly="true"/></td>
-                <td><input id="serviceLessMoney1" name="serviceLessMoney" type="text" class="input5 input_arr" readonly="true"/></td>
-                <td>
-                    <input id="serviceId1" name="serviceId" type="hidden" class="input5 input_arr" />
-                </td>
+                <td style="width: auto">服务名称</td>
+                <td style="width: auto">服务描述</td>
+                <td style="width: auto">单价</td>
+                <td style="width: auto">数量</td>
+                <td style="width: auto">小计</td>
+                <td style="width: auto">优惠情况</td>
+                <td style="width: auto">服务技师</td>
+                <td style="width: auto">实习技师</td>
+                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addServicesTr('','')"><h1>+</h1></a></td>
             </tr>
         </table>
         <!--服务信息 end-->
