@@ -204,9 +204,6 @@ router.all('/class_meet_select_list',classMeetAction.classMeetSelectList);
 
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);
-router.all('/nurs_service_add',nursServiceAction.add);
-router.all('/nurs_service_goAdd',nursServiceAction.goAdd);
-router.all('/nurs_service_show',nursServiceAction.show);
 router.all('/nurs_service_preEdit',nursServiceAction.preEdit);
 router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
 router.all('/nurs_service_del',nursServiceAction.del);
