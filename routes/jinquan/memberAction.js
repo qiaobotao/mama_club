@@ -18,6 +18,8 @@ var complain = require('../../model/service/complain');
 //公用数据
 var consts = require('../../model/utils/consts');
 
+var commonUtil = require('../../model/utils/common');//公共类
+
 module.exports.list = function (req, res,next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
@@ -81,7 +83,6 @@ module.exports.add = function (req, res,next) {
     var childHeight = req.body.childHeight ? req.body.childHeight : '';
     var childWeight = req.body.childWeight ? req.body.childWeight : '';
     var childBirthday = req.body.childBirthday ? req.body.childBirthday : '';
-    var understandJinQuanChannel = req.body.understandJinQuanChannel ? req.body.understandJinQuanChannel : '';
     var hospitalization = req.body.hospitalization ? req.body.hospitalization : '';
     var hospitalizationReason = req.body.hospitalizationReason ? req.body.hospitalizationReason : '';
     var assistantTool = req.body.assistantTool ? req.body.assistantTool : '';
@@ -89,17 +90,8 @@ module.exports.add = function (req, res,next) {
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
 
     //如果understandJinQuanChannel为多选，将多选的值用逗号隔开
-    var understandJinQuanChannelVal = "";
-    if (understandJinQuanChannel instanceof Array) {
-        for (var i = 0; i < understandJinQuanChannel.length; i++) {
-            if(i != 0){
-                understandJinQuanChannelVal += ",";
-            }
-            understandJinQuanChannelVal += understandJinQuanChannel[i];
-        }
-    }else{
-        understandJinQuanChannelVal = understandJinQuanChannel;
-    }
+    var understandJinQuanChannel = req.body.understandJinQuanChannel ? req.body.understandJinQuanChannel : '';
+    var understandJinQuanChannelVal = commonUtil.array2Str(understandJinQuanChannel,",");
 
     service.insertMember(shopId,birthYearMonth,memberCardType,memberName,tel,contact,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
@@ -120,7 +112,6 @@ module.exports.doEdit = function (req, res,next) {
     var birthYearMonth = req.body.birthYearMonth ? req.body.birthYearMonth : '';//去掉年龄字段，增加出生年月字段
     var memberCardType = req.body.memberCardType ? req.body.memberCardType : '';
     var memberName = req.body.memberName ? req.body.memberName : '';
-    var tel = req.body.tel ? req.body.tel : '';
     var contact = req.body.contact ? req.body.contact : '';
     var address = req.body.address ? req.body.address : '';
     var city_district = req.body.city_district ? req.body.city_district : '';//居住地址：区县~
@@ -141,7 +132,6 @@ module.exports.doEdit = function (req, res,next) {
     var childHeight = req.body.childHeight ? req.body.childHeight : '';
     var childWeight = req.body.childWeight ? req.body.childWeight : '';
     var childBirthday = req.body.childBirthday ? req.body.childBirthday : '';
-    var understandJinQuanChannel = req.body.understandJinQuanChannel ? req.body.understandJinQuanChannel : '';
     var understandJinQuanChannelDes = req.body.understandJinQuanChannelDes ? req.body.understandJinQuanChannelDes : '';//如何知道金泉， 备注
     var hospitalization = req.body.hospitalization ? req.body.hospitalization : '';
     var hospitalizationReason = req.body.hospitalizationReason ? req.body.hospitalizationReason : '';
@@ -150,30 +140,11 @@ module.exports.doEdit = function (req, res,next) {
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
 
     //如果understandJinQuanChannel为多选，将多选的值用逗号隔开
-    var understandJinQuanChannelVal = "";
-    if (understandJinQuanChannel instanceof Array) {
-        for (var i = 0; i < understandJinQuanChannel.length; i++) {
-            if(i != 0){
-                understandJinQuanChannelVal += ",";
-            }
-            understandJinQuanChannelVal += understandJinQuanChannel[i];
-        }
-    }else{
-        understandJinQuanChannelVal = understandJinQuanChannel;
-    }
-
+    var understandJinQuanChannel = req.body.understandJinQuanChannel ? req.body.understandJinQuanChannel : '';
+    var understandJinQuanChannelVal = commonUtil.array2Str(understandJinQuanChannel,",");
     //如果tel为多个，将多选的值用分号隔开
-    var telVal = "";
-    if (tel instanceof Array) {
-        for (var i = 0; i < tel.length; i++) {
-            if(i != 0){
-                telVal += ";";
-            }
-            telVal += tel[i];
-        }
-    }else{
-        telVal = tel;
-    }
+    var tel = req.body.tel ? req.body.tel : '';
+    var telVal = commonUtil.array2Str(tel,";");
     if(id != ""){
         service.updateMember(id,birthYearMonth,memberCardType,memberName,telVal,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,

@@ -7,10 +7,10 @@ var express = require('express');
 var router = express.Router();
 
 var welcomeAction = require('./welcomeAction');
-var shopAction = require('./shopAction');
-var storeroomAction = require('./storeroomAction');
-var waresAction = require('./waresAction');
-var classifyAction = require('./classifyAction');
+var shopAction = require('./shopAction');//门店信息维护
+var storeroomAction = require('./storeroomAction');//库房信息维护
+var waresAction = require('./waresAction');//商品信息维护
+var classifyAction = require('./classifyAction');//数据字典维护
 var classroomAction = require('./classroomAction');//教室管理
 var courseAction = require('./courseAction');//课程管理
 var coursePlanAction = require('./coursePlanAction');//排课管理

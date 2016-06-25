@@ -3,7 +3,7 @@ var laypage = require('laypage');
 var service = require('../../model/service/nursservice');
 var storeroomOutService = require('../../model/service/storeroomOut');
 var serviceMeetService = require('../../model/service/servicemeet');
-var commonUtil = require('../../model/utils/common');
+var commonUtil = require('../../model/utils/common');//公共类
 
 /**
  * Created by kuanchang on 16/1/18.
