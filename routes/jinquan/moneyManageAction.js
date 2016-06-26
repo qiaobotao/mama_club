@@ -9,6 +9,7 @@ var memberCardService = require('../../model/service/membercard');
 var nursService = require('../../model/service/nursservice');//护理服务单Service
 var consts = require('../../model/utils/consts');
 var utils = require('../../common/utils');
+var commonUtil = require('../../model/utils/common');//公共类
 
 /**
  * 获取收费管理列表
@@ -53,9 +54,9 @@ module.exports.list = function (req, res, next) {
 module.exports.edit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
-    var chargeType = req.query.chargeType ? req.query.chargeType : '4';//仅购买商品
-
-    service.fetchSingleMoneyManage(id, '2016-03-17',function(err, results) {
+    var chargeType = req.query.chargeType ? req.query.chargeType : '2';//仅购买商品
+    var thisDate = commonUtil.date2str(new Date(),'yyyy-MM-dd');
+    service.fetchSingleMoneyManage(id, thisDate,function(err, results) {
         if (!err) {
             //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
             if (chargeType == 1) {//购买会员卡

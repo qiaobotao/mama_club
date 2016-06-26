@@ -168,7 +168,7 @@
         }
         //table中增加需要添加的行信息
         function addServicesTr(staffId,staffName){
-            if(staffId == "" && staffName == ""){
+            if($("#nursServiceId").val() == ""){
                 parent.layer.alert('请先选择服务单：）',{icon: 2});
                 return;
             }
@@ -193,9 +193,9 @@
             cell4.innerHTML='<input id="serviceCount'+serviceIndex+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" onblur="getSubtotal()"/>';
             cell5.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
             cell6.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
-            cell7.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+')" />' +
+            cell7.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+')" readonly/>' +
                             '<input id="serviceStaffId'+serviceIndex+'" name="serviceStaffId" type="hidden" class="input5 input_arr" readonly="true" value="'+staffId+'"/>';
-            cell8.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+')" />' +
+            cell8.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+')" readonly/>' +
                     '<input id="serviceTraineeId'+serviceIndex+''+serviceIndex+'" name="serviceTraineeId" type="hidden" class="input5 input_arr" readonly="true"/>';
             cell9.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
             cell10.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
@@ -471,7 +471,7 @@
             <tr>
                 <td class="regTd_l">收费项目：</td>
                 <td class="regTd_r">
-                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)">
+                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)" disabled>
                         <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
                         <option value="2" <%if(chargeType == '2'){%>selected<%}%>>护理收费</option>
                         <option value="3" <%if(chargeType == '3'){%>selected<%}%>>上课付费</option>
@@ -479,7 +479,7 @@
                         <option value="5" <%if(chargeType == '5'){%>selected<%}%>>仅服务次卡</option>
                         <option value="6" <%if(chargeType == '6'){%>selected<%}%>>员工内购</option>
                         <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
-                    </select>
+                    </select>暂时仅开放护理收费
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">服务单号：</td>
                 <td class="regTd_r">
@@ -616,7 +616,7 @@
                 <td>商品单价</td>
                 <td>小计</td>
                 <td>减免费用</td>
-                <td><a style="cursor: pointer" onclick="javaScript:addWaresTr()"><h1>+</h1></a></td>
+                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addWaresTr()"><h1>+</h1></a></td>
             </tr>
         </table>
         <!--商品信息 end-->
