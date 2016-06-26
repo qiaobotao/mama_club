@@ -198,6 +198,29 @@ module.exports.selectForActivity = function(req, res, next) {
     var currentPage = req.query.page ? req.query.page : '1';
     var index = req.query.index ? req.query.index : '';
     var url = '/jinquan'+req.url;
+    /*
+    console.log("url="+url);
+    //找到page所在第几个字符，往后截取，然后追加上来
+    var urlStart = url.substring(0,url.indexOf("?"));
+    var urlEnd = url.substring(url.indexOf("?"),url.length);
+    urlEnd = urlEnd.replace("?","&");
+    console.log("urlStart="+urlStart);
+    console.log("urlEnd="+urlEnd);
+    if(index.indexOf(",")<0){
+        url = urlStart +"?index="+index;
+    }
+    console.log("urlurl="+url);
+    //url += urlEnd
+    console.log("urlurlEnd="+url);
+    /*
+    if(url.indexOf("index") == -1){
+        if(url.indexOf("?") > 0){
+            url += "&index="+index;
+        }else{
+            url += "?index="+index;
+        }
+    }
+    */
     service.list(name,classifyId,currentPage, function(err, results) {
 
         if (!err) {

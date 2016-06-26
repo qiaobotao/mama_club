@@ -56,6 +56,10 @@
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index)) {
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('price'+index).value=obj.price;
         }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('count'+index)) {
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('count'+index).value=1;
+            window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal();
+        }
         if (window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index)) {
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('bname'+index).value = obj.bname;
         }
