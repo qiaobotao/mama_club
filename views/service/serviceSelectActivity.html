@@ -36,9 +36,14 @@
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId'+index)){
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceId'+index).value=id;
         }
-        //商品单价
+        //服务单价
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('servicePrice'+index)){
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('servicePrice'+index).value=price;
+        }
+        //服务数量
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceCount'+index)){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceCount'+index).value=1;
+            window.parent.document.getElementById("rightFrame").contentWindow.getSubtotal();
         }
         //分类名称
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceClassName'+index)){
