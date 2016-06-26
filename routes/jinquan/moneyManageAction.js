@@ -103,7 +103,12 @@ module.exports.save = function(req, res, next) {
     var discounts = req.body.discounts ? req.body.discounts : '';//折上折力度
     var discountsMoney = req.body.discountsMoney ? req.body.discountsMoney : '';//折扣卡优惠费用
     var finalActualMoney = req.body.finalActualMoney ? req.body.finalActualMoney : '';//折上折力度
-
+    var meetTime = req.body.meetTime ? req.body.meetTime : '';//预约时间
+    var serviceStartTime = req.body.serviceTime ? req.body.serviceTime : '';//开始服务时间
+    var serviceEndTimeHH = req.body.serviceEndTimeHH ? req.body.serviceEndTimeHH : '';//服务截止时间(小时)
+    var serviceEndTimeSS = req.body.serviceEndTimeSS ? req.body.serviceEndTimeSS : '';//服务截止时间（分钟）
+    var serviceDate = meetTime.split(" ")[0];//服务日期
+    var serviceEndTime = serviceEndTimeHH+":"+serviceEndTimeSS;
     var state = "0";
     if(payType != '0'){//不是延迟收费，即为已收费
         state = "1";//1、已收费；0：未收费
@@ -153,6 +158,8 @@ module.exports.save = function(req, res, next) {
     var servicePrice = req.body.servicePrice ? req.body.servicePrice : '';//服务单价
     var serviceSubtotal = req.body.serviceSubtotal ? req.body.serviceSubtotal : '';//服务小计
     var serviceLessMoney = req.body.serviceLessMoney ? req.body.serviceLessMoney : '';//服务优惠费用
+    var serviceStaffId = req.body.serviceStaffId ? req.body.serviceStaffId : '';//服务技师
+    var serviceTraineeId = req.body.serviceTraineeId ? req.body.serviceTraineeId : '';//实习技师
 
 
     // 处理服务集合数据
@@ -165,6 +172,8 @@ module.exports.save = function(req, res, next) {
             obj.servicePrice = servicePrice[i];
             obj.serviceSubtotal = serviceSubtotal[i];
             obj.serviceLessMoney = serviceLessMoney[i];
+            obj.serviceStaffId = serviceStaffId[i];
+            obj.serviceTraineeId = serviceTraineeId[i];
             serviceArr.push(obj);
         }
     } else {
@@ -193,7 +202,7 @@ module.exports.save = function(req, res, next) {
                         }
                     });
                 }else if(chargeType == 2){//添加护理服务单
-                    nursService.insertNursServiceByMoneyManage(serviceMeetId,function(err, results) {
+                    nursService.insertNursServiceByMoneyManage(serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,function(err, results) {
                         if (!err) {
                             var nursServiceId = results.insertId;//刚创建的服务单id
                             //更新收费单主表中的服务单id

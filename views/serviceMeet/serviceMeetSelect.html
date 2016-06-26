@@ -79,7 +79,10 @@
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime')){//开始服务时间
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime').value = serviceMeet.serviceTime;
-                window.parent.document.getElementById("rightFrame").contentWindow.changeServiceTime();
+                window.parent.document.getElementById("rightFrame").contentWindow.changeServiceTime();//为
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('meetTime')){//预约时间
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('meetTime').value = serviceMeet.meetTime;
             }
             if(serviceMeet.serviceStaffIds != null && serviceMeet.serviceStaffIds != ""){//开始服务时间
                 var serviceStaffIdArr = serviceMeet.serviceStaffIds.split(",");

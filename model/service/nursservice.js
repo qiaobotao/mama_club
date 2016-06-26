@@ -31,9 +31,9 @@ var serverDemandId = require('../../config').mainClassifyId.serverDemand;//ÊúçÂä
  * @param serviceMeetId
  * @param serviceDate
  */
-module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,cb){
-    var sql = 'INSERT INTO nursService(serviceMeetId,dateLine) VALUES (?,?)';
-    db.query(sql, [serviceMeetId,new Date().getTime()], function(cbData, err, rows, fields) {
+module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,cb){
+    var sql = 'INSERT INTO nursService(serviceMeetId,serviceDate,startTime,endTime,dateLine) VALUES (?,?,?,?,?)';
+    db.query(sql, [serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -148,7 +148,7 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
 
 module.exports.fetchSingleNursService =function (id, cb) {
 
-    var nursServicesql = 'SELECT a.*,b.tel,b.name,b.address FROM nursService a inner join serviceMeet b on (a.serviceMeetId=b.id) WHERE a.id = ?';
+    var nursServicesql = 'SELECT a.*,b.* FROM nursService a inner join serviceMeet b on (a.serviceMeetId=b.id) WHERE a.id = ?';
 
     var classificationPare = mainDiagnosticResultClassifyId +","+
         mainMomReasonsClassifyId +","+

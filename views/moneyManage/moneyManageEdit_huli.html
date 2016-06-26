@@ -538,7 +538,11 @@
                 <td  class="regTd_l">服务单号：</td>
                 <td class="regTd_r">
                     <input id="nursServiceId" type="text" name="nursServiceId" onfocus="getServiceMeet()" onblur="activationActivity()" />
+                    <!-- 选择预约单后，自动带回来预约单id、服务时间 -->
                     <input id="serviceMeetId" type="hidden" name="serviceMeetId"/>
+                    <input id="serviceDate" type="hidden" name="serviceDate"/>
+
+
                     <input id="memberId" name="memberId" type="hidden"/>
                     <input id="memberType" name="memberType" type="hidden"/>
                     &nbsp;&nbsp;<span id="inActivityId" style="color:#05ff00;;display:none">可参与活动</span><span id="outActivityId" style="color:#ff0505;display:none">不可参与活动</span>
@@ -558,7 +562,8 @@
             <tr>
                 <td  class="regTd_l">服务开始时间：</td>
                 <td class="regTd_r">
-                    <input id="serviceTime" type="hidden" onchange="changeServiceTime()" value=""/>
+                    <input id="serviceTime" name="serviceTime" type="hidden" onchange="changeServiceTime()" value=""/>
+                    <input id="meetTime" type="hidden" name="meetTime"/>
                     <select id="serviceStartTimeHH" disabled>
                         <option value="">请选择</option>
                         <%
@@ -584,7 +589,7 @@
                 </td>
                 <td  class="regTd_l">服务截止时间：</td>
                 <td class="regTd_r">
-                    <select id="serviceEndTimeHH">
+                    <select id="serviceEndTimeHH" name="serviceEndTimeHH">
                         <option value="">请选择</option>
                         <%
                         for(var i = 0 ; i < 12 ; i ++){
@@ -596,7 +601,7 @@
                         }
                         %>
                     </select>:
-                    <select id="serviceEndTimeSS">
+                    <select id="serviceEndTimeSS" name="serviceEndTimeSS">
                         <option value="">请选择</option>
                         <%
                         var miao = "";
