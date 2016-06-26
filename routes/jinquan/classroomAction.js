@@ -51,6 +51,7 @@ module.exports.preAdd = function (req, res,next) {
 
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
+    var shopCode = req.session.user.shopCode;
 
     service.getClassroomClassify(function (err, results) {
         if (!err) {
@@ -59,6 +60,7 @@ module.exports.preAdd = function (req, res,next) {
             storeroomService.getAllStorerooms(shopId,function(err, results) {
                 if (!err) {
                     data.storeroom = results;
+                    data.shopCode = shopCode;
                     res.render('classroom/classroomAdd', {data : data});
                 } else {
                     console.log(err);
@@ -419,6 +421,19 @@ module.exports.update = function(req, res, next) {
                     }
                 });
             }
+        } else {
+            myUtils.printSystemLog(err);
+            next();
+        }
+    });
+}
+
+module.exports.getCode = function (req, res, next) {
+
+    service.getCode(function(err, results) {
+
+        if (!err) {
+             res.json({count:results});
         } else {
             myUtils.printSystemLog(err);
             next();

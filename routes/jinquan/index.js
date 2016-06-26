@@ -81,7 +81,7 @@ router.all('/classroom_preedit',classroomAction.preEdit);
 router.all('/classroom_checkdel',classroomAction.checkdel);
 router.all('/classroom_del',classroomAction.del);
 router.all('/classroom_update',classroomAction.update);
-
+router.all('/classroom_getcode',classroomAction.getCode);
 
 
 // 排课情况

@@ -362,6 +362,20 @@ module.exports.updateClassroom = function (id,shopId,name,classType,remark,oper,
     });
 }
 
+module.exports.getCode = function (cb) {
+
+    var sql = 'SELECT count(*) AS count FROM classroom';
+    db.query(sql,[],function(cbData, err, rows, filelds){
+
+        if (!err) {
+            var count = rows[0].count;
+            cb(null,count);
+        } else {
+            cb(err);
+        }
+    });
+}
+
 /**
  * 删除教室新增入库单
  */

@@ -292,7 +292,7 @@ module.exports.deleteRoleByUserId =function (userId, cb) {
  */
 module.exports.checkUser = function (shop,checkUser,cb) {
 
-    var sql = 'SELECT sp.id AS shopId,u.`password`,st.name as `userName`,sp.name as `shopName`,u.id,u.shortcutMenuId1,u.shortcutMenuId2,u.shortcutMenuId3,u.shortcutMenuId4 FROM sysUser u,staff st,shop sp ' +
+    var sql = 'SELECT sp.id AS shopId,sp.serialNumber AS shopCode, u.`password`,st.name as `userName`,sp.name as `shopName`,u.id,u.shortcutMenuId1,u.shortcutMenuId2,u.shortcutMenuId3,u.shortcutMenuId4 FROM sysUser u,staff st,shop sp ' +
         'WHERE sp.id = st.shopId ' +
         'AND u.staffId = st.id ' +
         'AND u.userName = ? ' +
