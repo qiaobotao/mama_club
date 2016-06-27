@@ -201,9 +201,9 @@ module.exports.preEdit = function(req, res, next) {
             memberService.getMemberByNameTel(tel ,shopId ,function(err, results) {
                 if (!err) {
                     var member = results.length == 0 ? null : results[0];
-                    member == null ? {} : member;
+                   member == null ? {} : member;
                     if(1==1){
-                        res.render('servicemeet/serviceMeetEdit', {
+                        res.render('serviceMeet/serviceMeetEdit', {
                             service_meet : service_meet,
                             datas:{},
                             treatmentMethodArr:treatmentMethodArr,
@@ -230,7 +230,7 @@ module.exports.preEdit = function(req, res, next) {
                                 complain.getTop3Complain(serviceMeetIds,function(err, complains) {
                                     result.complains=complains;
                                     var datas = JSON.stringify(result);
-                                    res.render('servicemeet/serviceMeetEdit', {
+                                    res.render('serviceMeet/serviceMeetEdit', {
                                         service_meet : service_meet,
                                         datas:datas,
                                         treatmentMethodArr:treatmentMethodArr,
