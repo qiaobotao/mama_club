@@ -24,10 +24,15 @@ var serverDemandId = require('../../config').mainClassifyId.serverDemand;//ÊúçÂä
  * @param materialid
  * @param cb
  */
-module.exports.insertServiceMeet = function(shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price, memberId,serviceId,cb) {
+module.exports.insertServiceMeet = function(shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,address ,price ,serverShopId ,
+                                            specified,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,cb) {
 
-    var sql = 'INSERT INTO serviceMeet (shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId,new Date().getTime()], function(cbData, err, rows, fields) {
+
+    var sql = 'INSERT INTO serviceMeet (shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,address ,price ,serverShopId ,'
+        + 'specified,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,dateline) ' +
+        ' VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,address ,price ,serverShopId ,
+        specified,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
