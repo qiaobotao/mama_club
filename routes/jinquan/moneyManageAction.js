@@ -53,7 +53,7 @@ module.exports.list = function (req, res, next) {
  */
 module.exports.edit = function(req, res, next) {
 
-    var id = req.query.id ? req.query.id : '';
+    var id = req.query.id ? req.query.id : '';//收费单id
     var chargeType = req.query.chargeType ? req.query.chargeType : '2';//仅购买商品
     var thisDate = commonUtil.date2str(new Date(),'yyyy-MM-dd');
     service.fetchSingleMoneyManage(id, thisDate,function(err, results) {
@@ -62,7 +62,14 @@ module.exports.edit = function(req, res, next) {
             if (chargeType == 1) {//购买会员卡
                 res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
             } else if (chargeType == 2) {//护理收费
-                res.render('moneyManage/moneyManageEdit_huli', {data : results,chargeType:chargeType});
+                //对于护理收费，还要获取护理单信息
+                nursService.getNurServiceById(results.moneyManageData.serviceId,function(err, nurServiceRes) {
+                    if (!err) {
+                        res.render('moneyManage/moneyManageEdit_huli', {data : results,nurServiceRes:nurServiceRes,chargeType:chargeType});
+                    }else{
+                        next();
+                    }
+                });
             } else if (chargeType == 3) {//上课付费
                 res.render('moneyManage/moneyManageEdit_kecheng', {data : results,chargeType:chargeType});
             } else if (chargeType == 4) {//仅商品购买
@@ -87,6 +94,7 @@ module.exports.edit = function(req, res, next) {
  */
 module.exports.save = function(req, res, next) {
 
+    var shopId = req.session.user.shopId;//所属门店id
     var id = req.body.id ? req.body.id : '';//收费单id
     var memberId = req.body.memberId ? req.body.memberId : '';//会员id
     var memberCardId = req.body.memberCardId ? req.body.memberCardId : '';//会员卡id
@@ -190,7 +198,7 @@ module.exports.save = function(req, res, next) {
         res.redirect('/jinquan/money_manage_list?replytype=edit');
     }else{
         //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
-        service.insertMoneyManage(chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
+        service.insertMoneyManage(shopId,chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
             if (!err) {
                 var moneyManageId = results.insertId;
                 if(chargeType == 1){//购买会员卡：需要将会员卡状态改为启用
