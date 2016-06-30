@@ -68,24 +68,6 @@ module.exports.insertNursService = function(serviceMeetId,serviceDate,name,tel,s
         }
     });
 
-    /*
-    var sql = 'INSERT INTO nursService(shopId,outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,'
-        + 'bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,'
-        + 'milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,'
-        + 'diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,'
-        + 'isLeadTrainee,whetherAppointmentAgain,traineeName,dateLine) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [shopId,outLogId,serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
-        bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
-        milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName,new Date().getTime()], function(cbData, err, rows, fields) {
-        if (!err) {
-            cb(null, rows);
-        } else {
-            cb(err);
-        }
-    });
-    */
 };
 
 module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
@@ -163,6 +145,12 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
     });
 }
 
+/**
+ * 获取护理服务单数据
+ * 编辑护理服务单信息时使用
+ * @param id
+ * @param cb
+ */
 module.exports.fetchSingleNursService =function (id, cb) {
 
     var nursServicesql = 'SELECT a.*,b.* FROM nursService a inner join serviceMeet b on (a.serviceMeetId=b.id) WHERE a.id = ?';
@@ -281,6 +269,24 @@ module.exports.fetchSingleNursService =function (id, cb) {
         }
     });
 }
+
+/**
+ * 根据id获取护理服务单基本数据
+ * @param id
+ * @param cb
+ */
+module.exports.getNurServiceById =function (id, cb) {
+
+    var nursServicesql = 'SELECT a.* FROM nursService a where a.id = ?';
+    db.query(nursServicesql, [id], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null,rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
 module.exports.delNursService= function (id, cb) {
 
     var sql = 'DELETE FROM nursService WHERE id = ?';
