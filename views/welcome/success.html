@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <title>操作成功</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+
+        function closeLayer(){
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+        }
+        $(function(){
+            var obj = new Object();
+            obj.id = '<%=id%>';
+            obj.staffId = '<%=staffId%>';
+            obj.vocationalQualifications = '<%=vocationalQualifications%>';
+            obj.qualificationsSrc = '<%=qualificationsSrc%>';
+            obj.qualificationsName = '<%=qualificationsName%>';
+            obj.qualificationsDescribe = '<%=qualificationsDescribe%>';
+            obj.qualificationsTime = '<%=qualificationsTime%>';
+            window.parent.document.getElementById("rightFrame").contentWindow.addQualificationsTr(obj);//
+        });
+
+
+    </script>
+</head>
+
+<body>
+<div class="center_con">
+        <table id="noticeTalbeId" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_r" style="width: 200px">
+                    &nbsp;
+                </td>
+                <td class="regTd_r">
+                    &nbsp;
+                </td>
+                <td class="regTd_r">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_r">
+                    &nbsp;
+                </td>
+                <td class="regTd_l">
+                    <img src="../images/success.jpg" width="200" height="200" />
+                </td>
+                <td class="regTd_r">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span style="color:green;font-size: 20px">操作成功！</span>
+                </td>
+            </tr>
+        </table>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:closeLayer()" class="close"></a></div>
+    </div>
+
+</div>
+</body>
+</html>

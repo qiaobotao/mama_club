@@ -10,6 +10,7 @@ var attendanceTypeService = require('../../model/service/attendanceType');//考�
 var classifyService = require('../../model/service/classify');//获取子分类信息
 var educationId = require('../../config').mainClassifyId.education;//学历id
 var vocationalQualificationId = require('../../config').mainClassifyId.vocationalQualification;//职业资格id
+var multiparty = require('multiparty');//上传文件使用
 /**
  * 获取员工列表
  * @param req
@@ -127,6 +128,7 @@ module.exports.save = function (req, res,next) {
         obj.contractRemarks = contractRemarks;
         contractArr.push(obj);
     }
+    /*
     //员工职业资格信息
     var vocationalQualifications = req.body.vocationalQualifications ? req.body.vocationalQualifications : '';
     var qualificationsTime = req.body.qualificationsTime ? req.body.qualificationsTime : '';
@@ -150,6 +152,7 @@ module.exports.save = function (req, res,next) {
         obj.qualificationsImage = qualificationsImage;
         qualificationsArr.push(obj);
     }
+    */
 
     //  考勤周期信息
     var attendanceId = req.body.attendanceId ? req.body.attendanceId : '';//考勤类型表id
@@ -183,7 +186,7 @@ module.exports.save = function (req, res,next) {
         service.updateStaff(id,serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 //添加子女信息
-                service.addStaffOhter(id,childrenArr,contractArr,qualificationsArr,attendancesArr,function(err, results) {
+                service.addStaffOhter(id,childrenArr,contractArr,attendancesArr,function(err, results) {
                     if(!err) {
                         //添加子女信息
                         res.redirect('/jinquan/staff_list?replytype=update');
@@ -201,7 +204,7 @@ module.exports.save = function (req, res,next) {
         service.insertStaff(serialNumber,name,tel,idCard,birthDate,highestEducation,graduationSchool,spouseName,spouseTel,email,startJobTime,endJobTime,isJob,shopId,clockCode,remarks,staffLevel,function(err, results) {
             if(!err) {
                 //添加子女信息
-                service.addStaffOhter(results.insertId,childrenArr,contractArr,qualificationsArr,attendancesArr,function(err, results) {
+                service.addStaffOhter(results.insertId,childrenArr,contractArr,attendancesArr,function(err, results) {
                     if(!err) {
                         //添加子女信息
                         res.redirect('/jinquan/staff_list?replytype=add');
@@ -293,6 +296,101 @@ module.exports.preEdit = function(req, res, next) {
             })
         } else {
             next();
+        }
+    })
+}
+
+/**
+ * 跳转到编辑员工资质页面
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.editQualification = function(req, res, next) {
+
+    var index = req.query.index ? req.query.index : '';
+    var staffId = req.query.staffId ? req.query.staffId : '';
+
+    //获取职业资格类别
+    classifyService.getSubcollectionById(vocationalQualificationId,function(err,result){
+        if (!err) {
+            var vocationalQualificationArr = result;
+            res.render('staff/editQualification', {
+                index:index,
+                staffId:staffId,
+                vocationalQualificationList:vocationalQualificationArr//职业资格
+            });
+        } else {
+            next();
+        }
+    });
+}
+
+/**
+ * 保存员工资质信息
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.saveQualification = function(req, res, next) {
+
+    var staffId = req.query.staffId ? req.query.staffId : '';//员工id
+    //员工职业资格信息
+    var vocationalQualifications = req.query.vocationalQualifications ? req.query.vocationalQualifications : '';
+    var qualificationsTime = req.query.qualificationsTime ? req.query.qualificationsTime : '';
+    var qualificationsDescribe = req.query.qualificationsDescribe ? req.query.qualificationsDescribe : '';
+
+    var form = new multiparty.Form({uploadDir: './public/files/staffQualifications/'});//将突破上传到”./public/files/staffQualifications“目录下
+
+    form.parse(req, function(err, fields, files) {
+        if (!err) {
+            var qualificationsSrc = "",qualificationsName="";
+            for(var f = 0 ; f<files.recordfile.length ; f ++){
+                var inputFile = files.recordfile[f];
+                qualificationsName += inputFile.originalFilename;
+                qualificationsSrc += inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+            }
+
+            service.addStaffQualifications(staffId,vocationalQualifications,qualificationsSrc,qualificationsName,qualificationsDescribe,qualificationsTime,function(err, results) {
+                if(!err) {
+                    res.render('welcome/success',{
+                        id:results.insertId,
+                        staffId:staffId,
+                        vocationalQualifications:vocationalQualifications,
+                        qualificationsSrc:qualificationsSrc,
+                        qualificationsName:qualificationsName,
+                        qualificationsDescribe:qualificationsDescribe,
+                        qualificationsTime:qualificationsTime
+                    });
+                } else {
+                    console.log(err.message);
+                    res.render('error');
+                }
+            })
+        } else {
+            console.log('parse error: ' + err);
+            next();
+        }
+    });
+
+}
+
+/**
+ * 删除员工资质信息
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.delQualification = function(req, res, next) {
+
+    var certificatesId = req.body.certificatesId ? req.body.certificatesId : '';//职业资格id
+    service.delStaffQualifications(certificatesId,function(err, results) {
+        if(!err) {
+            var result={} ;
+            res.json(JSON.stringify(result));
+        } else {
+            console.log(err.message);
+            res.render('error');
         }
     })
 }

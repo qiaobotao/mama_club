@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <title>设置职业资质信息</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+
+        function submitForm(){
+
+
+
+            if($('#vocationalQualifications').val() == ''){
+                parent.layer.alert('请选择职业资质',{icon: 2});
+                return;
+            }
+            if($('#qualificationsTime').val() == ''){
+                parent.layer.alert('请选择获取时间',{icon: 2});
+                return;
+            }
+            if($('#qualificationsDescribe').val() == ''){
+                parent.layer.alert('请填写描述信息。',{icon: 2});
+                return;
+            }
+
+            var staffId = $('#staffId').val();
+            var vocationalQualifications = $('#vocationalQualifications').val();
+            var qualificationsTime = $('#qualificationsTime').val();
+            var qualificationsDescribe = $('#qualificationsDescribe').val();
+
+            var filesNames = "";
+            $("input[name^='filesNames']").each(function(i, o){
+                if(i != 0 ){
+                    filesNames += ",";
+                }
+                filesNames += $(o).val();
+            });
+            var filesUrls = "";
+            $("input[name^='filesUrls']").each(function(i, o){
+                if(i != 0 ){
+                    filesUrls += ",";
+                }
+                filesUrls += $(o).val();
+            });
+
+            document.getElementById("myform").action = "/jinquan/staff_save_qualification?staffId="+staffId+'&vocationalQualifications='+vocationalQualifications+'&qualificationsTime='+qualificationsTime+'&qualificationsDescribe='+qualificationsDescribe;
+            document.getElementById("myform").submit();
+        }
+        function closeLayer(){
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+        }
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：增加职业资格图片信息
+    </div>
+</div>
+<div class="center_con">
+
+    <form enctype="multipart/form-data" method="post" id="myform" >
+
+        <!-- <form method="post" id="myform" action="/jinquan/notice_save">  -->
+        <table id="noticeTalbeId" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td class="regTd_l">职业资质：</td>
+                <td class="regTd_r">
+                    <input type="hidden" name="staffId" id="staffId" value="<%=staffId%>"/>
+                    <select name="vocationalQualifications" id="vocationalQualifications">
+                        <option value="">请选择</option>
+                        <%
+                        for(var v = 0 ; v < vocationalQualificationList.length ; v ++){
+                        %><option value="<%=vocationalQualificationList[v].id%>" ><%=vocationalQualificationList[v].name%></option><%
+                        }
+                        %>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">获取时间：</td>
+                <td class="regTd_r">
+                    <input id="qualificationsTime" name="qualificationsTime" type="text" class="input5" value="" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">资质描述：</td>
+                <td class="regTd_r" colspan="3">
+                    <textarea id="qualificationsDescribe" name="qualificationsDescribe" rows="10" cols="120"></textarea><span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">上传文件：</td>
+                <td class="regTd_r" colspan="3">
+                    <input  name="recordfile" type="file" multiple='mutiple' value="" class="input5"/>
+                    <input type="hidden" name="filesNames" value=""/>
+                    <input type="hidden" name="filesUrls" value=""/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div class="reg_but">
+        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <div class="rb_l"><a href="javascript:closeLayer()" class="close"></a></div>
+    </div>
+
+
+</div>
+</body>
+</html>

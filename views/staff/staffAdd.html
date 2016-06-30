@@ -192,29 +192,6 @@
                     return;
                 }
             }
-            /*******************验证子表（合同信息）部分 end**********************/
-            var vocationalQualificationsArr = $("select[name='vocationalQualifications']");
-            var qualificationsTimeArr = $("input[name='qualificationsTime']");
-            var qualificationsImageArr = $("input[name='qualificationsImage']");
-            if(vocationalQualificationsArr.length == 0){
-                parent.layer.alert('请至少增加一条职业资质信息。',{icon: 2});
-                return;
-            }
-            for(var i = 0 ; i < vocationalQualificationsArr.length ; i ++){
-                if(vocationalQualificationsArr[i].value == ""){//填写资质名称
-                    parent.layer.alert('请为第'+(i+1)+'行选择职业资质。',{icon: 2});
-                    return;
-                }
-                if(qualificationsTimeArr[i].value == ""){//填写获取资质时间
-                    parent.layer.alert('请为第'+(i+1)+'行获取资质时间。',{icon: 2});
-                    return;
-                }
-
-                if(qualificationsImageArr[i].value == ""){
-                    parent.layer.alert('请为第'+(i+1)+'行上传职业资质照片。',{icon: 2});
-                    return;
-                }
-            }
             /*******************验证子表（职业资质信息）部分 end**********************/
             document.getElementById("myform").submit();
 //            parent.layer.alert('全部通过，准备保存',{icon: 1});
@@ -270,15 +247,44 @@
         }
         //当前职业资质显示位置
         var qualificationsIndex = 0;
-        //table中增加需要添加的行信息（职业资格）
-        function addQualificationsTr(){
+        /**
+         * 弹出层页面，选择资质信息进行上传
+         */
+        function addQualifications(delObj){
+            if($("#id").val() == ""){
+                parent.layer.alert('新增员工时不可以更新资质信息。',{icon: 2});
+                return;
+            }
+            var deltr = delObj.parentNode.parentNode;
+            var qualificationsTableLength = $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').length;
+            //iframe层
+            parent.layer.open({
+                type: 2,
+                title: '选择资质信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '60%'],
+                content: '/jinquan/staff_add_qualification?staffId='+$("#id").val()+'&index='+qualificationsTableLength, //iframe的url
+                success: function(layero, index){
 
+                },
+                close: function(d){
+
+                }
+            });
+        }
+        //table中增加需要添加的行信息（职业资格）
+        function addQualificationsTr(obj){
 
             var vocationalQualificationList = '<%-JSON.stringify(vocationalQualificationList)%>';
             vocationalQualificationList = JSON.parse(vocationalQualificationList);
             var selectVocationalQualificationList = "<option value=''>请选择</option>";
             for(var j = 0 ; j < vocationalQualificationList.length ; j ++){
-                selectVocationalQualificationList += "<option value='"+vocationalQualificationList[j].id+"'>"+vocationalQualificationList[j].name+"</option>";
+                if(obj.vocationalQualifications == vocationalQualificationList[j].id){
+                    selectVocationalQualificationList += "<option value='"+vocationalQualificationList[j].id+"' selected>"+vocationalQualificationList[j].name+"</option>";
+                }else{
+                    selectVocationalQualificationList += "<option value='"+vocationalQualificationList[j].id+"'>"+vocationalQualificationList[j].name+"</option>";
+                }
             }
 
             //获取表格对象
@@ -292,11 +298,11 @@
             var cell4=row.insertCell(3);//上传图片
             var cell5=row.insertCell(4);//删除本行
 //            cell1.innerHTML = '<td><input name="vocationalQualifications" type="text" class="input5" /></td>';
-            cell1.innerHTML = '<td><select name="vocationalQualifications">'+selectVocationalQualificationList+'</select></td>';
-            cell2.innerHTML='<td><input name="qualificationsTime" type="text" class="input5"  readonly onclick="laydate()"/></td>';
-            cell3.innerHTML='<td><input name="qualificationsDescribe" type="text" class="input5" /></td>';
-            cell4.innerHTML='<td><input name="qualificationsImage" type="text" class="input5" /></td>';
-            cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>';
+            cell1.innerHTML = '<td><select name="vocationalQualifications" disabled>'+selectVocationalQualificationList+'</select></td>';
+            cell2.innerHTML='<td><input name="qualificationsTime" type="text" class="input5" value="'+obj.qualificationsTime+'"  readonly /></td>';
+            cell3.innerHTML='<td><input name="qualificationsDescribe" type="text" class="input5" value="'+obj.qualificationsDescribe+'" readonly/></td>';
+            cell4.innerHTML='<td><input type="hidden" id="certificatesId" name="certificatesId" value="'+obj.id+'"/><a href="'+obj.qualificationsSrc+'">'+obj.qualificationsName+'</a></td>';
+            cell5.innerHTML='<td><a style="cursor: pointer" onclick="javaScript:delQualifications('+obj.id+',this)"><h1>-</h1></a></td>';
         }
         //table中增加需要添加的行信息（考勤周期）
         function addAttendanceTypesTr(){
@@ -353,12 +359,29 @@
             if(tableId == 2){//合同
                 $('#contractTableId tr:eq('+deltr.rowIndex+')').remove();
             }
-            if(tableId == 3){//职业资格
-                $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').remove();
-            }
             if(tableId == 4){//考勤周期
                 $('#attendanceTypesTableId tr:eq('+deltr.rowIndex+')').remove();
             }
+        }
+        //根据id删除职业资格证
+        function delQualifications(certificatesId,delObj){
+            var deltr = delObj.parentNode.parentNode;
+            $.ajax({
+                data: {"certificatesId":certificatesId},
+                url: '/jinquan/staff_del_qualification',
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                cache: false,
+                timeout: 5000,
+                success: function(data){
+                    //删除对应的职业资格table中数据
+                    $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').remove();
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    parent.layer.alert("系统错误请系统管理员！",{icon: 2});
+                }
+            });
         }
     </script>
 </head>
@@ -580,18 +603,15 @@
                 <td>职业资质</td>
                 <td>获取时间</td>
                 <td>资质描述</td>
-                <td>上传图片</td>
-                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addQualificationsTr()"><h1>+</h1></a></td>
+                <td>图片（点击下载）</td>
+                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addQualifications(this)"><h1>+</h1></a></td>
             </tr>
             <%
             for(var i = 0 ; i< certificates.length ; i ++){
             %>
             <tr>
                 <td>
-                    <!--
-                    <input id="vocationalQualifications" name="vocationalQualifications" value="<%=certificates[i].vocationalQualifications%>" type="text" class="input5" />
-                    -->
-                    <select name="vocationalQualifications">
+                    <select name="vocationalQualifications" disabled>
                         <option value="">请选择</option>
                         <%
                         for(var v = 0 ; v < vocationalQualificationList.length ; v ++){
@@ -600,10 +620,13 @@
                         %>
                     </select>
                 </td>
-                <td><input id="qualificationsTime" name="qualificationsTime" type="text" value="<%=certificates[i].qualificationsTime%>" class="input5"  readonly onclick="laydate()"/></td>
-                <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" value="<%=certificates[i].qualificationsDescribe%>" class="input5" /></td>
-                <td><input id="qualificationsImage" name="qualificationsImage" type="text" value="<%=certificates[i].qualificationsImage%>" class="input5" /></td>
-                <td><a style="cursor: pointer" onclick="javaScript:delTr(3,this)"><h1>-</h1></a></td>
+                <td><input id="qualificationsTime" name="qualificationsTime" type="text" value="<%=certificates[i].qualificationsTime%>" class="input5"  readonly/></td>
+                <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" value="<%=certificates[i].qualificationsDescribe%>" class="input5" readonly /></td>
+                <td>
+                    <input type="hidden" id="certificatesId" name="certificatesId" value="<%=certificates[i].id%>"/>
+                    <a href="<%=certificates[i].qualificationsSrc%>"><%=certificates[i].qualificationsName%></a>
+                </td>
+                <td><a style="cursor: pointer" onclick="javaScript:delQualifications('<%=certificates[i].id%>',this)"><h1>-</h1></a></td>
             </tr>
             <%
             }

@@ -178,9 +178,11 @@ module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate
     //删除员工与之对应的合同信息
     var deleteContractSql = 'delete from staffContract WHERE staffId = ?';
     var deleteContractPar = [id];
+    /*
     //删除员工与之对应的职业资格信息
     var deleteCertificateSql = 'delete from staffCertificate WHERE staffId = ?';
     var deleteCertificatePar = [id];
+    */
     //删除员工与之对应的考勤周期信息
     var deleteAttendanceSql = 'delete from staffAttendance WHERE staffId = ?';
     var deleteAttendancePar = [id];
@@ -212,6 +214,7 @@ module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate
                 }
             });
         },
+        /*
         delCertificate : function(callback){
             db.query(deleteCertificateSql, deleteCertificatePar, function (cbData, err, rows, fields) {
                 if (!err) {
@@ -221,6 +224,7 @@ module.exports.updateStaff = function(id, serialNumber,name,tel,idCard,birthDate
                 }
             });
         },
+        */
         delAttendance : function(callback){
             db.query(deleteAttendanceSql, deleteAttendancePar, function (cbData, err, rows, fields) {
                 if (!err) {
@@ -317,20 +321,21 @@ module.exports.fetchSingleStaff =function (id, cb) {
 
 
 /**
- * 添加员工与子女、合同、职业资格等信息
+ * 添加员工与子女、合同等信息
  * @param id
  * @param childrenArr
  * @param contractArr
- * @param qualificationsArr
  * @param cb
  */
-module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualificationsArr,attendancesArr,cb) {
+module.exports.addStaffOhter = function(id,childrenArr,contractArr,attendancesArr,cb) {
     //添加员工孩子信息
     var addChildrenSql = 'insert into staffChildren(staffId,childrenName,childrenBirth,childrenSex,childrenRank,dateline) VALUES (?,?,?,?,?,?)';
     //添加员工合同信息
     var addContractSql = 'insert into staffContract(staffId,contractStartDate,contractEndDate,contractRemarks,dateline) VALUES (?,?,?,?,?)';
+    /*
     //添加员工职业资格信息
     var addCertificateSql = 'insert into staffCertificate(staffId,vocationalQualifications,qualificationsImage,qualificationsDescribe,qualificationsTime,dateline) VALUES (?,?,?,?,?,?)';
+    */
     //添加员工考勤周期信息
     var addAttendanceSql = 'insert into staffAttendance(staffId,attendanceId,attendanceStartDate,attendanceEndDate,attendanceRank,dateline) VALUES (?,?,?,?,?,?)';
     //批量添加员工的孩子信息
@@ -369,6 +374,7 @@ module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualification
     }, function(err,results) {
         //cb(err, results);
     });
+    /*
     //批量添加员工的职业资格信息
     async.map(qualificationsArr, function(item, callback) {
         db.query(addCertificateSql, [id,item.vocationalQualifications,item.qualificationsImage,item.qualificationsDescribe,item.qualificationsTime,new Date().getTime()], function (cbData, err, rows, fields) {
@@ -380,5 +386,43 @@ module.exports.addStaffOhter = function(id,childrenArr,contractArr,qualification
         });
     }, function(err,results) {
         cb(err, results);
+    });
+    */
+}
+
+
+/**
+ * 添加职业资格信息
+ * @param id
+ * @param qualifications
+ * @param cb
+ */
+module.exports.addStaffQualifications = function(staffId,vocationalQualifications,qualificationsSrc,qualificationsName,qualificationsDescribe,qualificationsTime,cb) {
+    //添加员工职业资格信息
+    var addCertificateSql = 'insert into staffCertificate(staffId,vocationalQualifications,qualificationsSrc,qualificationsName,qualificationsDescribe,qualificationsTime,dateline) VALUES (?,?,?,?,?,?,?)';
+    //添加员工的职业资格信息
+    db.query(addCertificateSql, [staffId,vocationalQualifications,qualificationsSrc,qualificationsName,qualificationsDescribe,qualificationsTime,new Date().getTime()], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 删除资质信息
+ * @param id
+ * @param cb
+ */
+module.exports.delStaffQualifications= function (id, cb) {
+
+    var sql = 'DELETE FROM staffCertificate WHERE id = ?';
+    db.query(sql, [id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
     });
 }
