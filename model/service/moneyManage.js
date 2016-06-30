@@ -22,13 +22,13 @@ var async = require('async');
  * @param state
  * @param cb
  */
-module.exports.insertMoneyManage = function(chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state, cb) {
+module.exports.insertMoneyManage = function(shopId,chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state, cb) {
     var thisDate = new Date();
     var month = thisDate.getMonth()+1 < 10 ? "0"+(thisDate.getMonth()+1):thisDate.getMonth()+1;
     var day = thisDate.getDate() < 10 ? "0"+thisDate.getDate() : thisDate.getDate();
     var chargeTime = thisDate.getFullYear()+"-"+month+"-"+day;
-    var sql = 'INSERT INTO moneyManage (chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,new Date().getTime()], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO moneyManage (shopId,chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,chargeTime,discounts,discountsMoney,finalActualMoney,state,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -271,10 +271,38 @@ module.exports.fetchSingleMoneyManage =function (id,thisDate , cb) {
         "and str_to_date(a.effectiveTimeStart, '%Y-%m-%d') <= str_to_date(?, '%Y-%m-%d') " +
         "and  str_to_date(?, '%Y-%m-%d') <= str_to_date(a.effectiveTimeEnd, '%Y-%m-%d') ";
 
+    //获取收费子表（服务信息）数据
+    var moneyManageServicesSql = "SELECT * FROM moneyManageServices WHERE moneyManageId = ? ";
+    //获取收费子表（商品信息）数据
+    var moneyManageWaresSql = "SELECT * FROM moneyManageWares WHERE moneyManageId = ? ";
+    //获取服务单数据
+    //var nursServiceSql = "SELECT * FROM nursService WHERE moneyManageId = ? ";
+
+
     async.series({
         //收费单id
         moneyManageData : function(callback){
             db.query(oneMoneyManageSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //获取收费子表（服务信息）数据
+        moneyManageServicesData : function(callback){
+            db.query(moneyManageServicesSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //获取收费子表（商品信息）数据
+        moneyManageWaresData : function(callback){
+            db.query(moneyManageWaresSql, [id], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {
@@ -293,17 +321,6 @@ module.exports.fetchSingleMoneyManage =function (id,thisDate , cb) {
                 }
             });
         }
-        //
-        //activityManageData : function(callback){
-        //    db.query(enableActivityManageSql, [consts.STATE_ENABLE, thisDate,thisDate], function (cbData, err, rows, fields) {
-        //
-        //        if (!err) {
-        //            callback(null,rows);
-        //        } else {
-        //            callback(err);
-        //        }
-        //    });
-        //},
     },function(err, results) {
 
         if (!err) {
