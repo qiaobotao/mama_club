@@ -9,6 +9,8 @@
     <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
     <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <script type="text/javascript" src="../../js/geo.js"></script>
+    <script type="text/javascript" src="../../js/py.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -48,16 +50,32 @@
             }
 
 
-            var contact = document.getElementById("contact").value;
-            if (!contact || contact.length == 0) {
-                parent.layer.alert('联系人不能为空',{icon: 2});
-                return;
-            }
             var workStatus = document.getElementById("workStatus").value;
             if (!workStatus || workStatus.length == 0) {
                 parent.layer.alert('工作状态不能为空',{icon: 2});
                 return;
             }
+
+            //居住地址
+            if($("#s1").val() == "省份"){
+                parent.layer.alert('请选择省份。',{icon: 2});
+                return;
+            }
+            if($("#s2").val() == "地级市"){
+                parent.layer.alert('请选择市。',{icon: 2});
+                return;
+            }
+            if($("#s3").val() == "市、县级市、县"){
+                parent.layer.alert('请选择乡镇。',{icon: 2});
+                return;
+            }
+            if($("#address").val() == ""){
+                parent.layer.alert('请填写小区信息。',{icon: 2});
+                return;
+            }
+
+
+
             var motherEducation = document.getElementById("motherEducation").value;
             if (!motherEducation || motherEducation.length == 0) {
                 parent.layer.alert('妈妈学历不能为空',{icon: 2});
@@ -181,6 +199,49 @@
             //特殊说明添加 end
             document.getElementById("myform").submit();
         }
+        /**
+         * 变更省份时方法
+         */
+        function initCode() {
+            $.ajax({
+                type: "post",
+                url: "/jinquan/shop_count",
+                data: {},
+                success: function (result) {
+                    var count = parseInt(result.count)+parseInt(1);
+                    var num = '001';
+                    if (parseInt(0)<parseInt(count) && parseInt(count)<=parseInt(9)) {
+                        num = '00'+count;
+                    }
+                    if(parseInt(10)<=parseInt(count) && parseInt(count)<=parseInt(99)) {
+                        num = '0'+count;
+                    }
+                    if(parseInt(100)<=parseInt(count) && parseInt(count)<=parseInt(999)) {
+                        num = count;
+                    }
+                    var str = document.getElementById("s1").value.trim();
+                    if(str == "") return;
+                    var arrRslt = makePy(str);
+                    for(var j=0;j<arrRslt.length;j++){
+                        document.getElementById("mycode").value = arrRslt[j] + num;
+                    }
+                }
+            });
+        }
+        $(function(){
+            if('<%=member.city%>'==''){
+                setup('initCode');
+                preselect('北京市');
+                initCode();
+            }else{
+                $("#s1").attr("disabled", "disabled");
+                $("#s2").attr("disabled", "disabled");
+                $("#s3").attr("disabled", "disabled");
+                $("#s1").append("<option value='<%=member.province%>' selected><%=member.province%></option>"); //添加一项option
+                $("#s2").append("<option value='<%=member.city%>' selected><%=member.city%></option>"); //添加一项option
+                $("#s3").append("<option value='<%=member.town%>' selected><%=member.town%></option>"); //添加一项option
+            }
+        });
     </script>
 </head>
 
@@ -221,12 +282,10 @@
                     }
                     %>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">联系人：</td>
-                <td class="regTd_r"><input id="contact" name="contact" type="text" class="input5" value="<%=member.contact%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
                 <td  class="regTd_l">出生年月：</td>
                 <td class="regTd_r"><input id="birthYearMonth" name="birthYearMonth" type="text" class="input5" value="<%=member.birthYearMonth%>" readonly onclick="laydate({istime: true, format: 'YYYY-MM'})"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
                 <td class="regTd_l">工作状态：</td>
                 <td class="regTd_r">
                     <select id="workStatus" name="workStatus">
@@ -238,6 +297,39 @@
                         %>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+
+                <td class="regTd_l">居住地址：</td>
+                <td class="regTd_r" colspan="3">
+                    <%
+                    if(member.province != ""){
+                        %>
+                        <select class="select" name="province" id="s1" onchange="initCode()">
+                            <option></option>
+                        </select>
+                        <select class="select" name="city" id="s2">
+                            <option></option>
+                        </select>
+                        <select class="select" name="town" id="s3">
+                            <option></option>
+                        </select>
+                        <%
+                    }else{
+                        %>
+                        <select class="select" name="province" id="s1" disabled>
+                            <option value="<%=member.province%>"><%=member.province%></option>
+                        </select>
+                        <select class="select" name="city" id="s2" disabled>
+                            <option value="<%=member.city%>"><%=member.city%></option>
+                        </select>
+                        <select class="select" name="town" id="s3" disabled>
+                            <option value="<%=member.town%>"><%=member.town%></option>
+                        </select>
+                        <%
+                    }
+                    %>
+
+                    <input id="address" name="address" type="text" class="input5"   value="<%=member.address%>"/>&nbsp;&nbsp;
+                    <span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈学历：</td>
@@ -262,20 +354,6 @@
                         %>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l" >居住地址：</td>
-                <td class="regTd_r" colspan="3">
-                    <select name="city_district" id="city_district">
-                        <option value="">请选择</option>
-                        <%
-                        for(var i = 0 ; i < areaNames.length ; i ++){
-                        %><option value="<%=areaCodes[i]%>" <%if(member.city_district == areaCodes[i]){%>selected<%}%>><%=areaNames[i]%></option><%
-                        }
-                        %>
-                    </select>
-                    <input id="address" name="address" type="text" class="input5"   value="<%=member.address%>"/>&nbsp;&nbsp;
-                    <span style="color:#FF0000;">*</span></td>
             </tr>
             <!-- 孕产信息 -->
             <tr>

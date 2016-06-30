@@ -114,7 +114,9 @@ module.exports.doEdit = function (req, res,next) {
     var memberName = req.body.memberName ? req.body.memberName : '';
     var contact = req.body.contact ? req.body.contact : '';
     var address = req.body.address ? req.body.address : '';
-    var city_district = req.body.city_district ? req.body.city_district : '';//居住地址：区县~
+    var province = req.body.province ? req.body.province : '';//所属省份
+    var city = req.body.city ? req.body.city : '';//所属区县
+    var town = req.body.town ? req.body.town : '';//所属乡镇
     var workStatus = req.body.workStatus ? req.body.workStatus : '';
     var motherEducation = req.body.motherEducation ? req.body.motherEducation : '';
     var fatherEducation = req.body.fatherEducation ? req.body.fatherEducation : '';
@@ -146,7 +148,7 @@ module.exports.doEdit = function (req, res,next) {
     var tel = req.body.tel ? req.body.tel : '';
     var telVal = commonUtil.array2Str(tel,";");
     if(id != ""){
-        service.updateMember(id,birthYearMonth,memberCardType,memberName,telVal,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        service.updateMember(id,birthYearMonth,memberCardType,memberName,telVal,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
             husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,understandJinQuanChannelDes,
             hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
@@ -158,7 +160,7 @@ module.exports.doEdit = function (req, res,next) {
             });
     }else{
         var shopId = req.session.user.shopId;
-        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,telVal,contact,city_district,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,telVal,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
             deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
             husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
             hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
