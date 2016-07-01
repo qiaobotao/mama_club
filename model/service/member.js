@@ -297,8 +297,8 @@ module.exports.getMemberByNameTel_bak =function (memberName,tel , cb) {
  */
 module.exports.getMemberByNameTel =function (tel ,shopId, cb) {
 
-    var sql = 'SELECT * FROM member WHERE tel=? and shopId=?';
-    db.query(sql, [tel,shopId ], function(cbData, err, rows, fields) {
+    var sql = 'SELECT * FROM member WHERE tel like ? and shopId=?';
+    db.query(sql, ['%'+tel+'%',shopId ], function(cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);
