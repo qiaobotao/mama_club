@@ -292,12 +292,12 @@ module.exports.getTop3ServiceMeet =function (memberId,tel, cb) {
     }
     else
     {
-        parm=   " and tel='" + tel + "' " ;
+        parm=   " and tel like ? " ;
         //parm=   " and tel='" + tel + "' and name ='" + name + "'" ;
     }
     parm+=" order by dateline limit 0,3";
-    var sql = 'SELECT a.*,b.`name` AS serviceName FROM serviceMeet a,service b WHERE a.serviceId=b.id  '+parm ;
-    db.query(sql, [],  function(cbData, err, rows, fields) {
+    var sql = 'SELECT a.*  FROM serviceMeet a WHERE 1=1 '+parm ;
+    db.query(sql, ['%'+tel+'%'],  function(cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);
