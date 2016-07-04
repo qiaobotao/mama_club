@@ -229,19 +229,29 @@
             });
         }
         $(function(){
-            if('<%=member.city%>'==''){
-                setup('initCode');
+            setup('');
+            if('<%=member.province%>' == ''){
                 preselect('北京市');
-                initCode();
             }else{
-                $("#s1").attr("disabled", "disabled");
-                $("#s2").attr("disabled", "disabled");
-                $("#s3").attr("disabled", "disabled");
-                $("#s1").append("<option value='<%=member.province%>' selected><%=member.province%></option>"); //添加一项option
-                $("#s2").append("<option value='<%=member.city%>' selected><%=member.city%></option>"); //添加一项option
-                $("#s3").append("<option value='<%=member.town%>' selected><%=member.town%></option>"); //添加一项option
+                preselect('<%=member.province%>');
+                //1秒钟后，为另外两个下拉框赋值
+                var t=setTimeout("initAddr()",800)
             }
+//                initCode();
         });
+
+        /**
+         * 修改、查看时，为省市县下拉框赋值
+         */
+        function initAddr(){
+            $("#s2 option").each(function() {
+                if ($(this).text() == '<%=member.city%>') {
+                    $(this).attr("selected", "selected");
+//                    break;
+                }
+            });
+            $("#s3").append("<option value='<%=member.town%>' selected><%=member.town%></option>"); //为Select追加一个Option(下拉项)
+        }
     </script>
 </head>
 
@@ -300,33 +310,15 @@
 
                 <td class="regTd_l">居住地址：</td>
                 <td class="regTd_r" colspan="3">
-                    <%
-                    if(member.province != ""){
-                        %>
-                        <select class="select" name="province" id="s1" onchange="initCode()">
-                            <option></option>
-                        </select>
-                        <select class="select" name="city" id="s2">
-                            <option></option>
-                        </select>
-                        <select class="select" name="town" id="s3">
-                            <option></option>
-                        </select>
-                        <%
-                    }else{
-                        %>
-                        <select class="select" name="province" id="s1" disabled>
-                            <option value="<%=member.province%>"><%=member.province%></option>
-                        </select>
-                        <select class="select" name="city" id="s2" disabled>
-                            <option value="<%=member.city%>"><%=member.city%></option>
-                        </select>
-                        <select class="select" name="town" id="s3" disabled>
-                            <option value="<%=member.town%>"><%=member.town%></option>
-                        </select>
-                        <%
-                    }
-                    %>
+                    <select class="select" name="province" id="s1" onchange="initCode()">
+                        <option></option>
+                    </select>
+                    <select class="select" name="city" id="s2">
+                        <option></option>
+                    </select>
+                    <select class="select" name="town" id="s3">
+                        <option></option>
+                    </select>
 
                     <input id="address" name="address" type="text" class="input5"   value="<%=member.address%>"/>&nbsp;&nbsp;
                     <span style="color:#FF0000;">*</span></td>
