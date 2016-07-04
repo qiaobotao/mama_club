@@ -103,6 +103,9 @@ module.exports.doEdit = function (req, res,next) {
     var meetTime = req.body.meetTime ? req.body.meetTime : '';//预约时间
     var specialRemarks = req.body.specialRemarks ? req.body.specialRemarks : '';//特殊备注
     var serviceType = req.body.serviceType ? req.body.serviceType : '';//服务位置：到店、上门
+    var province = req.body.province ? req.body.province : '';//市级信息
+    var city = req.body.city ? req.body.city : '';//市、县级市、县信息
+    var town = req.body.town ? req.body.town : '';//县信息
     var address = req.body.address ? req.body.address : '';//上门时选择的地址
     var price = req.body.price ? req.body.price : '';//报价
     var serverShopId = req.body.serverShopId ? req.body.serverShopId : '';//接受服务的门店id
@@ -112,6 +115,8 @@ module.exports.doEdit = function (req, res,next) {
     var status = req.body.status ? req.body.status : '';//当前状态
     var nursServiceId = req.body.nursServiceId ? req.body.nursServiceId : '';//护理服务单号
     var serviceTime = req.body.serviceTime ? req.body.serviceTime : '';//服务开始时间
+
+
 
     //做过何种处理
     var dealTemp = req.body.deal ? req.body.deal : '';
@@ -126,7 +131,7 @@ module.exports.doEdit = function (req, res,next) {
     var serviceStaffNamesTemp = req.body.serviceStaffName ? req.body.serviceStaffName : '';//护理服务技师名称
     var serviceStaffNames = commonUtil.array2Str(serviceStaffNamesTemp,",");
     if(id != ""){
-        service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,address,price,serverShopId,specified,principal,
+        service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
             staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
                 if (!err) {
                     res.redirect('/jinquan/service_meet_list?replytype=update');
@@ -135,7 +140,7 @@ module.exports.doEdit = function (req, res,next) {
                 }
             });
     }else{
-        service.insertServiceMeet(shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,address ,price ,serverShopId ,
+        service.insertServiceMeet(shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,province,city,town,address ,price ,serverShopId ,
             specified,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,function (err, results) {
                 if (!err) {
                     res.redirect('/jinquan/service_meet_list?replytype=add');
@@ -219,9 +224,7 @@ module.exports.preEdit = function(req, res, next) {
                             datas:{},
                             treatmentMethodArr:treatmentMethodArr,
                             serverDemandArr:serverDemandArr,
-                            shopArr:shopArr,
-                            areaNames:consts.AREA_NAMES,
-                            areaCodes:consts.AREA_CODES});
+                            shopArr:shopArr});
                     }else{
 
                         result.member=member;
@@ -246,9 +249,7 @@ module.exports.preEdit = function(req, res, next) {
                                         datas:datas,
                                         treatmentMethodArr:treatmentMethodArr,
                                         serverDemandArr:serverDemandArr,
-                                        shopArr:shopArr,
-                                        areaNames:consts.AREA_NAMES,
-                                        areaCodes:consts.AREA_CODES});
+                                        shopArr:shopArr});
                                 });
                             })
                         });

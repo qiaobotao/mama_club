@@ -8,6 +8,8 @@
     <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <script type="application/javascript" src="../../js/layer/layer.js"></script>
     <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../../js/geo.js"></script>
+    <script type="text/javascript" src="../../js/py.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -195,7 +197,19 @@
                     parent.layer.alert('报价不能为空',{icon: 2});
                     return;
                 }
-                if($("#cityId").val() == ""){//需选择详细地址
+                if($("#s1").val() == ""){//需选择省份
+                    parent.layer.alert('请选择省份。',{icon: 2});
+                    return;
+                }
+                if($("#s2").val() == ""){//需选择地级市
+                    parent.layer.alert('请选择地级市。',{icon: 2});
+                    return;
+                }
+                if($("#s3").val() == ""){//需选择市、县级市、县
+                    parent.layer.alert('请选择市、县级市、县。',{icon: 2});
+                    return;
+                }
+                if($("#address").val() == ""){//需填写详细地址
                     parent.layer.alert('请选择详细地址。',{icon: 2});
                     return;
                 }
@@ -343,10 +357,41 @@
             $("#principal"+delIndex).remove();
             $("#serviceStaffSpan"+delIndex).remove();
         }
+
+        $(function(){
+            setup('');
+            if('<%=service_meet.province%>' == ''){
+                preselect('北京市');
+            }else{
+                preselect('<%=service_meet.province%>');
+                //1秒钟后，为另外两个下拉框赋值
+                var t=setTimeout("initAddr()",800)
+            }
+            renderTables('<%=datas%>');
+
+            if($("#specified").val() == '1') {//未指定
+                $("#principal").val("");
+                $("#principal").attr("disabled", "disabled");//设为不可用
+            }
+        });
+        /**
+         * 修改、查看时，为省市县下拉框赋值
+         */
+        function initAddr(){
+//            alert("OK");
+//            province,city,town
+            $("#s2 option").each(function() {
+                if ($(this).text() == '<%=service_meet.city%>') {
+                    $(this).attr("selected", "selected");
+//                    break;
+                }
+            });
+            $("#s3").append("<option value='<%=service_meet.town%>' selected><%=service_meet.town%></option>"); //为Select追加一个Option(下拉项)
+        }
     </script>
 </head>
 
-<body onload="renderTables('<%=datas%>')">
+<body>
 <div class="r_top">
     <div class="weizhi">
         当前位置：预约服务
@@ -439,13 +484,14 @@
                     </select>
                 </span>
                 <span id="memberAddress" style='display:none;'>
-                    <select id="cityId" name="cityId">
-                        <option value="">请选择</option>
-                        <%
-                        for(var i = 0 ; i < areaNames.length ; i ++){
-                        %><option value="<%=areaCodes[i]%>"><%=areaNames[i]%></option><%
-                        }
-                        %>
+                    <select class="select" name="province" id="s1" onchange="initCode()">
+                        <option></option>
+                    </select>
+                    <select class="select" name="city" id="s2">
+                        <option></option>
+                    </select>
+                    <select class="select" name="town" id="s3">
+                        <option></option>
                     </select>
                     <input id="address" name="address" type="text" class="input5"  value="<%=service_meet.address%>" />&nbsp;&nbsp;
                 </span>
