@@ -365,23 +365,34 @@
         }
         //根据id删除职业资格证
         function delQualifications(certificatesId,delObj){
-            var deltr = delObj.parentNode.parentNode;
-            $.ajax({
-                data: {"certificatesId":certificatesId},
-                url: '/jinquan/staff_del_qualification',
-                type: 'post',
-                dataType: 'json',
-                async: false,
-                cache: false,
-                timeout: 5000,
-                success: function(data){
-                    //删除对应的职业资格table中数据
-                    $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').remove();
-                },
-                error: function(jqXHR, textStatus, errorThrown){
-                    parent.layer.alert("系统错误请系统管理员！",{icon: 2});
-                }
+
+            layer.confirm('确定要删除本资质信息么？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                //确定删除
+                layer.msg('即将删除。', {icon: 1});
+                var deltr = delObj.parentNode.parentNode;
+                $.ajax({
+                    data: {"certificatesId":certificatesId},
+                    url: '/jinquan/staff_del_qualification',
+                    type: 'post',
+                    dataType: 'json',
+                    async: false,
+                    cache: false,
+                    timeout: 5000,
+                    success: function(data){
+                        //删除对应的职业资格table中数据
+                        $('#qualificationsTableId tr:eq('+deltr.rowIndex+')').remove();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        parent.layer.alert("系统错误请系统管理员！",{icon: 2});
+                    }
+                });
+            }, function(){
+                //取消删除
+                layer.msg('取消删除。', {icon: 1});
             });
+
         }
     </script>
 </head>
