@@ -178,6 +178,7 @@ module.exports.save = function (req, res,next) {
         obj.attendanceStartDate = attendanceStartDate;
         obj.attendanceEndDate = attendanceEndDate;
         obj.attendanceRank = attendanceRank;
+        obj.attendanceOrder = 0;
         attendancesArr.push(obj);
     }
 
