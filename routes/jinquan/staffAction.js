@@ -169,6 +169,7 @@ module.exports.save = function (req, res,next) {
             obj.attendanceStartDate = attendanceStartDate[i];
             obj.attendanceEndDate = attendanceEndDate[i];
             obj.attendanceRank = attendanceRank[i];
+            obj.attendanceOrder = i;
             attendancesArr.push(obj);
         }
     } else {

@@ -323,11 +323,13 @@
                     return;
                 }
             }
-            //将字符串转成时间
-            endDateStr = endDateStr.replace(/-/g,"/");
-            var endDate = new Date(endDateStr );
-            endDate.setDate(endDate.getDate()+1);//日期加一
-            endDateStr = date2str(endDate,'yyyy-MM-dd');//将时间转为字符串
+            if(endDateStr != ""){
+                //将字符串转成时间
+                endDateStr = endDateStr.replace(/-/g,"/");
+                var endDate = new Date(endDateStr );
+                endDate.setDate(endDate.getDate()+1);//日期加一
+                endDateStr = date2str(endDate,'yyyy-MM-dd');//将时间转为字符串
+            }
             //获取表格对象
             var table=document.getElementById("attendanceTypesTableId");
             //获取当前行数
@@ -340,6 +342,11 @@
             var cell5=row.insertCell(4);//备注
 //            var cell6=row.insertCell(5);//删除本行
             cell1.innerHTML = '<td><select name="attendanceId">'+selectAttendanceType+'</select></td>';
+//            if(attendanceTypesIndex == 1){
+//                //如果第一次添加考勤记录，开始时间可以选择
+//            }else{
+//
+//            }
             if(endDateStr == ""){
                 cell2.innerHTML='<td><input name="attendanceStartDate" type="text" class="input5" readonly onclick="laydate()"/></td>';
             }else{
@@ -635,7 +642,7 @@
                 <td><input id="qualificationsDescribe" name="qualificationsDescribe" type="text" value="<%=certificates[i].qualificationsDescribe%>" class="input5" readonly /></td>
                 <td>
                     <input type="hidden" id="certificatesId" name="certificatesId" value="<%=certificates[i].id%>"/>
-                    <a href="<%=certificates[i].qualificationsSrc%>"><%=certificates[i].qualificationsName%></a>
+                    <a href="<%=certificates[i].qualificationsSrc%>" target="_blank"><%=certificates[i].qualificationsName%></a>
                 </td>
                 <td><a style="cursor: pointer" onclick="javaScript:delQualifications('<%=certificates[i].id%>',this)"><h1>-</h1></a></td>
             </tr>

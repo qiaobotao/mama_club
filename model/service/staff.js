@@ -260,7 +260,7 @@ module.exports.fetchSingleStaff =function (id, cb) {
     //员工职业资格信息
     var certificateSql = 'SELECT * FROM staffCertificate WHERE staffId = ?'
     //员工考勤类型信息
-    var attendanceTypeSql = 'SELECT * FROM staffAttendance WHERE staffId = ?';
+    var attendanceTypeSql = 'SELECT * FROM staffAttendance WHERE staffId = ? order by attendanceOrder';
     async.series({
         staff : function(callback){
             db.query(staffSql, [id], function (cbData, err, rows, fields) {
@@ -332,12 +332,8 @@ module.exports.addStaffOhter = function(id,childrenArr,contractArr,attendancesAr
     var addChildrenSql = 'insert into staffChildren(staffId,childrenName,childrenBirth,childrenSex,childrenRank,dateline) VALUES (?,?,?,?,?,?)';
     //添加员工合同信息
     var addContractSql = 'insert into staffContract(staffId,contractStartDate,contractEndDate,contractRemarks,dateline) VALUES (?,?,?,?,?)';
-    /*
-    //添加员工职业资格信息
-    var addCertificateSql = 'insert into staffCertificate(staffId,vocationalQualifications,qualificationsImage,qualificationsDescribe,qualificationsTime,dateline) VALUES (?,?,?,?,?,?)';
-    */
     //添加员工考勤周期信息
-    var addAttendanceSql = 'insert into staffAttendance(staffId,attendanceId,attendanceStartDate,attendanceEndDate,attendanceRank,dateline) VALUES (?,?,?,?,?,?)';
+    var addAttendanceSql = 'insert into staffAttendance(staffId,attendanceId,attendanceStartDate,attendanceEndDate,attendanceRank,attendanceOrder,dateline) VALUES (?,?,?,?,?,?,?)';
     //批量添加员工的孩子信息
     async.map(childrenArr, function(item, callback) {
         db.query(addChildrenSql, [id,item.childrenName,item.childrenBirth,item.childrenSex,item.childrenRank,new Date().getTime()], function (cbData, err, rows, fields) {
@@ -364,7 +360,7 @@ module.exports.addStaffOhter = function(id,childrenArr,contractArr,attendancesAr
     });
     //批量添加考勤周期信息
     async.map(attendancesArr, function(item, callback) {
-        db.query(addAttendanceSql, [id,item.attendanceId,item.attendanceStartDate,item.attendanceEndDate,item.attendanceRank,new Date().getTime()], function (cbData, err, rows, fields) {
+        db.query(addAttendanceSql, [id,item.attendanceId,item.attendanceStartDate,item.attendanceEndDate,item.attendanceRank,item.attendanceOrder,new Date().getTime()], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -372,7 +368,7 @@ module.exports.addStaffOhter = function(id,childrenArr,contractArr,attendancesAr
             }
         });
     }, function(err,results) {
-        //cb(err, results);
+        cb(err, results);
     });
     /*
     //批量添加员工的职业资格信息
