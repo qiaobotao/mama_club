@@ -28,13 +28,15 @@
         var classroom = document.getElementById('classroom').value;
         var courseType = document.getElementById('courseType').value;
         var date = document.getElementById('date').value;
-        window.location.href = '/jinquan/course_list?classroom='+classroom+'&courseType='+courseType+'&date='+date;
+        var dateEnd = document.getElementById('dateEnd').value;
+        window.location.href = '/jinquan/course_list?classroom='+classroom+'&courseType='+courseType+'&date='+date+'&dateEnd='+dateEnd;
     }
 
     function pageturning (selectPage) {
         var classroom = document.getElementById('classroom').value;
         var courseType = document.getElementById('courseType').value;
         var date = document.getElementById('date').value;
+        var dateEnd = document.getElementById('dateEnd').value;
         window.location.href = '/jinquan/course_list?page='+selectPage+'&classroom='+classroom+'&courseType='+courseType+'&date='+date;
     }
 
@@ -64,7 +66,7 @@
                         <option value="3" <%if(data.courseType== 3){%>selected <%}%>>父母课</option>
                         <option value="4" <%if(data.courseType== 4){%>selected <%}%>>会议</option>
                     </select></td>
-                    <td> &nbsp;上课时间：<input id="date" name="date" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.date%>"/></td>
+                    <td> &nbsp;上课时间：<input id="date" name="date" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.date%>"/>~<input id="dateEnd" name="dateEnd" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.dateEnd%>"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

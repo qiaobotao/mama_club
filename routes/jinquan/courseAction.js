@@ -20,6 +20,7 @@ module.exports.list = function (req, res,next) {
     var classroom = req.query.classroom ? req.query.classroom : '';
     var courseType = req.query.courseType ? req.query.courseType : '';
     var date = req.query.date ? req.query.date : '';
+    var dateEnd = req.query.dateEnd ? req.query.dateEnd : '';
 
     var url = '/jinquan'+req.url;
     // 接收操作参数
@@ -27,12 +28,13 @@ module.exports.list = function (req, res,next) {
 
     var resourcesData = req.session.user.resourcesData;
 
-    service.getCourseList(shopId,classroom,courseType,date,currentPage,function(err, results){
+    service.getCourseList(shopId,classroom,courseType,date,dateEnd,currentPage,function(err, results){
         if (!err){
             results.currentPage = currentPage;
             results.classroom = classroom;
             results.courseType = courseType;
             results.date = date;
+            results.dateEnd = dateEnd;
             res.render('course/courseList',{data : results,replytype : replytype,laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
             });
