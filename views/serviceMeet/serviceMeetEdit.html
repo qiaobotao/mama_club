@@ -14,51 +14,57 @@
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
-        //输入手机号处，失去焦点时触发
-        function getMemberId()
-        {
-            var memberTel = document.getElementById("tel").value;
-            if (!memberTel || memberTel.length == 0) {
+
+        /**
+         * 检索手机号逻辑
+         * 1、根据手机号检索用户信息
+         * 2、选择某会员后，调动本页面方法，查询该会员预约、服务、投诉情况
+         */
+        //1、根据手机号检索用户信息
+        function getMemberId(){
+            if($("#tel").val() == ''){
                 parent.layer.alert('电话不能为空',{icon: 2});
                 return;
+            }else{
+                parent.layer.open({
+                    type: 2,
+                    title: '选择会员',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['80%', '90%'],
+                    content: '/jinquan/member_all_select?tel='+$("#tel").val(), //iframe的url
+                    success: function(layero, index){
+
+                    },
+                    close: function(d){
+
+                    }
+                });
             }
+        }
+        //2、选择某会员后，调动本页面方法，查询该会员预约、服务、投诉情况
+        function getMemberByMemberId(memberId){
+
             $.ajax({
-                data: {"memberTel":memberTel},
-                url: '/jinquan/getMemberByNameTel',
+                data: {"memberId":memberId},
+                url: '/jinquan/getMemberByMemberId',
                 type: 'post',
                 dataType: 'json',
                 async: false,
                 cache: false,
                 timeout: 5000,
                 success: function(data){
+                    $("#serviceMeets  tr:not(:first)").empty("");
+                    $("#nursServices  tr:not(:first)").empty("");
+                    $("#complains  tr:not(:first)").empty("");
                     var datas =eval('(' + data + ')');
-                    if(datas.flag) {
-                        //回填会员id
-                        document.getElementById("memberId").value=datas.member.id;
-                        renderTables(datas);
-                    }
-                    else
-                    {
-                        $("#serviceMeets  tr:not(:first)").empty("");
-                        $("#nursServices  tr:not(:first)").empty("");
-                        $("#complains  tr:not(:first)").empty("");
-                        document.getElementById("memberId").value=null;
-                        var msg = '非会员预约服务，是否确认预约？';
-                        var index = parent.layer.confirm(msg, {
-                            icon : 3,
-                            title : "请确认姓名和电话号码是系统会员信息",
-                            btn: ['确定','取消'], //按钮
-                            shade: [0.3,'#000'] //不显示遮罩
-                        }, function(){
-                            parent.layer.close(index);
-                        });
-                    }
+                    renderTables(datas);
                 },
                 error: function(jqXHR, textStatus, errorThrown){
                     $("#serviceMeets  tr:not(:first)").empty("");
                     $("#nursServices  tr:not(:first)").empty("");
                     $("#complains  tr:not(:first)").empty("");
-                     parent.layer.alert("系统错误请系统管理员！",{icon: 2});
+                    parent.layer.alert("系统错误请系统管理员！",{icon: 2});
                 }
             });
         }
@@ -84,10 +90,8 @@
                 var cell1=row.insertCell(0);//预约时间
                 var cell2=row.insertCell(1);//预约技师
                 var cell3=row.insertCell(2);//如约、爽约
-                var cell4=row.insertCell(3);//如约、爽约
-                cell1.innerHTML =serviceMeets[i].serviceName;
-                cell2.innerHTML =serviceMeets[i].meetTime;
-                cell3.innerHTML =serviceMeets[i].principal;
+                cell1.innerHTML =serviceMeets[i].meetTime;
+                cell2.innerHTML =serviceMeets[i].principal;
                 var zhuangtai ="";
                 if(serviceMeets[i].status==1){
                     zhuangtai="预约成功";
@@ -112,7 +116,7 @@
                 {
                     zhuangtai="处理失败";
                 }
-                cell4.innerHTML =zhuangtai;
+                cell3.innerHTML =zhuangtai;
                 serviceMeetsIndex++;
             }
             }
@@ -124,19 +128,20 @@
             if(nursServices!=null)
             {
 
-            for(var i=0;i<nursServices.length;i++)
-            {
-                var row=nursServicesTable.insertRow(nursServicesIndex);
-                var cell1=row.insertCell(0);//护理服务项目
-                var cell2=row.insertCell(1);//服务时间
-                var cell3=row.insertCell(2);//服务技师
-                var cell4=row.insertCell(3);//服务类型
-                cell1.innerHTML =nursServices[i].serviceName;
-                cell2.innerHTML =nursServices[i].startTime;
-                cell3.innerHTML =nursServices[i].principal;
-                cell4.innerHTML =nursServices[i].serviceType;
-                nursServicesIndex++;
-            }
+                for(var i=0;i<nursServices.length;i++)
+                {
+                    var row=nursServicesTable.insertRow(nursServicesIndex);
+                    var cell1=row.insertCell(0);//服务日期
+                    var cell2=row.insertCell(1);//开始时间
+                    var cell3=row.insertCell(2);//截止时间
+                    var cell4=row.insertCell(3);//查看详情
+                    cell1.innerHTML =nursServices[i].serviceDate;
+                    cell2.innerHTML =nursServices[i].startTime;
+                    cell3.innerHTML =nursServices[i].endTime;
+                    var nursServiceId =nursServices[i].id;
+                    cell4.innerHTML ="<a href='javascript:void();' onclick='showNursService("+nursServiceId+")' >查看详情</a>";
+                    nursServicesIndex++;
+                }
 
             }
             //获取表格对象
@@ -163,8 +168,26 @@
             }
             }
         }
+
+        function showNursService(id){
+            parent.layer.open({
+                type: 2,
+                title: '查看服务单详情',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/nurs_service_preEdit?show=show&openWindow=open&id='+id, //iframe的url
+                success: function(layero, index){
+
+                },
+                close: function(d){
+
+                }
+            });
+        }
+
         function submitForm(){
-            var name = document.getElementById("name").value;
+            var name = document.getElementById("customerName").value;
             if (!name || name.length == 0) {
                 parent.layer.alert('名称不能为空',{icon: 2});
                 return;
@@ -404,10 +427,10 @@
                 <td class="regTd_l">名称：</td>
                 <td class="regTd_r">
                     <input id="id" type="hidden" name="id" value="<%=service_meet.id%>"  readonly="true"/>
-                    <input id="name" name="name" type="text" class="input5" value="<%=service_meet.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    <input id="memberId" name="memberId" type="hidden" class="input5"  value="<%=service_meet.memberId%>" />
+                    <input id="customerName" name="name" type="text" class="input5" value="<%=service_meet.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">电话：</td>
                 <td class="regTd_r">
-                    <input id="memberId" name="memberId" type="hidden" class="input5"  value="<%=service_meet.memberId%>" />
                     <input id="tel" name="tel" type="text" class="input5"   onBlur="getMemberId()"   value="<%=service_meet.tel%>" />&nbsp;&nbsp;
                     <span style="color:#FF0000;">*</span></td>
             </tr>
@@ -426,7 +449,7 @@
                             meetTimeStrSS = meetTimeStr.split(" ")[1].split(":")[1];
                         }
                     %>
-                    <input id="meetTimeYMD" name="meetTimeYMD" type="text" class="input5" style="width: 70px" onclick="laydate()"  value="<%=meetTimeStrYMD%>" />
+                    <input id="meetTimeYMD" name="meetTimeYMD" type="text" class="input5" style="width: 70px" readonly onclick="laydate()"  value="<%=meetTimeStrYMD%>" />
                     <input id="meetTime" name="meetTime" type="hidden" value="<%=service_meet.meetTime%>" />
                     <select id="meetTimeHH">
                         <option value="">请选择</option>
@@ -632,10 +655,9 @@
         <br>
         <table id="serviceMeets" name="serviceMeets" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>服务项目</td>
-                <td>预约时间</td>
-                <td>预约技师</td>
-                <td>如约/爽约</td>
+                <td width="30%">预约时间</td>
+                <td width="30%">预约技师</td>
+                <td width="30%">如约/爽约</td>
             </tr>
         </table>
 
@@ -644,10 +666,10 @@
         <br>
         <table id="nursServices" name="nursServices" class="reg_table" border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
-                <td>服务项目</td>
-                <td>服务时间</td>
-                <td>服务技师</td>
-                <td>服务类型</td>
+                <td>服务日期</td>
+                <td>开始时间</td>
+                <td>截止时间</td>
+                <td>详情</td>
             </tr>
         </table>
         <!-- 投诉情况 -->
@@ -664,7 +686,7 @@
         </table>
     </form>
     <div class="reg_but">
-        <%if(show == 'show'){
+        <%if(show == ''){
             %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
         }%>
         <div class="rb_l"><a href="/jinquan/service_meet_list" class="close"></a></div>

@@ -167,6 +167,11 @@
                 }
             }
         })
+        //关闭窗口（只适用于弹出窗口）
+        function closeWindow(){
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+        }
     </script>
 </head>
 
@@ -490,7 +495,14 @@
             %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
         }
         %>
-        <div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div>
+        <%
+        if(openWindow == ''){
+            %><div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div><%
+        }else if(openWindow == 'open'){
+            %><div class="rb_l"><a href="javascript:void();" onclick="closeWindow()" class="close"></a></div><%
+        }
+        %>
+
     </div>
 
 

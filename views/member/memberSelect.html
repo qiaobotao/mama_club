@@ -5,8 +5,11 @@
     <title>选择员工列表</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
@@ -27,16 +30,24 @@
         var tel = document.getElementById('tel').value;
         window.location.href = '/jinquan/member_select?serialNumber='+serialNumber+'&page='+selectPage+'&memberName='+memberName+'&tel='+tel;
     }
-    //选择该商品
+    //选择该会员信息
     function select(name,seril,type){
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName').value=name;
-        window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId').value=seril;
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName')){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName').value=name;
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('customerName')){
+            //适用于预约单中，选择会员信息
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('customerName').value=name;
+            window.parent.document.getElementById("rightFrame").contentWindow.getMemberByMemberId(seril);
+        }
+        if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId')){
+            window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId').value=seril;
+        }
         if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberType')){
             window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberType').value = type;
         }
         var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
         parent.layer.close(index); //执行关闭
-
     }
 </script>
 
@@ -101,8 +112,7 @@
         </tr>
         <%}%>
     </table>
-
-    <%- include ../pagination.html -%>
+    <%- laypage %>
 </div>
 </body>
 </html>

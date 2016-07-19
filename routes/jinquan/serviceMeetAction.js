@@ -147,7 +147,7 @@ module.exports.preEdit = function(req, res, next) {
 
                         result.member=member;
                         //预约服务单
-                        servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
+                        servicemeet.getTop3ServiceMeet(member.id,function(err, services) {
                             result.serviceMeets=services;
 
                             var serviceMeetIds="";

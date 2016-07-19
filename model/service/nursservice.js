@@ -306,9 +306,8 @@ module.exports.delNursService= function (id, cb) {
 module.exports.getTop3NursService =function (serviceMeetIds, cb) {
     var  parm=   "and a.serviceMeetId in(" + serviceMeetIds + ")" ;
     parm+=" order by dateLine";
-    var sql = 'SELECT   a.*,  c.name AS serviceName,  b.principal AS principal,  d.name AS serviceType FROM  nursService a,  serviceMeet b,  service c,  systemClassify d WHERE a.serviceMeetId = b.id AND b.serviceId = c.id  AND c.classify = d.id  '+parm;
+    var sql = 'SELECT   a.*,   b.principal AS principal FROM  nursService a,  serviceMeet b WHERE a.serviceMeetId = b.id  '+parm;
     db.query(sql, [],  function(cbData, err, rows, fields) {
-
         if (!err) {
             cb(null, rows);
         } else {

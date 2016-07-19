@@ -211,6 +211,7 @@ module.exports.doEdit = function (req, res,next) {
 
 
 /**
+ * 进入编辑页面
  * @param req
  * @param res
  * @param next
@@ -219,6 +220,7 @@ module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
     var show = req.query.show ? req.query.show : '';
+    var openWindow = req.query.openWindow ? req.query.openWindow : '';//通过弹出层打开
 
     service.fetchSingleNursService(id, function(err, results) {
         if (!err) {
@@ -227,7 +229,7 @@ module.exports.preEdit = function(req, res, next) {
             var dictData = results;
             storeroomOutService.detail(outLogId,function(err, results) {
                 if (!err) {
-                    res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,dictData : dictData,show:show});
+                    res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,dictData : dictData,show:show,openWindow:openWindow});
                     /*
                     service.getnursserviceClassify(function (err, results1) {
                         if (!err) {

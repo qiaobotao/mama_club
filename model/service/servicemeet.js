@@ -281,7 +281,7 @@ module.exports.fetchSingleServiceMeet =function (userId,id, cb) {
  * @param id
  * @param cb
  */
-module.exports.getTop3ServiceMeet =function (memberId,tel, cb) {
+module.exports.getTop3ServiceMeet =function (memberId, cb) {
 //module.exports.getTop3ServiceMeet =function (memberId,name,tel, cb) {
 
     var parm ="";
@@ -290,14 +290,9 @@ module.exports.getTop3ServiceMeet =function (memberId,tel, cb) {
     {
         parm=   " and  memberId='" + memberId + "'" ;
     }
-    else
-    {
-        parm=   " and tel like ? " ;
-        //parm=   " and tel='" + tel + "' and name ='" + name + "'" ;
-    }
     parm+=" order by dateline limit 0,3";
     var sql = 'SELECT a.*  FROM serviceMeet a WHERE 1=1 '+parm ;
-    db.query(sql, ['%'+tel+'%'],  function(cbData, err, rows, fields) {
+    db.query(sql, [],  function(cbData, err, rows, fields) {
 
         if (!err) {
             cb(null, rows);

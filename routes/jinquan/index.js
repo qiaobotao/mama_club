@@ -182,7 +182,7 @@ router.all('/member_doEdit',memberAction.doEdit);
 router.all('/member_del',memberAction.del);
 router.all('/member_select',memberAction.select);
 router.all('/member_all_select',memberAction.selectAll);
-router.all('/getMemberByNameTel',memberAction.getMemberByNameTel);
+router.all('/getMemberByMemberId',memberAction.getMemberByMemberId);
 router.all('/member_select_activity',memberAction.selectForActivity);
 // 预约服务
 router.all('/service_meet_list',serviceMeetAction.list);

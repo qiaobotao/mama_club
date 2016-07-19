@@ -236,7 +236,7 @@ module.exports.select = function (req, res, next) {
             results.memberName = memberName;
             results.tel = tel;
             results.currentPage = currentPage;
-            res.render('member/memberSelect', {data : results});
+            res.render('member/memberSelect',  {data : results});
         } else {
             next();
         }
@@ -247,10 +247,11 @@ module.exports.selectAll = function (req, res, next) {
     //res.render('member/memberList');
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
-    var tel = req.query.tel ? req.query.tel : '';
+    //var tel = req.query.tel ? req.query.tel : '';
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
+    var url = '/jinquan'+req.url;
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
     service.fetchAllMember(shopId,serialNumber,memberName,tel,currentPage, function (err, results) {
@@ -259,7 +260,8 @@ module.exports.selectAll = function (req, res, next) {
             results.memberName = memberName;
             results.tel = tel;
             results.currentPage = currentPage;
-            res.render('member/memberSelect', {data : results});
+            res.render('member/memberSelect', {data : results,laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})});
         } else {
             console.log(err.message);
             res.render('error', {error : err});
@@ -267,52 +269,44 @@ module.exports.selectAll = function (req, res, next) {
     });
 
 }
-module.exports.getMemberByNameTel = function(req, res, next) {
 
-    //var memberName = req.body.memberName ? req.body.memberName : '';
-    var tel = req.body.memberTel ? req.body.memberTel : '';
+/**
+ * 根据会员id查询预约、服务、投诉信息
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.getMemberByMemberId = function(req, res, next) {
+
+    var memberId = req.body.memberId ? req.body.memberId : '';
     var result={} ;
     result.flag= false;
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
-    service.getMemberByNameTel(tel ,shopId ,function(err, results) {
+    //根据会员id获取预约单信息
+    servicemeet.getTop3ServiceMeet(memberId,function(err, services) {
         if (!err) {
-                var member = results.length == 0 ? null : results[0];
-                if(member!=null)
-                {
-                    result.member=member;
-                    //预约服务单
-                      servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
-                          result.serviceMeets=services;
+            result.serviceMeets=services;
 
-                          var serviceMeetIds="";
-                          for(var i=0;i<services.length;i++)
-                          {
-                              serviceMeetIds+="'"+services[i].id+"',";
-                          }
-                          serviceMeetIds= serviceMeetIds.substr(0,serviceMeetIds.length-1);
-                          //护理服务
-                          nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
-                              result.nursServices=nursServices;
-                                  complain.getTop3Complain(serviceMeetIds,function(err, complains) {
-                                      result.complains=complains;
-                                      result.flag= true;
-                                      console.log(JSON.stringify(result));
-                                      res.json(JSON.stringify(result));
-                                 });
-                              })
-                          });
-                }else
-                {
+            var serviceMeetIds="";
+            for(var i=0;i<services.length;i++)
+            {
+                serviceMeetIds+="'"+services[i].id+"',";
+            }
+            serviceMeetIds= serviceMeetIds.substr(0,serviceMeetIds.length-1);
+            //护理服务
+            nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
+                result.nursServices=nursServices;
+                complain.getTop3Complain(serviceMeetIds,function(err, complains) {
+                    result.complains=complains;
                     console.log(JSON.stringify(result));
                     res.json(JSON.stringify(result));
-                }
-
+                });
+            })
         } else {
             next();
         }
-    }
-    )
+    });
 }
 
 
