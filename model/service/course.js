@@ -124,7 +124,7 @@ module.exports.selectCourseByType = function(currentPage,courseIds,courseType,cb
  * @param currentPage
  * @param cb
  */
-module.exports.getCourseList = function (shopId,classroom,courseType,date,currentPage,cb) {
+module.exports.getCourseList = function (shopId,classroom,courseType,date,dateEnd,currentPage,cb) {
 
     var par = "WHERE r.name LIKE '%"+classroom+"%' ";
     if (courseType != '') {
@@ -132,7 +132,11 @@ module.exports.getCourseList = function (shopId,classroom,courseType,date,curren
     }
 
     if (date != '') {
-        par = par + " AND courseDate = '"+date+"'";
+        par = par + " AND courseDate >= '"+date+"'";
+    }
+
+    if (dateEnd != '') {
+        par = par + "AND courseDate <= '"+dateEnd+"'";
     }
 
     par = par + ' AND r.shopId = '+ shopId;
