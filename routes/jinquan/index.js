@@ -207,6 +207,7 @@ router.all('/nurs_service_list',nursServiceAction.list);
 router.all('/nurs_service_preEdit',nursServiceAction.preEdit);
 router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
 router.all('/nurs_service_del',nursServiceAction.del);
+router.all('/nurs_service_create_no',nursServiceAction.createNo);
 
 // 收费信息
 router.all('/money_manage_list',moneyManageAction.list);

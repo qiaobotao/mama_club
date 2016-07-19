@@ -9,6 +9,7 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var utils = require('../../common/utils');
 var mainDiagnosticResultClassifyId = require('../../config').mainClassifyId.diagnosticResult;
 var mainMomReasonsClassifyId = require('../../config').mainClassifyId.momReasons;
 var mainBabyResultClassifyId = require('../../config').mainClassifyId.babyReasons;
@@ -297,6 +298,53 @@ module.exports.delNursService= function (id, cb) {
             cb(err);
         }
     });
+}
+/**
+ * 根据门店id，查找本年、本月第几个服务单
+ * @param id
+ * @param cb
+ */
+module.exports.createNursNo= function (id, cb) {
+    /**
+     * 1、根据门店id获取门店编码
+     * 2、根据门店id+4位年-2位月获取当前门店当前月共有多少个服务单
+     */
+    var serialNumberSql = 'select serialNumber from shop where id = ?';
+    var nursServiceCountSql = 'select count(*) as nursCount from nursService t where left(t.serviceDate,7) = ? and t.shopId = ?';
+    async.series({
+        //根据门店id获取门店编码
+        serialNumber: function(callback){
+            db.query(serialNumberSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        nursServiceCount : function(callback){
+            db.query(nursServiceCountSql, [utils.date2str(new Date(),"yyyy-MM"),id], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+        //门店编号+年份4位+月份2位+编号3位。
+        var codeIndex = results.nursServiceCount[0].nursCount +1;
+        codeIndex = codeIndex<10?"00"+codeIndex:(codeIndex<100?"0"+codeIndex:codeIndex)
+        var nursNo = results.serialNumber[0].serialNumber+utils.date2str(new Date(),"yyyyMM")+codeIndex;
+        if (!err) {
+            results.nursNo = nursNo;
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+
 }
 /**
  * 获取前三条预约数据根据会员id 或者 姓名和电话

@@ -259,5 +259,24 @@ module.exports.del = function (req, res, next) {
             next();
         }
     });
+}
 
+/**
+ * 生成护理服务单编号
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.createNo = function (req, res, next) {
+
+    var shopId = req.session.user.shopId;
+
+    //根据门店id获取下一个服务单编号信息
+    service.createNursNo(shopId,function(err, results){
+        if (!err) {
+            res.json(JSON.stringify(results));
+        } else {
+            next();
+        }
+    });
 }
