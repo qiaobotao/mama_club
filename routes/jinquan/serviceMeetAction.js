@@ -56,42 +56,6 @@ module.exports.list = function (req, res,next) {
     });
 }
 
-/**
- * 增加预约服务
- * @param req
- * @param res
- */
-/*
-module.exports.goAdd = function (req, res,next) {
-
-    res.render('serviceMeet/serviceMeetAdd');
-}
-*/
-
-module.exports.add = function (req, res,next) {
-    var tel = req.body.tel ? req.body.tel : '';
-    var name = req.body.name ? req.body.name : '';
-    var memberId = req.body.memberId ? req.body.memberId : '';
-    var age = req.body.age ? req.body.age : '';
-    var principal = req.body.principal ? req.body.principal : '';
-    var meetTime = req.body.meetTime ? req.body.meetTime : '';
-    var problemDescription = req.body.problemDescription ? req.body.problemDescription : '';
-    var serviceType = req.body.serviceType ? req.body.serviceType : '';
-    var address = req.body.address ? req.body.address : '';
-    var price = req.body.price ? req.body.price : '';
-    var serviceId = req.body.serviceId ? req.body.serviceId : '';
-    var staffId = req.body.staffId ? req.body.staffId : '';
-    var specified = req.body.specified ? req.body.specified : '';
-
-    service.insertServiceMeet(shopId,specified,staffId,tel,name,age,principal,meetTime,problemDescription,serviceType,address,price,memberId,serviceId, function (err, results) {
-        if (!err) {
-            res.redirect('/jinquan/service_meet_list?replytype=add');
-        } else {
-            next();
-        }
-    });
-}
-
 
 module.exports.doEdit = function (req, res,next) {
     // 从session 中获取门店id
@@ -151,58 +115,11 @@ module.exports.doEdit = function (req, res,next) {
     }
 }
 
-module.exports.show = function(req, res, next) {
-    var id = req.query.id ? req.query.id : '';
-    // 从session 中获取门店id
-    var shopId = req.session.user.shopId;
-    service.fetchSingleServiceMeet(id, function(err, results) {
-        if (!err) {
-            var service_meet = results.length == 0 ? null : results[0];
-            var tel =service_meet.tel;
-            var result={};
-            memberService.getMemberByNameTel( tel ,shopId,function(err, results) {
-                if (!err) {
-                    var member = results.length == 0 ? null : results[0];
-                    if(member!=null)
-                    {
-                        result.member=member;
-                        //预约服务单
-                        servicemeet.getTop3ServiceMeet(member.id,tel,function(err, services) {
-                            result.serviceMeets=services;
 
-                            var serviceMeetIds="";
-                            for(var i=0;i<services.length;i++)
-                            {
-                                serviceMeetIds+="'"+services[i].id+"',";
-                            }
-                            serviceMeetIds= serviceMeetIds.substr(0,serviceMeetIds.length-1);
-                            //护理服务
-                            nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
-                                result.nursServices=nursServices;
-                                complain.getTop3Complain(serviceMeetIds,function(err, complains) {
-                                    result.complains=complains;
-                                    var datas = JSON.stringify(result);
-                                    res.render('servicemeet/serviceMeetDetail', {service_meet : service_meet,datas:datas});
-                                });
-                            })
-                        });
-                    }
-                    else{
-                        res.render('servicemeet/serviceMeetDetail', {service_meet : service_meet,datas:null});
-
-                    }
-                }else{
-                    next();
-                }
-            })
-        } else {
-            next();
-        }
-    })
-}
 module.exports.preEdit = function(req, res, next) {
     var shopId = req.session.user.shopId;
     var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
     var userId = req.session.user.id;//用户id
 
     service.fetchSingleServiceMeet(userId,id, function(err, results) {
@@ -221,6 +138,7 @@ module.exports.preEdit = function(req, res, next) {
                     if(1==1){
                         res.render('serviceMeet/serviceMeetEdit', {
                             service_meet : service_meet,
+                            show:show,
                             datas:{},
                             treatmentMethodArr:treatmentMethodArr,
                             serverDemandArr:serverDemandArr,
@@ -246,6 +164,7 @@ module.exports.preEdit = function(req, res, next) {
                                     var datas = JSON.stringify(result);
                                     res.render('serviceMeet/serviceMeetEdit', {
                                         service_meet : service_meet,
+                                        show:show,
                                         datas:datas,
                                         treatmentMethodArr:treatmentMethodArr,
                                         serverDemandArr:serverDemandArr,

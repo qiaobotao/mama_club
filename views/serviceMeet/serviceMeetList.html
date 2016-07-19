@@ -40,10 +40,10 @@
             window.location.href = '/jinquan/service_meet_list?phone='+phone+'&page='+selectPage+'&customerName='+name+ '&meetStartTime='+meetTime ;
         }
         function show (id) {
-            window.location.href = '/jinquan/service_meet_show?id='+id;
+            window.location.href = '/jinquan/service_meet_preEdit?id='+id;
         }
         function preEdit (id) {
-            window.location.href = '/jinquan/service_meet_preEdit?id='+id;
+            window.location.href = '/jinquan/service_meet_preEdit?show=show&id='+id;
         }
         function del (id) {
             delData('/jinquan/service_meet_del?id='+id);
