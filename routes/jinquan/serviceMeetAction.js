@@ -79,6 +79,7 @@ module.exports.doEdit = function (req, res,next) {
     var status = req.body.status ? req.body.status : '';//当前状态
     var nursServiceId = req.body.nursServiceId ? req.body.nursServiceId : '';//护理服务单号
     var serviceTime = req.body.serviceTime ? req.body.serviceTime : '';//服务开始时间
+    var createService = req.body.createService ? req.body.createService : '';//是否新增护理服务单数据
 
 
 
@@ -95,14 +96,34 @@ module.exports.doEdit = function (req, res,next) {
     var serviceStaffNamesTemp = req.body.serviceStaffName ? req.body.serviceStaffName : '';//护理服务技师名称
     var serviceStaffNames = commonUtil.array2Str(serviceStaffNamesTemp,",");
     if(id != ""){
-        service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
-            staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
-                if (!err) {
-                    res.redirect('/jinquan/service_meet_list?replytype=update');
-                } else {
-                    next();
-                }
-            });
+
+        //根据门店id获取下一个服务单编号信息
+        nursservice.createNursNo(shopId,function(err, results){
+            nursServiceId = results.nursNo;
+            if (!err) {
+                service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
+                    staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
+                        if (!err) {
+                            if(createService == 'Y') {//新增护理服务单记录
+                                //先获取服务单号，新增记录
+                                nursservice.insertNursServiceByServiceMeet(nursServiceId, id, meetTime.substring(0,10), serviceTime, function (err, results) {
+                                    if (!err) {
+                                        res.redirect('/jinquan/service_meet_list?replytype=update');
+                                    } else {
+                                        next();
+                                    }
+                                });
+                            }else{
+                                res.redirect('/jinquan/service_meet_list?replytype=update');
+                            }
+                        } else {
+                            next();
+                        }
+                    });
+            } else {
+                next();
+            }
+        });
     }else{
         service.insertServiceMeet(shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,province,city,town,address ,price ,serverShopId ,
             specified,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,function (err, results) {

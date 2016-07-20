@@ -26,6 +26,8 @@
                 parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }else{
+                $("#memberId").val("");
+                $("#customerName").val("");
                 parent.layer.open({
                     type: 2,
                     title: '选择会员',
@@ -260,12 +262,18 @@
 
                 var serviceStaffNameStr = "";
                 $("input[name='serviceStaffName']").each(function(){
-                    serviceStaffNameStr += ",";
+                    if($(this).val() != ""){
+                        serviceStaffNameStr += ","+$(this).val();
+                    }
                 });
                 if(serviceStaffNameStr == ""){
                     parent.layer.alert('请选择服务技师。',{icon: 2});
                     return;
                 }
+            }
+
+            if($("#status").val() == 3 && ('<%=service_meet.status%>'=='1' || '<%=service_meet.status%>' == '2')){//是否创建护理服务单数据
+                $("#createService").val("Y");
             }
             document.getElementById("myform").submit();
         }
@@ -298,17 +306,19 @@
                 $("#memberAddress").hide();
                 $("#shopAddressText").show();
                 $("#memberAddressText").hide();
-                $("#serviceCode1").show();
-                $("#serviceCode2").show();
                 $("#priceSpanId").hide();//到店时报价隐藏
-                $("#status").find("option[value='1']").attr("selected",true);
+                if($("#id").val() == ''){
+                    $("#status").find("option[value='1']").attr("selected",true);
+                }
             }else{//上门
                 $("#shopAddress").hide();
                 $("#memberAddress").show();
                 $("#shopAddressText").hide();
                 $("#memberAddressText").show();
                 $("#priceSpanId").show();//上门时报价隐藏
-                $("#status").find("option[value='2']").attr("selected",true);
+                if($("#id").val() == ''){
+                    $("#status").find("option[value='2']").attr("selected",true);
+                }
             }
         }
 
@@ -322,8 +332,12 @@
                 $("#status").find("option[value='<%=service_meet.status%>']").attr("selected",true);
                 return;
             }
-
-
+            statusInit();
+        }
+        /**
+         * 初始化状态信息
+         */
+        function statusInit(){
             if($("#status").val() == 3){
                 $("#serviceCode1").show();
                 $("#serviceCode2").show();
@@ -406,13 +420,14 @@
                 $("#principal").val("");
                 $("#principal").attr("disabled", "disabled");//设为不可用
             }
+            statusInit();
         });
         /**
          * 从后台生成护理服务单编号
          */
         function createNursServiceNo(){
-            if($("#memberId").val() == ''){//如果没有用户信息，提示先更新会员信息
-                parent.layer.alert('该客户还不是会员，请更新会员信息。',{icon: 2});
+            if($("#id").val() == ''){//如果没有用户信息，提示先更新会员信息
+                parent.layer.alert('预约单应预约成功后，再变更服务信息。',{icon: 2});
                 return;
             }else{
                 $.ajax({
@@ -463,6 +478,7 @@
                 <td class="regTd_r">
                     <input id="id" type="hidden" name="id" value="<%=service_meet.id%>"  readonly="true"/>
                     <input id="memberId" name="memberId" type="hidden" class="input5"  value="<%=service_meet.memberId%>" />
+                    <input id="createService" name="createService" type="hidden" /><!-- 是否创建服务单 -->
                     <input id="customerName" name="name" type="text" class="input5" value="<%=service_meet.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">电话：</td>
                 <td class="regTd_r">
@@ -610,16 +626,21 @@
             <tr>
                 <td class="regTd_l">当前状态：</td>
                 <td class="regTd_r">
-                    <select name="status" id="status" onchange="changeStatus()" <%if(service_meet.id == null){%>disabled<%}%>>
-                        <option value="1" <%if(service_meet.status == 1){%>selected<%}%>>预约成功</option>
-                        <option value="2" <%if(service_meet.status == 2){%>selected<%}%>>上门预约</option>
-                        <option value="3" <%if(service_meet.status == 3){%>selected<%}%>>已接受服务</option>
-                        <option value="4" <%if(service_meet.status == 4){%>selected<%}%>>取消预约</option>
+                    <select name="status" id="status" onchange="changeStatus()" >
+                        <option value="1" <%if(service_meet.status == '1'){%>selected<%}%>>预约成功</option>
+                        <option value="2" <%if(service_meet.status == '2'){%>selected<%}%>>上门预约</option>
+                        <option value="3" <%if(service_meet.status == '3'){%>selected<%}%>>已接受服务</option>
+                        <option value="4" <%if(service_meet.status == '4'){%>selected<%}%>>取消预约</option>
+                        <option value="5" <%if(service_meet.status == '5'){%>selected<%}%>>已结算</option>
                     </select>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l" id="serviceCode1">护理服务单号：</td>
                 <td class="regTd_r" id="serviceCode2">
-                    <input type="button" style="height: 50px" value="生成护理服务单号" onclick="createNursServiceNo()"/>
+                    <%
+                        if(service_meet.status == '1' || service_meet.status == '2'){
+                            %><input type="button" style="height: 50px" value="生成护理服务单号" onclick="createNursServiceNo()"/><%
+                        }
+                    %>
                     <input type="text" id="nursServiceId" readonly name="nursServiceId" value="<%=service_meet.nursServiceId%>"/>&nbsp;&nbsp;
                     服务开始时间
                     <input type="hidden" id="serviceTime" name="serviceTime" value="<%=service_meet.serviceTime%>"/>
@@ -656,7 +677,7 @@
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr id="serviceStaffTrId">
-                <td class="regTd_l">预约技师：</td>
+                <td class="regTd_l">服务技师：</td>
                 <td class="regTd_r" colspan="3">
                     <span id="serviceStaffDivId">
                         <%

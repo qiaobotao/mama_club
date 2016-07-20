@@ -31,6 +31,9 @@ var serverDemandId = require('../../config').mainClassifyId.serverDemand;//服�
  * 在收费单中生成护理服务单信息
  * @param serviceMeetId
  * @param serviceDate
+ * @param serviceStartTime
+ * @param serviceEndTime
+ * @param cb
  */
 module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,cb){
     var sql = 'INSERT INTO nursService(serviceMeetId,serviceDate,startTime,endTime,dateLine) VALUES (?,?,?,?,?)';
@@ -42,33 +45,24 @@ module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,serviceDa
         }
     });
 };
-
 /**
- * 2016年05月04日
- * 此方法以后将不被使用：业务上，由收费功能生成护理服务单；护理服务单可以自行修改
+ * 在预约单中生成护理服务单信息
+ * @param nursServiceNo
+ * @param serviceMeetId
+ * @param serviceDate
+ * @param serviceStartTime
+ * @param serviceEndTime
  * @param cb
  */
-module.exports.insertNursService = function(serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
-                                            bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
-                                            milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-                                            diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-                                            isLeadTrainee,whetherAppointmentAgain,traineeName, cb) {
-    var sql = "INSERT INTO nursService(serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,"
-        + "milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,diagnosis,specialInstructions,childReason,breastExplain,motherReason,"
-        + "leaveAdvise,otherReason,isLeadTrainee,whetherAppointmentAgain,traineeName,dateLine)"
-        + " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    db.query(sql, [serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
-                bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
-                milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-                diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-                isLeadTrainee,whetherAppointmentAgain,traineeName,new Date().getTime()], function(cbData, err, rows, fields) {
+module.exports.insertNursServiceByServiceMeet = function(nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,cb){
+    var sql = 'INSERT INTO nursService(nursServiceNo,serviceMeetId,serviceDate,startTime,dateLine) VALUES (?,?,?,?,?)';
+    db.query(sql, [nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
             cb(err);
         }
     });
-
 };
 
 module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,

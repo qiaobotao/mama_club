@@ -68,13 +68,12 @@
                         电话：<input id="phone" name="phone" type="text" class="input5" value="<%=data.phone%>" /></td>
                     <td> &nbsp;预约时间：<input id="meetTime" name="meetTime" type="text" class="input5" onclick="laydate()" value="<%=data.meetTime%>"/></td>
                     <td> &nbsp;状态： <select id="serviceType" name="serviceType" >
-                        <option value="-1" <%if(data.status == '-1'){%>selected<%}%>>全部</option>
-                        <option value="0"   <%if(data.status == '0'){%>selected<%}%>>预约失败</option>
-                        <option value="1"   <%if(data.status == '1'){%>selected<%}%>>预约成功</option>
-                        <option value="2"   <%if(data.status == '2'){%>selected<%}%>>已护理</option>
-                        <option value="3"   <%if(data.status == '3'){%>selected<%}%>>已收费</option>
-                        <option value="4"   <%if(data.status == '4'){%>selected<%}%>>已回访</option>
-                        <option value="5"   <%if(data.status == '4'){%>selected<%}%>>已投诉</option>
+                        <option value="" >全部</option>
+                        <option value="1" <%if(data.status == 1){%>selected<%}%>>预约成功</option>
+                        <option value="2" <%if(data.status == 2){%>selected<%}%>>上门预约</option>
+                        <option value="3" <%if(data.status == 3){%>selected<%}%>>已接受服务</option>
+                        <option value="4" <%if(data.status == 4){%>selected<%}%>>取消预约</option>
+                        <option value="5" <%if(data.status == 5){%>selected<%}%>>已结算</option>
 
                     </select>
                     </td>
@@ -111,27 +110,23 @@
                     <%
                     var zhuangtai ="";
                     if(data.data[i].status==1){
-                    zhuangtai="预约成功";
+                        zhuangtai="预约成功";
                     }
                     else if(data.data[i].status==2)
                     {
-                    zhuangtai="已护理";
+                        zhuangtai="上门预约";
                     }
                     else if(data.data[i].status==3)
                     {
-                     zhuangtai="已收费";
+                        zhuangtai="已接受服务";
                     }
                     else if(data.data[i].status==4)
                     {
-                     zhuangtai="已回访";
+                        zhuangtai="取消预约";
                     }
                     else if(data.data[i].status==5)
                     {
-                    zhuangtai="已投诉";
-                    }
-                    else
-                    {
-                    zhuangtai="处理失败";
+                        zhuangtai="已结算";
                     }
                     %><%=zhuangtai%></td>
                 <td>
