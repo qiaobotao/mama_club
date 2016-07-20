@@ -41,14 +41,14 @@ module.exports.insertServiceMeet = function(shopId,memberId,name,tel,meetTime ,s
     });
 };
 module.exports.updateServiceMeet = function(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
-                                            staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames, cb) {
+                                            staffId,status,nursServiceId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames, cb) {
 
     var sql = 'UPDATE serviceMeet SET ' +
         ' memberId = ?,name = ?,tel = ?,meetTime = ?,specialRemarks = ?,serviceType = ?,province=?,city=?,town=?,address = ?,price = ?,serverShopId = ?,specified = ?,principal = ?,' +
-        ' staffId = ?,status = ?,nursServiceId = ?,serviceTime = ?,deal = ?,serviceNeeds = ?,serviceStaffIds = ?, serviceStaffNames = ?' +
+        ' staffId = ?,status = ?,nursServiceId = ?,nursServiceNo=?,serviceTime = ?,deal = ?,serviceNeeds = ?,serviceStaffIds = ?, serviceStaffNames = ?' +
         'WHERE  id  =  ?  ';
     db.query(sql, [memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
-        staffId,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,id], function(cbData, err, rows, fields) {
+        staffId,status,nursServiceId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

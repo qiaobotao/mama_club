@@ -96,6 +96,7 @@ module.exports.save = function(req, res, next) {
 
     var shopId = req.session.user.shopId;//所属门店id
     var id = req.body.id ? req.body.id : '';//收费单id
+    var nursServiceId = req.body.nursServiceId ? req.body.nursServiceId : '';//护理服务单编号
     var memberId = req.body.memberId ? req.body.memberId : '';//会员id
     var memberCardId = req.body.memberCardId ? req.body.memberCardId : '';//会员卡id
     var staffId = req.body.staffId ? req.body.staffId : '';//员工id
@@ -149,14 +150,16 @@ module.exports.save = function(req, res, next) {
             proArr.push(obj);
         }
     } else {
-        var obj = {};
-        obj.waresId = proNo;
-        obj.price = price;
-        obj.count = count;
-        obj.subtotal = subtotal;
-        obj.discount = discount;
-        obj.insidePrice = insidePrice;
-        proArr.push(obj);
+        if(proNo != ""){
+            var obj = {};
+            obj.waresId = proNo;
+            obj.price = price;
+            obj.count = count;
+            obj.subtotal = subtotal;
+            obj.discount = discount;
+            obj.insidePrice = insidePrice;
+            proArr.push(obj);
+        }
     }
     //记录商品信息集合  end
 
@@ -210,13 +213,18 @@ module.exports.save = function(req, res, next) {
                         }
                     });
                 }else if(chargeType == 2){//添加护理服务单
-                    nursService.insertNursServiceByMoneyManage(serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,function(err, results) {
+                    //nursService.insertNursServiceByMoneyManage(serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,function(err, results) {
+                    //更新护理服务单中状态以及结束时间
+                    var nursState = payType>0?"2":"3";
+                    //状态
+                    //2、完成已收费
+                    //3、完成未收费
+                    nursService.updateNursServiceByMoneyManage(nursServiceId,nursState,serviceEndTime,function(err, results) {
                         if (!err) {
-                            var nursServiceId = results.insertId;//刚创建的服务单id
                             //更新收费单主表中的服务单id
                             service.updateMoneyManage4ServiceId(moneyManageId,nursServiceId,function(err, results) {
                                 if (!err) {
-                                    //将收费的服务信息保存到子表中（并记录收费主表id、护理服务单主表id）
+                                    //将收费的服务信息保存到子表中（并记录收费主表id、nursServiceId）
                                     service.insertServiceByMoneyManage(moneyManageId,nursServiceId,serviceArr,function(err, results) {
                                         if (!err) {
                                             if(proArr.length > 0){

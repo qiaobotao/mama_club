@@ -27,7 +27,7 @@
 //            var status = document.getElementById('status').value;
             window.location.href = '/jinquan/service_meet_select?phone='+phone+'&page='+selectPage+'&customerName='+name+ '&meetStartTime='+meetTime ;
         }
-        //选择该商品
+        //选择该预约单信息
         function select(serviceMeet){
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId')){//预约单id
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceMeetId').value=serviceMeet.id;
@@ -76,6 +76,9 @@
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId')){//护理服务单id
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId').value=serviceMeet.nursServiceId;
+            }
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceNo')){//护理服务单id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceNo').value=serviceMeet.nursServiceNo;
             }
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime')){//开始服务时间
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('serviceTime').value = serviceMeet.serviceTime;
@@ -139,30 +142,27 @@
                 <td><%=data.data[i].meetTime%></td>
                 <td><%=data.data[i].principal%></td>
                 <td>
+
                     <%
                     var zhuangtai ="";
                     if(data.data[i].status==1){
-                    zhuangtai="预约成功";
+                        zhuangtai="预约成功";
                     }
                     else if(data.data[i].status==2)
                     {
-                    zhuangtai="已护理";
+                        zhuangtai="上门预约";
                     }
                     else if(data.data[i].status==3)
                     {
-                    zhuangtai="已收费";
+                        zhuangtai="已接受服务";
                     }
                     else if(data.data[i].status==4)
                     {
-                    zhuangtai="已回访";
+                        zhuangtai="取消预约";
                     }
                     else if(data.data[i].status==5)
                     {
-                    zhuangtai="已投诉";
-                    }
-                    else
-                    {
-                    zhuangtai="处理失败";
+                        zhuangtai="已结算";
                     }
                     %><%=zhuangtai%></td>
                 <td>

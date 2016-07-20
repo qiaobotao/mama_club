@@ -94,27 +94,15 @@
                 <%
                 var zhuangtai ="";
                 if(data.data[i].status==1){
-                zhuangtai="预约成功";
+                    zhuangtai="服务中";
                 }
                 else if(data.data[i].status==2)
                 {
-                zhuangtai="已护理";
+                    zhuangtai="完成已收费";
                 }
                 else if(data.data[i].status==3)
                 {
-                zhuangtai="已收费";
-                }
-                else if(data.data[i].status==4)
-                {
-                zhuangtai="已回访";
-                }
-                else if(data.data[i].status==5)
-                {
-                zhuangtai="已投诉";
-                }
-                else
-                {
-                zhuangtai="处理失败";
+                    zhuangtai="完成未收费";
                 }
                 %><%=zhuangtai%></td>
                 <td>

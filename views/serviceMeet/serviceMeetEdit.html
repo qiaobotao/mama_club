@@ -439,7 +439,7 @@
                     timeout: 5000,
                     success: function(data){
                         var datas =eval('(' + data + ')');
-                        $("#nursServiceId").val(datas.nursNo);
+                        $("#nursServiceNo").val(datas.nursNo);
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         parent.layer.alert("系统错误请系统管理员！",{icon: 2});
@@ -641,7 +641,8 @@
                             %><input type="button" style="height: 50px" value="生成护理服务单号" onclick="createNursServiceNo()"/><%
                         }
                     %>
-                    <input type="text" id="nursServiceId" readonly name="nursServiceId" value="<%=service_meet.nursServiceId%>"/>&nbsp;&nbsp;
+                    <input type="hidden" id="nursServiceId" readonly name="nursServiceId" value="<%=service_meet.nursServiceId%>"/>&nbsp;&nbsp;
+                    <input type="text" id="nursServiceNo" readonly name="nursServiceNo" value="<%=service_meet.nursServiceNo%>"/>&nbsp;&nbsp;
                     服务开始时间
                     <input type="hidden" id="serviceTime" name="serviceTime" value="<%=service_meet.serviceTime%>"/>
                     <select id="serviceTimeHH">

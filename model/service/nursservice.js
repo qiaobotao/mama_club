@@ -54,9 +54,9 @@ module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,serviceDa
  * @param serviceEndTime
  * @param cb
  */
-module.exports.insertNursServiceByServiceMeet = function(nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,cb){
-    var sql = 'INSERT INTO nursService(nursServiceNo,serviceMeetId,serviceDate,startTime,dateLine) VALUES (?,?,?,?,?)';
-    db.query(sql, [nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,new Date().getTime()], function(cbData, err, rows, fields) {
+module.exports.insertNursServiceByServiceMeet = function(nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,status,cb){
+    var sql = 'INSERT INTO nursService(nursServiceNo,serviceMeetId,serviceDate,startTime,status,dateLine) VALUES (?,?,?,?,?,?)';
+    db.query(sql, [nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,status,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -65,6 +65,65 @@ module.exports.insertNursServiceByServiceMeet = function(nursServiceNo,serviceMe
     });
 };
 
+/**
+ * 根据护理服务单号更新服务完成时间、护理服务单状态
+ * @param nursServiceNo
+ * @param nursState
+ * @param serviceEndTime
+ * @param cb
+ */
+module.exports.updateNursServiceByMoneyManage = function(nursServiceId,nursState,serviceEndTime, cb) {
+
+    var sql = 'UPDATE nursService set endTime=?,status=?'
+        + ' where id=?';
+    db.query(sql, [serviceEndTime,nursState,nursServiceId], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+
+/**
+ * 更新护理服务单全部字段
+ * @param id
+ * @param serviceMeetId
+ * @param serviceDate
+ * @param name
+ * @param tel
+ * @param startTime
+ * @param endTime
+ * @param serviceType
+ * @param address
+ * @param serviceNeeds
+ * @param bowelFrequenc
+ * @param deal
+ * @param shape
+ * @param feedSituation
+ * @param urination
+ * @param feedRemark
+ * @param milkSituation
+ * @param childCurrentMonths
+ * @param milkNumber
+ * @param childCurrentHeight
+ * @param milkAmount
+ * @param childCurrentWeight
+ * @param breastpumpBrand
+ * @param isCarefulNurse
+ * @param referralAdvise
+ * @param diagnosis
+ * @param specialInstructions
+ * @param childReason
+ * @param breastExplain
+ * @param motherReason
+ * @param leaveAdvise
+ * @param otherReason
+ * @param isLeadTrainee
+ * @param whetherAppointmentAgain
+ * @param traineeName
+ * @param cb
+ */
 module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                             bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                             milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
@@ -105,7 +164,7 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
     var sql_count = 'SELECT  count(1) as count FROM nursService a ,serviceMeet b'+ parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,b.status FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,a.status FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
