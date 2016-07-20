@@ -119,7 +119,6 @@
         }
         $(document).ready(function() {
 
-
             var motherReasons ='<%=nursService.motherReason%>';
             var temps = motherReasons.split(',');
             var check = document.getElementsByName("motherReason");
@@ -166,12 +165,41 @@
                     }
                 }
             }
+
+            //为孩子月龄赋值
+            var childMonths ='<%=nursService.childMonths%>';
+            if($("#childCurrentMonths").val() == ''){
+                $("#childCurrentMonths").val(childMonths+"个月");
+            }
+            if(childMonths > 6){//超过6个月，大便次数、性状、小便次数都不是必填项
+                $("#bowelFrequencSpanId").hide();
+                $("#shapeSpanId").hide();
+            }
+            //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
+            if(document.getElementById("milkSituation").selectedIndex == 1){
+                $("#milkNumberSpanId").hide();//挤奶次数
+                $("#milkAmountSpanId").hide();//挤奶总量
+            }
+
         })
         //关闭窗口（只适用于弹出窗口）
         function closeWindow(){
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
             parent.layer.close(index); //执行关闭
         }
+        //挤奶情况变更
+        function milkSituationChange(){
+            //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
+
+            if(document.getElementById("milkSituation").selectedIndex == 1){
+                $("#milkNumberSpanId").hide();//挤奶次数
+                $("#milkAmountSpanId").hide();//挤奶总量
+            }else{
+                $("#milkAmountSpanId").show();//挤奶总量
+                $("#milkNumberSpanId").show();//挤奶次数
+            }
+        }
+
     </script>
 </head>
 
@@ -209,11 +237,15 @@
                 <td class="regTd_l">服务地点：</td>
                 <td class="regTd_r">
                     <select id="serviceType" name="serviceType" disabled>
-                        <option value="1" <%if(nursService.serviceType == 1){%>selected<%}%>>上门</option>
-                        <option value="2" <%if(nursService.serviceType == 2){%>selected<%}%>>到店</option>
+                        <option value="1" <%if(nursService.serviceType == 1){%>selected<%}%>>到店</option>
+                        <option value="2" <%if(nursService.serviceType == 2){%>selected<%}%>>上门</option>
                     </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务地址：</td>
-                <td class="regTd_r"><input id="address" name="address" type="text" class="input5" readonly />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input type="text" class="input5" <%if(nursService.serviceType == 2){%>style="width: 300px;"<%}else{%>style="width: 100px;"<%}%>
+                           value="<%if(nursService.serviceType == 1){%><%=nursService.shopName%><%}else{%><%=nursService.province%>,<%=nursService.city%>,<%=nursService.town%>,<%=nursService.address%><%}%>" readonly />
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">开始时间：</td>
@@ -276,7 +308,9 @@
             </tr>
             <tr>
                 <td class="regTd_l">大便次数：</td>
-                <td class="regTd_r"><input id="bowelFrequenc" name="bowelFrequencc" type="text" class="input5"  value="<%=nursService.bowelFrequencc%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="bowelFrequenc" name="bowelFrequencc" type="text" class="input5"  value="<%=nursService.bowelFrequencc%>"/>&nbsp;&nbsp;
+                    <span id="bowelFrequencSpanId" style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">形状：</td>
                 <td class="regTd_r">
                     <select id="shape" name="shape">
@@ -286,7 +320,7 @@
                         %><option value="<%=dictData.shapeArr[i].id%>" <%if(nursService.shape ==dictData.shapeArr[i].id ){%>selected<%}%>><%=dictData.shapeArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<span id="shapeSpanId" style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">喂养情况：</td>
@@ -315,7 +349,7 @@
                 <td class="regTd_r"><input id="feedRemark" name="feedRemark" type="text" class="input5"  value="<%=nursService.feedRemark%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">挤奶情况：</td>
                 <td class="regTd_r">
-                    <select id="milkSituation" name="milkSituation">
+                    <select id="milkSituation" name="milkSituation" onchange="milkSituationChange();">
                         <option value="">请选择</option>
 
                         <%for(var i=0;i<dictData.milkSituationArr.length;i++){
@@ -329,6 +363,7 @@
                 <td class="regTd_r"><input id="childCurrentMonths" name="childCurrentMonths" type="text" class="input5"  value="<%=nursService.childCurrentMonths%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">挤奶次数：</td>
                 <td class="regTd_r">
+                    <!--
                     <select id="milkNumber" name="milkNumber">
                         <option value="">请选择</option>
 
@@ -336,13 +371,16 @@
                         %><option value="<%=dictData.milkNumArr[i].id%>" <%if(nursService.milkNumber ==dictData.milkNumArr[i].id ){%>selected<%}%>><%=dictData.milkNumArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    -->
+                    <input type="text" id="milkNumber" name="milkNumber" value="<%=nursService.milkNumber%>"/>
+                    &nbsp;&nbsp;<span id="milkNumberSpanId" style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">目前身高：</td>
                 <td class="regTd_r"><input id="childCurrentHeight" name="childCurrentHeight" type="text" class="input5"  value="<%=nursService.childCurrentHeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">挤奶总量：</td>
                 <td class="regTd_r">
+                    <!--
                     <select id="milkAmount" name="milkAmount">
                         <option value="">请选择</option>
 
@@ -350,7 +388,9 @@
                         %><option value="<%=dictData.milkTotalArr[i].id%>" <%if(nursService.milkAmount ==dictData.milkTotalArr[i].id ){%>selected<%}%>><%=dictData.milkTotalArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    -->
+                    <input type="text" id="milkAmount" name="milkAmount" value="<%=nursService.milkAmount%>"/>
+                    &nbsp;&nbsp;<span id="milkAmountSpanId" style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">目前体重：</td>

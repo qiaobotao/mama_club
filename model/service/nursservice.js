@@ -207,7 +207,11 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
  */
 module.exports.fetchSingleNursService =function (id, cb) {
 
-    var nursServicesql = 'SELECT a.*,b.* FROM nursService a inner join serviceMeet b on (a.serviceMeetId=b.id) WHERE a.id = ?';
+    var nursServicesql = 'SELECT a.*,b.*,(select name from shop where id = b.serverShopId) as shopName,datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 as childMonths ' +
+        'FROM nursService a , serviceMeet b ,member m ' +
+        'WHERE a.serviceMeetId=b.id ' +
+        'AND m.id = b.memberId ' +
+        'AND a.id = ? ';
 
     var classificationPare = mainDiagnosticResultClassifyId +","+
         mainMomReasonsClassifyId +","+
