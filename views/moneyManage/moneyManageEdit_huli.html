@@ -414,12 +414,12 @@
             }
             //截止时间大于开始时间(判断小时)
             if(parseInt($("#serviceEndTimeHH").val()) < parseInt($("#serviceStartTimeHH").val())){
-                parent.layer.alert(parseInt($("#serviceEndTimeHH").val())+'截止时间应大于开始时间11。'+parseInt($("#serviceStartTimeHH").val()),{icon: 2});
+                parent.layer.alert('截止时间应大于开始时间。',{icon: 2});
                 return;
             }else if(parseInt($("#serviceEndTimeHH").val()) == parseInt($("#serviceStartTimeHH").val())){
                 //截止时间大于开始时间（判断分钟）
                 if(parseInt($("#serviceEndTimeSS").val()) <= parseInt($("#serviceStartTimeSS").val())){
-                    parent.layer.alert(parseInt($("#serviceEndTimeSS").val())+'截止时间应大于开始时间22。'+parseInt($("#serviceStartTimeSS").val()),{icon: 2});
+                    parent.layer.alert('截止时间应大于开始时间。',{icon: 2});
                     return;
                 }
             }

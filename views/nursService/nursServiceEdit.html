@@ -13,158 +13,162 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
-            var nursServiceId = document.getElementById("nursServiceId").value;
-            if (!nursServiceId || name.nursServiceId == 0) {
-                alert('服务单号不能为空');
-                return;
+            //大便次数
+            if(!$("#bowelFrequencSpanId").is(":hidden")){//大便次数必填
+                if($("#bowelFrequenc").val() == ''){
+                    parent.layer.alert('大便次数不能为空。',{icon: 2});
+                    return ;
+                }
             }
-            var arr_proname = document.getElementsByName('proname');
-            for (var i=0;i<arr_proname.length;i++) {
-                if(arr_proname[i].value == '') {
-                    var n = i+1;
-                    parent.layer.alert('商品详情第'+n+'行产品名称不能为空',{icon: 2});
+            //形状
+            if(!$("#shapeSpanId").is(":hidden")){//大便次数必填
+                if($("#shape").val() == ''){
+                    parent.layer.alert('请选择形状。',{icon: 2});
+                    return ;
+                }
+            }
+            //喂养情况
+            if($("#feedSituation").val() == ''){
+                parent.layer.alert('请选择喂养情况。',{icon: 2});
+                return ;
+            }
+            //尿量
+            if($("#urination").val() == ''){
+                parent.layer.alert('请选择尿量。',{icon: 2});
+                return ;
+            }
+            //喂养备注
+            if($("#feedRemark").val() == ''){
+                parent.layer.alert('请填写喂养备注。',{icon: 2});
+                return ;
+            }
+            //挤奶情况
+            if($("#milkSituation").val() == ''){
+                parent.layer.alert('请选择挤奶情况。',{icon: 2});
+                return ;
+            }
+            //宝宝目前月龄
+            if($("#childCurrentMonths").val() == ''){
+                parent.layer.alert('请填写宝宝目前月龄。',{icon: 2});
+                return ;
+            }
+            //挤奶次数
+            if(!$("#milkNumberSpanId").is(":hidden")) {//挤奶次数
+                if ($("#milkNumber").val() == '') {
+                    parent.layer.alert('请选择挤奶次数。', {icon: 2});
                     return;
                 }
             }
-
-            var arr_count = document.getElementsByName('count');
-            for (var i=0;i<arr_count.length;i++) {
-                if(arr_count[i].value == '') {
-                    var n = i+1;
-                    parent.layer.alert('商品详情第'+n+'行商品数量不能为空',{icon: 2});
+            //目前身高
+            if($("#childCurrentHeight").val() == ''){
+                parent.layer.alert('请填写目前身高。',{icon: 2});
+                return ;
+            }
+            //挤奶总量
+            if(!$("#milkAmountSpanId").is(":hidden")) {//挤奶次数
+                if ($("#milkAmount").val() == '') {
+                    parent.layer.alert('请填写挤奶总量。', {icon: 2});
                     return;
                 }
             }
-
-            var arr_price = document.getElementsByName('price');
-            for (var i=0;i<arr_price.length;i++) {
-                if(arr_price[i].value == '') {
-                    var n = i+1;
-                    parent.layer.alert('商品详情第'+n+'行商品单价不能为空',{icon: 2});
-                    return;
+            //目前体重
+            if($("#childCurrentWeight").val() == ''){
+                parent.layer.alert('请填写目前体重。',{icon: 2});
+                return ;
+            }
+            //吸奶器品牌
+            var breastpumpBrandStr = "";
+            $("[name='breastpumpBrand']").each(function(){
+                if($(this).attr("checked")){
+                    breastpumpBrandStr = "....";//代表选中的记录
                 }
+            });
+            if(breastpumpBrandStr == ''){
+                parent.layer.alert('请选中吸奶器品牌。',{icon: 2});
+                return ;
+            }
+            //是否观察哺乳
+            if($("#isCarefulNurse").val() == ''){
+//                parent.layer.alert('请选择观察哺乳，。',{icon: 2});
+                return ;
+            }
+            //转诊建议
+            if($("#referralAdvise").val() == ''){
+                parent.layer.alert('请填写转诊建议。',{icon: 2});
+                return ;
             }
 
+            //诊断结果
+            var diagnosisStr = "";
+            $("[name='diagnosis']").each(function(){
+                if($(this).attr("checked")){
+                    diagnosisStr = "....";//代表选中的记录
+                }
+            });
+            if(diagnosisStr == ''){
+                parent.layer.alert('请选中诊断结果。',{icon: 2});
+                return ;
+            }
+            //特殊说明
+            if($("#specialInstructions").val() == ''){
+                parent.layer.alert('请填写特殊说明。',{icon: 2});
+                return ;
+            }
+            //宝宝原因
+            var childReasonStr = "";
+            $("[name='childReason']").each(function(){
+                if($(this).attr("checked")){
+                    childReasonStr = "....";//代表选中的记录
+                }
+            });
+            if(childReasonStr == ''){
+                parent.layer.alert('请选中宝宝原因。',{icon: 2});
+                return ;
+            }
+            //乳房示意图说明
+            if($("#breastExplain").val() == ''){
+                parent.layer.alert('请填写乳房示意图说明。',{icon: 2});
+                return ;
+            }
+            //妈妈原因
+            var motherReasonStr = "";
+            $("[name='motherReason']").each(function(){
+                if($(this).attr("checked")){
+                    motherReasonStr = "....";//代表选中的记录
+                }
+            });
+            if(motherReasonStr == ''){
+                parent.layer.alert('请选择妈妈原因。',{icon: 2});
+                return ;
+            }
+            //其他原因
+            var otherReasonStr = "";
+            $("[name='otherReason']").each(function(){
+                if($(this).attr("checked")){
+                    otherReasonStr = "....";//代表选中的记录
+                }
+            });
+            if(otherReasonStr == ''){
+                parent.layer.alert('请选择其他原因。',{icon: 2});
+                return ;
+            }
+            //离店建议
+            if($("#leaveAdvise").val() == ''){
+                parent.layer.alert('请填写离店建议。',{icon: 2});
+                return ;
+            }
+            //是否预约二次
+            if($("#whetherAppointmentAgain").val() == ''){
+                parent.layer.alert('请选择是否预约二次。',{icon: 2});
+                return ;
+            }
+
+
+//            alert("可以提交");
             document.getElementById("myform").submit();
         }
-        var iframIndex ;
-        function getServiceMeets(){
-            //iframe层
-            iframIndex = parent.layer.open({
 
-                type: 2,
-                title: '选择预约服务单信息',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['80%', '90%'],
-                content: '/jinquan/service_meet_select', //iframe的url
-                success: function(layero, index){
-                },
-                close: function(d){
-                }
-            });
-        }
-
-        var iframIndex1 ;
-        function getWares(index){
-            //iframe层
-            iframIndex1 = parent.layer.open({
-
-                type: 2,
-                title: '选择商品',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['80%', '90%'],
-                content: '/jinquan/wares_select?index='+index, //iframe的url
-                success: function(layero, index){
-
-                },
-                close: function(d){
-
-                }
-            });
-        }
-        function getPrices(index)
-        {
-            document.getElementById('prices'+index).value=  document.getElementById('price'+index).value*document.getElementById('count'+index).value
-        }
-        //当前商品显示位置
-        var waresIndex = 0;
-        //table中增加需要添加的行信息
-        function addTr(){
-            //获取表格对象
-            var table=document.getElementById("waresTable");
-            //获取当前行数
-            waresIndex = $("#waresTable tr").length;
-            var row=table.insertRow(waresIndex);
-            var cell1=row.insertCell(0);//商品名称
-            var cell2=row.insertCell(1);//商品编号
-            var cell3=row.insertCell(2);//采购数量
-            var cell4=row.insertCell(3);//商品单价
-            var cell5=row.insertCell(4);//商品单价
-            var cell6=row.insertCell(5);//删除本行
-            var cell7=row.insertCell(6);//商品id
-            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"/>';
-            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
-            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" onblur="getPrices('+waresIndex+')"  class="input5 input_arr" />';
-            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text"   class="input5 input_arr" />';
-            cell5.innerHTML='<input id="prices'+waresIndex+'" name="prices" type="text"  readonly="true"  class="input5 input_arr" />';
-            cell7.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
-            cell6.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this)"><h1>-</h1></a>';
-        }
-        //table中删除选中的行数据
-        function delTr(delObj){
-            var deltr = delObj.parentNode.parentNode;
-            $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
-        }
         $(document).ready(function() {
-
-            var motherReasons ='<%=nursService.motherReason%>';
-            var temps = motherReasons.split(',');
-            var check = document.getElementsByName("motherReason");
-
-            for (var i = 0; i < temps.length; i++) {
-                for (var j = 0; j < check.length; j++) {
-                    if (temps[i] == check[j].value) {
-                        check[j].checked = true;
-                    }
-                }
-            }
-
-            var otherReasons ='<%=nursService.otherReason%>';
-            var temps1 = otherReasons.split(',');
-            var check1 = document.getElementsByName("otherReason");
-
-            for (var i = 0; i < temps1.length; i++) {
-                for (var j = 0; j < check1.length; j++) {
-                    if (temps1[i] == check1[j].value) {
-                        check1[j].checked = true;
-                    }
-                }
-            }
-
-            var childReassons ='<%=nursService.childReason%>';
-            var temps2 = childReassons.split(',');
-            var check2 = document.getElementsByName("childReason");
-
-            for (var i = 0; i < temps2.length; i++) {
-                for (var j = 0; j < check2.length; j++) {
-                    if (temps2[i] == check2[j].value) {
-                        check2[j].checked = true;
-                    }
-                }
-            }
-            var diagnosises ='<%=nursService.diagnosis%>';
-            var temps3 = diagnosises.split(',');
-            var check3 = document.getElementsByName("diagnosis");
-
-            for (var i = 0; i < temps3.length; i++) {
-                for (var j = 0; j < check3.length; j++) {
-                    if (temps3[i] == check3[j].value) {
-                        check3[j].checked = true;
-                    }
-                }
-            }
 
             //为孩子月龄赋值
             var childMonths ='<%=nursService.childMonths%>';
@@ -218,9 +222,10 @@
             </tr>
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
+                <input id="serviceMeetId" type="hidden" name="serviceMeetId" value="<%=nursService.serviceMeetId%>"/>
                 <td class="regTd_l">服务单号：</td>
                 <td class="regTd_r">
-                    <input id="nursServiceId" name="nursServiceId"  type="text" class="input5" value="<%=nursService.nursServiceId%>" readonly="true"/>
+                    <input id="nursServiceNo" name="nursServiceNo"  type="text" class="input5" value="<%=nursService.nursServiceNo%>" readonly="true"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">服务日期：</td>
                 <td class="regTd_r">
@@ -229,12 +234,12 @@
             </tr>
             <tr>
                 <td class="regTd_l">姓名：</td>
-                <td class="regTd_r"><input id="name" name="name" readonly type="text" class="input5"  value="<%=nursService.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="name" name="name" readonly type="text" class="input5"  value="<%=nursService.memberName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" readonly type="text" class="input5"  value="<%=nursService.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="tel" name="tel" readonly type="text" class="input5"  value="<%=nursService.memberTel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
-                <td class="regTd_l">服务地点：</td>
+                <td class="regTd_l">服务地点<%=nursService.serviceType%>：</td>
                 <td class="regTd_r">
                     <select id="serviceType" name="serviceType" disabled>
                         <option value="1" <%if(nursService.serviceType == 1){%>selected<%}%>>到店</option>
@@ -309,7 +314,7 @@
             <tr>
                 <td class="regTd_l">大便次数：</td>
                 <td class="regTd_r">
-                    <input id="bowelFrequenc" name="bowelFrequencc" type="text" class="input5"  value="<%=nursService.bowelFrequencc%>"/>&nbsp;&nbsp;
+                    <input id="bowelFrequenc" name="bowelFrequenc" type="text" class="input5"  value="<%=nursService.bowelFrequenc%>"/>&nbsp;&nbsp;
                     <span id="bowelFrequencSpanId" style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">形状：</td>
                 <td class="regTd_r">
@@ -436,7 +441,8 @@
                     <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
                         var diagnosisId ='diagnosis'+i;
                         %>
-                        <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=dictData.diagnosticResultArr[i].id%>"/>
+                        <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=dictData.diagnosticResultArr[i].id%>"
+                            <%if(nursService.diagnosis.indexOf(dictData.diagnosticResultArr[i].id) > -1){%>checked<%}%>/>
                         <%=dictData.diagnosticResultArr[i].name%>
                         <%
                         if((i+1)%4 == 0){
@@ -453,7 +459,8 @@
                     <%for(var i=0;i<dictData.babyReasonsArr.length;i++){
                         var childReasonId='childReason'+i;
                         %>
-                        <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=dictData.babyReasonsArr[i].id%>"/>
+                        <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=dictData.babyReasonsArr[i].id%>"
+                               value ="<%=dictData.babyReasonsArr[i].id%>" <%if(nursService.childReason.indexOf(dictData.babyReasonsArr[i].id) > -1){%>checked<%}%>/>
                         <%=dictData.babyReasonsArr[i].name%>
                         <%
                         if((i+1)%4 == 0){
@@ -470,7 +477,8 @@
                     <%for(var i=0;i<dictData.momReasonsArr.length;i++){
                         var motherReasonId='motherReason'+i;
                         %>
-                        <input id="<%=motherReasonId%>" name="motherReason" type="checkbox" value ="<%=dictData.momReasonsArr[i].id%>"/>
+                        <input id="<%=motherReasonId%>" name="motherReason" type="checkbox"
+                               value ="<%=dictData.momReasonsArr[i].id%>" <%if(nursService.motherReason.indexOf(dictData.momReasonsArr[i].id) > -1){%>checked<%}%>/>
                         <%=dictData.momReasonsArr[i].name%>
                         <%
                         if((i+1)%4 == 0){
@@ -487,19 +495,29 @@
                     <%for(var i=0;i<dictData.otherReasonsArr.length;i++){
                     var otherReasonId='otherReason'+i;
                     %>
-                    <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=dictData.otherReasonsArr[i].id%>"/>
+                    <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=dictData.otherReasonsArr[i].id%>"
+                           <%if(nursService.otherReason.indexOf(dictData.otherReasonsArr[i].id) > -1){%>checked<%}%>/>
                     <%=dictData.otherReasonsArr[i].name%>
                     <%}%>
                     <span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">是否预约二次：</td>
+                <td class="regTd_r">
+                    <select id="whetherAppointmentAgain" name="whetherAppointmentAgain">
+                        <option value="">请选择</option>
+                        <option value="Y" <%if(nursService.whetherAppointmentAgain == 'Y'){%>selected<%}%>>是</option>
+                        <option value="N" <%if(nursService.whetherAppointmentAgain == 'N'){%>selected<%}%>>否</option>
+                    </select>
+                            &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+
+            </tr>
+            <!--
+            <tr>
                 <td class="regTd_l">是否带实习技师：</td>
                 <td class="regTd_r"><input id="isLeadTrainee" name="isLeadTrainee" type="text" class="input5"  value="<%=nursService.isLeadTrainee%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">是否预约二次：</td>
-                <td class="regTd_r"><input id="whetherAppointmentAgain" name="whetherAppointmentAgain" type="text" class="input5"  value="<%=nursService.whetherAppointmentAgain%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">实习技师姓名：</td>
                 <td class="regTd_r"><input id="traineeName" name="traineeName" type="text" class="input5"  value="<%=nursService.traineeName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
+            -->
         </table>
         <!--商品信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息

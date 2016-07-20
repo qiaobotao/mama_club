@@ -207,12 +207,6 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
  */
 module.exports.fetchSingleNursService =function (id, cb) {
 
-    var nursServicesql = 'SELECT a.*,b.*,(select name from shop where id = b.serverShopId) as shopName,datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 as childMonths ' +
-        'FROM nursService a , serviceMeet b ,member m ' +
-        'WHERE a.serviceMeetId=b.id ' +
-        'AND m.id = b.memberId ' +
-        'AND a.id = ? ';
-
     var classificationPare = mainDiagnosticResultClassifyId +","+
         mainMomReasonsClassifyId +","+
         mainBabyResultClassifyId +","+
@@ -228,6 +222,12 @@ module.exports.fetchSingleNursService =function (id, cb) {
         feedingConditionId+","+
         treatmentMethodId+","+
         serverDemandId;
+
+    var nursServicesql = 'SELECT a.*,b.serviceType,b.province,b.city,b.town,b.address,b.deal,b.serviceNeeds,m.memberName,m.tel as memberTel,(select name from shop where id = b.serverShopId) as shopName,datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 as childMonths ' +
+        'FROM nursService a , serviceMeet b ,member m ' +
+        'WHERE a.serviceMeetId=b.id ' +
+        'AND m.id = b.memberId ' +
+        'AND a.id = ? ';
     var classificationSql = 'select * from systemClassify where parentId in ('+classificationPare+')';
 
 

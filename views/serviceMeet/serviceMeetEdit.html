@@ -246,7 +246,7 @@
                 }
             }
             if($("#status").val() == 3){//如果预约单状态改为“已接受服务”则服务技师、服务时间、服务单号都不能为空
-                if($("#nursServiceId").val() == ''){
+                if($("#nursServiceNo").val() == ''){
                     parent.layer.alert('请填写护理服务单。',{icon: 2});
                     return;
                 }
