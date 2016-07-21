@@ -429,6 +429,9 @@
             if($("#id").val() == ''){//如果没有用户信息，提示先更新会员信息
                 parent.layer.alert('预约单应预约成功后，再变更服务信息。',{icon: 2});
                 return;
+            }else if($("#memberId").val() == ''){
+                parent.layer.alert('用户还不是会员，请更新会员信息，再变更服务信息。',{icon: 2});
+                return;
             }else{
                 $.ajax({
                     url: '/jinquan/nurs_service_create_no',

@@ -13,6 +13,11 @@
     </style>
     <script type="text/javascript">
         function submitForm(){
+            //服务截止时间不能为空
+            if($("#endTime").val() == ''){
+                parent.layer.alert('请先收费后在维护此护理服务单。',{icon: 2});
+                return ;
+            }
             //大便次数
             if(!$("#bowelFrequencSpanId").is(":hidden")){//大便次数必填
                 if($("#bowelFrequenc").val() == ''){
@@ -248,7 +253,7 @@
                 <td class="regTd_l">服务地址：</td>
                 <td class="regTd_r">
                     <input type="text" class="input5" <%if(nursService.serviceType == 2){%>style="width: 300px;"<%}else{%>style="width: 100px;"<%}%>
-                           value="<%if(nursService.serviceType == 1){%><%=nursService.shopName%><%}else{%><%=nursService.province%>,<%=nursService.city%>,<%=nursService.town%>,<%=nursService.address%><%}%>" readonly />
+                    value="<%if(nursService.serviceType == 1){%><%=nursService.shopName%><%}else{%><%=nursService.province%>,<%=nursService.city%>,<%=nursService.town%>,<%=nursService.address%><%}%>" readonly />
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
             </tr>
@@ -406,15 +411,15 @@
                     <%
                     var breastpumpBrandStr = nursService.breastpumpBrand == null ? "" :nursService.breastpumpBrand;
                     for(var i=0;i<dictData.breastPumpBrandArr.length;i++){
-                        var breastpumpBrandId='breastpumpBrand'+i;
-                        %>
-                        <input id="<%=breastpumpBrandId%>" name="breastpumpBrand" type="checkbox" value ="<%=dictData.breastPumpBrandArr[i].id%>"
-                        <%if(breastpumpBrandStr.indexOf(dictData.breastPumpBrandArr[i].id) > -1){%>checked<%}%>/>
-                        <%=dictData.breastPumpBrandArr[i].name%>
-                        <%
-                        if((i+1)%4 == 0){
-                            %><br><%
-                        }
+                    var breastpumpBrandId='breastpumpBrand'+i;
+                    %>
+                    <input id="<%=breastpumpBrandId%>" name="breastpumpBrand" type="checkbox" value ="<%=dictData.breastPumpBrandArr[i].id%>"
+                    <%if(breastpumpBrandStr.indexOf(dictData.breastPumpBrandArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.breastPumpBrandArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
                     }%>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
@@ -427,9 +432,9 @@
                     <select id="isCarefulNurse" name="isCarefulNurse">
                         <option value="">请选择</option>
 
-                    <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
+                        <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
                         %><option value="<%=dictData.diagnosticResultArr[i].id%>" <%if(nursService.isCarefulNurse ==dictData.diagnosticResultArr[i].id ){%>selected<%}%>><%=dictData.diagnosticResultArr[i].name%></option><%
-                    }%>
+                        }%>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">转诊建议：</td>
@@ -439,15 +444,15 @@
                 <td class="regTd_l">诊断结果：</td>
                 <td class="regTd_r">
                     <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
-                        var diagnosisId ='diagnosis'+i;
-                        %>
-                        <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=dictData.diagnosticResultArr[i].id%>"
-                            <%if(nursService.diagnosis.indexOf(dictData.diagnosticResultArr[i].id) > -1){%>checked<%}%>/>
-                        <%=dictData.diagnosticResultArr[i].name%>
-                        <%
-                        if((i+1)%4 == 0){
-                            %><br><%
-                        }
+                    var diagnosisId ='diagnosis'+i;
+                    %>
+                    <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" value ="<%=dictData.diagnosticResultArr[i].id%>"
+                    <%if(nursService.diagnosis != null && nursService.diagnosis.indexOf(dictData.diagnosticResultArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.diagnosticResultArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
                     }%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊说明：</td>
@@ -457,15 +462,15 @@
                 <td class="regTd_l">宝宝原因：</td>
                 <td class="regTd_r">
                     <%for(var i=0;i<dictData.babyReasonsArr.length;i++){
-                        var childReasonId='childReason'+i;
-                        %>
-                        <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=dictData.babyReasonsArr[i].id%>"
-                               value ="<%=dictData.babyReasonsArr[i].id%>" <%if(nursService.childReason.indexOf(dictData.babyReasonsArr[i].id) > -1){%>checked<%}%>/>
-                        <%=dictData.babyReasonsArr[i].name%>
-                        <%
-                        if((i+1)%4 == 0){
-                            %><br><%
-                        }
+                    var childReasonId='childReason'+i;
+                    %>
+                    <input id="<%=childReasonId%>" name="childReason" type="checkbox" value ="<%=dictData.babyReasonsArr[i].id%>"
+                           value ="<%=dictData.babyReasonsArr[i].id%>" <%if(nursService.childReason != null && nursService.childReason.indexOf(dictData.babyReasonsArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.babyReasonsArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
                     }%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">乳房示意图说明：</td>
@@ -475,15 +480,15 @@
                 <td class="regTd_l">妈妈原因：</td>
                 <td class="regTd_r">
                     <%for(var i=0;i<dictData.momReasonsArr.length;i++){
-                        var motherReasonId='motherReason'+i;
-                        %>
-                        <input id="<%=motherReasonId%>" name="motherReason" type="checkbox"
-                               value ="<%=dictData.momReasonsArr[i].id%>" <%if(nursService.motherReason.indexOf(dictData.momReasonsArr[i].id) > -1){%>checked<%}%>/>
-                        <%=dictData.momReasonsArr[i].name%>
-                        <%
-                        if((i+1)%4 == 0){
-                            %><br><%
-                        }
+                    var motherReasonId='motherReason'+i;
+                    %>
+                    <input id="<%=motherReasonId%>" name="motherReason" type="checkbox"
+                           value ="<%=dictData.momReasonsArr[i].id%>" <%if(nursService.motherReason != null && nursService.motherReason.indexOf(dictData.momReasonsArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.momReasonsArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
                     }%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">离店建议：</td>
@@ -496,7 +501,7 @@
                     var otherReasonId='otherReason'+i;
                     %>
                     <input id="<%=otherReasonId%>" name="otherReason" type="checkbox" value ="<%=dictData.otherReasonsArr[i].id%>"
-                           <%if(nursService.otherReason.indexOf(dictData.otherReasonsArr[i].id) > -1){%>checked<%}%>/>
+                    <%if(nursService.otherReason != null && nursService.otherReason != null && nursService.otherReason.indexOf(dictData.otherReasonsArr[i].id) > -1){%>checked<%}%>/>
                     <%=dictData.otherReasonsArr[i].name%>
                     <%}%>
                     <span style="color:#FF0000;">*</span></td>
@@ -507,7 +512,7 @@
                         <option value="Y" <%if(nursService.whetherAppointmentAgain == 'Y'){%>selected<%}%>>是</option>
                         <option value="N" <%if(nursService.whetherAppointmentAgain == 'N'){%>selected<%}%>>否</option>
                     </select>
-                            &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
 
             </tr>
             <!--
@@ -550,14 +555,14 @@
     <div class="reg_but">
         <%
         if(show == ''){
-            %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
         }
         %>
         <%
         if(openWindow == ''){
-            %><div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div><%
+        %><div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div><%
         }else if(openWindow == 'open'){
-            %><div class="rb_l"><a href="javascript:void();" onclick="closeWindow()" class="close"></a></div><%
+        %><div class="rb_l"><a href="javascript:void();" onclick="closeWindow()" class="close"></a></div><%
         }
         %>
 
