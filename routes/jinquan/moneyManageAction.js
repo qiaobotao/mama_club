@@ -56,35 +56,43 @@ module.exports.edit = function(req, res, next) {
     var id = req.query.id ? req.query.id : '';//收费单id
     var chargeType = req.query.chargeType ? req.query.chargeType : '2';//仅购买商品
     var thisDate = commonUtil.date2str(new Date(),'yyyy-MM-dd');
-    service.fetchSingleMoneyManage(id, thisDate,function(err, results) {
-        if (!err) {
-            //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
-            if (chargeType == 1) {//购买会员卡
-                res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
-            } else if (chargeType == 2) {//护理收费
-                //对于护理收费，还要获取护理单信息
-                nursService.getNurServiceById(results.moneyManageData.serviceId,function(err, nurServiceRes) {
-                    if (!err) {
-                        res.render('moneyManage/moneyManageEdit_huli', {data : results,nurServiceRes:nurServiceRes,chargeType:chargeType});
-                    }else{
-                        next();
-                    }
-                });
-            } else if (chargeType == 3) {//上课付费
-                res.render('moneyManage/moneyManageEdit_kecheng', {data : results,chargeType:chargeType});
-            } else if (chargeType == 4) {//仅商品购买
-                res.render('moneyManage/moneyManageEdit_shangpin', {data : results,chargeType:chargeType});
-            } else if (chargeType == 5) {//仅服务此卡
-                res.render('moneyManage/moneyManageEdit_service', {data : results,chargeType:chargeType});
-            } else if (chargeType == 6) {//员工内购
-                res.render('moneyManage/moneyManageEdit_neigou', {data : results,chargeType:chargeType});
-            } else if (chargeType == 7) {//会员续费
-                res.render('moneyManage/moneyManageEdit_xufei', {data : results,chargeType:chargeType});
+
+    //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
+    if (chargeType == 1) {//购买会员卡
+        res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
+    } else if (chargeType == 2) {//护理收费
+
+        service.fetchSingleMoneyManageByHuli(id, thisDate,function(err, results) {
+            if (!err) {
+                var moneyObj = results.moneyManageData.length > 0 ? results.moneyManageData[0]:{};//收费单单独处理
+                var serviceArr = results.moneyManageServicesData.length > 0 ? results.moneyManageServicesData:{};//收费单（服务子表）单独处理
+                var proArr = results.moneyManageWaresData.length > 0 ? results.moneyManageWaresData:{};//收费单（商品子表）单独处理
+                var activityManageData = results.activityManageData.length > 0 ? results.activityManageData:{};//收费单（商品子表）单独处理
+                res.render('moneyManage/moneyManageEdit_huli', {moneyObj : moneyObj,serviceArr:serviceArr,proArr:proArr,activityManageData:activityManageData,chargeType:chargeType});
+            } else {
+                next();
             }
-        } else {
-            next();
-        }
-    })
+        });
+        /*
+        //对于护理收费，还要获取护理单信息
+        nursService.getNurServiceById(results.moneyManageData.serviceId,function(err, nurServiceRes) {
+            if (!err) {
+            }else{
+                next();
+            }
+        });
+        */
+    } else if (chargeType == 3) {//上课付费
+        res.render('moneyManage/moneyManageEdit_kecheng', {data : results,chargeType:chargeType});
+    } else if (chargeType == 4) {//仅商品购买
+        res.render('moneyManage/moneyManageEdit_shangpin', {data : results,chargeType:chargeType});
+    } else if (chargeType == 5) {//仅服务此卡
+        res.render('moneyManage/moneyManageEdit_service', {data : results,chargeType:chargeType});
+    } else if (chargeType == 6) {//员工内购
+        res.render('moneyManage/moneyManageEdit_neigou', {data : results,chargeType:chargeType});
+    } else if (chargeType == 7) {//会员续费
+        res.render('moneyManage/moneyManageEdit_xufei', {data : results,chargeType:chargeType});
+    }
 }
 
 /**
@@ -194,11 +202,19 @@ module.exports.save = function(req, res, next) {
         obj.servicePrice = servicePrice;
         obj.serviceSubtotal = serviceSubtotal;
         obj.serviceLessMoney = serviceLessMoney;
+        obj.serviceStaffId = serviceStaffId;
+        obj.serviceTraineeId = serviceTraineeId;
         serviceArr.push(obj);
     }
     //记录服务信息集合  end
     if(id != ""){//只可以修改总费用和状态
-        res.redirect('/jinquan/money_manage_list?replytype=edit');
+        service.updateMoneyManage(id, payType,actualMoney,state,function(err,results){
+            if(!err){
+                res.redirect('/jinquan/money_manage_list?replytype=edit');
+            }else{
+                next();
+            }
+        });
     }else{
         //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
         service.insertMoneyManage(shopId,chargeType,memberId,memberCardId,staffId,classMeetId,payType,receivableMoney,discountMoney,actualMoney,activityManageId,activityManageMxId,discounts,discountsMoney,finalActualMoney,state,function(err, results) {
@@ -348,42 +364,5 @@ module.exports.setStatus = function(req, res, next) {
     })
 }
 
-
-/**
- * 修改保存
- * @param req
- * @param res
- */
-module.exports.update = function(req, res,next) {
-
-    var id = req.body.id ? req.body.id : '';
-    var serialNumber = req.body.serialNumber ? req.body.serialNumber : '';
-    var name = req.body.name ? req.body.name : '';
-    var principal = req.body.principal ? req.body.principal : '';
-    var tel = req.body.tel ? req.body.tel : '';
-    var address = req.body.address ? req.body.address : '';
-    var remark = req.body.remark ? req.body.remark : '';
-
-    service.updateMoneyManage(id, serialNumber,  name, address, principal, tel, remark, function(err, results) {
-        if (!err) {
-            res.redirect('/jinquan/shop_list?replytype=update');
-        } else {
-            next();
-        }
-    })
-}
-
-module.exports.browse = function (req, res, next) {
-
-    var id = req.query.id ? req.query.id : '';
-    service.fetchSingleMoneyManage(id, function (err, results) {
-        if (!err && results.length != 0) {
-            var data = results[0];
-            res.render('shop/shopBrowse', {data : data});
-        } else {
-            next();
-        }
-    })
-}
 
 

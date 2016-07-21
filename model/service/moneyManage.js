@@ -77,11 +77,10 @@ module.exports.insertProsByMoneyManage = function(moneyManageId,nursServiceId,pr
  * @param cb
  */
 module.exports.insertServiceByMoneyManage = function(moneyManageId,nursServiceId,serviceArr, cb) {
-
-    var sql = 'INSERT INTO moneyManageServices (moneyManageId,nursServiceId,serviceId,count,price,subtotal,discount) VALUES (?,?,?,?,?,?,?)';
+    var sql = 'INSERT INTO moneyManageServices (moneyManageId,nursServiceId,serviceId,count,price,subtotal,discount,staffId,traineeId) VALUES (?,?,?,?,?,?,?,?,?)';
     //批量添加收货单中商品列表信息
     async.map(serviceArr, function(item, callback) {
-        db.query(sql, [moneyManageId,nursServiceId,item.serviceId,item.serviceCount,item.servicePrice,item.serviceSubtotal,item.serviceLessMoney], function (cbData, err, rows, fields) {
+        db.query(sql, [moneyManageId,nursServiceId,item.serviceId,item.serviceCount,item.servicePrice,item.serviceSubtotal,item.serviceLessMoney,item.serviceStaffId,item.serviceTraineeId], function (cbData, err, rows, fields) {
             if (!err) {
                 callback(null, rows);
             } else {
@@ -235,17 +234,12 @@ module.exports.fetchAllMoneyManage = function(chargeType,startDate,endDate,state
 
 /**
  * 修改收费管理
- * @param id
- * @param name
- * @param address
- * @param principal
- * @param cb
+ * 付款方式、实付金额、付费状态
  */
-module.exports.updateMoneyManage = function(id, chargeType,memberId,staffId,classMeetId,serviceId,state, cb) {
+module.exports.updateMoneyManage = function(id, payType,actualMoney,state, cb) {
 
-    var sql = 'UPDATE moneyManage SET serialNumber = ?, name = ?, tel = ?, address = ?, principal = ?, remark = ? WHERE id = ?';
-    var par = [serialNumber, name, tel, address, principal, remark, id];
-
+    var sql = 'UPDATE moneyManage SET payType = ?, actualMoney = ?, state = ? WHERE id = ?';
+    var par = [payType,actualMoney,state, id];
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -257,14 +251,19 @@ module.exports.updateMoneyManage = function(id, chargeType,memberId,staffId,clas
 }
 
 /**
- * 获取收费管理详情
+ * 获取收费管理详情(护理服务单)
  * @param id
  * @param cb
  */
-module.exports.fetchSingleMoneyManage =function (id,thisDate , cb) {
+module.exports.fetchSingleMoneyManageByHuli =function (id,thisDate , cb) {
 
     //根据id获取收费单id
-    var oneMoneyManageSql = 'SELECT * FROM moneyManage WHERE id = ? ';
+    var oneMoneyManageSql = 'SELECT s.nursServiceNo,n.serviceDate,s.serviceTime,n.endTime,b.memberName,b.tel,m.* ' +
+        'from moneyManage m ,nursService n , serviceMeet s,member b ' +
+        'where m.serviceId = n.id ' +
+        'and n.id = s.nursServiceId ' +
+        'and s.memberId = b.id ' +
+        'and m.id = ?';
     //获取所有启用中的活动列表
     var enableActivityManageSql = "select * from activityManage a " +
         "where a.`status`  = ? " +
@@ -272,7 +271,11 @@ module.exports.fetchSingleMoneyManage =function (id,thisDate , cb) {
         "and  str_to_date(?, '%Y-%m-%d') <= str_to_date(a.effectiveTimeEnd, '%Y-%m-%d') ";
 
     //获取收费子表（服务信息）数据
-    var moneyManageServicesSql = "SELECT * FROM moneyManageServices WHERE moneyManageId = ? ";
+    var moneyManageServicesSql = "SELECT m.*," +
+        "   (SELECT name from staff s WHERE s.id = m.staffId) as serviceStaffName," +
+        "   (SELECT name from staff s WHERE s.id = m.traineeId) as traineeStaffName ," +
+        "   (select name from service s where id = m.serviceId) as serviceName " +
+        "FROM moneyManageServices m WHERE moneyManageId = ? ";
     //获取收费子表（商品信息）数据
     var moneyManageWaresSql = "SELECT * FROM moneyManageWares WHERE moneyManageId = ? ";
     //获取服务单数据

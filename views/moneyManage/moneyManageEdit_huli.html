@@ -108,7 +108,7 @@
             cell8.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
         }
         //table中增加需要添加的行信息
-        function addServicesTr(staffId,staffName){
+        function addServicesTr(serviceName,servicePrice,serviceCount,serviceSubtotal,serviceLessMoney,serviceTraineeName,staffId,staffName){
             if($("#nursServiceId").val() == ""){
                 parent.layer.alert('请先选择预约单。',{icon: 2});
                 return;
@@ -128,18 +128,21 @@
             var cell8=row.insertCell(7);//服务id
             var cell9=row.insertCell(8);//服务id
             var cell10=row.insertCell(9);//服务id
-            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'"  name="serviceName" type="text" class="input5 input_arr"  style="width: 90px;" onfocus="getServices('+serviceIndex+')"  readonly/>';
-            cell2.innerHTML='<input id="serviceContent'+serviceIndex+'" name="serviceContent" type="text" class="input5 input_arr" style="width: 90px;" readonly="true"/>';
-            cell3.innerHTML='<input id="servicePrice'+serviceIndex+'" name="servicePrice" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
-            cell4.innerHTML='<input id="serviceCount'+serviceIndex+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" onblur="getSubtotal()"/>';
-            cell5.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
-            cell6.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
-            cell7.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+')" readonly/>' +
+            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'" value="'+serviceName+'"  name="serviceName" type="text" class="input5 input_arr"  style="width: 90px;" onfocus="getServices('+serviceIndex+')"  readonly/>';
+            cell2.innerHTML='<input id="servicePrice'+serviceIndex+'" value="'+servicePrice+'" name="servicePrice" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
+            cell3.innerHTML='<input id="serviceCount'+serviceIndex+'" value="'+serviceCount+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" onblur="getSubtotal()"/>';
+            cell4.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" value="'+serviceSubtotal+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+            cell5.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" value="'+serviceLessMoney+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+            cell6.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+')" readonly/>' +
                             '<input id="serviceStaffId'+serviceIndex+'" name="serviceStaffId" type="hidden" class="input5 input_arr" readonly="true" value="'+staffId+'"/>';
-            cell8.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+')" readonly/>' +
+            cell7.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" value="'+serviceTraineeName+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+')" readonly/>' +
                     '<input id="serviceTraineeId'+serviceIndex+''+serviceIndex+'" name="serviceTraineeId" type="hidden" class="input5 input_arr" readonly="true"/>';
-            cell9.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
-            cell10.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
+            if(serviceName != ''){
+                cell8.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
+            }else{
+                cell8.innerHTML='';
+            }
+            cell9.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
 
         }
         /**
@@ -506,6 +509,23 @@
             document.getElementById("myform").submit();
         }
 
+        //初始化方法
+        $(function(){
+            //遍历所有服务数据，循环添加到table中
+            var serviceArr = JSON.parse('<%-JSON.stringify(serviceArr)%>');//该角色对应的菜单
+            for(var i = 0 ; i < serviceArr.length ; i ++){
+                addServicesTr(
+                        serviceArr[i].serviceName,
+                        serviceArr[i].price,
+                        serviceArr[i].count,
+                        serviceArr[i].subtotal,
+                        serviceArr[i].discount,
+                        serviceArr[i].traineeStaffName,
+                        serviceArr[i].staffId,
+                        serviceArr[i].serviceStaffName)
+            }
+        });
+
     </script>
 </head>
 
@@ -537,11 +557,13 @@
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">服务单号：</td>
                 <td class="regTd_r">
-                    <input id="nursServiceNo" type="text" name="nursServiceNo" onfocus="getServiceMeet()" onblur="activationActivity()" />
+                    <input id="nursServiceNo" type="text" name="nursServiceNo" onfocus="getServiceMeet()" onblur="activationActivity()"
+                           value="<%=moneyObj.nursServiceNo%>" <%if(moneyObj.nursServiceNo != null){%>disabled<%}%>/>
                     <!-- 选择预约单后，自动带回来预约单id、服务时间 -->
-                    <input id="nursServiceId" type="hidden" name="nursServiceId"/>
+                    <input id="nursServiceId" type="hidden" name="nursServiceId" value="<%=moneyObj.serviceId%>"/>
                     <input id="serviceMeetId" type="hidden" name="serviceMeetId"/>
                     <input id="serviceDate" type="hidden" name="serviceDate"/>
+                    <input id="id" type="hidden" name="id" value="<%=moneyObj.id%>"/>
 
 
                     <input id="memberId" name="memberId" type="hidden"/>
@@ -553,11 +575,17 @@
             <tr>
                 <td  class="regTd_l">会员名称：</td>
                 <td class="regTd_r">
-                    <input id="name" type="text" name="name"/>
+                    <input id="name" type="text" name="name" value="<%=moneyObj.memberName%>" <%if(moneyObj.memberName != null){%>disabled<%}%>/>
                 </td>
                 <td  class="regTd_l">会员电话：</td>
                 <td class="regTd_r">
-                    <input id="tel" type="text" name="tel"/>
+                    <%
+                    var memberTel = "";
+                    if(moneyObj.tel != null){
+                        memberTel = moneyObj.tel.split(";")[0];
+                    }
+                    %>
+                    <input id="tel" type="text" name="tel" value="<%=memberTel%>" <%if(memberTel != ''){%>disabled<%}%>/>
                 </td>
             </tr>
             <tr>
@@ -565,15 +593,29 @@
                 <td class="regTd_r">
                     <input id="serviceTime" name="serviceTime" type="hidden" onchange="changeServiceTime()" value=""/>
                     <input id="meetTime" type="hidden" name="meetTime"/>
+                    <%
+                    var startHH = "";
+                    var startSS = "";
+                    var endHH = "";
+                    var endSS = "";
+                    if(moneyObj.serviceTime != null){
+                        startHH = moneyObj.serviceTime.split(":")[0];
+                        startSS = moneyObj.serviceTime.split(":")[1];
+                    }
+                    if(moneyObj.endTime != null){
+                        endHH = moneyObj.endTime.split(":")[0];
+                        endSS = moneyObj.endTime.split(":")[1];
+                    }
+                    %>
                     <select id="serviceStartTimeHH" disabled>
                         <option value="">请选择</option>
                         <%
                         for(var i = 0 ; i < 12 ; i ++){
-                        var timeHHVal = i+8;
-                        if(timeHHVal < 10){
-                        timeHHVal = "0"+timeHHVal;
-                        }
-                        %><option value="<%=timeHHVal%>"><%=timeHHVal%></option><%
+                            var timeHHVal = i+8;
+                            if(timeHHVal < 10){
+                                timeHHVal = "0"+timeHHVal;
+                            }
+                            %><option value="<%=timeHHVal%>" <%if(startHH == timeHHVal){%>selected<%}%>><%=timeHHVal%></option><%
                         }
                         %>
                     </select>:
@@ -583,14 +625,14 @@
                         var miao = "";
                         for(var i = 5 ; i <= 60 ; i += 5 ){
                         miao = i == 5 ? "0"+i:i;
-                        %><option value="<%=miao%>"><%=miao%></option><%
+                        %><option value="<%=miao%>" <%if(startSS == miao){%>selected<%}%>><%=miao%></option><%
                         }
                         %>
                     </select>
                 </td>
                 <td  class="regTd_l">服务截止时间：</td>
                 <td class="regTd_r">
-                    <select id="serviceEndTimeHH" name="serviceEndTimeHH">
+                    <select id="serviceEndTimeHH" name="serviceEndTimeHH" <%if(endHH != ''){%>disabled<%}%>>
                         <option value="">请选择</option>
                         <%
                         for(var i = 0 ; i < 12 ; i ++){
@@ -598,54 +640,22 @@
                         if(timeHHVal < 10){
                         timeHHVal = "0"+timeHHVal;
                         }
-                        %><option value="<%=timeHHVal%>"><%=timeHHVal%></option><%
+                        %><option value="<%=timeHHVal%>"  <%if(endHH == timeHHVal){%>selected<%}%>><%=timeHHVal%></option><%
                         }
                         %>
                     </select>:
-                    <select id="serviceEndTimeSS" name="serviceEndTimeSS">
+                    <select id="serviceEndTimeSS" name="serviceEndTimeSS" <%if(endSS != ''){%>disabled<%}%>>
                         <option value="">请选择</option>
                         <%
                         var miao = "";
                         for(var i = 5 ; i <= 60 ; i += 5 ){
                         miao = i == 5 ? "0"+i:i;
-                        %><option value="<%=miao%>"><%=miao%></option><%
+                        %><option value="<%=miao%>" <%if(endSS == miao){%>selected<%}%>><%=miao%></option><%
                         }
                         %>
                     </select>
                 </td>
             </tr>
-            <!--
-            <tr>
-                <td  class="regTd_l">预约技师：</td>
-                <td class="regTd_r">
-                    <input id="staffName" type="text" name="staffName"/>
-                    <input id="staffId" name="staffId" type="hidden"/>
-                </td>
-                <td  class="regTd_l">预约时间：</td>
-                <td class="regTd_r">
-                    <input id="meetTime" type="text" name="meetTime"/>
-                </td>
-            </tr>
-            <tr>
-                <td  class="regTd_l">预约服务：</td>
-                <td class="regTd_r">
-                    <input id="serviceName" type="text" name="serviceName"/>
-                    <input id="serviceId" name="memberId" type="hidden"/>
-                </td>
-                <td  class="regTd_l">服务费用：</td>
-                <td class="regTd_r">
-                    <input id="servicePrice" type="text" name="servicePrice"/>
-                </td>
-            </tr>
-            <tr>
-                <td  class="regTd_l">前台报价：</td>
-                <td class="regTd_r">
-                </td>
-                <td  class="regTd_l"></td>
-                <td class="regTd_r">
-                </td>
-            </tr>
-            -->
         </table>
         <!--服务信息 start-->
         <span style="float: left; font-weight:bold;width: 100px;"><h3>服务信息</h3></span>
@@ -653,14 +663,13 @@
         <table id="servicesTable" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
             <tr bgcolor="lightblue">
                 <td style="width: auto">服务名称</td>
-                <td style="width: auto">服务描述</td>
                 <td style="width: auto">单价</td>
                 <td style="width: auto">数量</td>
                 <td style="width: auto">小计</td>
                 <td style="width: auto">优惠情况</td>
                 <td style="width: auto">服务技师</td>
                 <td style="width: auto">实习技师</td>
-                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addServicesTr('','')"><h1>+</h1></a></td>
+                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addServicesTr('','','','','','','','')"><h1>+</h1></a></td>
             </tr>
         </table>
         <!--服务信息 end-->
@@ -688,8 +697,8 @@
                     <select id="availableActivity" name="availableActivity" onchange="asyGetActivity(this)" disabled="disabled">
                         <option value="">请选择</option>
                         <%
-                        for(var i = 0 ; i < data.activityManageData.length ; i ++ ){
-                        %><option value="<%=data.activityManageData[i].id%>" ><%=data.activityManageData[i].activityName%></option><%
+                        for(var i = 0 ; i < activityManageData.length ; i ++ ){
+                        %><option value="<%=activityManageData[i].id%>" <%if(moneyObj.activityManageId == activityManageData[i].id){%>selected<%}%>><%=activityManageData[i].activityName%></option><%
                         }
                         %>
                     </select>
@@ -698,6 +707,7 @@
                 <td class="regTd_r">
                     <select id="lessLevel" name="lessLevel" onchange="getSubtotal()">
                         <option value="1" >请选择</option>
+                        <!-- 优惠方式细节activityManageMxId -->
                     </select>
                     优惠 <input type="text" name="activityDiscountMoney" id="activityDiscountMoney" style="width: 40px;" readonly/> 元
                 </td>
@@ -705,7 +715,7 @@
             <tr>
                 <td class="regTd_l">应收金额：</td>
                 <td class="regTd_r">
-                    <input type="text" id="receivableMoney" name="receivableMoney" readonly/>
+                    <input type="text" id="receivableMoney" name="receivableMoney" readonly value="<%=moneyObj.receivableMoney%>"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">活动后应收：</td>
                 <td class="regTd_r">
@@ -721,7 +731,8 @@
                 </td>
                 <td  class="regTd_l">折扣卡优惠：</td>
                 <td class="regTd_r">
-                    <input type="text" id="discountsMoney" name="discountsMoney" value="0" style="width: 40px;" readonly/>元，最终应收<input type="text" id="finalActualMoney" name="finalActualMoney" value="0" style="width: 60px;" readonly/>
+                    <input type="text" id="discountsMoney" name="discountsMoney" value="<%=moneyObj.discountsMoney%>" style="width: 40px;" readonly/>元，最终应收
+                    <input type="text" id="finalActualMoney" name="finalActualMoney" value="<%=moneyObj.finalActualMoney%>" style="width: 60px;" readonly/>
                 </td>
             </tr>
             <tr>
@@ -729,16 +740,16 @@
                 <td class="regTd_r">
                     <select id="payType" name="payType" onchange="changePayType()">
                         <option value="">请选择</option>
-                        <option value="0">延迟付费</option>
-                        <option value="1">现金</option>
-                        <option value="2">微信</option>
-                        <option value="3">支付宝</option>
-                        <option value="4">充值卡</option>
+                        <option value="0" <%if(moneyObj.payType == '0'){%>selected<%}%>>延迟付费</option>
+                        <option value="1" <%if(moneyObj.payType == '1'){%>selected<%}%>>现金</option>
+                        <option value="2" <%if(moneyObj.payType == '2'){%>selected<%}%>>微信</option>
+                        <option value="3" <%if(moneyObj.payType == '3'){%>selected<%}%>>支付宝</option>
+                        <option value="4" <%if(moneyObj.payType == '4'){%>selected<%}%>>充值卡</option>
                     </select>
                 </td>
                 <td  class="regTd_l">实付金额：</td>
                 <td class="regTd_r">
-                    <input type="text" id="actualMoney" name="actualMoney"/>
+                    <input type="text" id="actualMoney" name="actualMoney" value="<%=moneyObj.actualMoney%>"/>
                 </td>
             </tr>
         </table>
