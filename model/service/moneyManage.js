@@ -277,7 +277,7 @@ module.exports.fetchSingleMoneyManageByHuli =function (id,thisDate , cb) {
         "   (select name from service s where id = m.serviceId) as serviceName " +
         "FROM moneyManageServices m WHERE moneyManageId = ? ";
     //获取收费子表（商品信息）数据
-    var moneyManageWaresSql = "SELECT * FROM moneyManageWares WHERE moneyManageId = ? ";
+    var moneyManageWaresSql = "SELECT m.*,w.`name`,w.serialNumber FROM moneyManageWares m , wares w  WHERE m.waresId = w.id AND m.moneyManageId = ? ";
     //获取服务单数据
     //var nursServiceSql = "SELECT * FROM nursService WHERE moneyManageId = ? ";
 

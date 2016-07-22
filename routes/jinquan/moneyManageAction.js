@@ -137,7 +137,8 @@ module.exports.save = function(req, res, next) {
     }
 
     //记录商品信息集合  start
-    var proNo = req.body.proNo ? req.body.proNo : '';//商品id
+    var proId = req.body.proId ? req.body.proId : '';//商品id
+    var proNo = req.body.proNo ? req.body.proNo : '';//商品编码
     var price = req.body.price ? req.body.price : '';//商品单价
     var insidePrice = req.body.insidePrice ? req.body.insidePrice : '';//内部单价
     var count = req.body.count ? req.body.count : '';//购买数量
@@ -149,7 +150,7 @@ module.exports.save = function(req, res, next) {
     if (proNo instanceof Array) {
         for (var i = 0; i < proNo.length; i++) {
             var obj = {};
-            obj.waresId = proNo[i];
+            obj.waresId = proId[i];
             obj.price = price[i];
             obj.count = count[i];
             obj.subtotal = subtotal[i];
@@ -160,7 +161,7 @@ module.exports.save = function(req, res, next) {
     } else {
         if(proNo != ""){
             var obj = {};
-            obj.waresId = proNo;
+            obj.waresId = proId;
             obj.price = price;
             obj.count = count;
             obj.subtotal = subtotal;

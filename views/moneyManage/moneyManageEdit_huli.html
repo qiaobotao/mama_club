@@ -67,24 +67,56 @@
             });
         }
         //选择技师
-        function getmembers(index){
-            index = index == null ? "" :index;
-            //iframe层
-            memberIndex = parent.layer.open({
-                type: 2,
-                title: '选择技师',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['80%', '90%'],
-                content: '/jinquan/staff_select_servicemeet?index='+index, //iframe的url
-                success: function(layero, index){
-                },
-                close: function(d){
-                }
-            });
+        function getmembers(index,defaultStaff){
+            if(defaultStaff == '1'){
+                parent.layer.confirm('是否变更服务技师？', {
+                    btn: ['修改','取消'] //按钮
+                }, function(confirmIndex){
+                    layer.msg('修改技师', {
+                        icon: 1,
+                        time: 500 //20s后自动关闭
+                    });
+                    index = index == null ? "" :index;
+                    //iframe层
+                    memberIndex = parent.layer.open({
+                        type: 2,
+                        title: '选择技师',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['80%', '90%'],
+                        content: '/jinquan/staff_select_servicemeet?index='+index, //iframe的url
+                        success: function(layero, index){
+                        },
+                        close: function(d){
+                        }
+                    });
+                    parent.layer.close(confirmIndex);
+                }, function(confirmIndex){
+                    layer.msg('技师不变', {
+                        icon: 1,
+                        time: 500 //20s后自动关闭
+                    });
+                    parent.layer.close(confirmIndex);
+                });
+            }else{
+                index = index == null ? "" :index;
+                //iframe层
+                memberIndex = parent.layer.open({
+                    type: 2,
+                    title: '选择技师',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['80%', '90%'],
+                    content: '/jinquan/staff_select_servicemeet?index='+index, //iframe的url
+                    success: function(layero, index){
+                    },
+                    close: function(d){
+                    }
+                });
+            }
         }
         //table中增加需要添加的行信息
-        function addWaresTr(){
+        function addWaresTr(proname,proNo,count,price,subtotal,lessMoney,proId){
             //获取表格对象
             var table=document.getElementById("waresTable");
             //获取当前行数
@@ -96,19 +128,28 @@
             var cell4=row.insertCell(3);//商品单价
             var cell5=row.insertCell(4);//小计
             var cell6=row.insertCell(5);//优惠价格
-            var cell7=row.insertCell(6);//商品id
-            var cell8=row.insertCell(7);//商品id
-            cell1.innerHTML = '<input id="proname'+waresIndex+'"  name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"  readonly/>';
-            cell2.innerHTML='<input id="proNo'+waresIndex+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
-            cell3.innerHTML='<input id="count'+waresIndex+'" name="count" type="text" class="input5 input_arr" onblur="getSubtotal()"/>';
-            cell4.innerHTML='<input id="price'+waresIndex+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
-            cell5.innerHTML='<input id="subtotal'+waresIndex+'" name="subtotal" type="text" class="input5 input_arr" readonly="true"/>';
-            cell6.innerHTML='<input id="lessMoney'+waresIndex+'" name="lessMoney" type="text" class="input5 input_arr" readonly="true"/>';
-            cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,2)"><h1>-</h1></a>';
-            cell8.innerHTML='<input id="proId'+waresIndex+'" name="proId" type="hidden" class="input5 input_arr" />';
+            if(proname != ""){//编辑界面，商品修改
+                cell1.innerHTML = '<input id="proname'+waresIndex+'" value="'+proname+'" name="proname" type="text" class="input5 input_arr" readonly/>';
+                cell2.innerHTML='<input id="proNo'+waresIndex+'" value="'+proNo+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+                cell3.innerHTML='<input id="count'+waresIndex+'" value="'+count+'" name="count" type="text" class="input5 input_arr" readonly="true"/>';
+                cell4.innerHTML='<input id="price'+waresIndex+'" value="'+price+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
+                cell5.innerHTML='<input id="subtotal'+waresIndex+'" value="'+subtotal+'" name="subtotal" type="text" class="input5 input_arr" readonly="true"/>';
+                cell6.innerHTML='<input id="lessMoney'+waresIndex+'" value="'+lessMoney+'" name="lessMoney" type="text" class="input5 input_arr" readonly="true"/>' +
+                        '<input id="proId'+waresIndex+'" value="'+proId+'" name="proId" type="hidden" class="input5 input_arr" />';
+            }else{
+                var cell7=row.insertCell(6);//删除商品图片
+                cell1.innerHTML = '<input id="proname'+waresIndex+'" value="'+proname+'" name="proname" type="text" class="input5 input_arr" onfocus="getWares('+waresIndex+')"  readonly/>';
+                cell2.innerHTML='<input id="proNo'+waresIndex+'" value="'+proNo+'" name="proNo" type="text" class="input5 input_arr" readonly="true"/>';
+                cell3.innerHTML='<input id="count'+waresIndex+'" value="'+count+'" name="count" type="text" class="input5 input_arr" onblur="getSubtotal()"/>';
+                cell4.innerHTML='<input id="price'+waresIndex+'" value="'+price+'" name="price" type="text" class="input5 input_arr" readonly="true"/>';
+                cell5.innerHTML='<input id="subtotal'+waresIndex+'" value="'+subtotal+'" name="subtotal" type="text" class="input5 input_arr" readonly="true"/>';
+                cell6.innerHTML='<input id="lessMoney'+waresIndex+'" value="'+lessMoney+'" name="lessMoney" type="text" class="input5 input_arr" readonly="true"/>';
+                cell7.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,2)"><h1>-</h1></a>' +
+                        '<input id="proId'+waresIndex+'" value="'+proId+'" name="proId" type="hidden" class="input5 input_arr" />';
+            }
         }
         //table中增加需要添加的行信息
-        function addServicesTr(serviceName,servicePrice,serviceCount,serviceSubtotal,serviceLessMoney,serviceTraineeName,staffId,staffName){
+        function addServicesTr(serviceName,servicePrice,serviceCount,serviceSubtotal,serviceLessMoney,serviceTraineeName,staffId,staffName,isDefault){
             if($("#nursServiceId").val() == ""){
                 parent.layer.alert('请先选择预约单。',{icon: 2});
                 return;
@@ -125,24 +166,33 @@
             var cell5=row.insertCell(4);//小计
             var cell6=row.insertCell(5);//优惠价格
             var cell7=row.insertCell(6);//删除服务
-            var cell8=row.insertCell(7);//服务id
-            var cell9=row.insertCell(8);//服务id
-            var cell10=row.insertCell(9);//服务id
-            cell1.innerHTML = '<input id="serviceName'+serviceIndex+'" value="'+serviceName+'"  name="serviceName" type="text" class="input5 input_arr"  style="width: 90px;" onfocus="getServices('+serviceIndex+')"  readonly/>';
-            cell2.innerHTML='<input id="servicePrice'+serviceIndex+'" value="'+servicePrice+'" name="servicePrice" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
-            cell3.innerHTML='<input id="serviceCount'+serviceIndex+'" value="'+serviceCount+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" onblur="getSubtotal()"/>';
-            cell4.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" value="'+serviceSubtotal+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
-            cell5.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" value="'+serviceLessMoney+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
-            cell6.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+')" readonly/>' +
-                            '<input id="serviceStaffId'+serviceIndex+'" name="serviceStaffId" type="hidden" class="input5 input_arr" readonly="true" value="'+staffId+'"/>';
-            cell7.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" value="'+serviceTraineeName+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+')" readonly/>' +
-                    '<input id="serviceTraineeId'+serviceIndex+''+serviceIndex+'" name="serviceTraineeId" type="hidden" class="input5 input_arr" readonly="true"/>';
-            if(serviceName != ''){
-                cell8.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1)"><h1>-</h1></a>';
+            if(serviceName != ''){//服务id不为空，不需要修改
+                cell1.innerHTML = '<input id="serviceName'+serviceIndex+'" value="'+serviceName+'"  name="serviceName" type="text" class="input5 input_arr"  style="width: 90px;" readonly/>';
+                cell2.innerHTML='<input id="servicePrice'+serviceIndex+'" value="'+servicePrice+'" name="servicePrice" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
+                cell3.innerHTML='<input id="serviceCount'+serviceIndex+'" value="'+serviceCount+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
+                cell4.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" value="'+serviceSubtotal+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+                cell5.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" value="'+serviceLessMoney+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+                cell6.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" readonly/>' +
+                        '<input id="serviceStaffId'+serviceIndex+'" name="serviceStaffId" type="hidden" class="input5 input_arr" readonly="true" value="'+staffId+'"/>';
+                cell7.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" value="'+serviceTraineeName+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" readonly/>' +
+                        '<input id="serviceTraineeId'+serviceIndex+''+serviceIndex+'" name="serviceTraineeId" type="hidden" class="input5 input_arr" readonly="true"/>' +
+                        '<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
             }else{
-                cell8.innerHTML='';
+                var cell8=row.insertCell(7);//服务id
+
+                cell1.innerHTML = '<input id="serviceName'+serviceIndex+'" value="'+serviceName+'"  name="serviceName" type="text" class="input5 input_arr"  style="width: 90px;" onfocus="getServices('+serviceIndex+')"  readonly/>';
+                cell2.innerHTML='<input id="servicePrice'+serviceIndex+'" value="'+servicePrice+'" name="servicePrice" type="text" class="input5 input_arr" style="width: 60px;" readonly="true"/>';
+                cell3.innerHTML='<input id="serviceCount'+serviceIndex+'" value="'+serviceCount+'" name="serviceCount" type="text" class="input5 input_arr" style="width: 60px;" onblur="getSubtotal()"/>';
+                cell4.innerHTML='<input id="serviceSubtotal'+serviceIndex+'" value="'+serviceSubtotal+'" name="serviceSubtotal" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+                cell5.innerHTML='<input id="serviceLessMoney'+serviceIndex+'" value="'+serviceLessMoney+'" name="serviceLessMoney" type="text" class="input5 input_arr" style="width: 70px;" readonly="true"/>';
+                cell6.innerHTML='<input id="serviceStaffName'+serviceIndex+'" name="serviceStaffName" type="text" class="input5 input_arr" style="width: 80px;" value="'+staffName+'" onfocus="getmembers('+serviceIndex+','+isDefault+')" readonly/>' +
+                        '<input id="serviceStaffId'+serviceIndex+'" name="serviceStaffId" type="hidden" class="input5 input_arr" readonly="true" value="'+staffId+'"/>';
+                cell7.innerHTML='<input id="serviceTraineeName'+serviceIndex+''+serviceIndex+'" value="'+serviceTraineeName+'" name="serviceTraineeName" type="text" class="input5 input_arr" style="width: 80px;" onfocus="getmembers('+serviceIndex+''+serviceIndex+',0)" readonly/>' +
+                        '<input id="serviceTraineeId'+serviceIndex+''+serviceIndex+'" name="serviceTraineeId" type="hidden" class="input5 input_arr" readonly="true"/>';
+                cell8.innerHTML='<a style="cursor: pointer" onclick="javaScript:delTr(this,1,'+isDefault+')"><h1>-</h1></a>' +
+                        '<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
             }
-            cell9.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
+//            cell9.innerHTML='<input id="serviceId'+serviceIndex+'" name="serviceId" type="hidden" class="input5 input_arr" />';
 
         }
         /**
@@ -151,10 +201,14 @@
          * delTemp：删除那个表格:1服务表；2：商品表格
          */
 
-        function delTr(delObj,delIndex){
+        function delTr(delObj,delIndex,isDefault){
             var deltr = delObj.parentNode.parentNode;
             if(delIndex == 1){//从服务table中删除行
-                $('#servicesTable tr:eq('+deltr.rowIndex+')').remove();
+                if(isDefault == '1'){//默认服务不可删除
+                    parent.layer.alert('该服务信息需要保留。',{icon: 2});
+                }else{
+                    $('#servicesTable tr:eq('+deltr.rowIndex+')').remove();
+                }
             }else if(delIndex == 2){//从商品table中删除行
                 $('#waresTable tr:eq('+deltr.rowIndex+')').remove();
             }
@@ -217,6 +271,7 @@
             //遍历已选择商品，判断每个商品是否可以打折，如果可以，则计算出折扣后金额
             var receivableMoneys = 0,activityDiscountMoney = 0;//活动优惠价格
             var arr_proId = document.getElementsByName('proId');
+            alert("=="+arr_proId.length);
             for(var i=1;i<=arr_proId.length;i++) {
                 var proId = $('#proId'+i).val();//当前商品id
                 var proCount = $('#count'+i).val();//当前商品购买数量
@@ -247,6 +302,7 @@
                 $('#lessMoney'+i).val("-"+ForDight(proCount * proPrice * discount,2));//当前商品优惠后价格
                 activityDiscountMoney += ForDight(proCount * proPrice * discount,2);
             }
+//            alert("自动计算"+activityDiscountMoney);
             //遍历已选择的服务，判断每个服务是否可以打折，如果可以，则计算出折扣后金额
 //            var receivableMoneys = 0,activityDiscountMoney = 0;//活动优惠价格
             var arr_serviceId = document.getElementsByName('serviceId');
@@ -511,8 +567,8 @@
 
         //初始化方法
         $(function(){
-            //遍历所有服务数据，循环添加到table中
-            var serviceArr = JSON.parse('<%-JSON.stringify(serviceArr)%>');//该角色对应的菜单
+            //遍历所有服务子表数据，循环添加到table中
+            var serviceArr = JSON.parse('<%-JSON.stringify(serviceArr)%>');//该收费单的服务子表
             for(var i = 0 ; i < serviceArr.length ; i ++){
                 addServicesTr(
                         serviceArr[i].serviceName,
@@ -522,8 +578,21 @@
                         serviceArr[i].discount,
                         serviceArr[i].traineeStaffName == null ? "" :serviceArr[i].traineeStaffName,
                         serviceArr[i].staffId,
-                        serviceArr[i].serviceStaffName)
+                        serviceArr[i].serviceStaffName,'0')
             }
+
+            //遍历所有商品子表数据，循环添加到table中
+            var proArr = JSON.parse('<%-JSON.stringify(proArr)%>');//该收费单的商品子表
+            for(var i = 0 ; i < proArr.length ; i ++){
+                addWaresTr(proArr[i].name,
+                        proArr[i].serialNumber,
+                        proArr[i].count,
+                        proArr[i].price,
+                        proArr[i].subtotal,
+                        proArr[i].discount,
+                        proArr[i].waresId);
+            }
+            getSubtotal();
         });
 
     </script>
@@ -669,7 +738,11 @@
                 <td style="width: auto">优惠情况</td>
                 <td style="width: auto">服务技师</td>
                 <td style="width: auto">实习技师</td>
-                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addServicesTr('','','','','','','','')"><h1>+</h1></a></td>
+                <%
+                if(moneyObj.id == null){
+                    %><td width="50px;"><a style="cursor: pointer" onclick="javaScript:addServicesTr('','','','','','','','','0')"><h1>+</h1></a></td><%
+                }
+                %>
             </tr>
         </table>
         <!--服务信息 end-->
@@ -685,7 +758,11 @@
                 <td>商品单价</td>
                 <td>小计</td>
                 <td>减免费用</td>
-                <td width="50px;"><a style="cursor: pointer" onclick="javaScript:addWaresTr()"><h1>+</h1></a></td>
+                <%
+                    if(moneyObj.id == null){
+                        %><td width="50px;"><a style="cursor: pointer" onclick="javaScript:addWaresTr('','','','','','','')"><h1>+</h1></a></td><%
+                    }
+                %>
             </tr>
         </table>
         <!--商品信息 end-->
