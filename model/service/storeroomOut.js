@@ -10,7 +10,7 @@ var mainOutTypeClassifyId = require('../../config').mainClassifyId.outType;
 var myUtils = require('../../common/utils');
 
 
-module.exports.list = function (shopId,outType,oper,outDate,currentPage,cb) {
+module.exports.list = function (shopId,outType,oper,outDate,outDateEnd,currentPage,cb) {
 
     var parm = "WHERE s.oper LIKE '%"+oper+"%' ";
 
@@ -19,7 +19,11 @@ module.exports.list = function (shopId,outType,oper,outDate,currentPage,cb) {
     }
 
     if (outDate != '') {
-        parm = parm + " AND s.outDate ="+outDate;
+        parm = parm + " AND s.outDate >='"+outDate+"'";
+    }
+
+    if (outDateEnd != '') {
+        parm = parm + " AND s.outDate <='"+outDateEnd+"'";
     }
 
     var sql_count = 'SELECT count(*) as count FROM storeroomOutLog s,storeroom st '+parm+'  AND s.storeroomId = st.id AND st.shopId='+shopId+' ORDER BY s.dateline DESC';

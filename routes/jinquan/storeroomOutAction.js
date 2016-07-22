@@ -19,6 +19,7 @@ module.exports.list = function (req, res, next) {
     var oper = req.query.oper ? req.query.oper : '';// 领取人
     var outDate = req.query.outDate ? req.query.outDate : ''; // 出库日期
     var currentPage = req.query.page ? req.query.page : '1';
+    var outDateEnd = req.query.outDateEnd ? req.query.outDateEnd : '';
     var url = '/jinquan'+req.url;
     // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
@@ -29,7 +30,7 @@ module.exports.list = function (req, res, next) {
     var resourcesData = req.session.user.resourcesData;
 
 
-    service.list(shopId,outType,oper,outDate,currentPage,function (err, results) {
+    service.list(shopId,outType,oper,outDate,outDateEnd,currentPage,function (err, results) {
 
         if (!err) {
             for (var i=0;i<results.data.length;i++) {
@@ -43,7 +44,7 @@ module.exports.list = function (req, res, next) {
             results.oper = oper;
             results.outType = outType;
             results.outDate =outDate;
-
+            results.outDateEnd = outDateEnd;
             service.getOutTypeClassify(function (err, outTypeClassify) {
 
                 if (!err) {

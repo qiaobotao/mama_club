@@ -11,7 +11,7 @@ var mainBuyTypeClassifyId = require('../../config').mainClassifyId.buyType;
 var myUtils = require('../../common/utils');
 
 
-module.exports.list = function (shopId,buyer,buyType,buyDate,currentPage,cb) {
+module.exports.list = function (shopId,buyer,buyType,buyDate,buyDateEnd,currentPage,cb) {
 
     var parm = "WHERE s.buyer LIKE '%"+buyer+"%' ";
 
@@ -20,7 +20,11 @@ module.exports.list = function (shopId,buyer,buyType,buyDate,currentPage,cb) {
     }
 
     if (buyDate != '') {
-        parm = parm + " AND s.buyDate >="+buyDate;
+        parm = parm + " AND s.buyDate >= '"+buyDate+"'";
+    }
+
+    if (buyDateEnd != '') {
+        parm = parm + " AND s.buyDate <='" + buyDateEnd+"'";
     }
 
     var sql_count = "SELECT count(*) as count FROM storeroomInLog s, storeroom st "+parm+" AND s.storeroomId = st.id AND st.shopId = "+shopId+"   ORDER BY s.dateline DESC";

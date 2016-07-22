@@ -24,19 +24,22 @@
         parent.layer.msg('修改成功');
     }
 
-    function search () {
+    function search() {
         var buyer = document.getElementById('buyer').value;
         var buyType = document.getElementById('buyType').value;
         var buyDate = document.getElementById('buyDate').value;
-        window.location.href = '/jinquan/storeroom_in_list?buyer='+buyer+'&buyType='+buyType+'&buyDate='+buyDate;
+        var buyDateEnd = document.getElementById('buyDateEnd').value;
+        window.location.href = '/jinquan/storeroom_in_list?buyer='+buyer+'&buyType='+buyType+'&buyDate='+buyDate+'&buyDateEnd='+buyDateEnd;
     }
 
     function pageturning (selectPage) {
         var buyer = document.getElementById('buyer').value;
         var buyType = document.getElementById('buyType').value;
         var buyDate = document.getElementById('buyDate').value;
-        window.location.href = '/jinquan/storeroom_in_list?page='+selectPage+'&buyer='+buyer+'&buyType='+buyType+'&buyDate='+buyDate;
+        var buyDateEnd = document.getElementById('buyDateEnd').value;
+        window.location.href = '/jinquan/storeroom_in_list?page='+selectPage+'&buyer='+buyer+'&buyType='+buyType+'&buyDate='+buyDate+'&buyDateEnd='+buyDateEnd;
     }
+
 </script>
 
 <body>
@@ -57,7 +60,7 @@
                         <option value ="<%=data.buyTypeClassify[i].id%>" <%if(data.par_buyType == data.buyTypeClassify[i].id){%>selected<%}%> ><%=data.buyTypeClassify[i].name%></option>
                         <%}%>
                     </select></td>
-                    <td> &nbsp;采购时间：<input id="buyDate" name="buyDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.par_buyDate%>"/> </td>
+                    <td> &nbsp;采购时间：<input id="buyDate" name="buyDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.par_buyDate%>"/> ~ <input id="buyDateEnd" name="buyDateEnd" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.par_buyDateEnd%>"/> </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

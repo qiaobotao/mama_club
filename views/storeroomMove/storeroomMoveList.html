@@ -30,7 +30,8 @@
         var outId = document.getElementById('outId').value;
         var inId = document.getElementById('inId').value;
         var moveDate = document.getElementById('moveDate').value;
-        window.location.href = '/jinquan/storeroom_move_list?oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate;
+        var moveDateEnd = document.getElementById('moveDateEnd').value;
+        window.location.href = '/jinquan/storeroom_move_list?oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate+'&moveDateEnd='+moveDateEnd;
     }
 
     function pageturning (selectPage) {
@@ -38,7 +39,8 @@
         var outId = document.getElementById('outId').value;
         var inId = document.getElementById('inId').value;
         var moveDate = document.getElementById('moveDate').value;
-        window.location.href = '/jinquan/storeroom_move_list?page='+selectPage+'&oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate;
+        var moveDateEnd = document.getElementById('moveDateEnd').value;
+        window.location.href = '/jinquan/storeroom_move_list?page='+selectPage+'&oper='+oper+'&outId='+outId+'&inId='+inId+'&moveDate='+moveDate+'&moveDateEnd='+moveDateEnd;
     }
 </script>
 
@@ -66,7 +68,7 @@
                         <option value ="<%=data.storerooms[i].id%>" <%if(data.inId == data.storerooms[i].id){%>selected<%}%> ><%=data.storerooms[i].name%></option>
                         <%}%>
                     </select> </td>
-                    <td> &nbsp;移库时间：<input id="moveDate" name="moveDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.moveDate%>"/> </td>
+                    <td> &nbsp;移库时间：<input id="moveDate" name="moveDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.moveDate%>"/> ~ <input id="moveDateEnd" name="moveDateEnd" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.moveDateEnd%>"/> </td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

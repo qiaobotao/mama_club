@@ -27,14 +27,16 @@
         var oper = document.getElementById('oper').value;
         var outType = document.getElementById('outType').value;
         var outDate = document.getElementById('outDate').value;
-        window.location.href = '/jinquan/storeroom_out_list?oper='+oper+'&outType='+outType+'&outDate='+outDate;
+        var outDateEnd = document.getElementById('outDateEnd').value;
+        window.location.href = '/jinquan/storeroom_out_list?oper='+oper+'&outType='+outType+'&outDate='+outDate+'&outDateEnd='+outDateEnd;
     }
 
     function pageturning (selectPage) {
         var oper = document.getElementById('oper').value;
         var outType = document.getElementById('outType').value;
         var outDate = document.getElementById('outDate').value;
-        window.location.href = '/jinquan/storeroom_out_list?page='+selectPage+'&oper='+oper+'&outType='+outType+'&outDate='+outDate;
+        var outDateEnd = document.getElementById('outDateEnd').value;
+        window.location.href = '/jinquan/storeroom_out_list?page='+selectPage+'&oper='+oper+'&outType='+outType+'&outDate='+outDate+'&outDateEnd='+outDateEnd;
     }
 </script>
 
@@ -56,7 +58,7 @@
                         <%}%>
                     </select></td>
                     <td> &nbsp;领取人：<input id="oper" name="oper" type="text" class="input5" value="<%=data.oper%>"/></td>
-                    <td> &nbsp;出库时间：<input id="outDate" name="outDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.outDate%>"/> </td>
+                    <td> &nbsp;出库时间：<input id="outDate" name="outDate" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.outDate%>"/> ~ <input id="outDateEnd" name="outDateEnd" type="text" class="input5" onclick="laydate()" readonly="true" value="<%=data.outDateEnd%>"/></td>
                     <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>

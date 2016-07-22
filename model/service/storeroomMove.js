@@ -5,12 +5,11 @@
 var db = require('../../common/db');
 var async = require('async');
 var moment = require('moment');
-var mainInTypeClassifyId = require('../../config').mainClassifyId.inType;
 var myUtils = require('../../common/utils');
 
 
 
-module.exports.list = function (shopId,outId,oper,inId,moveDate,currentPage,cb) {
+module.exports.list = function (shopId,outId,oper,inId,moveDate,moveDateEnd,currentPage,cb) {
 
     var parm = "WHERE s.oper LIKE '%"+oper+"%' ";
 
@@ -23,7 +22,10 @@ module.exports.list = function (shopId,outId,oper,inId,moveDate,currentPage,cb) 
     }
 
     if (moveDate != '') {
-        parm = parm + " AND s.moveDate ="+moveDate;
+        parm = parm + " AND s.moveDate >='"+moveDate+"'";
+    }
+    if (moveDateEnd != '') {
+        parm = parm + " AND s.moveDate <='"+moveDateEnd+"'";
     }
 
     var sql_count = 'SELECT count(*) as count FROM storeroomMoveLog s, storeroom st '+parm+' AND s.outStoreroomId = st.id AND st.shopId='+shopId+' ORDER BY s.dateline DESC';

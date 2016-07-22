@@ -18,6 +18,7 @@ module.exports.list = function (req, res, next) {
     var buyer = req.query.buyer ? req.query.buyer : ''; // 采购人
     var buyType = req.query.buyType ? req.query.buyType : '';// 采购方式
     var buyDate = req.query.buyDate ? req.query.buyDate : ''; // 采购日期
+    var buyDateEnd = req.query.buyDateEnd ? req.query.buyDateEnd : '';
     var currentPage = req.query.page ? req.query.page : '1';
     var url = '/jinquan'+req.url;
     // 接收操作参数
@@ -28,7 +29,7 @@ module.exports.list = function (req, res, next) {
     var resourcesData = req.session.user.resourcesData;
 
 
-    service.list(shopId,buyer,buyType,buyDate,currentPage, function(err, results) {
+    service.list(shopId,buyer,buyType,buyDate,buyDateEnd,currentPage, function(err, results) {
         if (!err) {
             for (var i=0;i<results.data.length;i++) {
                 var dateline = results.data[i].buyDate;
@@ -41,6 +42,7 @@ module.exports.list = function (req, res, next) {
             results.par_buyer = buyer;
             results.par_buyType = buyType;
             results.par_buyDate =buyDate;
+            results.par_buyDateEnd = buyDateEnd;
 
             service.getBuyTypeClassify(function(err, buyTypeClassify){
 

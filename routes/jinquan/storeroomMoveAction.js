@@ -20,6 +20,7 @@ module.exports.list = function (req, res, next) {
         var inId = req.query.inId ? req.query.inId : ''; // 入库房
         var moveDate = req.query.moveDate ? req.query.moveDate : ''; // 入库房
         var currentPage = req.query.page ? req.query.page : '1';
+        var moveDateEnd = req.query.moveDateEnd ? req.query.moveDateEnd : '';
         var url = '/jinquan'+req.url;
         // 接收操作参数
         var replytype = req.query.replytype ? req.query.replytype : '';
@@ -30,7 +31,7 @@ module.exports.list = function (req, res, next) {
     var resourcesData = req.session.user.resourcesData;
 
 
-    service.list(shopId,outId,oper,inId,moveDate,currentPage, function(err, results) {
+    service.list(shopId,outId,oper,inId,moveDate,moveDateEnd,currentPage, function(err, results) {
             if (!err) {
                 for (var i=0;i<results.data.length;i++) {
                     var dateline = results.data[i].moveDate;
@@ -44,7 +45,7 @@ module.exports.list = function (req, res, next) {
                 results.outId = outId;
                 results.inId =inId;
                 results.moveDate = moveDate;
-
+                results.moveDateEnd = moveDateEnd;
                 service_storeroom.getAllStorerooms(shopId,function(err, storerooms){
 
                     if (!err) {
