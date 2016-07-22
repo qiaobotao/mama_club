@@ -4,6 +4,7 @@ var service = require('../../model/service/nursservice');
 var storeroomOutService = require('../../model/service/storeroomOut');
 var serviceMeetService = require('../../model/service/servicemeet');
 var commonUtil = require('../../model/utils/common');//公共类
+var multiparty = require('multiparty');//上传文件使用
 
 /**
  * Created by kuanchang on 16/1/18.
@@ -74,6 +75,10 @@ module.exports.doEdit = function (req, res,next) {
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
     var traineeName = req.body.traineeName ? req.body.traineeName : '';
+    var noNeedVisit = req.body.noNeedVisit ? req.body.noNeedVisit : '';//不必回访
+    var evaluateTemp = req.body.evaluate ? req.body.evaluate : '';//服务评价
+    var evaluate = commonUtil.array2Str(evaluateTemp,",");
+    var proposal = req.body.proposal ? req.body.proposal : '';//建议信息
 
     var serviceNeedsTemp = req.body.serviceNeeds ? req.body.serviceNeeds : '';//服务需求可以是多选的
     var serviceNeeds = commonUtil.array2Str(serviceNeedsTemp,",");
@@ -137,7 +142,7 @@ module.exports.doEdit = function (req, res,next) {
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName, function (err, results) {
+        isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/nurs_service_list?replytype=update');
             } else {
@@ -227,9 +232,19 @@ module.exports.preEdit = function(req, res, next) {
             var nursService = results.nursService.length == 0 ? null : results.nursService[0];
             var outLogId =nursService.outLogId;
             var dictData = results;
+            var serviceArr = results.moneyManageServicesData.length > 0 ? results.moneyManageServicesData:{};//收费单（服务子表）单独处理
+            var proArr = results.moneyManageWaresData.length > 0 ? results.moneyManageWaresData:{};//收费单（商品子表）单独处理
             storeroomOutService.detail(outLogId,function(err, results) {
                 if (!err) {
-                    res.render('nursService/nursServiceEdit', {nursService : nursService,data : results,dictData : dictData,show:show,openWindow:openWindow});
+                    res.render('nursService/nursServiceEdit', {
+                        nursService : nursService,
+                        data : results,
+                        dictData : dictData,
+                        show:show,
+                        openWindow:openWindow,
+                        serviceArr:serviceArr,
+                        proArr:proArr
+                    });
                     /*
                     service.getnursserviceClassify(function (err, results1) {
                         if (!err) {
@@ -276,6 +291,50 @@ module.exports.createNo = function (req, res, next) {
         if (!err) {
             res.json(JSON.stringify(results));
         } else {
+            next();
+        }
+    });
+}
+/**
+ * 打开上传乳房图片页面
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.openUploadBreastImage = function (req, res, next) {
+
+    var id = req.query.id ? req.query.id :'';//服务单id
+    res.render('nursService/uploadBreastImage', {id : id});
+}
+/**
+ * 保存上传乳房图片页面
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.saveUploadBreastImage = function (req, res, next) {
+
+    var id = req.query.id ? req.query.id : '';//护理服务单id
+
+    var form = new multiparty.Form({uploadDir: './public/files/breastImage/'});//将突破上传到”./public/files/staffQualifications“目录下
+
+    form.parse(req, function(err, fields, files) {
+        if (!err) {
+            if(files.recordfile.length > 0){
+                var inputFile = files.recordfile[0];
+                var breastImageSrc = inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+                var breastImage = inputFile.originalFilename+";"+inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+                service.updateBreastImage(id,breastImage,function(err, results) {
+                    if(!err) {
+                        res.render('welcome/successByUpLoadBreasImage',{breastImageSrc:breastImageSrc});
+                    } else {
+                        console.log(err.message);
+                        res.render('error');
+                    }
+                })
+            }
+        } else {
+            console.log('parse error: ' + err);
             next();
         }
     });

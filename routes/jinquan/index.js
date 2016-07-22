@@ -209,6 +209,8 @@ router.all('/nurs_service_preEdit',nursServiceAction.preEdit);
 router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
 router.all('/nurs_service_del',nursServiceAction.del);
 router.all('/nurs_service_create_no',nursServiceAction.createNo);
+router.all('/open_upload_nursService_breast_image',nursServiceAction.openUploadBreastImage);//上传乳房示意图
+router.all('/save_upload_nursService_breast_image',nursServiceAction.saveUploadBreastImage);//上传乳房示意图
 
 // 收费信息
 router.all('/money_manage_list',moneyManageAction.list);

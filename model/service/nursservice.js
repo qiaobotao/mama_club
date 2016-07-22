@@ -86,6 +86,26 @@ module.exports.updateNursServiceByMoneyManage = function(nursServiceId,nursState
 };
 
 /**
+ * 修改乳房示意图图片名称及路径
+ * @param id
+ * @param breastExplain：名称与路径用分号隔开
+ * @param cb
+ */
+module.exports.updateBreastImage = function(id,breastExplain, cb) {
+
+    var sql = 'UPDATE nursService set breastExplain=?'
+        + ' where id=?';
+    db.query(sql, [breastExplain,id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+
+
+/**
  * 更新护理服务单全部字段
  * @param id
  * @param serviceMeetId
@@ -128,19 +148,19 @@ module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,te
                                             bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                             milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
                                             diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-                                            isLeadTrainee,whetherAppointmentAgain,traineeName, cb) {
+                                            isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal, cb) {
 
     var sql = 'UPDATE nursService set serviceMeetId=?,serviceDate=?,startTime=?,endTime=?,serviceType=?,address=?,serviceNeeds=?,'
         + ' bowelFrequenc=?,deal=?,shape=?,feedSituation=?,urination=?,feedRemark=?,milkSituation=?,childCurrentMonths=?,'
         + ' milkNumber=?,childCurrentHeight=?,milkAmount=?,childCurrentWeight=?,breastpumpBrand=?,isCarefulNurse=?,referralAdvise=?,'
         + ' diagnosis=?,specialInstructions=?,childReason=?,breastExplain=?,motherReason=?,leaveAdvise=?,otherReason=?,'
-        + ' isLeadTrainee=?,whetherAppointmentAgain=?,traineeName=?,dateLine=?'
+        + ' isLeadTrainee=?,whetherAppointmentAgain=?,traineeName=?,noNeedVisit=?,evaluate=?,proposal=?,dateLine=?'
         + ' where id=?';
     db.query(sql, [serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName,new Date().getTime(),id], function(cbData, err, rows, fields) {
+        isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal,new Date().getTime(),id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -223,18 +243,46 @@ module.exports.fetchSingleNursService =function (id, cb) {
         treatmentMethodId+","+
         serverDemandId;
 
-    var nursServicesql = 'SELECT a.*,b.serviceType,b.province,b.city,b.town,b.address,b.deal,b.serviceNeeds,m.memberName,m.tel as memberTel,(select name from shop where id = b.serverShopId) as shopName,datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 as childMonths ' +
+    var nursServicesql = 'SELECT a.*,b.serviceType,b.province,b.city,b.town,b.address,b.deal,b.serviceNeeds,m.memberName,m.tel as memberTel,(select name from shop where id = b.serverShopId) as shopName,FORMAT(datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 ,1)as childMonths ' +
         'FROM nursService a , serviceMeet b ,member m ' +
         'WHERE a.serviceMeetId=b.id ' +
         'AND m.id = b.memberId ' +
         'AND a.id = ? ';
     var classificationSql = 'select * from systemClassify where parentId in ('+classificationPare+')';
+    //获取护理子表（服务信息）数据
+    var serviceSql = "SELECT m.*," +
+        "   (SELECT name from staff s WHERE s.id = m.staffId) as serviceStaffName," +
+        "   (SELECT name from staff s WHERE s.id = m.traineeId) as traineeStaffName ," +
+        "   (select name from service s where id = m.serviceId) as serviceName " +
+        "FROM moneyManageServices m WHERE nursServiceId = ? ";
+    //获取护理服务子表（商品信息）数据
+    var proSql = "SELECT m.*,w.`name`,w.serialNumber FROM moneyManageWares m , wares w  WHERE m.waresId = w.id AND m.nursServiceId = ? ";
 
 
     async.series({
         //活动详情列表
         nursService : function(callback){
             db.query(nursServicesql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //获取收费子表（服务信息）数据
+        moneyManageServicesData : function(callback){
+            db.query(serviceSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        //获取收费子表（商品信息）数据
+        moneyManageWaresData : function(callback){
+            db.query(proSql, [id], function (cbData, err, rows, fields) {
                 if (!err) {
                     callback(null,rows);
                 } else {

@@ -19,15 +19,7 @@
         }
 
         $(document).ready(function() {
-            var obj = new Object();
-            obj.id = '<%=id%>';
-            obj.staffId = '<%=staffId%>';
-            obj.vocationalQualifications = '<%=vocationalQualifications%>';
-            obj.qualificationsSrc = '<%=qualificationsSrc%>';
-            obj.qualificationsName = '<%=qualificationsName%>';
-            obj.qualificationsDescribe = '<%=qualificationsDescribe%>';
-            obj.qualificationsTime = '<%=qualificationsTime%>';
-            window.parent.document.getElementById("rightFrame").contentWindow.addQualificationsTr(obj);//
+            window.parent.document.getElementById("rightFrame").contentWindow.setBreastImageSrc('<%=breastImageSrc%>');
         });
 
     </script>
