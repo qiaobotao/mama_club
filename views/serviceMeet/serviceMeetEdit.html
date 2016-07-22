@@ -70,6 +70,7 @@
                 }
             });
         }
+
         //回填用户最近情况
         function renderTables(datas)
         {
@@ -451,6 +452,33 @@
             }
         }
         /**
+         * 一键新增会员
+         */
+        function addMemberByTel(){
+            var tel = $("#tel").val();
+            var customerName = $("#customerName").val();
+            $.ajax({
+                url: '/jinquan/member_add_by_tel?tel='+tel+'&customerName='+customerName,
+                type: 'post',
+                dataType: 'json',
+                async: false,
+                cache: false,
+                timeout: 5000,
+                success: function(data){
+                    var datas =eval('(' + data + ')');
+                    if(datas.isAdd == '0'){
+                        parent.layer.alert("该客户已存在，无需重复增加！",{icon: 2});
+                    }else if(datas.isAdd == '1'){
+                        $("#memberId").val(datas.id);
+                        parent.layer.alert("已更新会员信息！",{icon: 2});
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    parent.layer.alert("系统错误请系统管理员！",{icon: 2});
+                }
+            });
+        }
+        /**
          * 修改、查看时，为省市县下拉框赋值
          */
         function initAddr(){
@@ -486,7 +514,13 @@
                 <td  class="regTd_l">电话：</td>
                 <td class="regTd_r">
                     <input id="tel" name="tel" type="text" class="input5"   onBlur="getMemberId()"   value="<%=service_meet.tel%>" />&nbsp;&nbsp;
-                    <span style="color:#FF0000;">*</span></td>
+                    <span style="color:#FF0000;">*</span>
+                    <%
+                    if(service_meet.memberId == null || service_meet.memberId == ''){
+                        %><input type="button" value="一键新增会员" onclick="addMemberByTel()"/><%
+                    }
+                    %>
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">预约时间：</td>
@@ -521,8 +555,8 @@
                         <option value="">请选择</option>
                         <%
                         var miao = "";
-                        for(var i = 5 ; i <= 60 ; i += 5 ){
-                            miao = i == 5 ? "0"+i:i;
+                        for(var i = 0 ; i < 60 ; i += 30 ){
+                            miao = i < 10 ? "0"+i:i;
                             %><option value="<%=miao%>" <%if(meetTimeStrSS == miao){%>selected<%}%>><%=miao%></option><%
                         }
                         %>

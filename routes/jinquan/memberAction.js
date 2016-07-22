@@ -106,7 +106,48 @@ module.exports.add = function (req, res,next) {
 
 }
 
+/**
+ * 一键新增会员
+ *
+ */
 
+
+module.exports.addMemberByTel = function (req, res,next) {
+    var shopId = req.session.user.shopId;
+    var tel = req.query.tel?req.query.tel:'';
+    var customerName = req.query.customerName?req.query.customerName:'';
+
+    service.getMemberByNameTel(tel,shopId,function (err, results) {
+        if (!err) {
+            var resObj = new Object();
+            if(results.length > 0){
+                resObj.id = results[0].id;
+                resObj.isAdd = 0;
+                res.json(JSON.stringify(resObj));
+            }else{
+                service.insertMemberByTel(shopId,customerName,tel, function (err, insertResults) {
+                    if (!err) {
+                        resObj.id = insertResults.insertId;
+                        resObj.isAdd = 1;
+                        res.json(JSON.stringify(resObj));
+                    } else {
+                        next();
+                    }
+                });
+            }
+        } else {
+            next();
+        }
+    });
+
+}
+
+/**
+ * 新增或修改会员信息
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.doEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var birthYearMonth = req.body.birthYearMonth ? req.body.birthYearMonth : '';//去掉年龄字段，增加出生年月字段

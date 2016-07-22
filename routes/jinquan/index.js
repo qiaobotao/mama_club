@@ -179,6 +179,7 @@ router.all('/member_add',memberAction.add);
 router.all('/member_show',memberAction.show);
 router.all('/member_preEdit',memberAction.preEdit);
 router.all('/member_doEdit',memberAction.doEdit);
+router.all('/member_add_by_tel',memberAction.addMemberByTel);
 router.all('/member_del',memberAction.del);
 router.all('/member_select',memberAction.select);
 router.all('/member_all_select',memberAction.selectAll);

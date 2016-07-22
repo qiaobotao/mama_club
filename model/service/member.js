@@ -45,6 +45,23 @@ module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memb
         }
     });
 };
+/**
+ * 根据手机号、名称新增会员
+ * @param shopId
+ * @param memberName
+ * @param tel
+ * @param cb
+ */
+module.exports.insertMemberByTel = function(shopId,memberName,tel, cb) {
+    var sql = 'INSERT INTO member (shopId,memberName,tel,dateline) VALUES (?,?,?,?)';
+    db.query(sql, [shopId,memberName,tel,new Date().getTime()], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
 
 module.exports.updateMember = function(id,birthYearMonth,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
