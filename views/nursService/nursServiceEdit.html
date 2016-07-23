@@ -69,10 +69,11 @@
                 }
             }
             //目前身高
-            if($("#childCurrentHeight").val() == ''){
-                parent.layer.alert('请填写目前身高。',{icon: 2});
-                return ;
-            }
+            //不是必填项
+//            if($("#childCurrentHeight").val() == ''){
+//                parent.layer.alert('请填写目前身高。',{icon: 2});
+//                return ;
+//            }
             //挤奶总量
             if(!$("#milkAmountSpanId").is(":hidden")) {//挤奶次数
                 if ($("#milkAmount").val() == '') {
@@ -81,31 +82,34 @@
                 }
             }
             //目前体重
-            if($("#childCurrentWeight").val() == ''){
-                parent.layer.alert('请填写目前体重。',{icon: 2});
-                return ;
-            }
+            //不是必填项
+//            if($("#childCurrentWeight").val() == ''){
+//                parent.layer.alert('请填写目前体重。',{icon: 2});
+//                return ;
+//            }
             //吸奶器品牌
-            var breastpumpBrandStr = "";
-            $("[name='breastpumpBrand']").each(function(){
-                if($(this).attr("checked")){
-                    breastpumpBrandStr = "....";//代表选中的记录
-                }
-            });
-            if(breastpumpBrandStr == ''){
-                parent.layer.alert('请选中吸奶器品牌。',{icon: 2});
-                return ;
-            }
+            //不是必填项
+//            var breastpumpBrandStr = "";
+//            $("[name='breastpumpBrand']").each(function(){
+//                if($(this).attr("checked")){
+//                    breastpumpBrandStr = "....";//代表选中的记录
+//                }
+//            });
+//            if(breastpumpBrandStr == ''){
+//                parent.layer.alert('请选中吸奶器品牌。',{icon: 2});
+//                return ;
+//            }
             //是否观察哺乳
             if($("#isCarefulNurse").val() == ''){
 //                parent.layer.alert('请选择观察哺乳，。',{icon: 2});
                 return ;
             }
             //转诊建议
-            if($("#referralAdvise").val() == ''){
-                parent.layer.alert('请填写转诊建议。',{icon: 2});
-                return ;
-            }
+            //不是必填项
+//            if($("#referralAdvise").val() == ''){
+//                parent.layer.alert('请填写转诊建议。',{icon: 2});
+//                return ;
+//            }
 
             //诊断结果
             var diagnosisStr = "";
@@ -119,10 +123,11 @@
                 return ;
             }
             //特殊说明
-            if($("#specialInstructions").val() == ''){
-                parent.layer.alert('请填写特殊说明。',{icon: 2});
-                return ;
-            }
+            //不是必填项
+//            if($("#specialInstructions").val() == ''){
+//                parent.layer.alert('请填写特殊说明。',{icon: 2});
+//                return ;
+//            }
             //宝宝原因
             var childReasonStr = "";
             $("[name='childReason']").each(function(){
@@ -135,8 +140,8 @@
                 return ;
             }
             //乳房示意图说明
-            if($("#breastExplain").val() == ''){
-                parent.layer.alert('请填写乳房示意图说明。',{icon: 2});
+            if($("#breastExplainId").attr('src') == '/images/noImage.png'){
+                parent.layer.alert('请上传乳房示意图说明。',{icon: 2});
                 return ;
             }
             //妈妈原因
@@ -167,10 +172,11 @@
                 return ;
             }
             //是否预约二次
-            if($("#whetherAppointmentAgain").val() == ''){
-                parent.layer.alert('请选择是否预约二次。',{icon: 2});
-                return ;
-            }
+            //不是必填项
+//            if($("#whetherAppointmentAgain").val() == ''){
+//                parent.layer.alert('请选择是否预约二次。',{icon: 2});
+//                return ;
+//            }
 
 
 //            alert("可以提交");
@@ -424,7 +430,8 @@
             </tr>
             <tr>
                 <td class="regTd_l">目前身高：</td>
-                <td class="regTd_r"><input id="childCurrentHeight" name="childCurrentHeight" type="text" class="input5"  value="<%=nursService.childCurrentHeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="childCurrentHeight" name="childCurrentHeight" type="text" class="input5"  value="<%=nursService.childCurrentHeight%>"/>&nbsp;&nbsp;</td>
                 <td class="regTd_l">挤奶总量：</td>
                 <td class="regTd_r">
                     <!--
@@ -441,7 +448,9 @@
             </tr>
             <tr>
                 <td class="regTd_l">目前体重：</td>
-                <td class="regTd_r"><input id="childCurrentWeight" name="childCurrentWeight" type="text" class="input5"  value="<%=nursService.childCurrentWeight%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="childCurrentWeight" name="childCurrentWeight" type="text" class="input5"  value="<%=nursService.childCurrentWeight%>"/>&nbsp;&nbsp;
+                </td>
                 <td class="regTd_l">吸奶器品牌：</td>
                 <td class="regTd_r">
 
@@ -458,7 +467,7 @@
                     %><br><%
                     }
                     }%>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="4" align="left">服务信息：</td>
@@ -475,7 +484,8 @@
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">转诊建议：</td>
-                <td class="regTd_r"><input id="referralAdvise" name="referralAdvise" type="text" class="input5"  value="<%=nursService.referralAdvise%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="referralAdvise" name="referralAdvise" type="text" class="input5"  value="<%=nursService.referralAdvise%>"/>&nbsp;&nbsp;</td>
             </tr>
             <tr>
                 <td class="regTd_l">诊断结果：</td>
@@ -493,7 +503,9 @@
                     }%>
                     <span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">特殊说明：</td>
-                <td class="regTd_r"><input id="specialInstructions" name="specialInstructions" type="text" class="input5"  value="<%=nursService.specialInstructions%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="specialInstructions" name="specialInstructions" type="text" class="input5"  value="<%=nursService.specialInstructions%>"/>&nbsp;&nbsp;
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">宝宝原因：</td>
@@ -568,7 +580,7 @@
                         <option value="Y" <%if(nursService.whetherAppointmentAgain == 'Y'){%>selected<%}%>>是</option>
                         <option value="N" <%if(nursService.whetherAppointmentAgain == 'N'){%>selected<%}%>>否</option>
                     </select>
-                    <span style="color:#FF0000;">*</span>&nbsp;&nbsp;
+                    &nbsp;&nbsp;
                     <input type="checkbox" id="noNeedVisit" name="noNeedVisit" value="Y" <%if(nursService.noNeedVisit == 'Y'){%>checked<%}%>/>不必回访
                 </td>
 
