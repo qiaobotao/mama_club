@@ -232,11 +232,8 @@ module.exports.save = function(req, res, next) {
                 }else if(chargeType == 2){//添加护理服务单
                     //nursService.insertNursServiceByMoneyManage(serviceMeetId,serviceDate,serviceStartTime,serviceEndTime,function(err, results) {
                     //更新护理服务单中状态以及结束时间
-                    var nursState = payType>0?"2":"3";
-                    //状态
-                    //2、完成已收费
-                    //3、完成未收费
-                    nursService.updateNursServiceByMoneyManage(nursServiceId,nursState,serviceEndTime,function(err, results) {
+                    //状态(只要完成收费单保存，则服务单状态变成“已收费”)
+                    nursService.updateNursServiceByMoneyManage(nursServiceId,consts.NURS_STATE_2,serviceEndTime,function(err, results) {
                         if (!err) {
                             //更新收费单主表中的服务单id
                             service.updateMoneyManage4ServiceId(moneyManageId,nursServiceId,function(err, results) {

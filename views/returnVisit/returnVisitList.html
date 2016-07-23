@@ -2,17 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>回访信息</title>
+    <title>回访管理</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <script type="application/javascript" src="../../js/qiehuan.js"></script>
-    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../../js/layer/layer.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
-	var replytype = '<%=replytype%>';
+        var replytype = '<%=replytype%>';
         if (replytype == 'add') {
             parent.layer.msg('增加成功');
         } else if (replytype == 'del') {
@@ -21,28 +22,26 @@
             parent.layer.msg('修改成功');
         }
         function search () {
-            var serviceMeetId = document.getElementById('serviceMeetId').value;
-            var returnVisitDate = document.getElementById('returnVisitDate').value;
-            var returnVisitType = document.getElementById('returnVisitType').value;
-            var status = document.getElementById('status').value;
+            var name = document.getElementById('name').value;
+            var principal = document.getElementById('principal').value;
+            var serviceDate = document.getElementById('serviceDate').value;
             var selectPage = document.getElementById('page').value;
-            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType +'&status='+status;
+            window.location.href = '/jinquan/return_visit_list?name='+name+'&page='+selectPage+'&principal='+principal+ '&serviceDate='+serviceDate ;
         }
         function pageturning (selectPage) {
-            var serviceMeetId = document.getElementById('serviceMeetId').value;
-            var returnVisitDate = document.getElementById('returnVisitDate').value;
-            var returnVisitType = document.getElementById('returnVisitType').value;
-            var status = document.getElementById('status').value;
-            window.location.href = '/jinquan/return_visit_list?serviceMeetId='+serviceMeetId+'&page='+selectPage+'&returnVisitDate='+returnVisitDate+ '&returnVisitType='+returnVisitType+'&status='+status ;
+            var name = document.getElementById('name').value;
+            var principal = document.getElementById('principal').value;
+            var serviceDate = document.getElementById('serviceDate').value;
+            window.location.href = '/jinquan/return_visit_list?name='+name+'&page='+selectPage+'&principal='+principal+ '&serviceDate='+serviceDate ;
         }
         function show (id) {
-            window.location.href = '/jinquan/return_visit_show?id='+id;
+            window.location.href = '/jinquan/return_visit_preEdit?show=show&id='+id;
         }
         function preEdit (id) {
             window.location.href = '/jinquan/return_visit_preEdit?id='+id;
         }
         function del (id) {
-            delData('/jinquan/return_visit_del?id='+id);
+            delData('/jinquan/nurs_service_del?id='+id);
         }
 
     </script>
@@ -51,7 +50,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：回访信息列表
+        当前位置：回访单列表
     </div>
 </div>
 <div class="center_con">
@@ -60,71 +59,57 @@
             <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
-                        服务单编号：<input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" value="<%=data.serviceMeetId%>"/></td>
-                    <td> &nbsp;回访时间：<input id="returnVisitDate" name="returnVisitDate" type="text" class="input5" value="<%=data.returnVisitDate%>"/></td>
-                    <td> &nbsp;回访方式：<input id="returnVisitType" name="returnVisitType" type="text" class="input5" value="<%=data.returnVisitType%>"/> </td>
-
-                    <td> &nbsp;回访状态：<select id="status" name="status" class="input5">
-                        <option <%if(data.status == '-1'){%>selected<%}%> value="-1">全部</option>
-                        <option <%if(data.status == '0'){%>selected<%}%> value="0">未回访</option>
-                        <option <%if(data.status == '1'){%>selected<%}%> value="1">已回访</option>
-                        <option <%if(data.status == '2'){%>selected<%}%> value="2">不必回访</option>
-                        <option <%if(data.status == '3'){%>selected<%}%> value="3">回访未果</option>
-                    </select>
-                    </td><td><a href="javascript:search()" class="chaxun"></a></td>
+                        客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>  </td>
+                    <td> &nbsp;技师名称：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" /> </td>
+                    <td> &nbsp;护理服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate()" /></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
                 </tr>
             </table>
 
         </div>
-       <!-- <div class="but_0"><a href="/jinquan/return_visit_goAdd" class="bsty0"></a></div>-->
     </div>
     <div class="tabCon">
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
                 <th>客户名称</th>
                 <th>电话</th>
-                <th>服务时间</th>
-                <th>回访方式</th>
+                <th>护理服务时间</th>
                 <th>回访时间</th>
-                <th>回访结果</th>
+                <th>回访人</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
+
             <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
                 <td><%=data.data[i].name%></td>
                 <td><%=data.data[i].tel%></td>
                 <td><%=data.data[i].serviceDate%></td>
-                <td><%=data.data[i].returnVisitType%></td>
                 <td><%=data.data[i].returnVisitDate%></td>
-                <td><%=data.data[i].returnVisitResult%></td>
-                <td>  <%
+                <td><%=data.data[i].returnVisitStaffName%></td>
+                <td>
+                    <%
                     var zhuangtai ="";
-                    if(data.data[i].status==0 || data.data[i].status==null){
-                    zhuangtai="未回访";
+                    if(data.data[i].status==1){
+                    zhuangtai="服务中";
+                    }else if(data.data[i].status==2){
+                    zhuangtai="已收费";
+                    }else if(data.data[i].status==3){
+                    zhuangtai="已录入未回访";
+                    }else if(data.data[i].status==4){
+                    zhuangtai="已回访未接电话";
+                    }else if(data.data[i].status==5){
+                    zhuangtai="回访结束";
                     }
-                    else if(data.data[i].status==1)
-                    {
-                    zhuangtai="已回访";
-                    }
-                    else if(data.data[i].status==2)
-                    {
-                    zhuangtai="不必回访";
-                    }
-                    else if(data.data[i].status==3)
-                    {
-                    zhuangtai="回访未果";
-                    }
-
                     %><%=zhuangtai%></td>
                 <td>
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
-                            <%if(resourcesData["/return_visit_show"] == "1"){
-                                %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</img></div></td><%
+                            <%if(resourcesData["/nurs_service_show"] == "1"){
+                            %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</img></div></td><%
                             }%>
-                            <%if(resourcesData["/return_visit_preEdit"] == "1"){
-                                %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</img></div></td><%
+                            <%if(resourcesData["/nurs_service_preEdit"] == "1" && data.data[i].status!=5){//状态为“缴费成功”时，可以编辑；其他时候不成
+                            %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</img></div></td><%
                             }%>
                             <!--<td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->
                         </tr>

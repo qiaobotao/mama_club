@@ -2,86 +2,100 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="../../js/layer/layer.js"></script>
-    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
-    <title>编辑回访信息</title>
+    <title>编辑回访单信息</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
-        function submitForm(){
-//            var serviceMeetId = document.getElementById("serviceMeetId").value;
-//            if (!serviceMeetId || serviceMeetId.length == 0) {
-//                parent.layer.alert('服务单号不能为空',{icon: 2});
-//                return;
-//            }
-            var name = document.getElementById("name").value;
-            if (!name || name.length == 0) {
-                parent.layer.alert('客户姓名不能为空',{icon: 2});
-                return;
-            }
-            var tel = document.getElementById("tel").value;
-            if (!tel || tel.length == 0) {
-                parent.layer.alert('电话不能为空',{icon: 2});
-                return;
-            }
-            var returnVisitDate = document.getElementById("returnVisitDate").value;
-            if(!returnVisitDate || returnVisitDate.length == 0) {
-                parent.layer.alert('回访日期不能为空',{icon: 2});
-                return;
-            }
-            var returnVisitType = document.getElementById("returnVisitType").value;
-            if (!returnVisitType || returnVisitType.length == 0) {
-                parent.layer.alert('回访方式不能为空',{icon: 2});
-                return;
-            }
-            var returnVisitResult = document.getElementById("returnVisitResult").value;
-            if (!returnVisitResult || returnVisitResult.length == 0) {
-                parent.layer.alert('回访结果不能为空',{icon: 2});
-                return;
-            }
-            var serviceComment = document.getElementById("serviceComment").value;
-            if (!serviceComment || serviceComment.length == 0) {
-                parent.layer.alert('服务评价不能为空',{icon: 2});
-                return;
-            }
-            var advice = document.getElementById("advice").value;
-            if (!advice || advice.length == 0) {
-                parent.layer.alert('建议不能为空',{icon: 2});
-                return;
-            }
-            var isReturnVisit = document.getElementById("isReturnVisit").value;
-            if (!isReturnVisit || isReturnVisit.length == 0) {
-                parent.layer.alert('是否店长回访不能为空',{icon: 2});
-                return;
-            }
-            var returnVisitReason = document.getElementById("returnVisitReason").value;
-            if (!returnVisitReason || returnVisitReason.length == 0) {
-                parent.layer.alert('回访原因不能为空',{icon: 2});
-                return;
-            }
+        $(document).ready(function() {
 
-            document.getElementById("myform").submit();
+            //为孩子月龄赋值
+            var childMonths ='<%=nursService.childMonths%>';
+            if($("#childCurrentMonths").val() == ''){
+                $("#childCurrentMonths").val(childMonths+"个月");
+            }
+            if(childMonths > 6){//超过6个月，大便次数、性状、尿量都不是必填项
+                $("#bowelFrequencSpanId").hide();//大便次数
+                $("#shapeSpanId").hide();//性状
+                $("#urinationSpanId").hide();//尿量
+            }
+            //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
+            if(document.getElementById("milkSituation").selectedIndex == 1){
+                $("#milkNumberSpanId").hide();//挤奶次数
+                $("#milkAmountSpanId").hide();//挤奶总量
+            }
+            closeWindow();
+        });
+        //回访方式选择第一个：无应答时，其他均不可选
+        function selectTypeOne(){
+            var returnVisitTypeStr = "";
+            $("[name='returnVisitType']").each(function(){
+                if($(this).val() !='无应答'){
+                    $(this).attr("checked",false);
+                }
+            });
         }
-        var iframIndex ;
-        function getServiceMeets(){
-            //iframe层
-            iframIndex = parent.layer.open({
+        //回访方式选择不是第一个：无应答时，其他均不可选
+        function selectTypeNoOne(){
+            var returnVisitTypeStr = "";
+            $("[name='returnVisitType']").each(function(){
+                if($(this).val() =='无应答'){
+                    $(this).attr("checked",false);
+                }
+            });
+        }
 
+        function getmembers(index){
+            var index = index == null ? "" :index;
+            //iframe层
+            memberIndex = parent.layer.open({
                 type: 2,
-                title: '选择预约服务单信息',
+                title: '选择技师',
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/return_visit_select', //iframe的url
+                content: '/jinquan/staff_select_servicemeet?index='+index, //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
                 }
             });
+        }
+
+        function submitForm(){
+            //回访日期
+            if($("#returnVisitDate").val() == ''){
+                parent.layer.alert('请填写回访日期。',{icon: 2});
+                return ;
+            }
+            //回访方式
+            var returnVisitTypeStr = "";
+            $("[name='returnVisitType']").each(function(){
+                if($(this).attr("checked")){
+                    returnVisitTypeStr = "....";//代表选中的记录
+                }
+            });
+            if(returnVisitTypeStr == ''){
+                parent.layer.alert('请选择回访方式。',{icon: 2});
+                return ;
+            }
+            //回访人
+            if($("#returnVisitStaffId").val() == ''){
+                parent.layer.alert('请选择回访人',{icon:2});
+                return ;
+            }
+            //回访结果
+            if($("#returnVisitResult").val() == ''){
+                parent.layer.alert('请填写回访结果',{icon:2});
+                return ;
+            }
+//            alert("可以提交");
+            document.getElementById("myform").submit();
         }
     </script>
 </head>
@@ -89,62 +103,467 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：回访信息
+        当前位置：编辑回访单信息
     </div>
 </div>
 <div class="center_con">
     <form method="post" id="myform" action="/jinquan/return_visit_doEdit">
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <input id="id" type="hidden" name="id" value="<%=returnVisit.id%>"/>
-                <td class="regTd_l">服务单号：</td>
-                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" readonly="true"  value="<%=returnVisit.serviceMeetId%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td  class="regTd_l">客户姓名：</td>
-                <td class="regTd_r"><input id="name" name="name" type="text" class="input5" readonly="true"  value="<%=returnVisit.name%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">客户电话：</td>
-                <td class="regTd_r"><input id="tel" name="tel" type="text" class="input5" readonly="true"  value="<%=returnVisit.tel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">回访日期：</td>
-                <td class="regTd_r"><input id="returnVisitDate" name="returnVisitDate"  onclick="laydate()" type="text" class="input5" value="<%=returnVisit.returnVisitDate%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
+                <td class="regTd_r">
+                    <input id="returnVisitDate" name="returnVisitDate"  onclick="laydate()" readonly type="text" class="input5" value="<%=nursService.returnVisitDate%>"/>
+                    <input type="hidden" id="id" name="id" value="<%=nursService.id%>"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">回访方式：</td>
-                <td class="regTd_r"><input id="returnVisitType" name="returnVisitType" type="text" class="input5" value="<%=returnVisit.returnVisitType%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <%
+                    var returnVisitTypeStr = nursService.returnVisitType == null ? "":nursService.returnVisitType;
+                    %>
+                    <input type="checkbox" name="returnVisitType" value="无应答" onchange="selectTypeOne();" <%if(returnVisitTypeStr.indexOf('无应答')>-1){%>checked<%}%>/>无应答&nbsp;
+                    <input type="checkbox" name="returnVisitType" value="电话" onchange="selectTypeNoOne();" <%if(returnVisitTypeStr.indexOf("电话")>-1){%>checked<%}%>/>电话(400/手机/固话)&nbsp;
+                    <input type="checkbox" name="returnVisitType" value="短信" onchange="selectTypeNoOne();" <%if(returnVisitTypeStr.indexOf("短信")>-1){%>checked<%}%>/>短信&nbsp;
+                    <input type="checkbox" name="returnVisitType" value="来店" onchange="selectTypeNoOne();" <%if(returnVisitTypeStr.indexOf("来店")>-1){%>checked<%}%>/>来店&nbsp;
+                    <input type="checkbox" name="returnVisitType" value="微信" onchange="selectTypeNoOne();" <%if(returnVisitTypeStr.indexOf("微信")>-1){%>checked<%}%>/>微信
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">回访人：</td>
+                <td class="regTd_r">
+                    <input id="returnVisitStaffName" name="returnVisitStaffName" type="text" class="input5" value="<%=nursService.returnVisitStaffName%>" readonly onclick="getmembers('')"/>
+                    <input id="returnVisitStaffId" name="returnVisitStaffId" type="hidden"  value="<%=nursService.returnVisitStaffId%>"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">回访结果：</td>
-                <td class="regTd_r"><input id="returnVisitResult" name="returnVisitResult" type="text" class="input5" value="<%=returnVisit.returnVisitResult%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">服务效果评价：</td>
-                <td class="regTd_r"><input id="serviceComment" name="serviceComment" type="text" class="input5" value="<%=returnVisit.serviceComment%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">建议：</td>
-                <td class="regTd_r"><input id="advice" name="advice" type="text" class="input5"  value="<%=returnVisit.advice%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l">是否店长回访：</td>
-                <td class="regTd_r"><input id="isReturnVisit" name="isReturnVisit" type="text" class="input5" value="<%=returnVisit.isReturnVisit%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">回访原因：</td>
-                <td class="regTd_r"><input id="returnVisitReason" name="returnVisitReason" type="text" class="input5" value="<%=returnVisit.returnVisitReason%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-            </tr>
-            <tr>
-                <td class="regTd_l"  >状态：</td>
-                <td class="regTd_r"  >
-                    <select id="status" name="status" class="input5">
-                        <option <%if(returnVisit.status == '0'){%>selected<%}%> value="0">未回访</option>
-                        <option <%if(returnVisit.status == '1'){%>selected<%}%> value="1">已回访</option>
-                        <option <%if(returnVisit.status == '2'){%>selected<%}%> value="2">不必回访</option>
-                        <option <%if(returnVisit.status == '3'){%>selected<%}%> value="3">回访未果</option>
-                    </select>
+                <td class="regTd_r"><input id="returnVisitResult" name="returnVisitResult" style="width: 300px;" type="text" class="input5" value="<%=nursService.returnVisitResult%>"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
         </table>
+        <div class="reg_but">
+            <%
+            if(show == ''){
+            %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+            }
+            %>
+            <%
+            if(openWindow == ''){
+            %><div class="rb_l"><a href="/jinquan/nurs_service_list" class="close"></a></div><%
+            }else if(openWindow == 'open'){
+            %><div class="rb_l"><a href="javascript:void();" onclick="closeWindow()" class="close"></a></div><%
+            }
+            %>
+        </div>
     </form>
-    <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
-        <div class="rb_l"><a href="/jinquan/return_visit_list" class="close"></a></div>
-    </div>
+
+        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <!-- 基本信息 -->
+            <tr>
+                <td colspan="4" align="left"><strong>以下信息仅供参考：</strong></td>
+            </tr>
+            <tr>
+                <td colspan="4" align="left">基本信息：</td>
+            </tr>
+            <tr>
+                <input id="id" type="hidden" name="id" value="<%=nursService.id%>"/>
+                <input id="serviceMeetId" type="hidden" name="serviceMeetId" value="<%=nursService.serviceMeetId%>"/>
+                <td class="regTd_l">服务单号：</td>
+                <td class="regTd_r">
+                    <input id="nursServiceNo" name="nursServiceNo"  type="text" class="input5" value="<%=nursService.nursServiceNo%>" readonly="true"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">服务日期：</td>
+                <td class="regTd_r">
+                    <input id="serviceDate" name="serviceDate" readonly type="text" class="input5"  value="<%=nursService.serviceDate%>" style="width: 80px"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">姓名：</td>
+                <td class="regTd_r"><input id="name" name="name" readonly type="text" class="input5"  value="<%=nursService.memberName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">电话：</td>
+                <td class="regTd_r"><input id="tel" name="tel" readonly type="text" class="input5"  value="<%=nursService.memberTel%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">服务地点：</td>
+                <td class="regTd_r">
+                    <select id="serviceType" name="serviceType" disabled>
+                        <option value="1" <%if(nursService.serviceType == 1){%>selected<%}%>>到店</option>
+                        <option value="2" <%if(nursService.serviceType == 2){%>selected<%}%>>上门</option>
+                    </select> &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">服务地址：</td>
+                <td class="regTd_r">
+                    <input type="text" class="input5" <%if(nursService.serviceType == 2){%>style="width: 300px;"<%}else{%>style="width: 100px;"<%}%>
+                    value="<%if(nursService.serviceType == 1){%><%=nursService.shopName%><%}else{%><%=nursService.province%>,<%=nursService.city%>,<%=nursService.town%>,<%=nursService.address%><%}%>" readonly />
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">开始时间：</td>
+                <td class="regTd_r"><input id="startTime" name="startTime"  value="<%=nursService.startTime%>" type="text" class="input5" readonly  style="width: 80px" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">截止时间：</td>
+                <td class="regTd_r"><input id="endTime" name="endTime" value="<%=nursService.endTime%>" type="text" class="input5" readonly  style="width: 80px"  />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <!-- 近期哺乳相关 -->
+            <tr>
+                <td colspan="4" align="left">近期哺乳相关：</td>
+            </tr>
+            <tr style="border:solid 1px #f56394;">
+                <td class="regTd_l">做过何种处理：</td>
+                <td class="regTd_r">
+
+                    <%
+                    var dealStr = nursService.deal == null ? "" :nursService.deal;
+                    for(var i=0;i<dictData.treatmentMethodArr.length;i++){
+                    var treatmentMethodId='deal'+i;
+                    %>
+                    <input id="<%=treatmentMethodId%>" name="deal" type="checkbox" value ="<%=dictData.treatmentMethodArr[i].id%>" disabled
+                    <%if(dealStr.indexOf(dictData.treatmentMethodArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.treatmentMethodArr[i].name%>
+                    <%
+                    if((i+1)%3 == 0){
+                    %><br><%
+                    }
+                    }%>
 
 
+
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">服务需求：</td>
+                <td class="regTd_r">
+                    <!--
+                    <select id="serviceNeeds" name="serviceNeeds">
+                        <option value="">请选择</option>
+                        <%for(var i=0;i<dictData.serverDemandArr.length;i++){
+                        %><option value="<%=dictData.serverDemandArr[i].id%>" <%if(nursService.serviceNeeds ==dictData.serverDemandArr[i].id ){%>selected<%}%>><%=dictData.serverDemandArr[i].name%></option><%
+                        }%>
+                    </select>
+                    -->
+
+                    <%
+                    var serviceNeedsStr = nursService.serviceNeeds == null ? "" :nursService.serviceNeeds;
+                    for(var i=0;i<dictData.serverDemandArr.length;i++){
+                    var serviceNeedsId='serviceNeeds'+i;
+                    %>
+                    <input id="<%=serviceNeedsId%>" name="serviceNeeds" type="checkbox" value ="<%=dictData.serverDemandArr[i].id%>" disabled
+                    <%if(serviceNeedsStr.indexOf(dictData.serverDemandArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.serverDemandArr[i].name%>
+                    <%
+                    if((i+1)%2 == 0){
+                    %><br><%
+                    }
+                    }%>
+
+
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">大便次数：</td>
+                <td class="regTd_r">
+                    <input id="bowelFrequenc" name="bowelFrequenc" type="text" class="input5" disabled value="<%=nursService.bowelFrequenc%>"/>&nbsp;&nbsp;
+                    <span id="bowelFrequencSpanId" style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">性状：</td>
+                <td class="regTd_r">
+                    <select id="shape" name="shape" disabled>
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.shapeArr.length;i++){
+                        %><option value="<%=dictData.shapeArr[i].id%>" <%if(nursService.shape ==dictData.shapeArr[i].id ){%>selected<%}%>><%=dictData.shapeArr[i].name%></option><%
+                        }%>
+                    </select>
+                    &nbsp;&nbsp;<span id="shapeSpanId" style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">喂养情况：</td>
+                <td class="regTd_r">
+                    <select id="feedSituation" name="feedSituation" disabled >
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.feedingConditionArr.length;i++){
+                        %><option value="<%=dictData.feedingConditionArr[i].id%>" <%if(nursService.feedSituation ==dictData.feedingConditionArr[i].id ){%>selected<%}%>><%=dictData.feedingConditionArr[i].name%></option><%
+                        }%>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">尿量：</td>
+                <td class="regTd_r">
+                    <select id="urination" name="urination" disabled>
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.urineVolumeArr.length;i++){
+                        %><option value="<%=dictData.urineVolumeArr[i].id%>" <%if(nursService.urination ==dictData.urineVolumeArr[i].id ){%>selected<%}%>><%=dictData.urineVolumeArr[i].name%></option><%
+                        }%>
+                    </select>
+                    &nbsp;&nbsp;<span id="urinationSpanId" style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">喂养备注：</td>
+                <td class="regTd_r">
+                    <input id="feedRemark" name="feedRemark" disabled type="text" class="input5"  value="<%=nursService.feedRemark%>"/>
+                    &nbsp;&nbsp;<span id="feedRemarkSpanId" style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">挤奶情况：</td>
+                <td class="regTd_r">
+                    <select id="milkSituation" name="milkSituation" disabled >
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.milkSituationArr.length;i++){
+                        %><option value="<%=dictData.milkSituationArr[i].id%>" <%if(nursService.milkSituation ==dictData.milkSituationArr[i].id ){%>selected<%}%>><%=dictData.milkSituationArr[i].name%></option><%
+                        }%>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">宝宝目前月龄：</td>
+                <td class="regTd_r"><input id="childCurrentMonths" name="childCurrentMonths" disabled type="text" class="input5"  value="<%=nursService.childCurrentMonths%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">挤奶次数：</td>
+                <td class="regTd_r">
+                    <!--
+                    <select id="milkNumber" name="milkNumber">
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.milkNumArr.length;i++){
+                        %><option value="<%=dictData.milkNumArr[i].id%>" <%if(nursService.milkNumber ==dictData.milkNumArr[i].id ){%>selected<%}%>><%=dictData.milkNumArr[i].name%></option><%
+                        }%>
+                    </select>
+                    -->
+                    <input type="text" id="milkNumber" name="milkNumber" disabled value="<%=nursService.milkNumber%>"/>
+                    &nbsp;&nbsp;<span id="milkNumberSpanId" style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">目前身高：</td>
+                <td class="regTd_r">
+                    <input id="childCurrentHeight" name="childCurrentHeight" disabled type="text" class="input5"  value="<%=nursService.childCurrentHeight%>"/>&nbsp;&nbsp;</td>
+                <td class="regTd_l">挤奶总量：</td>
+                <td class="regTd_r">
+                    <!--
+                    <select id="milkAmount" name="milkAmount">
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.milkTotalArr.length;i++){
+                        %><option value="<%=dictData.milkTotalArr[i].id%>" <%if(nursService.milkAmount ==dictData.milkTotalArr[i].id ){%>selected<%}%>><%=dictData.milkTotalArr[i].name%></option><%
+                        }%>
+                    </select>
+                    -->
+                    <input type="text" id="milkAmount" name="milkAmount" disabled value="<%=nursService.milkAmount%>"/>
+                    &nbsp;&nbsp;<span id="milkAmountSpanId" style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">目前体重：</td>
+                <td class="regTd_r">
+                    <input id="childCurrentWeight" name="childCurrentWeight" disabled type="text" class="input5"  value="<%=nursService.childCurrentWeight%>"/>&nbsp;&nbsp;
+                </td>
+                <td class="regTd_l">吸奶器品牌：</td>
+                <td class="regTd_r">
+
+                    <%
+                    var breastpumpBrandStr = nursService.breastpumpBrand == null ? "" :nursService.breastpumpBrand;
+                    for(var i=0;i<dictData.breastPumpBrandArr.length;i++){
+                    var breastpumpBrandId='breastpumpBrand'+i;
+                    %>
+                    <input id="<%=breastpumpBrandId%>" name="breastpumpBrand" disabled type="checkbox" value ="<%=dictData.breastPumpBrandArr[i].id%>"
+                    <%if(breastpumpBrandStr.indexOf(dictData.breastPumpBrandArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.breastPumpBrandArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
+                    }%>
+                    &nbsp;&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="left">服务信息：</td>
+            </tr>
+            <tr>
+                <td class="regTd_l">是否观察哺乳：</td>
+                <td class="regTd_r">
+                    <select id="isCarefulNurse" name="isCarefulNurse" disabled>
+                        <option value="">请选择</option>
+
+                        <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
+                        %><option value="<%=dictData.diagnosticResultArr[i].id%>" <%if(nursService.isCarefulNurse ==dictData.diagnosticResultArr[i].id ){%>selected<%}%>><%=dictData.diagnosticResultArr[i].name%></option><%
+                        }%>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">转诊建议：</td>
+                <td class="regTd_r">
+                    <input id="referralAdvise" name="referralAdvise" disabled type="text" class="input5"  value="<%=nursService.referralAdvise%>"/>&nbsp;&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="regTd_l">诊断结果：</td>
+                <td class="regTd_r">
+                    <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
+                    var diagnosisId ='diagnosis'+i;
+                    %>
+                    <input id="<%=diagnosisId%>" name="diagnosis" type="checkbox" disabled value ="<%=dictData.diagnosticResultArr[i].id%>"
+                    <%if(nursService.diagnosis != null && nursService.diagnosis.indexOf(dictData.diagnosticResultArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.diagnosticResultArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
+                    }%>
+                    <span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">特殊说明：</td>
+                <td class="regTd_r">
+                    <input id="specialInstructions" name="specialInstructions" disabled type="text" class="input5"  value="<%=nursService.specialInstructions%>"/>&nbsp;&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td class="regTd_l">宝宝原因：</td>
+                <td class="regTd_r">
+                    <%for(var i=0;i<dictData.babyReasonsArr.length;i++){
+                    var childReasonId='childReason'+i;
+                    %>
+                    <input id="<%=childReasonId%>" name="childReason" disabled type="checkbox" value ="<%=dictData.babyReasonsArr[i].id%>"
+                           value ="<%=dictData.babyReasonsArr[i].id%>" <%if(nursService.childReason != null && nursService.childReason.indexOf(dictData.babyReasonsArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.babyReasonsArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
+                    }%>
+                    <span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">乳房示意图说明：</td>
+                <td class="regTd_r">
+                    <!--
+                    <input id="breastExplain" name="breastExplain" type="text" class="input5"  value="<%=nursService.breastExplain%>"/>
+                    -->
+                    <%
+                    var breastExplainStr = nursService.breastExplain == null?"":nursService.breastExplain;
+                    if(breastExplainStr != ""){
+                    breastExplainStr = breastExplainStr.split(";")[1];
+                    }else{
+                    breastExplainStr = '/images/noImage.png';
+                    }
+                    %>
+                    <a href="<%=breastExplainStr%>" target="_blank">
+                        <img id="breastExplainId"
+                             src="<%=breastExplainStr%>"
+                             height="100" width="130"/>
+                    </a>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">妈妈原因：</td>
+                <td class="regTd_r">
+                    <%for(var i=0;i<dictData.momReasonsArr.length;i++){
+                    var motherReasonId='motherReason'+i;
+                    %>
+                    <input id="<%=motherReasonId%>" name="motherReason" type="checkbox" disabled
+                           value ="<%=dictData.momReasonsArr[i].id%>" <%if(nursService.motherReason != null && nursService.motherReason.indexOf(dictData.momReasonsArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.momReasonsArr[i].name%>
+                    <%
+                    if((i+1)%4 == 0){
+                    %><br><%
+                    }
+                    }%>
+                    <span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">离店建议：</td>
+                <td class="regTd_r"><input id="leaveAdvise" name="leaveAdvise" disabled type="text" class="input5"  value="<%=nursService.leaveAdvise%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr>
+                <td class="regTd_l">其他原因：</td>
+                <td class="regTd_r">
+                    <%for(var i=0;i<dictData.otherReasonsArr.length;i++){
+                    var otherReasonId='otherReason'+i;
+                    %>
+                    <input id="<%=otherReasonId%>" name="otherReason" disabled type="checkbox" value ="<%=dictData.otherReasonsArr[i].id%>"
+                    <%if(nursService.otherReason != null && nursService.otherReason != null && nursService.otherReason.indexOf(dictData.otherReasonsArr[i].id) > -1){%>checked<%}%>/>
+                    <%=dictData.otherReasonsArr[i].name%>
+                    <%}%>
+                    <span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">是否预约二次：</td>
+                <td class="regTd_r">
+                    <select id="whetherAppointmentAgain" name="whetherAppointmentAgain" disabled>
+                        <option value="">请选择</option>
+                        <option value="Y" <%if(nursService.whetherAppointmentAgain == 'Y'){%>selected<%}%>>是</option>
+                        <option value="N" <%if(nursService.whetherAppointmentAgain == 'N'){%>selected<%}%>>否</option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <input type="checkbox" id="noNeedVisit" name="noNeedVisit" disabled value="Y" <%if(nursService.noNeedVisit == 'Y'){%>checked<%}%>/>不必回访
+                </td>
+
+            </tr>
+            <tr>
+                <td class="regTd_l">服务效果评价：</td>
+                <td class="regTd_r">
+                    <%
+                    var evaluateStr = nursService.evaluate != null?nursService.evaluate:"";
+                    %>
+                    <input type="checkbox" name="evaluate" disabled value="1" <%if(evaluateStr.indexOf('1') > -1){%>checked<%}%>/>&nbsp;满意 &nbsp;
+                    <input type="checkbox" name="evaluate" disabled value="2" <%if(evaluateStr.indexOf('2') > -1){%>checked<%}%>/>&nbsp;基本满意 &nbsp;
+                    <input type="checkbox" name="evaluate" disabled value="3" <%if(evaluateStr.indexOf('3') > -1){%>checked<%}%>/>&nbsp;不满意
+                </td>
+                <td class="regTd_l">建议信息：</td>
+                <td class="regTd_r">
+                    <input id="proposal" name="proposal" type="text" disabled value="<%=nursService.proposal%>"/>
+                </td>
+            </tr>
+            <!--
+            <tr>
+                <td class="regTd_l">是否带实习技师：</td>
+                <td class="regTd_r"><input id="isLeadTrainee" name="isLeadTrainee" type="text" class="input5"  value="<%=nursService.isLeadTrainee%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_l">实习技师姓名：</td>
+                <td class="regTd_r"><input id="traineeName" name="traineeName" type="text" class="input5"  value="<%=nursService.traineeName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            -->
+        </table>
+        <!--服务信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>服务信息</h3></span>
+        <br>
+        <table id="servicesTable" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td style="width: auto">服务名称</td>
+                <td style="width: auto">单价</td>
+                <td style="width: auto">数量</td>
+                <td style="width: auto">小计</td>
+                <td style="width: auto">优惠情况</td>
+                <td style="width: auto">服务技师</td>
+                <td style="width: auto">实习技师</td>
+            </tr>
+            <%
+            for(var i = 0 ; i < serviceArr.length ; i ++ ){
+            %>
+            <tr>
+                <td><input type="text" readonly value="<%=serviceArr[i].serviceName%>"/></td>
+                <td><input type="text" readonly value="<%=serviceArr[i].price%>"/></td>
+                <td><input type="text" readonly value="<%=serviceArr[i].count%>"/></td>
+                <td><input type="text" readonly value="<%=serviceArr[i].subtotal%>"/></td>
+                <td><input type="text" readonly value="<%=serviceArr[i].discount%>"/></td>
+                <td><input type="text" readonly value="<%=serviceArr[i].serviceStaffName%>"/></td>
+                <td><input type="text" readonly value="<%=serviceArr[i].traineeStaffName%>"/></td>
+            </tr>
+            <%
+            }
+
+            %>
+        </table>
+        <!--服务信息 end-->
+
+        <!--商品信息 start-->
+        <span style="float: left; font-weight:bold;width: 100px;"><h3>商品信息</h3></span>
+        <br>
+        <table id="waresTable" width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="lightblue">
+                <td>商品名称</td>
+                <td>商品编号</td>
+                <td>采购数量</td>
+                <td>商品单价</td>
+                <td>小计</td>
+                <td>减免费用</td>
+            </tr>
+            <%
+            for(var i = 0 ; i < proArr.length ; i ++ ){
+            %>
+            <tr>
+                <td><input type="text" readonly value="<%=proArr[i].name%>"/></td>
+                <td><input type="text" readonly value="<%=proArr[i].serialNumber%>"/></td>
+                <td><input type="text" readonly value="<%=proArr[i].count%>"/></td>
+                <td><input type="text" readonly value="<%=proArr[i].price%>"/></td>
+                <td><input type="text" readonly value="<%=proArr[i].subtotal%>"/></td>
+                <td><input type="text" readonly value="<%=proArr[i].discount%>"/></td>
+            </tr>
+            <%
+            }
+
+            %>
+        </table>
+        <!--商品信息 end-->
 </div>
 </body>
 </html>

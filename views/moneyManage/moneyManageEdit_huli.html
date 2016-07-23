@@ -271,7 +271,6 @@
             //遍历已选择商品，判断每个商品是否可以打折，如果可以，则计算出折扣后金额
             var receivableMoneys = 0,activityDiscountMoney = 0;//活动优惠价格
             var arr_proId = document.getElementsByName('proId');
-            alert("=="+arr_proId.length);
             for(var i=1;i<=arr_proId.length;i++) {
                 var proId = $('#proId'+i).val();//当前商品id
                 var proCount = $('#count'+i).val();//当前商品购买数量

@@ -11,6 +11,19 @@
 exports.STATE_ENABLE = '1';
 exports.STATE_DISABLE = '0';
 /**
+ * 护理服务单各种状态
+    - 1、服务中：预约单保存护理单号时
+    - 2、已收费：缴费成功
+    - 3、已录入未回访：编辑并保存该护理服务单成功时
+    - 4、已回访未接电话
+    - 5、回访结束：不必回访、回访有结果
+ */
+exports.NURS_STATE_1 = '1';
+exports.NURS_STATE_2 = '2';
+exports.NURS_STATE_3 = '3';
+exports.NURS_STATE_4 = '4';
+exports.NURS_STATE_5 = '5';
+/**
  * 定义折扣信息显示值和计算值
  * @type {Array}
  */

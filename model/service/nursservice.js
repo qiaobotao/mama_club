@@ -25,6 +25,7 @@ var shapeId = require('../../config').mainClassifyId.shape;//形状
 var feedingConditionId = require('../../config').mainClassifyId.feedingCondition;//喂养情况
 var treatmentMethodId = require('../../config').mainClassifyId.treatmentMethod;//做过何种处理
 var serverDemandId = require('../../config').mainClassifyId.serverDemand;//服务需求
+var consts = require('../../model/utils/consts');
 
 
 /**
@@ -104,6 +105,28 @@ module.exports.updateBreastImage = function(id,breastExplain, cb) {
     });
 };
 
+/**
+ * 修改回访单信息
+ * @param id
+ * @param returnVisitDate
+ * @param returnVisitType
+ * @param returnVisitStaffId
+ * @param returnVisitResult
+ * @param cb
+ */
+module.exports.updateReturnVisit = function(id,returnVisitDate,returnVisitType,returnVisitStaffId,returnVisitResult,status, cb) {
+
+    var sql = 'UPDATE nursService set returnVisitDate=?,returnVisitType=?,returnVisitStaffId=?,returnVisitResult=?,status=? '
+        + ' where id=?';
+    db.query(sql, [returnVisitDate,returnVisitType,returnVisitStaffId,returnVisitResult,status,id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+
 
 /**
  * 更新护理服务单全部字段
@@ -148,19 +171,19 @@ module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,te
                                             bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                             milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
                                             diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-                                            isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal, cb) {
+                                            isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal, status,cb) {
 
     var sql = 'UPDATE nursService set serviceMeetId=?,serviceDate=?,startTime=?,endTime=?,serviceType=?,address=?,serviceNeeds=?,'
         + ' bowelFrequenc=?,deal=?,shape=?,feedSituation=?,urination=?,feedRemark=?,milkSituation=?,childCurrentMonths=?,'
         + ' milkNumber=?,childCurrentHeight=?,milkAmount=?,childCurrentWeight=?,breastpumpBrand=?,isCarefulNurse=?,referralAdvise=?,'
         + ' diagnosis=?,specialInstructions=?,childReason=?,breastExplain=?,motherReason=?,leaveAdvise=?,otherReason=?,'
-        + ' isLeadTrainee=?,whetherAppointmentAgain=?,traineeName=?,noNeedVisit=?,evaluate=?,proposal=?,dateLine=?'
+        + ' isLeadTrainee=?,whetherAppointmentAgain=?,traineeName=?,noNeedVisit=?,evaluate=?,proposal=?,status=?,dateLine=?'
         + ' where id=?';
     db.query(sql, [serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal,new Date().getTime(),id], function(cbData, err, rows, fields) {
+        isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal,status,new Date().getTime(),id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -169,6 +192,15 @@ module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,te
     });
 };
 
+/**
+ * 护理服务单列表使用
+ * @param shopId
+ * @param name
+ * @param principal
+ * @param serviceDate
+ * @param currentPage
+ * @param cb
+ */
 module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,currentPage,cb) {
 
     var parm = " where  (a.serviceMeetId=b.id)"
@@ -185,6 +217,70 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
     var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,a.status FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 回访信息列表使用
+ * @param shopId
+ * @param name
+ * @param principal
+ * @param serviceDate
+ * @param currentPage
+ * @param cb
+ */
+module.exports.fetchAllReturnVisit = function(shopId,name,principal,serviceDate,currentPage,cb) {
+
+    var parm = " where  (a.serviceMeetId=b.id)"
+    if (name != '')
+        parm += " and b.name like'%" + name + "%'";
+    if (shopId != '')
+        parm += " and b.shopId ='" + shopId + "'";
+    if (principal != '')
+        parm += " and b.principal like'%" + principal + "%'";
+    if (serviceDate != '')
+        parm += " and a.serviceDate like'%" + serviceDate + "%'";
+
+    parm += " and a.status > "+consts.NURS_STATE_2;//状态在“已收费”之后的状态数据
+    parm += " and a.noNeedVisit <> 'Y'";//回访状态不是“不必回访”
+
+    var sql_count = 'SELECT  count(1) as count FROM nursService a ,serviceMeet b'+ parm;
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,a.status,a.returnVisitDate,' +
+        "   (select name from staff s where id = a.returnVisitStaffId) as returnVisitStaffName " +
+        ' FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -243,7 +339,20 @@ module.exports.fetchSingleNursService =function (id, cb) {
         treatmentMethodId+","+
         serverDemandId;
 
-    var nursServicesql = 'SELECT a.*,b.serviceType,b.province,b.city,b.town,b.address,b.deal,b.serviceNeeds,m.memberName,m.tel as memberTel,(select name from shop where id = b.serverShopId) as shopName,FORMAT(datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 ,1)as childMonths ' +
+    var nursServicesql = 'SELECT ' +
+        '   a.*,' +
+        '   b.serviceType,' +
+        '   b.province,' +
+        '   b.city,' +
+        '   b.town,' +
+        '   b.address,' +
+        '   b.deal,' +
+        '   b.serviceNeeds,' +
+        '   m.memberName,' +
+        '   m.tel as memberTel,' +
+        '   (select name from shop where id = b.serverShopId) as shopName,' +
+        '   FORMAT(datediff(str_to_date(SYSDATE(), "%Y-%m-%d") ,m.childBirthday)/30 ,1)as childMonths, ' +
+        "   (select name from staff s where id = a.returnVisitStaffId) as returnVisitStaffName " +
         'FROM nursService a , serviceMeet b ,member m ' +
         'WHERE a.serviceMeetId=b.id ' +
         'AND m.id = b.memberId ' +

@@ -104,7 +104,7 @@ module.exports.doEdit = function (req, res,next) {
                 if (!err) {
                     //先获取服务单号，新增记录
                     //服务单状态为：服务中（1）
-                    nursservice.insertNursServiceByServiceMeet(nursServiceNo, id, meetTime.substring(0,10), serviceTime,"1", function (err, insertResults) {
+                    nursservice.insertNursServiceByServiceMeet(nursServiceNo, id, meetTime.substring(0,10), serviceTime,consts.NURS_STATE_1, function (err, insertResults) {
                         if (!err) {
                             service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
                                 staffId,status,insertResults.insertId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
