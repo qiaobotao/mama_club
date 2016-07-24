@@ -80,7 +80,7 @@
                 <th>电话</th>
                 <th>护理服务时间</th>
                 <th>状态</th>
-                <th>操作</th>
+                <th>操作(“已收费”时可修改)</th>
             </tr>
             <% for (var i=0;i<data.data.length;i++) {%>
 
@@ -93,14 +93,14 @@
                 var zhuangtai ="";
                 if(data.data[i].status==1){
                     zhuangtai="服务中";
-                }
-                else if(data.data[i].status==2)
-                {
-                    zhuangtai="完成已收费";
-                }
-                else if(data.data[i].status==3)
-                {
-                    zhuangtai="完成未收费";
+                }else if(data.data[i].status==2){
+                    zhuangtai="已收费";
+                }else if(data.data[i].status==3){
+                    zhuangtai="已录入未回访";
+                }else if(data.data[i].status==4){
+                    zhuangtai="已回访未接电话";
+                }else if(data.data[i].status==5){
+                    zhuangtai="回访结束";
                 }
                 %><%=zhuangtai%></td>
                 <td>
@@ -109,7 +109,7 @@
                             <%if(resourcesData["/nurs_service_show"] == "1"){
                                 %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:show(<%=data.data[i].id%>)">查看</a>]</img></div></td><%
                             }%>
-                            <%if(resourcesData["/nurs_service_preEdit"] == "1"){
+                            <%if(resourcesData["/nurs_service_preEdit"] == "1" && data.data[i].status==2){//状态为“缴费成功”时，可以编辑；其他时候不成
                                 %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">修改</a>]</img></div></td><%
                             }%>
                             <!--<td><div align="center">[<a href="javascript:del(<%=data.data[i].id%>)">删除</a>]</div></td>-->

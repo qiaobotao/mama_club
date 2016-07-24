@@ -220,13 +220,8 @@ router.all('/money_manage_del',moneyManageAction.del);
 
 // 回访信息
 router.all('/return_visit_list',returnVisitAction.list);
-router.all('/return_visit_goAdd',returnVisitAction.goAdd);
-router.all('/return_visit_add',returnVisitAction.add);
-router.all('/return_visit_show',returnVisitAction.show);
-router.all('/return_visit_preEdit',returnVisitAction.preEdit);
-router.all('/return_visit_doEdit',returnVisitAction.doEdit);
-router.all('/return_visit_del',returnVisitAction.del);
-router.all('/return_visit_select', returnVisitAction.select);
+router.all('/return_visit_preEdit',returnVisitAction.preEdit);//进入编辑页面
+router.all('/return_visit_doEdit',returnVisitAction.doEdit);//保存数据
 
 // 投诉信息
 router.all('/complain_list',complainAction.list);

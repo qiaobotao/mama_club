@@ -5,6 +5,7 @@ var storeroomOutService = require('../../model/service/storeroomOut');
 var serviceMeetService = require('../../model/service/servicemeet');
 var commonUtil = require('../../model/utils/common');//公共类
 var multiparty = require('multiparty');//上传文件使用
+var consts = require('../../model/utils/consts');
 
 /**
  * Created by kuanchang on 16/1/18.
@@ -138,11 +139,15 @@ module.exports.doEdit = function (req, res,next) {
         obj.price = arr_price;
         arr.push(obj);
     }
+    var state = consts.NURS_STATE_3;
+    if(noNeedVisit == 'Y'){
+        state = consts.NURS_STATE_5;
+    }
     service.updateNursService(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
         diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
-        isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal, function (err, results) {
+        isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal,state, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/nurs_service_list?replytype=update');
             } else {
