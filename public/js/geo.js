@@ -437,5 +437,5 @@ function setup(funstr) {
 }
 
 function initCode(){
-    alert("initCode");
+    //alert("initCode");
 }

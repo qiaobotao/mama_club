@@ -14,10 +14,10 @@ var mainStoreroomClassifyId = require('../../config').mainClassifyId.storeroom;
  * @param principal
  * @param cb
  */
-module.exports.insertStoreroom = function(shopId,name, address, principal, tel, serial, classify, remarks, cb) {
+module.exports.insertStoreroom = function(shopId,name, address,province, city, town, principal, tel, serial, classify, remarks, cb) {
 
-    var sql = 'INSERT INTO storeroom (name, address, principal, status, dateline, tel, serial, classify, remarks,shopId) VALUES (?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [name, address, principal, '0', new Date().getTime(), tel, serial, classify, remarks,shopId], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO storeroom (name, address, principal, status, dateline, tel, serial, classify, remarks,shopId,province,city,town) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [name, address, principal, '0', new Date().getTime(), tel, serial, classify, remarks,shopId,province,city,town], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {

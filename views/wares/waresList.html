@@ -54,7 +54,7 @@
                 <tr>
                     <td>商品名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/></td>
                     <td> &nbsp;商品分类：<select id="id" name="id">
-                        <option value =""></option>
+                        <option value ="">请选择</option>
                         <%for(var i=0;i<data.classify.length;i++){%>
                         <option value ="<%=data.classify[i].id%>" <%if(data.classifyId == data.classify[i].id){%>selected<%}%> ><%=data.classify[i].name%></option>
                         <%}%>

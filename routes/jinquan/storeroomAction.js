@@ -96,10 +96,14 @@ module.exports.add = function (req, res, next) {
     var address = req.body.address ? req.body.address : '';
     var remarks = req.body.remarks ? req.body.remarks : '';
 
+    var province = req.body.province ? req.body.province : '';
+    var city = req.body.city ? req.body.city : '';
+    var town = req.body.town ? req.body.town : '';
+
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
 
-    service.insertStoreroom(shopId,name, address, principal, tel, serial, cid, remarks, function(err, results) {
+    service.insertStoreroom(shopId,name, address, province, city, town, principal, tel, serial, cid, remarks, function(err, results) {
         if(!err) {
             res.redirect('/jinquan/storeroom_list?replytype=add');
         } else {
@@ -208,6 +212,7 @@ module.exports.detail = function(req, res, next) {
 
     service.fetchSingleStoreroom(id,function(err, results) {
         if (!err && results.length != 0) {
+            results[0].address = results[0].province+results[0].city+results[0].town+results[0].address;
             res.render('storeroom/storeroomDetail', {data : results[0]});
         } else {
             myUtils.printSystemLog(err)
