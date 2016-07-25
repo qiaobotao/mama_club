@@ -13,23 +13,11 @@
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
+            //如果护理服务单状态为4（已回访无应答时），回访结果不是必填项
+            if($("#status").val() == 4){
+                $("#returnVisitResultSpanId").hide();//回访结果
+            }
 
-            //为孩子月龄赋值
-            var childMonths ='<%=nursService.childMonths%>';
-            if($("#childCurrentMonths").val() == ''){
-                $("#childCurrentMonths").val(childMonths+"个月");
-            }
-            if(childMonths > 6){//超过6个月，大便次数、性状、尿量都不是必填项
-                $("#bowelFrequencSpanId").hide();//大便次数
-                $("#shapeSpanId").hide();//性状
-                $("#urinationSpanId").hide();//尿量
-            }
-            //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
-            if(document.getElementById("milkSituation").selectedIndex == 1){
-                $("#milkNumberSpanId").hide();//挤奶次数
-                $("#milkAmountSpanId").hide();//挤奶总量
-            }
-            closeWindow();
         });
         //回访方式选择第一个：无应答时，其他均不可选
         function selectTypeOne(){
@@ -39,6 +27,7 @@
                     $(this).attr("checked",false);
                 }
             });
+            $("#returnVisitResultSpanId").hide();
         }
         //回访方式选择不是第一个：无应答时，其他均不可选
         function selectTypeNoOne(){
@@ -48,6 +37,7 @@
                     $(this).attr("checked",false);
                 }
             });
+            $("#returnVisitResultSpanId").show();
         }
 
         function getmembers(index){
@@ -89,10 +79,13 @@
                 parent.layer.alert('请选择回访人',{icon:2});
                 return ;
             }
+
             //回访结果
-            if($("#returnVisitResult").val() == ''){
-                parent.layer.alert('请填写回访结果',{icon:2});
-                return ;
+            if(!$("#returnVisitResultSpanId").is(":hidden")){//大便次数必填
+                if($("#returnVisitResult").val() == ''){
+                    parent.layer.alert('请填写回访结果',{icon:2});
+                    return ;
+                }
             }
 //            alert("可以提交");
             document.getElementById("myform").submit();
@@ -114,6 +107,7 @@
                 <td class="regTd_r">
                     <input id="returnVisitDate" name="returnVisitDate"  onclick="laydate()" readonly type="text" class="input5" value="<%=nursService.returnVisitDate%>"/>
                     <input type="hidden" id="id" name="id" value="<%=nursService.id%>"/>
+                    <input type="hidden" id="status" name="status" value="<%=nursService.status%>"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">回访方式：</td>
                 <td class="regTd_r">
@@ -135,7 +129,11 @@
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">回访结果：</td>
                 <td class="regTd_r"><input id="returnVisitResult" name="returnVisitResult" style="width: 300px;" type="text" class="input5" value="<%=nursService.returnVisitResult%>"/>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;
+                    <span id="returnVisitResultSpanId">
+                        <span style="color:#FF0000;">*</span>
+                    </span>
+                </td>
             </tr>
         </table>
         <div class="reg_but">

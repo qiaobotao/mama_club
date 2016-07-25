@@ -205,8 +205,8 @@ router.all('/class_meet_select_list',classMeetAction.classMeetSelectList);
 
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);
-router.all('/nurs_service_preEdit',nursServiceAction.preEdit);
-router.all('/nurs_service_doEdit',nursServiceAction.doEdit);
+router.all('/nurs_service_preEdit',nursServiceAction.preEdit);//进入编辑界面
+router.all('/nurs_service_doEdit',nursServiceAction.doEdit);//更新数据库信息
 router.all('/nurs_service_del',nursServiceAction.del);
 router.all('/nurs_service_create_no',nursServiceAction.createNo);
 router.all('/open_upload_nursService_breast_image',nursServiceAction.openUploadBreastImage);//上传乳房示意图

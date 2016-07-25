@@ -343,10 +343,12 @@
                 $("#serviceCode1").show();
                 $("#serviceCode2").show();
                 $("#serviceStaffTrId").show();
+                $("#serviceTimeId").show();
             }else{
                 $("#serviceCode1").hide();
                 $("#serviceCode2").hide();
                 $("#serviceStaffTrId").hide();
+                $("#serviceTimeId").hide();
             }
         }
         /**
@@ -515,11 +517,6 @@
                 <td class="regTd_r">
                     <input id="tel" name="tel" type="text" class="input5"   onBlur="getMemberId()"   value="<%=service_meet.tel%>" />&nbsp;&nbsp;
                     <span style="color:#FF0000;">*</span>
-                    <%
-                    if(service_meet.memberId == null || service_meet.memberId == ''){
-                        %><input type="button" value="一键新增会员" onclick="addMemberByTel()"/><%
-                    }
-                    %>
                 </td>
             </tr>
             <tr>
@@ -537,7 +534,7 @@
                             meetTimeStrSS = meetTimeStr.split(" ")[1].split(":")[1];
                         }
                     %>
-                    <input id="meetTimeYMD" name="meetTimeYMD" type="text" class="input5" style="width: 70px" readonly onclick="laydate()"  value="<%=meetTimeStrYMD%>" />
+                    <input id="meetTimeYMD" name="meetTimeYMD" type="text" class="input5" style="width: 70px" readonly onclick="laydate({min: laydate.now(-7),max: laydate.now(+7)})"  value="<%=meetTimeStrYMD%>" />
                     <input id="meetTime" name="meetTime" type="hidden" value="<%=service_meet.meetTime%>" />
                     <select id="meetTimeHH">
                         <option value="">请选择</option>
@@ -615,6 +612,7 @@
                     <select id="specified" name="specified"  onchange="changeSpecified()">
                         <option value="1" <%if(service_meet.specified == '1'){%>selected<%}%>>未指定</option>
                         <option value="2" <%if(service_meet.specified == '2'){%>selected<%}%>>指定</option>
+                        <option value="3" <%if(service_meet.specified == '3'){%>selected<%}%>>推荐</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">技师：</td>
@@ -680,26 +678,36 @@
                     %>
                     <input type="hidden" id="nursServiceId" readonly name="nursServiceId" value="<%=service_meet.nursServiceId%>"/>&nbsp;&nbsp;
                     <input type="text" id="nursServiceNo" readonly name="nursServiceNo" value="<%=service_meet.nursServiceNo%>"/>&nbsp;&nbsp;
-                    服务开始时间
+                    <!-- 生成一键生成会员信息 -->
+                    <%
+                    if(service_meet.memberId == null || service_meet.memberId == ''){
+                    %><input type="button" value="一键新增会员" onclick="addMemberByTel()"/><%
+                    }
+                    %>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+            </tr>
+            <tr id="serviceTimeId">
+                <td class="regTd_l">服务开始时间</td>
+                <td class="regTd_r">
                     <input type="hidden" id="serviceTime" name="serviceTime" value="<%=service_meet.serviceTime%>"/>
                     <select id="serviceTimeHH">
                         <option value="">请选择</option>
                         <%
-                            var serviceTimeStr = service_meet.serviceTime;
-                            serviceTimeStr = serviceTimeStr == null?"":serviceTimeStr;
-                            var serviceTimeStrHH = "";
-                            var serviceTimeStrSS = "";
-                            if(serviceTimeStr != ""){
-                                serviceTimeStrHH = serviceTimeStr.split(":")[0];
-                                serviceTimeStrSS = serviceTimeStr.split(":")[1];
-                            }
-                            for(var i = 0 ; i < 12 ; i ++){
-                                var timeHHVal = i+8;
-                                if(timeHHVal < 10){
-                                    timeHHVal = "0"+timeHHVal;
-                                }
-                                %><option value="<%=timeHHVal%>" <%if(serviceTimeStrHH == timeHHVal){%>selected<%}%>><%=timeHHVal%></option><%
-                            }
+                        var serviceTimeStr = service_meet.serviceTime;
+                        serviceTimeStr = serviceTimeStr == null?"":serviceTimeStr;
+                        var serviceTimeStrHH = "";
+                        var serviceTimeStrSS = "";
+                        if(serviceTimeStr != ""){
+                        serviceTimeStrHH = serviceTimeStr.split(":")[0];
+                        serviceTimeStrSS = serviceTimeStr.split(":")[1];
+                        }
+                        for(var i = 0 ; i < 12 ; i ++){
+                        var timeHHVal = i+8;
+                        if(timeHHVal < 10){
+                        timeHHVal = "0"+timeHHVal;
+                        }
+                        %><option value="<%=timeHHVal%>" <%if(serviceTimeStrHH == timeHHVal){%>selected<%}%>><%=timeHHVal%></option><%
+                        }
                         %>
                     </select>:
                     <select id="serviceTimeSS">
@@ -712,7 +720,9 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                </td>
+                <td class="regTd_l">&nbsp;</td>
+                <td class="regTd_r">&nbsp;</td>
             </tr>
             <tr id="serviceStaffTrId">
                 <td class="regTd_l">服务技师：</td>
@@ -743,6 +753,7 @@
                     </span>
                     <span style="font-size:20px;cursor: pointer" onclick="appendServiceStaff()">+</span>
                     <span style="color:#FF0000;">*</span></td>
+                <td>&nbsp;</td>
             </tr>
         </table>
         <!-- 预约情况 -->

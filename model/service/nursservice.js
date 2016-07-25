@@ -158,7 +158,6 @@ module.exports.updateReturnVisit = function(id,returnVisitDate,returnVisitType,r
  * @param diagnosis
  * @param specialInstructions
  * @param childReason
- * @param breastExplain
  * @param motherReason
  * @param leaveAdvise
  * @param otherReason
@@ -170,19 +169,19 @@ module.exports.updateReturnVisit = function(id,returnVisitDate,returnVisitType,r
 module.exports.updateNursService = function(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
                                             bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
                                             milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-                                            diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+                                            diagnosis,specialInstructions,childReason,motherReason,leaveAdvise,otherReason,
                                             isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal, status,cb) {
 
     var sql = 'UPDATE nursService set serviceMeetId=?,serviceDate=?,startTime=?,endTime=?,serviceType=?,address=?,serviceNeeds=?,'
         + ' bowelFrequenc=?,deal=?,shape=?,feedSituation=?,urination=?,feedRemark=?,milkSituation=?,childCurrentMonths=?,'
         + ' milkNumber=?,childCurrentHeight=?,milkAmount=?,childCurrentWeight=?,breastpumpBrand=?,isCarefulNurse=?,referralAdvise=?,'
-        + ' diagnosis=?,specialInstructions=?,childReason=?,breastExplain=?,motherReason=?,leaveAdvise=?,otherReason=?,'
+        + ' diagnosis=?,specialInstructions=?,childReason=?,motherReason=?,leaveAdvise=?,otherReason=?,'
         + ' isLeadTrainee=?,whetherAppointmentAgain=?,traineeName=?,noNeedVisit=?,evaluate=?,proposal=?,status=?,dateLine=?'
         + ' where id=?';
     db.query(sql, [serviceMeetId,serviceDate,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+        diagnosis,specialInstructions,childReason,motherReason,leaveAdvise,otherReason,
         isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal,status,new Date().getTime(),id], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
@@ -216,7 +215,8 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
     var sql_count = 'SELECT  count(1) as count FROM nursService a ,serviceMeet b'+ parm;
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
-    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,a.status FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,a.status,(select m.childBirthday from member m where m.id = b.memberId) as childBirthday ' +
+        'FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

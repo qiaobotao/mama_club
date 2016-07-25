@@ -18,6 +18,18 @@
         }
         function submitForm(){
             //需要校验上传文件类型、文件数量、大小
+            var recordfile = $("#recordfile").val();
+            if(recordfile == ''){
+                parent.layer.msg("请选择需上传图片");
+                return;
+            }
+
+            var reg = ".*\\.(jpg|png|gif|JPG|PNG|GIF)";
+            var r = recordfile.match(reg);
+            if(r == null){
+                parent.layer.msg("对不起，您的图片格式不正确，请重新上传");
+                return;
+            }
 
             document.getElementById("myform").action = "/jinquan/save_upload_nursService_breast_image?id="+$("#nursId").val();
             document.getElementById("myform").submit();
@@ -33,7 +45,7 @@
             <tr>
                 <td class="regTd_l">选择乳房示意图：</td>
                 <td class="regTd_r" colspan="3">
-                    <input  name="recordfile" type="file" multiple='mutiple' value="" class="input5"/>
+                    <input id="recordfile" name="recordfile" type="file" multiple='mutiple' value="" class="input5"/>
                     <input type="hidden" id="nursId" name="nursId" value="<%=id%>"/>
                 </td>
             </tr>

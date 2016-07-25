@@ -71,7 +71,7 @@ module.exports.doEdit = function (req, res,next) {
     var isCarefulNurse = req.body.isCarefulNurse ? req.body.isCarefulNurse : '';
     var referralAdvise = req.body.referralAdvise ? req.body.referralAdvise : '';
     var specialInstructions = req.body.specialInstructions ? req.body.specialInstructions : '';
-    var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
+    //var breastExplain = req.body.breastExplain ? req.body.breastExplain : '';
     var leaveAdvise = req.body.leaveAdvise ? req.body.leaveAdvise : '';
     var isLeadTrainee = req.body.isLeadTrainee ? req.body.isLeadTrainee : '';
     var whetherAppointmentAgain = req.body.whetherAppointmentAgain ? req.body.whetherAppointmentAgain : '';
@@ -146,7 +146,7 @@ module.exports.doEdit = function (req, res,next) {
     service.updateNursService(id,serviceMeetId,serviceDate,name,tel,startTime,endTime,serviceType,address,serviceNeeds,
         bowelFrequenc,deal,shape,feedSituation,urination,feedRemark,milkSituation,childCurrentMonths,
         milkNumber,childCurrentHeight,milkAmount,childCurrentWeight,breastpumpBrand,isCarefulNurse,referralAdvise,
-        diagnosis,specialInstructions,childReason,breastExplain,motherReason,leaveAdvise,otherReason,
+        diagnosis,specialInstructions,childReason,motherReason,leaveAdvise,otherReason,
         isLeadTrainee,whetherAppointmentAgain,traineeName,noNeedVisit,evaluate,proposal,state, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/nurs_service_list?replytype=update');

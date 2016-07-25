@@ -24,6 +24,19 @@ exports.NURS_STATE_3 = '3';
 exports.NURS_STATE_4 = '4';
 exports.NURS_STATE_5 = '5';
 /**
+ * 预约单各种状态
+    - 1、预约成功：新增预约单，选择到店服务时。
+    - 2、上门预约：新增预约单，选择上门服务时。
+    - 3、已接受服务：开始为用户服务，此时已有服务技师为期服务了。
+    - 4、取消预约：不会生成服务单、收费单等信息。
+    - 5、已结算：会员进行收费。
+ */
+exports.SERVICE_MEET_STATE_1 = '1';
+exports.SERVICE_MEET_STATE_2 = '2';
+exports.SERVICE_MEET_STATE_3 = '3';
+exports.SERVICE_MEET_STATE_4 = '4';
+exports.SERVICE_MEET_STATE_5 = '5';
+/**
  * 定义折扣信息显示值和计算值
  * @type {Array}
  */

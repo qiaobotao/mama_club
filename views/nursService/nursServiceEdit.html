@@ -478,8 +478,8 @@
                     <select id="isCarefulNurse" name="isCarefulNurse">
                         <option value="">请选择</option>
 
-                        <%for(var i=0;i<dictData.diagnosticResultArr.length;i++){
-                        %><option value="<%=dictData.diagnosticResultArr[i].id%>" <%if(nursService.isCarefulNurse ==dictData.diagnosticResultArr[i].id ){%>selected<%}%>><%=dictData.diagnosticResultArr[i].name%></option><%
+                        <%for(var i=0;i<dictData.isViewLactationArr.length;i++){
+                        %><option value="<%=dictData.isViewLactationArr[i].id%>" <%if(nursService.isCarefulNurse ==dictData.isViewLactationArr[i].id ){%>selected<%}%>><%=dictData.isViewLactationArr[i].name%></option><%
                         }%>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>

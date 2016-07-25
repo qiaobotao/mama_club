@@ -96,6 +96,11 @@ module.exports.doEdit = function (req, res,next) {
     //提供服务的技师名称
     var serviceStaffNamesTemp = req.body.serviceStaffName ? req.body.serviceStaffName : '';//护理服务技师名称
     var serviceStaffNames = commonUtil.array2Str(serviceStaffNamesTemp,",");
+    if(status < consts.SERVICE_MEET_STATE_3 && specified ==2){//specified:1：未指定；2：指定；3：推荐
+        //当状态为：预约成功、上门预约时，默认将指定技师定义为为其服务的服务技师（确认服务时，可以修改）
+        serviceStaffIds = staffId;
+        serviceStaffNames = principal;
+    }
     if(id != ""){
         if(status == 3 && createService == 'Y'){//状态为已接受服务，增加护理服务单
             //根据门店id获取下一个服务单编号信息
