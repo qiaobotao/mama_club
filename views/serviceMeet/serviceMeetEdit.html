@@ -26,8 +26,8 @@
                 parent.layer.alert('电话不能为空',{icon: 2});
                 return;
             }else{
-                $("#memberId").val("");
-                $("#customerName").val("");
+//                $("#memberId").val("");
+//                $("#customerName").val("");
                 parent.layer.open({
                     type: 2,
                     title: '选择会员',
@@ -429,6 +429,15 @@
          * 从后台生成护理服务单编号
          */
         function createNursServiceNo(){
+            //如果服务位置选择：门店，服务单号根据所选门店生成；上门，服务单号按照当前登录用户所在门店生成
+            var createNoByShopId = "";//生成服务单号使用的门店
+            if($("#serviceType").val() == '1'){//到店
+                if($("#serverShopId").val() == ''){
+                    parent.layer.alert('请选择门店。',{icon: 2});
+                    return;
+                }
+                createNoByShopId = $("#serverShopId").val();
+            }
             if($("#id").val() == ''){//如果没有用户信息，提示先更新会员信息
                 parent.layer.alert('预约单应预约成功后，再变更服务信息。',{icon: 2});
                 return;
@@ -437,7 +446,7 @@
                 return;
             }else{
                 $.ajax({
-                    url: '/jinquan/nurs_service_create_no',
+                    url: '/jinquan/nurs_service_create_no?createNoByShopId='+createNoByShopId,
                     type: 'post',
                     dataType: 'json',
                     async: false,
@@ -661,7 +670,7 @@
             <tr>
                 <td class="regTd_l">当前状态：</td>
                 <td class="regTd_r">
-                    <select name="status" id="status" onchange="changeStatus()" >
+                    <select name="status" id="status" onchange="changeStatus()" <%if(show != ''){%>disabled<%}%>>
                         <option value="1" <%if(service_meet.status == '1'){%>selected<%}%>>预约成功</option>
                         <option value="2" <%if(service_meet.status == '2'){%>selected<%}%>>上门预约</option>
                         <option value="3" <%if(service_meet.status == '3'){%>selected<%}%>>已接受服务</option>

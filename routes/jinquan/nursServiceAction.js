@@ -320,9 +320,10 @@ module.exports.del = function (req, res, next) {
 module.exports.createNo = function (req, res, next) {
 
     var shopId = req.session.user.shopId;
+    var createNoByShopId = req.query.createNoByShopId ? req.query.createNoByShopId :shopId;
 
     //根据门店id获取下一个服务单编号信息
-    service.createNursNo(shopId,function(err, results){
+    service.createNursNo(createNoByShopId,function(err, results){
         if (!err) {
             res.json(JSON.stringify(results));
         } else {

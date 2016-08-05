@@ -223,9 +223,9 @@
         //喂养情况如果不是第一个（添加配方奶），喂养备注不是必填项
         function changeFeedSituation(){
             if(document.getElementById("feedSituation").selectedIndex == 1){
-                $("#feedRemarkSpanId").hide();
-            }else{
                 $("#feedRemarkSpanId").show();
+            }else{
+                $("#feedRemarkSpanId").hide();
             }
         }
         //弹出上传“乳房示意图说明”图片界面

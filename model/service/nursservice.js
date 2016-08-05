@@ -55,9 +55,9 @@ module.exports.insertNursServiceByMoneyManage = function(serviceMeetId,serviceDa
  * @param serviceEndTime
  * @param cb
  */
-module.exports.insertNursServiceByServiceMeet = function(nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,status,cb){
-    var sql = 'INSERT INTO nursService(nursServiceNo,serviceMeetId,serviceDate,startTime,status,dateLine) VALUES (?,?,?,?,?,?)';
-    db.query(sql, [nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,status,new Date().getTime()], function(cbData, err, rows, fields) {
+module.exports.insertNursServiceByServiceMeet = function(shopId,nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,status,cb){
+    var sql = 'INSERT INTO nursService(shopId,nursServiceNo,serviceMeetId,serviceDate,startTime,status,dateLine) VALUES (?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,nursServiceNo,serviceMeetId,serviceDate,serviceStartTime,status,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -216,7 +216,7 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
     var start = (currentPage - 1) * 10;
     var end = currentPage * 10;
     var sql_data = 'SELECT a.id,b.name,b.tel,a.serviceDate,b.principal,a.status,(select m.childBirthday from member m where m.id = b.memberId) as childBirthday ' +
-        'FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+        'FROM nursService a ,serviceMeet b'+ parm +' ORDER BY b.meetTime DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){

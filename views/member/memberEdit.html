@@ -106,21 +106,32 @@
                 parent.layer.alert('分娩医院不能为空',{icon: 2});
                 return;
             }
-            var parentTraining = document.getElementById("parentTraining").value;
-            if (!parentTraining || parentTraining.length == 0) {
-                parent.layer.alert('参与育儿不能为空',{icon: 2});
+
+            var parentTrainingStr = "";
+            $("input[name='parentTraining']").each(function(){
+                if($(this).attr("checked") == 'checked'){
+                    parentTrainingStr +=$(this).val() + ",";
+                }
+            });
+            if(parentTrainingStr == ''){
+                parent.layer.alert('请选择参与育儿情况',{icon: 2});
                 return;
             }
+
             var secondChildExperience = document.getElementById("secondChildExperience").value;
             if (!secondChildExperience || secondChildExperience.length == 0) {
                 parent.layer.alert('二胎经验不能为空',{icon: 2});
                 return;
             }
-            var secondChildExperienceRemark = document.getElementById("secondChildExperienceRemark").value;
-            if (!secondChildExperienceRemark || secondChildExperienceRemark.length == 0) {
-                parent.layer.alert('二胎经验备注不能为空',{icon: 2});
-                return;
+
+
+            if(!$("#secondChildExperienceRemarkSpanId").is(":hidden")) {//挤奶次数
+                if ($("#secondChildExperienceRemark").val() == '') {
+                    parent.layer.alert('二胎经验备注不能为空',{icon: 2});
+                    return;
+                }
             }
+
             var wifeBreastfeedTime = document.getElementById("wifeBreastfeedTime").value;
             if (!wifeBreastfeedTime || wifeBreastfeedTime.length == 0) {
                 parent.layer.alert('妻子儿时母乳多久不能为空',{icon: 2});
@@ -237,6 +248,7 @@
                 //1秒钟后，为另外两个下拉框赋值
                 var t=setTimeout("initAddr()",800)
             }
+            changeSecondChildExperience();
 //                initCode();
         });
 
@@ -252,6 +264,17 @@
             });
             $("#s3").append("<option value='<%=member.town%>' selected><%=member.town%></option>"); //为Select追加一个Option(下拉项)
         }
+        /**
+         * 变更二胎经验时触发事件
+         */
+        function changeSecondChildExperience(){
+            if(document.getElementById("secondChildExperience").selectedIndex == 1){
+                $("#secondChildExperienceRemarkSpanId").hide();
+            }else{
+                $("#secondChildExperienceRemarkSpanId").show();
+            }
+        }
+
     </script>
 </head>
 
@@ -380,20 +403,21 @@
                 <td class="regTd_r"><input id="deliveryHospital" name="deliveryHospital" type="text" class="input5" value="<%=member.deliveryHospital%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">参与育儿：</td>
                 <td class="regTd_r">
-                    <select id="parentTraining" name="parentTraining">
-                        <option value="">请选择</option>
-                        <%
-                        for(var i = 0 ; i < data.guardianArr.length ; i ++){
-                        %><option value="<%=data.guardianArr[i].id%>" <%if(member.parentTraining==data.guardianArr[i].id){%>selected<%}%>><%=data.guardianArr[i].name%></option><%
-                        }
-                        %>
-                    </select>
+                    <%
+                    var memberParentTraining = member.parentTraining;
+                    memberParentTraining = memberParentTraining == null ? "" : memberParentTraining;
+                    for(var i = 0 ; i < data.guardianArr.length ; i ++){
+                    %><input name="parentTraining" type="checkbox" value="<%=data.guardianArr[i].id%>" <%if(memberParentTraining.indexOf(data.guardianArr[i].id )>-1){%>checked<%}%>><%=data.guardianArr[i].name%>&nbsp;<%
+                    }
+                    %>
+
+
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">二胎经验：</td>
                 <td class="regTd_r">
-                    <select id="secondChildExperience" name="secondChildExperience">
+                    <select id="secondChildExperience" name="secondChildExperience" onchange="changeSecondChildExperience()">
                         <option value="">请选择</option>
                         <%
                         for(var i = 0 ; i < data.secondChildExperienceArr.length ; i ++){
@@ -403,7 +427,9 @@
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">二胎经验备注：</td>
-                <td class="regTd_r"><input id="secondChildExperienceRemark" name="secondChildExperienceRemark" type="text" class="input5" value="<%=member.secondChildExperienceRemark%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="secondChildExperienceRemark" name="secondChildExperienceRemark" type="text" class="input5" value="<%=member.secondChildExperienceRemark%>"/>&nbsp;&nbsp;
+                    <span id="secondChildExperienceRemarkSpanId" style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">妻子儿时母乳多久：</td>
