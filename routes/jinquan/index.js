@@ -205,12 +205,14 @@ router.all('/class_meet_select_list',classMeetAction.classMeetSelectList);
 
 // 护理服务
 router.all('/nurs_service_list',nursServiceAction.list);
+router.all('/nurs_service_list_select',nursServiceAction.select);
 router.all('/nurs_service_preEdit',nursServiceAction.preEdit);//进入编辑界面
 router.all('/nurs_service_doEdit',nursServiceAction.doEdit);//更新数据库信息
 router.all('/nurs_service_del',nursServiceAction.del);
 router.all('/nurs_service_create_no',nursServiceAction.createNo);
 router.all('/open_upload_nursService_breast_image',nursServiceAction.openUploadBreastImage);//上传乳房示意图
 router.all('/save_upload_nursService_breast_image',nursServiceAction.saveUploadBreastImage);//上传乳房示意图
+router.all('/nurs_service_getPrincipals_serviceId',nursServiceAction.getPrincipalsByServiceId);//根据护理服务单id获取参与服务的技师人员信息
 
 // 收费信息
 router.all('/money_manage_list',moneyManageAction.list);
@@ -225,13 +227,10 @@ router.all('/return_visit_doEdit',returnVisitAction.doEdit);//保存数据
 
 // 投诉信息
 router.all('/complain_list',complainAction.list);
-router.all('/complain_goAdd',complainAction.goAdd);
-router.all('/complain_add',complainAction.add);
-router.all('/complain_show',complainAction.show);
-router.all('/complain_preEdit',complainAction.preEdit);
-router.all('/complain_doEdit',complainAction.doEdit);
+router.all('/complain_edit',complainAction.preEdit);//进入投诉新增页面
+router.all('/complain_save',complainAction.save);//保存数据
 router.all('/complain_del',complainAction.del);
-router.all('/complain_select', complainAction.select);
+//router.all('/complain_select', complainAction.select);
 
 
 /*********************进销存管理***************************/

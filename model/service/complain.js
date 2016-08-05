@@ -4,14 +4,14 @@
 
 var db = require('../../common/db');
 var async = require('async');
+var utils = require('../../common/utils');
 
-module.exports.insertComplain = function(shopId,staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
+module.exports.insertComplain = function(shopId,nursServiceId,complainStaffId,complainType,solveStaffId,complainDetail, cb) {
 
-    var complainTime = new Date();
-    complainTime = complainTime.toLocaleDateString();
-    var sql = 'INSERT INTO complain (shopId,staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail, complainTime,dateLine) '
-        + ' VALUES (?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [shopId,staffId,serviceMeetId,complainPrincipal,complainType,dealPrincipal,complainDetail,complainTime,new Date().getTime()], function(cbData, err, rows, fields) {
+    var complainTime = utils.date2str(new Date(), "yyyy-MM-d h:m:s");//投诉时间
+    var sql = 'INSERT INTO complain (shopId,nursServiceId,complainStaffId,complainType,solveStaffId,complainDetail,complainTime,dateLine) '
+        + ' VALUES (?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,nursServiceId,complainStaffId,complainType,solveStaffId,complainDetail,complainTime,new Date().getTime()], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -20,10 +20,10 @@ module.exports.insertComplain = function(shopId,staffId,serviceMeetId,name,tel,c
     });
 };
 
-module.exports.updateComplain = function(staffId,id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, cb) {
+module.exports.updateComplain = function(complainId,complainType,complainDetail, cb) {
 
-    var sql = 'UPDATE complain set staffId=?,complainPrincipal=?,complainType=?,dealPrincipal=?,complainDetail=?,dateLine=? where id=?';
-    db.query(sql, [staffId,complainPrincipal,complainType,dealPrincipal,complainDetail,new Date().getTime(), id], function(cbData, err, rows, fields) {
+    var sql = 'UPDATE complain set complainType=?,complainDetail=? where id=?';
+    db.query(sql, [complainType,complainDetail,complainId], function(cbData, err, rows, fields) {
         if (!err) {
             cb(null, rows);
         } else {
@@ -32,25 +32,23 @@ module.exports.updateComplain = function(staffId,id,serviceMeetId,name,tel,compl
     });
 };
 
-module.exports.fetchAllComplain = function(shopId,name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage,cb) {
+module.exports.fetchAllComplain = function(shopId,complainType,complainTimeStart,complainTimeEnd,currentPage,cb) {
 
-    var parm = " where (a.serviceMeetId=b.id)"
-    if (name != '')
-        parm += " and  b.name like '%" + name + "%'";
-    if (complainPrincipal != '')
-        parm += " and a.complainPrincipal like '%" + complainPrincipal + "%'";
+    var parm = " where a.nursServiceId=n.id and n.serviceMeetId = b.id ";
     if (complainTimeStart != '')
-        parm += " and a.complainTime >='" + complainTimeStart + "'";
+        parm += " and str_to_date(a.complainTime, '%Y-%m-%d') >=str_to_date('" + complainTimeStart + "', '%Y-%m-%d')";
     if (complainTimeEnd != '')
-        parm += " and a.complainTime <='" + complainTimeEnd + "'";
-    if (dealPrincipal != '')
-        parm += " and a.dealPrincipal like '%" + dealPrincipal + "%'";
+        parm += " and str_to_date(a.complainTime, '%Y-%m-%d') <=str_to_date('" + complainTimeEnd + "', '%Y-%m-%d')";
+    if (complainType != '')
+        parm += " and a.complainType like '%" + complainType + "%'";
     if (shopId != '')
         parm += " and a.shopId = '" + shopId + "'";
-    var sql_count = 'SELECT count(1) as count FROM complain a , serviceMeet b '+ parm +' order by a.dateline  ';
+    var sql_count = 'SELECT count(1) as count FROM complain a , nursService n, nursService b '+ parm +' order by a.dateline  ';
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT b.name,a.* FROM complain a , serviceMeet b '+ parm +' order by a.dateline  LIMIT ?,?';
+    var sql_data = 'SELECT b.name,a.*,n.nursServiceNo,' +
+        '(select name from staff s where s.id = a.complainStaffId) as complainStaff,' +
+        '(select name from staff s where s.id = a.solveStaffId) as solveStaff   FROM complain a , nursService n,serviceMeet b '+ parm +' order by a.dateline  LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -86,8 +84,15 @@ module.exports.fetchAllComplain = function(shopId,name,complainPrincipal,complai
 }
 
 module.exports.fetchSingleComplain =function (id, cb) {
+    //当前投诉单详情信息
+    var sql = 'SELECT ' +
+        '   a.*,n.nursServiceNo,n.id as nursServiceId,b.name,b.tel , ' +
+        '   (select name from staff s where s.id = a.complainStaffId) as complainStaff,' +
+        '   (select name from staff s where s.id = a.solveStaffId) as solveStaff  ' +
+        'FROM complain a , nursService n,serviceMeet b ' +
+        'where a.nursServiceId=n.id and n.serviceMeetId = b.id ' +
+        'and a.id = ? ';
 
-    var sql = 'SELECT a.*,b.name,b.tel  FROM complain a , serviceMeet b where (a.serviceMeetId=b.id)  and a.id = ?';
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
         if (!err) {

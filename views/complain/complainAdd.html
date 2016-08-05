@@ -5,21 +5,39 @@
     <title>投诉信息</title>
     <link href="../../css/global.css" rel="stylesheet" type="text/css" />
     <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
     <style type="text/css">
         html,body{height:100%;padding:0;margin:0;}
     </style>
     <script type="text/javascript">
         var iframIndex ;
+        //此处应该选择护理服务单
+        //获取服务单信息
         function getServiceMeets(){
             //iframe层
             iframIndex = parent.layer.open({
-
                 type: 2,
                 title: '选择预约服务单信息',
                 shadeClose: true,
                 shade: 0.8,
                 area: ['80%', '90%'],
-                content: '/jinquan/complain_select', //iframe的url
+                                content: '/jinquan/nurs_service_list_select?1=1&status=5&isSelect=true', //iframe的url
+                success: function(layero, index){
+                },
+                close: function(d){
+                }
+            });
+        }
+        //获取技师信息
+        function getmembers(index){
+            //iframe层
+            memberIndex = parent.layer.open({
+                type: 2,
+                title: '选择员工信息',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['80%', '90%'],
+                content: '/jinquan/staff_select_servicemeet?index='+'complainAdd', //iframe的url
                 success: function(layero, index){
                 },
                 close: function(d){
@@ -27,21 +45,6 @@
             });
         }
         function submitForm(){
-//            var serviceMeetId = document.getElementById("serviceMeetId").value;
-//            if (!serviceMeetId || serviceMeetId.length == 0) {
-//                parent.layer.alert('服务单号不能为空');
-//                return;
-//            }
-//            var name = document.getElementById("name").value;
-//            if (!name || name.length == 0) {
-//                parent.layer.alert('会员姓名不能为空');
-//                return;
-//            }
-//            var tel = document.getElementById("tel").value;
-//            if (!tel || tel.length == 0) {
-//                parent.layer.alert('电话不能为空');
-//                return;
-//            }
             var complainPrincipal = document.getElementById("complainPrincipal").value;
             if(!complainPrincipal || complainPrincipal.length == 0) {
                 parent.layer.alert('投诉技师不能为空');
@@ -65,20 +68,24 @@
 
             document.getElementById("myform").submit();
         }
-        function getmembers(index){
-            //iframe层
-            memberIndex = parent.layer.open({
-                type: 2,
-                title: '选择员工信息',
-                shadeClose: true,
-                shade: 0.8,
-                area: ['80%', '90%'],
-                content: '/jinquan/staff_select_servicemeet?index='+'complainAdd', //iframe的url
-                success: function(layero, index){
-                },
-                close: function(d){
+        //根据服务单id获取该服务单下参与服务的所有技师
+        function getPrincipalsByServiceId(serviceId){
+            $.ajax({
+                type: "post",
+                url: "/jinquan/nurs_service_getPrincipals_serviceId",
+                data: {'serviceId':serviceId},
+                success: function (result) {
+                    var complainPrincipalList =  eval('(' + result + ')');
+                    //for each遍历往“投诉技师”下拉框中添加
+                    jQuery("#complainPrincipal").empty();
+                    jQuery("#complainPrincipal").append("<option value=''>请选择</option>");
+                    for (var i=0;i<complainPrincipalList.length;i++)
+                    {
+                        jQuery("#complainPrincipal").append("<option value='"+complainPrincipalList[i].staffId+"'>"+complainPrincipalList[i].staffName+"</option>");
+                    }
                 }
             });
+
         }
     </script>
 </head>
@@ -94,15 +101,23 @@
         <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td class="regTd_l">服务单号：</td>
-                <td class="regTd_r"><input id="serviceMeetId" name="serviceMeetId" type="text" class="input5" onfocus="getServiceMeets()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="complainId" name="complainId" type="hidden" />
+                    <input id="nursServiceNo" name="nursServiceNo" type="text" class="input5" onfocus="getServiceMeets()"/>
+                    <input id="nursServiceId" name="nursServiceId" type="hidden"/>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">会员姓名：</td>
-                <td class="regTd_r"><input id="name" name="name" readonly="true" type="text" class="input5"  readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r"><input id="memberName" name="memberName" readonly="true" type="text" class="input5"  readonly="true"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">会员电话：</td>
                 <td class="regTd_r"><input id="tel" name="tel" readonly="true" type="text" class="input5" readonly="true" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td class="regTd_l">投诉技师：</td>
-                <td class="regTd_r"><input id="complainPrincipal" readonly="true" name="complainPrincipal" type="text" readonly="true" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <select id="complainPrincipal" name="complainPrincipal" >
+                        <option value="">请选择</option>
+                    </select>
+                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
             </tr>
             <tr>
                 <td class="regTd_l">投诉类型：</td>

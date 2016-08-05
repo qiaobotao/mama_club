@@ -44,6 +44,36 @@ module.exports.list = function (req, res,next) {
         }
     });
 }
+/**
+ * 获取护理服务列表，用于选择某条服务单(如投诉单中选择护理服务单)
+ * @param req
+ * @param res
+ */
+module.exports.select = function (req, res,next) {
+    var shopId = req.session.user.shopId;
+    var name = req.query.name ? req.query.name : '';
+    var principal = req.query.principal ? req.query.principal : '';
+    var serviceDate = req.query.serviceDate ? req.query.serviceDate : '';
+    var currentPage = req.query.page ? req.query.page : 1;
+    currentPage =currentPage<1?1:currentPage;
+// 接收操作参数
+    var url = '/jinquan'+req.url;
+    //根据状态查询符合条件的的护理服务单
+    service.fetchNursByStatue_1(shopId,name,principal,serviceDate,currentPage, function (err, results) {
+        if (!err) {
+            results.name = name;
+            results.principal = principal;
+            results.serviceDate = serviceDate;
+            results.currentPage = currentPage;
+            res.render('nursService/nursServiceSelectList', {data : results,laypage: laypage({
+                curr: currentPage,url: url,pages: results.totalPages})
+            });
+        } else {
+            console.log(err.message);
+            res.render('error', {error : err});
+        }
+    });
+}
 
 
 module.exports.doEdit = function (req, res,next) {
@@ -293,6 +323,25 @@ module.exports.createNo = function (req, res, next) {
 
     //根据门店id获取下一个服务单编号信息
     service.createNursNo(shopId,function(err, results){
+        if (!err) {
+            res.json(JSON.stringify(results));
+        } else {
+            next();
+        }
+    });
+}
+/**
+ * 根据护理服务单id获取参与服务的技师人员信息
+ * @param req
+ * @param res
+ * @param next
+ */
+module.exports.getPrincipalsByServiceId = function (req, res, next) {
+
+    var serviceId = req.body.serviceId?req.body.serviceId:'';//护理服务单id
+
+    //根据门店id获取下一个服务单编号信息
+    service.getPrincipalsServiceById(serviceId,function(err, results){
         if (!err) {
             res.json(JSON.stringify(results));
         } else {

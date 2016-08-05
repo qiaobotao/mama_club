@@ -12,27 +12,22 @@ var laypage = require('laypage');
 var service = require('../../model/service/complain');
 var serviceMeetService = require('../../model/service/servicemeet');
 module.exports.list = function (req, res,next) {
-   // res.render('complain/complainList');
 // 从session 中获取门店id
     var shopId = req.session.user.shopId;
-    var name = req.query.name ? req.query.name : '';
-    var complainPrincipal = req.query.complainPrincipal ? req.query.complainPrincipal : '';
-    var complainTimeStart = req.query.complainTimeStart ? req.query.complainTimeStart : '';
-    var complainTimeEnd = req.query.complainTimeEnd ? req.query.complainTimeEnd : '';
-    var dealPrincipal = req.query.dealPrincipal ? req.query.dealPrincipal : '';
+    var complainType = req.query.complainType ? req.query.complainType : '';//投诉类型
+    var complainTimeStart = req.query.complainTimeStart ? req.query.complainTimeStart : '';//投诉开始时间
+    var complainTimeEnd = req.query.complainTimeEnd ? req.query.complainTimeEnd : '';//投诉截止时间
     var currentPage = req.query.page ? req.query.page : 1;
     currentPage =currentPage<1?1:currentPage;
   // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllComplain(shopId,name,complainPrincipal,complainTimeStart,complainTimeEnd,dealPrincipal,currentPage, function (err, results) {
+    service.fetchAllComplain(shopId,complainType,complainTimeStart,complainTimeEnd,currentPage, function (err, results) {
         if (!err) {
-            results.name = name;
-            results.complainPrincipal = complainPrincipal;
             results.complainTimeStart = complainTimeStart;
             results.complainTimeEnd = complainTimeEnd;
-            results.dealPrincipal = dealPrincipal;
+            results.complainType = complainType;
             results.currentPage = currentPage;
             res.render('complain/complainList', {data : results, replytype : replytype, laypage: laypage({
                 curr: currentPage,url: url,pages: results.totalPages}),resourcesData:resourcesData
@@ -43,36 +38,22 @@ module.exports.list = function (req, res,next) {
         }
     });
 }
-/**
- * 增加投诉
- * @param req
- * @param res
- */
-module.exports.goAdd = function (req, res,next) {
-    res.render('complain/complainAdd');
-}
 
-
-module.exports.add = function (req, res, next) {
+//保存——添加投诉单
+module.exports.save = function (req, res, next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
-    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
-    var name = req.body.name ? req.body.name : '';
-    var tel = req.body.tel ? req.body.tel : '';
-    var complainPrincipal = req.body.complainPrincipal ? req.body.complainPrincipal : '';
-    var complainType = req.body.complainType ? req.body.complainType : '';
-    var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
-    var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
-    var staffId = req.body.staffId ? req.body.staffId : '';
-    service.insertComplain(shopId,staffId,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
+    var complainId = req.body.complainId ? req.body.complainId : '';//投诉单id
+    var nursServiceId = req.body.nursServiceId ? req.body.nursServiceId : '';//服务单id
+    var complainStaffId = req.body.complainPrincipal ? req.body.complainPrincipal : '';//投诉技师id
+    var complainType = req.body.complainType ? req.body.complainType : '';//投诉类型
+    var solveStaffId = req.body.staffId ? req.body.staffId : '';//解决技师id
+    var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';//投诉详情
+    if(complainId == ''){
+        service.insertComplain(shopId,nursServiceId,complainStaffId,complainType,solveStaffId,complainDetail, function (err, results) {
             if (!err) {
                 if (!err) {
-                    //修改服务单状态 4，已做回访
-                    serviceMeetService.setStatus(serviceMeetId,5,function (err, results)
-                        {
-                            res.redirect('/jinquan/complain_list?replytype=add');
-                        }
-                    );
+                    res.redirect('/jinquan/complain_list?replytype=add');
                 } else {
                     next();
                 }
@@ -80,49 +61,36 @@ module.exports.add = function (req, res, next) {
                 next();
             }
         });
+    }else{
+        service.updateComplain(complainId,complainType,complainDetail, function (err, results) {
+            if (!err) {
+                if (!err) {
+                    res.redirect('/jinquan/complain_list?replytype=update');
+                } else {
+                    next();
+                }
+            } else {
+                next();
+            }
+        });
+    }
 
 }
-
-
-module.exports.doEdit = function (req, res, next) {
-    var id = req.body.id ? req.body.id : '';
-    var serviceMeetId = req.body.serviceMeetId ? req.body.serviceMeetId : '';
-    var name = req.body.name ? req.body.name : '';
-    var tel = req.body.tel ? req.body.tel : '';
-    var complainPrincipal = req.body.complainPrincipal ? req.body.complainPrincipal : '';
-    var complainType = req.body.complainType ? req.body.complainType : '';
-    var dealPrincipal = req.body.dealPrincipal ? req.body.dealPrincipal : '';
-    var complainDetail = req.body.complainDetail ? req.body.complainDetail : '';
-    var staffId = req.body.staffId ? req.body.staffId : '';
-    service.updateComplain(staffId,id,serviceMeetId,name,tel,complainPrincipal,complainType,dealPrincipal,complainDetail, function (err, results) {
-        if (!err) {
-            res.redirect('/jinquan/complain_list?replytype=update');
-        } else {
-            next();
-        }
-    });
-}
-
-module.exports.show = function(req, res, next) {
-    var id = req.query.id ? req.query.id : '';
-
-    service.fetchSingleComplain(id, function(err, results) {
-        if (!err) {
-            var complain = results.length == 0 ? null : results[0];
-            res.render('complain/complainDetail', {complain : complain});
-        } else {
-            next();
-        }
-    })
-}
+/**
+ * 进入编辑界面（新增、修改）
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
 
     service.fetchSingleComplain(id, function(err, results) {
         if (!err) {
-            var complain = results.length == 0 ? null : results[0];
-            res.render('complain/complainEdit', {complain : complain});
+            var complain = results.length == 0 ? {} : results[0];
+            res.render('complain/complainEdit', {complain : complain,show:show});
         } else {
             next();
         }

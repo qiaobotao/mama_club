@@ -250,6 +250,66 @@ module.exports.fetchAllNursService = function(shopId,name,principal,serviceDate,
         }
     });
 }
+/**
+ * 护理服务单列表使用
+ * @param shopId
+ * @param name
+ * @param principal
+ * @param serviceDate
+ * @param currentPage
+ * @param cb
+ */
+module.exports.fetchNursByStatue_1 = function(shopId,name,principal,serviceDate,currentPage,cb) {
+
+    var parm = " where  (a.serviceMeetId=b.id)"
+    if (name != '')
+        parm += " and b.name like'%" + name + "%'";
+    if (shopId != '')
+        parm += " and b.shopId ='" + shopId + "'";
+    if (principal != '')
+        parm += " and b.principal like'%" + principal + "%'";
+    if (serviceDate != '')
+        parm += " and a.serviceDate like'%" + serviceDate + "%'";
+
+    parm += " and a.status > "+consts.NURS_STATE_1;//查询所有已收费的服务单
+    var sql_count = 'SELECT  count(1) as count FROM nursService a ,serviceMeet b'+ parm;
+    var start = (currentPage - 1) * 10;
+    var end = currentPage * 10;
+    var sql_data = 'SELECT a.id,a.nursServiceNo,b.memberId,b.name,b.tel,a.serviceDate,b.principal,a.status,(select m.childBirthday from member m where m.id = b.memberId) as childBirthday ' +
+        'FROM nursService a ,serviceMeet b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+
+    async.series({
+        totalPages : function(callback){
+            db.query(sql_count, [], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    var count = rows[0].count;
+                    var totalPages = Math.ceil(count / 10);
+                    callback(null,totalPages);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        data : function(callback){
+            db.query(sql_data, [start, end], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
 
 /**
  * 回访信息列表使用
@@ -493,6 +553,23 @@ module.exports.fetchSingleNursService =function (id, cb) {
 module.exports.getNurServiceById =function (id, cb) {
 
     var nursServicesql = 'SELECT a.* FROM nursService a where a.id = ?';
+    db.query(nursServicesql, [id], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null,rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 根据id获取护理服务单，服务子表数据
+ * @param id
+ * @param cb
+ */
+module.exports.getPrincipalsServiceById =function (id, cb) {
+
+    var nursServicesql = 'SELECT a.*,s.`name` as staffName FROM moneyManageServices a,staff s where a.staffId = s.id and a.nursServiceId = ?';
     db.query(nursServicesql, [id], function (cbData, err, rows, fields) {
         if (!err) {
             cb(null,rows);

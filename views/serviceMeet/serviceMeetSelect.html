@@ -87,12 +87,18 @@
             if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('meetTime')){//预约时间
                 window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('meetTime').value = serviceMeet.meetTime;
             }
-            if(serviceMeet.serviceStaffIds != null && serviceMeet.serviceStaffIds != ""){//开始服务时间
-                var serviceStaffIdArr = serviceMeet.serviceStaffIds.split(",");
-                var serviceStaffNameArr = serviceMeet.serviceStaffNames.split(",");
-                for(var i = 0 ; i < serviceStaffIdArr.length ; i ++){
-                    window.parent.document.getElementById("rightFrame").contentWindow.addServicesTr('','','','','','',serviceStaffIdArr[i],serviceStaffNameArr[i],'1');
+            if(window.parent.document.getElementById("rightFrame").contentWindow.addServicesTr){
+                if(serviceMeet.serviceStaffIds != null && serviceMeet.serviceStaffIds != ""){//开始服务时间
+                    var serviceStaffIdArr = serviceMeet.serviceStaffIds.split(",");
+                    var serviceStaffNameArr = serviceMeet.serviceStaffNames.split(",");
+                    for(var i = 0 ; i < serviceStaffIdArr.length ; i ++){
+                        window.parent.document.getElementById("rightFrame").contentWindow.addServicesTr('','','','','','',serviceStaffIdArr[i],serviceStaffNameArr[i],'1');
+                    }
                 }
+            }
+            //调用投诉单中Ajax方法
+            if(window.parent.document.getElementById("rightFrame").contentWindow.getPrincipalsByServiceId){//预约时间
+                window.parent.document.getElementById("rightFrame").contentWindow.getPrincipalsByServiceId(serviceMeet.nursServiceId);
             }
 
             var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引

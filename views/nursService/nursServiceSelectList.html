@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>服务单管理</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="application/javascript" src="../../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="application/javascript" src="../../js/qiehuan.js"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
+    <script type="text/javascript">
+        function search () {
+            var name = document.getElementById('name').value;
+            var principal = document.getElementById('principal').value;
+            var serviceDate = document.getElementById('serviceDate').value;
+            var selectPage = document.getElementById('page').value;
+            window.location.href = '/jinquan/nurs_service_list_select?name='+name+'&page='+selectPage+'&principal='+principal+ '&serviceDate='+serviceDate ;
+        }
+        function pageturning (selectPage) {
+            var name = document.getElementById('name').value;
+            var principal = document.getElementById('principal').value;
+            var serviceDate = document.getElementById('serviceDate').value;
+            window.location.href = '/jinquan/nurs_service_list?name='+name+'&page='+selectPage+'&principal='+principal+ '&serviceDate='+serviceDate ;
+        }
+
+
+        //选择该护理单信息（用在投诉单中，选择某护理服务单）
+        function select(serviceMeet){
+            //护理服务单Id
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId')){//护理单id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceId').value=serviceMeet.id;
+            }
+            //护理服务单单号
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceNo')){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('nursServiceNo').value=serviceMeet.nursServiceNo;
+            }
+            //会员id
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId')){//会员id
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberId').value=serviceMeet.memberId;
+            }
+            //会员名称
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName')){//会员名称
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('memberName').value=serviceMeet.name;
+            }
+            //客户电话
+            if(window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel')){
+                window.parent.document.getElementById("rightFrame").contentWindow.document.getElementById('tel').value=serviceMeet.tel;
+            }
+            //调用父页面回调方法
+            //调用投诉单中Ajax方法
+            if(window.parent.document.getElementById("rightFrame").contentWindow.getPrincipalsByServiceId){//预约时间
+                window.parent.document.getElementById("rightFrame").contentWindow.getPrincipalsByServiceId(serviceMeet.id);
+            }
+
+            var index = parent.layer.getFrameIndex(window.name); //获取当前窗体索引
+            parent.layer.close(index); //执行关闭
+
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="r_top">
+    <div class="weizhi">
+        当前位置：护理服务单列表1212
+    </div>
+</div>
+<div class="center_con">
+    <div class="butSet">
+        <div class="sousuo">
+            <table width="100%" class="table4" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td><input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
+                        客户名称：<input id="name" name="name" type="text" class="input5" value="<%=data.name%>"/>  </td>
+                    <td> &nbsp;技师名称：<input id="principal" name="principal" type="text" class="input5" value="<%=data.principal%>" /> </td>
+                    <td> &nbsp;护理服务时间：<input id="serviceDate" name="serviceDate" type="text" class="input5" value="<%=data.serviceDate%>" onclick="laydate()" /></td>
+                    <td><a href="javascript:search()" class="chaxun"></a></td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <div class="tabCon">
+        <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
+            <tr>
+                <th>客户名称</th>
+                <th>电话</th>
+                <th>护理服务时间</th>
+                <th>状态</th>
+                <th>操作(“已收费”时可修改)</th>
+            </tr>
+            <% for (var i=0;i<data.data.length;i++) {%>
+
+            <tr onmouseover="this.className='f_on'" class="f_off"  onmouseout="this.className='f_off'">
+                <td><%=data.data[i].name%></td>
+                <td><%=data.data[i].tel%></td>
+                <td><%=data.data[i].serviceDate%></td>
+                <td>
+                <%
+                var zhuangtai ="";
+                if(data.data[i].status==1){
+                    zhuangtai="服务中";
+                }else if(data.data[i].status==2){
+                    zhuangtai="已收费";
+                }else if(data.data[i].status==3){
+                    zhuangtai="已录入未回访";
+                }else if(data.data[i].status==4){
+                    zhuangtai="已回访未接电话";
+                }else if(data.data[i].status==5){
+                    zhuangtai="回访结束";
+                }
+                %><%=zhuangtai%></td>
+                <td>
+                    <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
+                        <tr>
+                            <td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:select(<%=JSON.stringify(data.data[i])%>)">选择护理服务单</a>]</div></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <%}%>
+        </table>
+        <%- laypage %>
+    </div>
+</div>
+
+</body>
+</html>
