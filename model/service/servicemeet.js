@@ -290,7 +290,7 @@ module.exports.getTop3ServiceMeet =function (memberId, cb) {
     {
         parm=   " and  memberId='" + memberId + "'" ;
     }
-    parm+=" order by dateline limit 0,3";
+    parm+=" order by a.meetTime desc limit 0,3";
     var sql = 'SELECT a.*  FROM serviceMeet a WHERE 1=1 '+parm ;
     db.query(sql, [],  function(cbData, err, rows, fields) {
 

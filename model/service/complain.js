@@ -120,7 +120,7 @@ module.exports.delComplaint= function (id, cb) {
  */
 module.exports.getTop3Complain =function (serviceMeetIds, cb) {
     var  parm=   "and serviceMeetId in(" + serviceMeetIds + ")" ;
-    parm+=" order by dateLine";
+    parm+=" order by a.complainTime desc";
     var sql = 'SELECT   a.*,  c.name AS serviceName FROM  complain a,  serviceMeet b,  service c WHERE a.serviceMeetId = b.id  AND b.serviceId = c.id  '+parm;
     db.query(sql, [],  function(cbData, err, rows, fields) {
 

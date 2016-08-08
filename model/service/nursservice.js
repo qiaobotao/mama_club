@@ -644,7 +644,7 @@ module.exports.createNursNo= function (id, cb) {
  */
 module.exports.getTop3NursService =function (serviceMeetIds, cb) {
     var  parm=   "and a.serviceMeetId in(" + serviceMeetIds + ")" ;
-    parm+=" order by dateLine";
+    parm+=" order by a.serviceDate desc";
     var sql = 'SELECT   a.*,   b.principal AS principal FROM  nursService a,  serviceMeet b WHERE a.serviceMeetId = b.id  '+parm;
     db.query(sql, [],  function(cbData, err, rows, fields) {
         if (!err) {

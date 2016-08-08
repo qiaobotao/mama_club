@@ -424,6 +424,7 @@
                 $("#principal").attr("disabled", "disabled");//设为不可用
             }
             statusInit();
+            getMemberByMemberId('<%=service_meet.memberId%>');
         });
         /**
          * 从后台生成护理服务单编号
