@@ -104,7 +104,7 @@ module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,cu
         ") as staffName," +
         "(" +
         "select m.memberName from member m where m.id = sm.memberId " +
-        ") as memberName FROM serviceMeet sm "+parm+"  ORDER BY sm.dateline DESC   LIMIT ?,?";
+        ") as memberName FROM serviceMeet sm "+parm+"  ORDER BY sm.meetTime DESC   LIMIT ?,?";
 
     async.series({
         totalPages : function(callback){
