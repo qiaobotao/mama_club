@@ -11,6 +11,7 @@ var classifyService = require('../../model/service/classify');//获取子分类�
 var educationId = require('../../config').mainClassifyId.education;//学历id
 var vocationalQualificationId = require('../../config').mainClassifyId.vocationalQualification;//职业资格id
 var multiparty = require('multiparty');//上传文件使用
+var conf = require('../../config');
 /**
  * 获取员工列表
  * @param req
@@ -342,15 +343,15 @@ module.exports.saveQualification = function(req, res, next) {
     var qualificationsTime = req.query.qualificationsTime ? req.query.qualificationsTime : '';
     var qualificationsDescribe = req.query.qualificationsDescribe ? req.query.qualificationsDescribe : '';
 
-    var form = new multiparty.Form({uploadDir: './public/files/staffQualifications/'});//将突破上传到”./public/files/staffQualifications“目录下
-
+    var form = new multiparty.Form();//将突破上传到”./public/files/staffQualifications“目录下
+    form.uploadDir = conf.uploadDir.dir;
     form.parse(req, function(err, fields, files) {
         if (!err) {
             var qualificationsSrc = "",qualificationsName="";
             for(var f = 0 ; f<files.recordfile.length ; f ++){
                 var inputFile = files.recordfile[f];
                 qualificationsName += inputFile.originalFilename;
-                qualificationsSrc += inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+                qualificationsSrc += conf.uploadDir.url +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);
             }
 
             service.addStaffQualifications(staffId,vocationalQualifications,qualificationsSrc,qualificationsName,qualificationsDescribe,qualificationsTime,function(err, results) {

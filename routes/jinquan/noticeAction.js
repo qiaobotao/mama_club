@@ -5,6 +5,7 @@
 var laypage = require('laypage');
 var service = require('../../model/service/notice');
 var multiparty = require('multiparty');
+var conf = require('../../config');
 /**
  * 获取公告列表
  * @param req
@@ -79,7 +80,7 @@ module.exports.save = function (req, res, next) {
     var filename = "";
     var fileurl = "";
     var form = new multiparty.Form();
-    form.uploadDir = '/mnt/mama_club/public/files';
+    form.uploadDir = conf.uploadDir.dir;
     service.fetchSingleNotice(id, function(err, results) {
         if (!err) {
             var notice = results.length == 0 ? null : results[0];
@@ -94,7 +95,7 @@ module.exports.save = function (req, res, next) {
                         if (inputFile.originalFilename != '' && inputFile.size != 0) {
                             filename += inputFile.originalFilename;
                             // fileurl += inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
-                            fileurl += 'files/' +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);
+                            fileurl += conf.uploadDir.url +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);
                         }else{
                             //该文件没有变更，直接将原文件信息赋值即可
                             if(notice.filesName.indexOf(filesNames[f])>=0){

@@ -31,7 +31,7 @@ module.exports = {
 
     // 数据库连接池配置
     dbConfig: {
-        host     : '*',
+        host     : '123.57.24.162',
         database : 'mama_club',
         user     : 'root',
         password : 'q1w2e3',
@@ -92,8 +92,12 @@ module.exports = {
         serverDemand:46,//服务需求
         /**********应用在护理服务信息中 end**********/
 
-
         printSystemLogFlag:true
+    },
+
+    uploadDir : {
+        dir:'/mnt/mama_club/public/files',
+        url:'files/'
     }
 
 };

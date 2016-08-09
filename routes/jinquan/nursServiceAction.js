@@ -6,6 +6,7 @@ var serviceMeetService = require('../../model/service/servicemeet');
 var commonUtil = require('../../model/utils/common');//公共类
 var multiparty = require('multiparty');//上传文件使用
 var consts = require('../../model/utils/consts');
+var conf = require('../../config');
 
 /**
  * Created by kuanchang on 16/1/18.
@@ -371,13 +372,13 @@ module.exports.saveUploadBreastImage = function (req, res, next) {
 
     var id = req.query.id ? req.query.id : '';//护理服务单id
 
-    var form = new multiparty.Form({uploadDir: './public/files/breastImage/'});//将突破上传到”./public/files/staffQualifications“目录下
-
+    var form = new multiparty.Form();//将突破上传到”./public/files/staffQualifications“目录下
+    form.uploadDir = conf.uploadDir.dir;
     form.parse(req, function(err, fields, files) {
         if (!err) {
             if(files.recordfile.length > 0){
                 var inputFile = files.recordfile[0];
-                var breastImageSrc = inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+                var breastImageSrc = conf.uploadDir.url +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);
                 var breastImage = inputFile.originalFilename+";"+inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
                 service.updateBreastImage(id,breastImage,function(err, results) {
                     if(!err) {
