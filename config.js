@@ -97,7 +97,7 @@ module.exports = {
 
     uploadDir : {
         dir:'/mnt/mama_club/public/files',
-        url:'files/'
+        url:'/files/'
     }
 
 };

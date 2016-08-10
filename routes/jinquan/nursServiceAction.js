@@ -378,8 +378,8 @@ module.exports.saveUploadBreastImage = function (req, res, next) {
         if (!err) {
             if(files.recordfile.length > 0){
                 var inputFile = files.recordfile[0];
-                var breastImageSrc = conf.uploadDir.url +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);
-                var breastImage = inputFile.originalFilename+";"+inputFile.path.substr(inputFile.path.indexOf('/'),inputFile.path.length);
+                var breastImageSrc = '../'+conf.uploadDir.url +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);
+                var breastImage = inputFile.originalFilename+";"+conf.uploadDir.url +  inputFile.path.substr(inputFile.path.lastIndexOf('/'),inputFile.path.length);;
                 service.updateBreastImage(id,breastImage,function(err, results) {
                     if(!err) {
                         res.render('welcome/successByUpLoadBreasImage',{breastImageSrc:breastImageSrc});
