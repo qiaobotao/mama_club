@@ -34,6 +34,25 @@
             }
         }
     });
+
+    function iFrameLeftHeight() {
+        //获取屏幕高度
+        var pingmuHight = document.body.clientHeight;
+        //获取头部、底部高度
+        var topHight = $("#top").height();
+        var bottomHight = $("#bottom").height();
+        //为左侧菜单设置高度
+        var leftIfm= document.getElementById("leftFrame");
+        leftIfm.height = pingmuHight - topHight - bottomHight;
+        leftIfm.width = 171;
+    }
+    function iFrameRightHeight() {
+        var ifm= document.getElementById("rightFrame");
+        var subWeb = document.frames ? document.frames["rightFrame"].document : ifm.contentDocument;
+        if(ifm != null && subWeb != null) {
+            ifm.height = subWeb.body.scrollHeight;
+        }
+    }
 </script>
 <body>
 <frameset rows="81,*,29" cols="*" framespacing="0" frameborder="no" border="0">
@@ -67,11 +86,11 @@
         </tr>
         <tr height="85%">
             <td width="171" name="fmTitle" align="center" valign="top"  >
-                <iframe id="leftFrame" height="100%" width="171" src="jinquan/menu" border="0" frameborder="0"   scrolling="no"></iframe>
+                <iframe id="leftFrame" height="100%" width="171" src="jinquan/menu" border="0" frameborder="0" scrolling="no" onLoad="iFrameLeftHeight()"></iframe>
             </td>
             <td width="2"></td>
             <td align="center" valign="top">
-                <iframe id="rightFrame" height="100%" width="100%" src="jinquan/welcome" name="mainFrame" border="0" frameborder="0" ></iframe>
+                <iframe id="rightFrame" height="100%" width="100%" src="jinquan/welcome" name="mainFrame" border="0" frameborder="0" onLoad="iFrameRightHeight()"></iframe>
             </td>
         </tr>
         <tr height="5%">
