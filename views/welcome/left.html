@@ -1,90 +1,90 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
-<link href="../../css/global.css" rel="stylesheet" type="text/css" />
-<link href="../../css/index.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../js/qiehuan.js"></script>
-<script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="../../js/layer/layer.js"></script>
-<script src="../../js/prototype.lite.js" type="text/javascript"></script>
-<script src="../../js/moo.fx.js" type="text/javascript"></script>
-<script src="../../js/moo.fx.pack.js" type="text/javascript"></script>
-<style type="text/css">
-html,body{height:100%;padding:0;margin:0;}
-</style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    <link href="../../css/global.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/index.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../js/qiehuan.js"></script>
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="../../js/layer/layer.js"></script>
+    <script src="../../js/prototype.lite.js" type="text/javascript"></script>
+    <script src="../../js/moo.fx.js" type="text/javascript"></script>
+    <script src="../../js/moo.fx.pack.js" type="text/javascript"></script>
+    <style type="text/css">
+        html,body{height:100%;padding:0;margin:0;}
+    </style>
 
-<style>
-.content{
-	width: 171px;
-	height: 26px;
-	
-}
-.subClass {
-    width: 171px;
-	margin: 0px;
-	padding: 0px;
-	left: 0px;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	clip: rect(0px,0px,0px,0px);
-}
-.subClass ul {
-    list-style-type: none;
-	margin: 0px;
-	padding: 0px;
-	display: block;
-}
-.subClass li {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	line-height: 26px;
-	color: #333333;
-	list-style-type: none;
-	display: block;
-	text-decoration: none;
-	height: 26px;
-	width: 171px;
-	padding-left: 0px;
-}
+    <style>
+        .content{
+            width: 171px;
+            height: 26px;
 
-.subClass a:link,.subClass a:visited,.subClass a:active{
-	margin: 0px;
-	padding: 0px;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	color: #575757;
-	background-image:url(../../images/sub_bg_link.jpg);
-	background-repeat: no-repeat;
-	height: 26px;
-	line-height: 26px;
-	padding-left:51px;
-	width:120px;
-	display: block;
-    overflow: hidden;
-	text-decoration: none; text-align:left;
+        }
+        .subClass {
+            width: 171px;
+            margin: 0px;
+            padding: 0px;
+            left: 0px;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            clip: rect(0px,0px,0px,0px);
+        }
+        .subClass ul {
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+            display: block;
+        }
+        .subClass li {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            line-height: 26px;
+            color: #333333;
+            list-style-type: none;
+            display: block;
+            text-decoration: none;
+            height: 26px;
+            width: 171px;
+            padding-left: 0px;
+        }
 
-}
-.subClass a:hover {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 13px;
-	line-height: 26px;
-	font-weight: bold;
-	color: #575757;
-	background-image:url(../../images/sub_bg_hover.jpg);
-	background-repeat: no-repeat;
-	text-align:left;
-	display: block;
-	margin: 0px;
-	padding: 0px;
-	height: 26px;
-	padding-left:51px;
-	width:120px;
-	text-decoration: none;
-}
-</style>
+        .subClass a:link,.subClass a:visited,.subClass a:active{
+            margin: 0px;
+            padding: 0px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            color: #575757;
+            background-image:url(../../images/sub_bg_link.jpg);
+            background-repeat: no-repeat;
+            height: 26px;
+            line-height: 26px;
+            padding-left:51px;
+            width:120px;
+            display: block;
+            overflow: hidden;
+            text-decoration: none; text-align:left;
+
+        }
+        .subClass a:hover {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            line-height: 26px;
+            font-weight: bold;
+            color: #575757;
+            background-image:url(../../images/sub_bg_hover.jpg);
+            background-repeat: no-repeat;
+            text-align:left;
+            display: block;
+            margin: 0px;
+            padding: 0px;
+            height: 26px;
+            padding-left:51px;
+            width:120px;
+            text-decoration: none;
+        }
+    </style>
     <script type="text/javascript">
         function hrefRightPage(url){
             //判断右侧是否为编辑页面，如果是给出提示，然后进行跳转
@@ -95,9 +95,9 @@ html,body{height:100%;padding:0;margin:0;}
             if(mainFrameUrl.indexOf("edit") > 0 || mainFrameUrl.indexOf("add") > 0){//询问框
                 if(confirm("是否放弃对本页面进行编辑?") == true){     //如果用户单击了确定按钮
                     parent.mainFrame.location=url;
-                 }else{
+                }else{
 //                     alert("你是一个坏人");     //如果用户单击了取消按钮，就会输出：你是一个坏人
-                 }
+                }
             }else{
                 parent.mainFrame.location=url;
             }
@@ -106,78 +106,78 @@ html,body{height:100%;padding:0;margin:0;}
 </head>
 <body>
 <table width="171" border="0" cellspacing="0" cellpadding="0" style="float:left;" >
-  <tr>
-    <td valign="top">
-    <h1 class="tm1"><img src="../../images/tmbg.jpg" /></h1>
+    <tr>
+        <td valign="top">
+            <h1 class="tm1"><img src="../../images/tmbg.jpg" /></h1>
 
-        <ul class="subClass">
-            <li><a href="/jinquan/notice_user_list?page=1" target="mainFrame">最新公告</a></li>
-        </ul>
+            <ul class="subClass">
+                <li><a href="/jinquan/notice_user_list?page=1" target="mainFrame">最新公告</a></li>
+            </ul>
 
 
-    <%
-        for(var i = 0 ; i < menusData.length ; i ++){
+            <%
+            for(var i = 0 ; i < menusData.length ; i ++){
             var parentMenu = menusData[i];
             if(parentMenu.parentId == 0){//父菜单
-                %>
+            %>
 
-        <div class="menucon">
-            <h1 class="bigClass">
-                <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-                <div class="bigClass_r">
-                    <p><%=parentMenu.textCh%></p>
-                </div>
-            </h1>
-            <div class="content">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-                    </tr>
-                </table>
-                <ul class="subClass">
-                    <%
+            <div class="menucon">
+                <h1 class="bigClass">
+                    <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
+                    <div class="bigClass_r">
+                        <p><%=parentMenu.textCh%></p>
+                    </div>
+                </h1>
+                <div class="content">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
+                        </tr>
+                    </table>
+                    <ul class="subClass">
+                        <%
                         for(var j = 0 ; j < menusData.length ; j ++){
                         var childMenu = menusData[j];
-                            if(childMenu.parentId == parentMenu.id){//找到子菜单
-                                %><li><a href="javascript:void(0)" onclick="hrefRightPage('<%=childMenu.url%>?page=1')" target="mainFrame"><%=childMenu.textCh%></a></li><%
-                            }
+                        if(childMenu.parentId == parentMenu.id){//找到子菜单
+                        %><li><a href="javascript:void(0)" onclick="hrefRightPage('<%=childMenu.url%>?page=1')" target="mainFrame"><%=childMenu.textCh%></a></li><%
                         }
-                    %>
-                </ul>
-            </div>
-        </div>
-        <%
-            }
-        }
-        %>
-        <div class="menucon">
-            <h1 class="bigClass">
-                <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
-                <div class="bigClass_r">
-                    <p >效果样式</p>
+                        }
+                        %>
+                    </ul>
                 </div>
-            </h1>
-            <div class="content" >
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
-                    </tr>
-                </table>
-                <ul class="subClass">
-                    <li><a href="/jinquan/layui_demo" target="mainFrame">常用组件效果</a></li>
-                </ul>
             </div>
-        </div>
- <script type="text/javascript">
-		var contents = document.getElementsByClassName('content');
-		var toggles = document.getElementsByClassName('bigClass');
-	    var myAccordion = new fx.Accordion(
-			toggles, contents, {opacity: true, duration: 400}
-   	);
-		myAccordion.showThisHideOpen(contents[0]);
-	</script>  
-    </td>
-  </tr>
+            <%
+            }
+            }
+            %>
+            <div class="menucon">
+                <h1 class="bigClass">
+                    <div class="bigClass_l"><img src="../../images/menu_add.gif" ></div>
+                    <div class="bigClass_r">
+                        <p >效果样式</p>
+                    </div>
+                </h1>
+                <div class="content" >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td><img src="../../images/menu_topline.gif" width="171" height="2" /></td>
+                        </tr>
+                    </table>
+                    <ul class="subClass">
+                        <li><a href="/jinquan/layui_demo" target="mainFrame">常用组件效果</a></li>
+                    </ul>
+                </div>
+            </div>
+            <script type="text/javascript">
+                var contents = document.getElementsByClassName('content');
+                var toggles = document.getElementsByClassName('bigClass');
+                var myAccordion = new fx.Accordion(
+                        toggles, contents, {opacity: true, duration: 400}
+                );
+                myAccordion.showThisHideOpen(contents[0]);
+            </script>
+        </td>
+    </tr>
 </table>
 </body>
 </html>

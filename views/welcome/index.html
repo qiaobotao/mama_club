@@ -44,7 +44,7 @@
         //为左侧菜单设置高度
         var leftIfm= document.getElementById("leftFrame");
         leftIfm.height = pingmuHight - topHight - bottomHight;
-        leftIfm.width = 171;
+//        leftIfm.width = 171;
     }
     function iFrameRightHeight() {
         var ifm= document.getElementById("rightFrame");
@@ -62,7 +62,7 @@
                 <div id="top">
                     <table width="100%"  border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td width="296" ><div class="logo"><img src="images/logo.jpg" /></div> </td>
+                            <td width="296"><div class="logo"><img src="images/logo.jpg" /></div> </td>
                             <td >
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
@@ -70,7 +70,7 @@
                                             <ul id="nav">
                                             </ul>
                                         </td>
-                                        <td class="top_c" style="text-align:right">
+                                        <td class="top_c2" style="text-align:right">
                                             欢迎  <%=user.userName%>  使用金泉平台！
                                             <div class="zhuxiao"><a href="/" class="zx_sty"></a></div>
                                         </td>
@@ -89,7 +89,7 @@
                 <iframe id="leftFrame" height="100%" width="171" src="jinquan/menu" border="0" frameborder="0" scrolling="no" onLoad="iFrameLeftHeight()"></iframe>
             </td>
             <td width="2"></td>
-            <td align="center" valign="top">
+            <td width="99%" align="center" valign="top">
                 <iframe id="rightFrame" height="100%" width="100%" src="jinquan/welcome" name="mainFrame" border="0" frameborder="0" onLoad="iFrameRightHeight()"></iframe>
             </td>
         </tr>

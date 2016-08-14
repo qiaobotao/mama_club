@@ -447,7 +447,7 @@ ul,li{list-style:none;}
 .subbox{ padding:20px;}
 
 /***********首页top部分四个菜单样式***********************/
-#nav{ margin:0px auto; padding:0px; list-style-type:none; width:350px; margin-top:38px;}
+/*#nav{ margin:0px auto; padding:0px; list-style-type:none; width:350px; margin-top:38px;}*/
 #nav li{ margin:0px; padding:0px; width:80px; height:34px; float:left; line-height:30px; margin-right:6px;}
 #nav li a:link,#nav li a:visited{ margin:0px; padding:0px; width:80px; height:30px; font-size:15px; border:2px solid #f56394; border-bottom:none; background:#FFF; display:block;}
 #nav li a:hover{ background:#f56394; color:#FFF; font-weight:bold;}
