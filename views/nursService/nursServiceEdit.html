@@ -44,6 +44,13 @@
                     return ;
                 }
             }
+            //目前体重
+            if(!$("#childCurrentWeightSpanId").is(":hidden")){//目前体重
+                if($("#childCurrentWeight").val() == ''){
+                    parent.layer.alert('请填写目前体重。',{icon: 2});
+                    return ;
+                }
+            }
             //喂养备注
             if(!$("#feedRemarkSpanId").is(":hidden")){//大便次数必填
                 if($("#feedRemark").val() == ''){
@@ -156,6 +163,7 @@
                 return ;
             }
             //其他原因
+            /*
             var otherReasonStr = "";
             $("[name='otherReason']").each(function(){
                 if($(this).attr("checked")){
@@ -166,6 +174,7 @@
                 parent.layer.alert('请选择其他原因。',{icon: 2});
                 return ;
             }
+            */
             //离店建议
             if($("#leaveAdvise").val() == ''){
                 parent.layer.alert('请填写离店建议。',{icon: 2});
@@ -194,6 +203,7 @@
                 $("#bowelFrequencSpanId").hide();//大便次数
                 $("#shapeSpanId").hide();//性状
                 $("#urinationSpanId").hide();//尿量
+                $("#childCurrentWeightSpanId").hide();//目前体重
             }
             //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
             if(document.getElementById("milkSituation").selectedIndex == 1){
@@ -450,6 +460,7 @@
                 <td class="regTd_l">目前体重：</td>
                 <td class="regTd_r">
                     <input id="childCurrentWeight" name="childCurrentWeight" type="text" class="input5"  value="<%=nursService.childCurrentWeight%>"/>&nbsp;&nbsp;
+                    &nbsp;&nbsp;<span id="childCurrentWeightSpanId" style="color:#FF0000;">*</span></td>
                 </td>
                 <td class="regTd_l">吸奶器品牌：</td>
                 <td class="regTd_r">
@@ -572,7 +583,7 @@
                     <%if(nursService.otherReason != null && nursService.otherReason != null && nursService.otherReason.indexOf(dictData.otherReasonsArr[i].id) > -1){%>checked<%}%>/>
                     <%=dictData.otherReasonsArr[i].name%>
                     <%}%>
-                    <span style="color:#FF0000;">*</span></td>
+                    </td>
                 <td class="regTd_l">是否预约二次：</td>
                 <td class="regTd_r">
                     <select id="whetherAppointmentAgain" name="whetherAppointmentAgain">
