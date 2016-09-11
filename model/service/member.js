@@ -20,8 +20,9 @@ var eatBreastMilkReasonId = require('../../config').mainClassifyId.eatBreastMilk
 var hospitalAddItemsId = require('../../config').mainClassifyId.hospitalAddItems;//住院添加id
 var auxiliaryToolId = require('../../config').mainClassifyId.auxiliaryTool;//辅助工具id
 var specialNoteId = require('../../config').mainClassifyId.specialNote;//特殊说明id
+var utils = require('../../common/utils');
 
-module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+module.exports.insertMember = function(shopId,memberNo,birthYearMonth,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                                        deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
                                        husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
                                        hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, cb) {
@@ -30,11 +31,11 @@ module.exports.insertMember = function(shopId,birthYearMonth,memberCardType,memb
 
     //memberCardType = "12";
 
-    var sql = 'INSERT INTO member (shopId,birthYearMonth,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
+    var sql = 'INSERT INTO member (shopId,memberNo,birthYearMonth,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,'
         + 'deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,'
         + 'husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,'
-        + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [shopId,age,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+        + 'hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,dateline) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,memberNo,birthYearMonth,memberCardType,memberName,tel,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
         deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
         husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannel,
         hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions,new Date().getTime()], function(cbData, err, rows, fields) {
@@ -101,7 +102,7 @@ module.exports.fetchAllMember = function(shopId,serialNumber,memberName,tel,curr
 
     var start = (currentPage - 1) * 10;
     var end = 10;
-    var sql_data = 'SELECT a.id,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join  memberCard b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
+    var sql_data = 'SELECT a.id,a.memberNo,b.serialNumber,a.memberName,a.tel,b.type FROM member a left join  memberCard b'+ parm +' ORDER BY a.dateline DESC LIMIT ?,?';
 
     async.series({
         totalPages : function(callback){
@@ -323,4 +324,59 @@ module.exports.getMemberByNameTel =function (tel ,shopId, cb) {
             cb(err);
         }
     });
+}
+
+
+/**
+ * 查找本年、本月第几个会员
+ * @param cb
+ */
+module.exports.createMemberNo= function (cb) {
+    var memberCountSql = 'select DATE_FORMAT(current_date, "%Y%m") as yearMonth,count(*)+1 as memberCount from member m where left(FROM_UNIXTIME(m.dateline/1000),7) = ? ';
+    var monthDate = utils.date2str(new Date(),"yyyy-MM");
+    db.query(memberCountSql, [monthDate], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+    /*
+    var serialNumberSql = 'select serialNumber from shop where id = ?';
+    var nursServiceCountSql = 'select count(*) as nursCount from member t where left(FROM_UNIXTIME(m.dateline/1000),7) = ? ';
+    async.series({
+        //根据门店id获取门店编码
+        serialNumber: function(callback){
+            db.query(serialNumberSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        nursServiceCount : function(callback){
+            db.query(nursServiceCountSql, [utils.date2str(new Date(),"yyyy-MM"),id], function (cbData, err, rows, fields) {
+
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+        //门店编号+年份4位+月份2位+编号3位。
+        var codeIndex = results.nursServiceCount[0].nursCount +1;
+        codeIndex = codeIndex<10?"00"+codeIndex:(codeIndex<100?"0"+codeIndex:codeIndex)
+        var nursNo = results.serialNumber[0].serialNumber+utils.date2str(new Date(),"yyyyMM")+codeIndex;
+        if (!err) {
+            results.nursNo = nursNo;
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+    */
+
 }

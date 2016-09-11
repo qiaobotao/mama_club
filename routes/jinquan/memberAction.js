@@ -24,6 +24,7 @@ module.exports.list = function (req, res,next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
     //res.render('member/memberList');
+    //var memberNo = req.query.memberNo ? req.query.memberNo : '';//会员编号
     var serialNumber = req.query.serialNumber ? req.query.serialNumber : '';
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
@@ -34,6 +35,7 @@ module.exports.list = function (req, res,next) {
     var resourcesData = req.session.user.resourcesData;
     service.fetchAllMember(shopId,serialNumber,memberName,tel,currentPage, function (err, results) {
         if (!err) {
+            //results.memberNo = memberNo;
             results.serialNumber = serialNumber;
             results.memberName = memberName;
             results.tel = tel;
@@ -202,16 +204,29 @@ module.exports.doEdit = function (req, res,next) {
             });
     }else{
         var shopId = req.session.user.shopId;
-        service.insertMember(shopId,birthYearMonth,memberCardType,memberName,telVal,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
-            deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
-            husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
-            hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
-                if (!err) {
-                    res.redirect('/jinquan/member_list?replytype=add');
-                } else {
-                    next();
-                }
-            });
+        //获取会员原始卡号
+        //当前月份第几个员工：201609003（2016年9月第三个会员）
+        service.createMemberNo(function (err, results) {
+            if (!err) {
+                var menberDate = results[0].yearMonth;
+                var memberCount = results[0].memberCount;
+                memberCount = memberCount<10?"00"+memberCount:(memberCount<100?"0"+memberCount:memberCount);
+                var memberNo = menberDate+""+memberCount;
+                service.insertMember(shopId,memberNo,birthYearMonth,memberCardType,memberName,telVal,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
+                    deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
+                    husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,
+                    hospitalization,hospitalizationReason,assistantTool,useToolReason,specialInstructions, function (err, results) {
+                        if (!err) {
+                            res.redirect('/jinquan/member_list?replytype=add');
+                        } else {
+                            next();
+                        }
+                    });
+            } else {
+                next();
+            }
+        });
+
     }
 }
 
