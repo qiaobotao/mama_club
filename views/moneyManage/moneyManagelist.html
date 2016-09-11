@@ -46,14 +46,14 @@
             var page = document.getElementById('page').value;
             window.location.href = '/jinquan/shop_set?page='+page+'&shopname='+shopname+'&principal='+principal+'&number='+number+'&status='+status+'&id='+id;
         }
-        function preEdit (id) {
-            window.location.href = '/jinquan/money_manage_edit?id='+id;
+        function preEdit (id,chargeType) {
+            window.location.href = '/jinquan/money_manage_edit?id='+id+'&chargeType='+chargeType;
         }
         function del (id,serviceId) {
             delData('/jinquan/money_manage_del?id='+id+'&serviceId='+serviceId);
         }
-        function browse (id) {
-            window.location.href = '/jinquan/money_manage_view?id='+id;
+        function browse (id,chargeType) {
+            window.location.href = '/jinquan/money_manage_view?id='+id+'&chargeType='+chargeType;
         }
 
     </script>
@@ -175,10 +175,10 @@
                     <table width="100%" border="0" cellspacing="0" class="table_t"  cellpadding="0">
                         <tr>
                             <%if(resourcesData["/money_manage_view"] == "1"){
-                                %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>)">查看</a>]</div></td><%
+                                %><td><div align="center"><img src="../../images/index_2.jpg" width="9" height="9" />&nbsp;[<a href="javascript:browse(<%=data.data[i].id%>,<%=data.data[i].chargeType%>)">查看</a>]</div></td><%
                             }%>
                             <%if(resourcesData["/money_manage_edit"] == "1"){
-                                %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>)">编辑</a>]</div></td><%
+                                %><td><div align="center"><img src="../../images/037.gif" width="9" height="9" />&nbsp;[<a href="javascript:preEdit(<%=data.data[i].id%>,<%=data.data[i].chargeType%>)">编辑</a>]</div></td><%
                             }%>
                             <!--
                             <%if(resourcesData["/money_manage_del"] == "1"){

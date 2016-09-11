@@ -76,6 +76,8 @@ module.exports.doEdit = function (req, res,next) {
     var specified = req.body.specified ? req.body.specified : '';//是否指定技师
     var principal = req.body.principal ? req.body.principal : '';//所选技师名称
     var staffId = req.body.staffId ? req.body.staffId : '';//技师ID
+    var recommendStaffId = req.body.recommendStaffId ? req.body.recommendStaffId : '';//推荐技师id
+    var recommendName = req.body.recommendName ? req.body.recommendName : '';//推荐技师名称
     var status = req.body.status ? req.body.status : '';//当前状态
     var nursServiceId = req.body.nursServiceId ? req.body.nursServiceId : '';//护理服务Id
     var nursServiceNo = req.body.nursServiceNo ? req.body.nursServiceNo : '';//护理服务单号
@@ -96,7 +98,7 @@ module.exports.doEdit = function (req, res,next) {
     //提供服务的技师名称
     var serviceStaffNamesTemp = req.body.serviceStaffName ? req.body.serviceStaffName : '';//护理服务技师名称
     var serviceStaffNames = commonUtil.array2Str(serviceStaffNamesTemp,",");
-    if(status < consts.SERVICE_MEET_STATE_3 && specified ==2){//specified:1：未指定；2：指定；3：推荐
+    if(status < consts.SERVICE_MEET_STATE_3 && specified >= 2){//specified:1：未指定；2：指定；3：推荐
         //当状态为：预约成功、上门预约时，默认将指定技师定义为为其服务的服务技师（确认服务时，可以修改）
         serviceStaffIds = staffId;
         serviceStaffNames = principal;
@@ -115,7 +117,7 @@ module.exports.doEdit = function (req, res,next) {
                     nursservice.insertNursServiceByServiceMeet(serverShopId,nursServiceNo, id, meetTime.substring(0,10), serviceTime,consts.NURS_STATE_1, function (err, insertResults) {
                         if (!err) {
                             service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
-                                staffId,status,insertResults.insertId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
+                                staffId,recommendStaffId,recommendName,status,insertResults.insertId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
                                     if (!err) {
                                         res.redirect('/jinquan/service_meet_list?replytype=update');
                                     } else {
@@ -133,7 +135,7 @@ module.exports.doEdit = function (req, res,next) {
         }else{
             //其他状态，只修改其他字段即可
             service.updateServiceMeet(id,memberId,name,tel,meetTime,specialRemarks,serviceType,province,city,town,address,price,serverShopId,specified,principal,
-                staffId,status,nursServiceId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
+                staffId,recommendStaffId,recommendName,status,nursServiceId,nursServiceNo,serviceTime,deal,serviceNeeds,serviceStaffIds,serviceStaffNames,function (err, results) {
                 if (!err) {
                     res.redirect('/jinquan/service_meet_list?replytype=update');
                 } else {
@@ -144,7 +146,7 @@ module.exports.doEdit = function (req, res,next) {
 
     }else{
         service.insertServiceMeet(shopId,memberId,name,tel,meetTime ,specialRemarks ,serviceType,province,city,town,address ,price ,serverShopId ,
-            specified,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,function (err, results) {
+            specified,recommendStaffId,recommendName,principal,staffId ,status,nursServiceId,serviceTime,deal,serviceNeeds,serviceStaffIds, serviceStaffNames,function (err, results) {
                 if (!err) {
                     res.redirect('/jinquan/service_meet_list?replytype=add');
                 } else {

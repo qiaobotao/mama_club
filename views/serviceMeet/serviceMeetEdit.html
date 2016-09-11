@@ -358,12 +358,22 @@
          */
         function changeSpecified(){
             if($("#specified").val() == 1){
+                $("#staffIdRecommend").val("");//推荐技师id为空
+                $("#serviceStaffNameRecommend").val("");//推荐技师名称为空
                 $("#staffId").val("");//技师id为空
                 $("#price").val("");//标价设为空
                 $("#principal").val("");
                 $("#principal").attr("disabled","disabled");//设为不可用
                 $("#price").attr("disabled","disabled");//标价设为不可用
+                $("#recommendSpan").hide();
             }else{
+                if($("#specified").val() == 3){
+                    document.getElementById("serviceStaffSpanId").innerHTML = "推荐";
+                    $("#recommendSpan").show();
+                }else{
+                    document.getElementById("serviceStaffSpanId").innerHTML = "指定";
+                    $("#recommendSpan").hide();
+                }
                 $("#principal").removeAttr("disabled");//取消不可用的设置
                 $("#price").removeAttr("disabled");//取消不可用的设置
             }
@@ -422,6 +432,13 @@
             if($("#specified").val() == '1') {//未指定
                 $("#principal").val("");
                 $("#principal").attr("disabled", "disabled");//设为不可用
+            }
+            if($("#specified").val() != '3'){
+                $("#recommendSpan").hide();
+            }
+            if($("#specified").val() == '3'){
+                document.getElementById("serviceStaffSpanId").innerHTML = "推荐";
+                $("#recommendSpan").show();
             }
             statusInit();
             getMemberByMemberId('<%=service_meet.memberId%>');
@@ -625,10 +642,17 @@
                         <option value="3" <%if(service_meet.specified == '3'){%>selected<%}%>>推荐</option>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                <td class="regTd_l">技师：</td>
+                <td class="regTd_l">
+                    <span id="serviceStaffSpanId">指定</span> ：</td>
                 <td class="regTd_r">
+                    <span id="recommendSpan">
+                        <input id="staffIdRecommend" name="recommendStaffId" type="hidden"  value="<%=service_meet.recommendStaffId%>"  class="input5" />
+                        <input id="serviceStaffNameRecommend" name="recommendName" type="text" value="<%=service_meet.recommendName%>" class="input5" onfocus="getmembers('Recommend')" />&nbsp;
+                        指定:
+                    </span>
                     <input id="staffId" name="staffId" type="hidden"  value="<%=service_meet.staffId%>"  class="input5" />
-                    <input id="principal" name="principal" type="text" value="<%=service_meet.principal%>" class="input5" onfocus="getmembers()" />&nbsp;</td>
+                    <input id="principal" name="principal" type="text" value="<%=service_meet.principal%>" class="input5" onfocus="getmembers()" />&nbsp;
+                </td>
             </tr>
             <tr style="border:solid 1px #f56394;">
                 <td class="regTd_l">做过何种处理：</td>

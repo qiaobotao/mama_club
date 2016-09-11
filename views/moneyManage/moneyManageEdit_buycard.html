@@ -33,6 +33,10 @@
         //提交表单
         function submitForm(){
             var payType = $('#payType').val();//付费方式
+            if(payType == ''){
+                parent.layer.alert('请选择付费方式。',{icon: 2});
+                return;
+            }
             if($('#payType').val() == '0'){
                 $('#actualMoney').val("0");
             }else{
@@ -42,6 +46,7 @@
                     return;
                 }
             }
+            $("#receivableMoney").val($('#actualMoney').val());
             document.getElementById("myform").submit();
 
         }
@@ -79,47 +84,65 @@
             <tr>
                 <td class="regTd_l">收费项目：</td>
                 <td class="regTd_r">
-                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)">
-                        <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
-                        <option value="2" <%if(chargeType == '2'){%>selected<%}%>>护理收费</option>
-                        <option value="3" <%if(chargeType == '3'){%>selected<%}%>>上课付费</option>
-                        <option value="4" <%if(chargeType == '4'){%>selected<%}%>>仅商品购买</option>
-                        <option value="5" <%if(chargeType == '5'){%>selected<%}%>>仅服务次卡</option>
-                        <option value="6" <%if(chargeType == '6'){%>selected<%}%>>员工内购</option>
-                        <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
+                    <select id="chargeType" name="chargeType" onchange="changeFrom(this)" >
+                        <%if(cardObj.id != null){%>
+                            <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
+                        <%}else{%>
+                            <option value="1" <%if(chargeType == '1'){%>selected<%}%>>购买会员卡</option>
+                            <option value="2" <%if(chargeType == '2'){%>selected<%}%>>护理收费</option>
+                            <option value="3" <%if(chargeType == '3'){%>selected<%}%>>上课付费</option>
+                            <option value="4" <%if(chargeType == '4'){%>selected<%}%>>仅商品购买</option>
+                            <option value="5" <%if(chargeType == '5'){%>selected<%}%>>仅服务次卡</option>
+                            <option value="6" <%if(chargeType == '6'){%>selected<%}%>>员工内购</option>
+                            <option value="7" <%if(chargeType == '7'){%>selected<%}%>>会员续费</option>
+                        <%}%>
                     </select>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">会员名称：</td>
                 <td class="regTd_r">
-                    <input id="memberName" type="text" name="memberName" onfocus="getMenber()"/>
+                    <input id="memberName" type="text" name="memberName" onfocus="getMenber()" value="<%=cardObj.memberName%>" <%if(cardObj.id != null){%>disabled<%}%>/>
                     <input id="memberCardId" name="memberCardId" type="hidden"/>
+                    <input id="memberId" name="memberId" type="hidden"/>
+                    <input id="id" name="id" type="hidden" value="<%=cardObj.id%>"/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span>
                 </td>
             </tr>
             <tr>
                 <td class="regTd_l">会员卡类型：</td>
                 <td class="regTd_r">
-                    <input type="text" id="memberCartTypeVal" name="memberCartTypeVal" readonly/>
+                    <%
+
+                    var typeVal = "";//1：充值卡2 服务次卡3打折卡
+                    if(cardObj.type == 1){
+                        typeVal = "充值卡";
+                    }else if(cardObj.type == 2){
+                        typeVal = "服务次卡";
+                    }else if(cardObj.type == 3){
+                        typeVal = "打折卡";
+                    }
+                    %>
+                    <input type="text" id="memberCartTypeVal" name="memberCartTypeVal" value="<%=typeVal%>" readonly/>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">会员卡费用：</td>
                 <td class="regTd_r">
-                    <input type="text" id="finalActualMoney" name="finalActualMoney" readonly/>
+                    <input type="text" id="finalActualMoney" name="finalActualMoney" value="<%=cardObj.finalActualMoney%>" readonly/>
                 </td>
             </tr>
             <tr>
                 <td  class="regTd_l">付费方式：</td>
                 <td class="regTd_r">
                     <select id="payType" name="payType" onchange="changePayType()">
-                        <option value="">请选择</option>
-                        <option value="0">延迟付费</option>
-                        <option value="1">现金</option>
-                        <option value="2">微信</option>
-                        <option value="3">支付宝</option>
+                        <option value="" <%if(cardObj.payType == ''){%>selected<%}%>>请选择</option>
+                        <option value="0" <%if(cardObj.payType == '0'){%>selected<%}%>>延迟付费</option>
+                        <option value="1" <%if(cardObj.payType == '1'){%>selected<%}%>>现金</option>
+                        <option value="2" <%if(cardObj.payType == '2'){%>selected<%}%>>微信</option>
+                        <option value="3" <%if(cardObj.payType == '3'){%>selected<%}%>>支付宝</option>
                     </select>
                 </td>
                 <td  class="regTd_l">实付金额：</td>
                 <td class="regTd_r">
-                    <input type="text" id="actualMoney" name="actualMoney"/>
+                    <input type="text" id="actualMoney" name="actualMoney" value="<%=cardObj.actualMoney%>"/>
+                    <input type="hidden" id="receivableMoney" name="receivableMoney" value="<%=cardObj.receivableMoney%>"/>
                 </td>
             </tr>
         </table>

@@ -59,9 +59,16 @@ module.exports.edit = function(req, res, next) {
 
     //1、购买会员卡；2、护理收费；3、上课付费；4、仅商品购买；5、仅服务次卡；6、员工内购；7、会员卡续费
     if (chargeType == 1) {//购买会员卡
-        res.render('moneyManage/moneyManageEdit_buycard', {data : results,chargeType:chargeType});
+        //查询收费信息、会员卡信息、会员信息
+        service.fetchSingleMoneyManageByHuiYuanKa(id,function(err, results) {
+            if (!err) {
+                cardObj = results.length > 0?results[0]:{};
+                res.render('moneyManage/moneyManageEdit_buycard', {cardObj : results[0],chargeType:chargeType});
+            } else {
+                next();
+            }
+        });
     } else if (chargeType == 2) {//护理收费
-
         service.fetchSingleMoneyManageByHuli(id, thisDate,function(err, results) {
             if (!err) {
                 var moneyObj = results.moneyManageData.length > 0 ? results.moneyManageData[0]:{};//收费单单独处理

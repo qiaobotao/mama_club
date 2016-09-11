@@ -250,6 +250,28 @@ module.exports.updateMoneyManage = function(id, payType,actualMoney,state, cb) {
 
 }
 
+
+/**
+ * 获取收费管理详情(购买会员卡)
+ * @param id
+ * @param cb
+ */
+module.exports.fetchSingleMoneyManageByHuiYuanKa =function (id , cb) {
+    var sql = 'select ' +
+        '   m.id,m.payType,m.receivableMoney,m.actualMoney,m.finalActualMoney ,mb.memberName,mc.type ' +
+        'from moneyManage m ,member mb,memberCard mc ' +
+        '   where m.memberId = mb.id ' +
+        '   and m.memberCardId = mc.id ' +
+        '   and m.id = ?';
+    db.query(sql, [id], function(cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
 /**
  * 获取收费管理详情(护理服务单)
  * @param id
