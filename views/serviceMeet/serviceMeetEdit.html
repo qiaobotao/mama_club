@@ -308,18 +308,19 @@
                 $("#shopAddressText").show();
                 $("#memberAddressText").hide();
                 $("#priceSpanId").hide();//到店时报价隐藏
-                if($("#id").val() == ''){
-                    $("#status").find("option[value='1']").attr("selected",true);
-                }
+//                if($("#id").val() == ''){
+//                }
+//                alert("修改状态为：1");
+                $("#status").find("option[value='1']").attr("selected",true);
             }else{//上门
                 $("#shopAddress").hide();
                 $("#memberAddress").show();
                 $("#shopAddressText").hide();
                 $("#memberAddressText").show();
                 $("#priceSpanId").show();//上门时报价隐藏
-                if($("#id").val() == ''){
-                    $("#status").find("option[value='2']").attr("selected",true);
-                }
+//                if($("#id").val() == ''){
+//                }
+                $("#status").find("option[value='2']").attr("selected",true);
             }
         }
 
@@ -339,6 +340,7 @@
          * 初始化状态信息
          */
         function statusInit(){
+
             if($("#status").val() == 3){
                 $("#serviceCode1").show();
                 $("#serviceCode2").show();
