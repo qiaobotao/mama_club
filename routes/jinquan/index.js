@@ -61,9 +61,9 @@ router.all('/shop_list',shopAction.list);
 router.all('/shop_pre_add',shopAction.preAdd);//添加门店
 router.all('/shop_add',shopAction.add);//保存门店
 router.all('/shop_del', shopAction.del);//删除门店
-router.all('/shop_browse',shopAction.browse);//门店浏览
 router.all('/shop_pre_edit',shopAction.preEdit);//编辑门店
 router.all('/shop_update',shopAction.update);//修改门店
+router.all('/shop_update4AttendanceDetail',shopAction.update4AttendanceDetail);//修改门店内员工工作时间
 router.all('/check_shopseril',shopAction.checkSeril);//检查门店号是否重复
 router.all('/check_shopname', shopAction.checkName);//检查门店名称是否重复
 router.all('/shop_count',shopAction.shopCount);

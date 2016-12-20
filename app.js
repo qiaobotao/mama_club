@@ -63,6 +63,7 @@ app.use(function(req, res, next){
                                     user.userName = resUser.userName;//用户名称
                                     user.shopName = resUser.shopName;//所在门店
                                     user.shopCode = resUser.shopCode;// 门店编号
+                                    user.availableSopIds = resUser.availableSopIds;// 可查看门店信息
                                     user.shortcutMenuId1 = resUser.shortcutMenuId1;//快捷菜单1
                                     user.shortcutMenuId2 = resUser.shortcutMenuId2;//快捷菜单2
                                     user.shortcutMenuId3 = resUser.shortcutMenuId3;//快捷菜单3

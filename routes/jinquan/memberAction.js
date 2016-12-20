@@ -205,13 +205,23 @@ module.exports.doEdit = function (req, res,next) {
     }else{
         var shopId = req.session.user.shopId;
         //获取会员原始卡号
-        //当前月份第几个员工：201609003（2016年9月第三个会员）
-        service.createMemberNo(function (err, results) {
+        //(2016年12月20日和姚雨辰确认：会员编号用门店编码+第几个会员)当前月份第几个员工：201609003（2016年9月第三个会员）
+        service.createMemberNoByShopId(shopId,function (err, results) {
             if (!err) {
-                var menberDate = results[0].yearMonth;
-                var memberCount = results[0].memberCount;
-                memberCount = memberCount<10?"00"+memberCount:(memberCount<100?"0"+memberCount:memberCount);
-                var memberNo = menberDate+""+memberCount;
+                var count = results[0].count;
+                var shopCode = results[0].shopCode;
+                var memberNo = "";
+                if(count < 10){
+                    memberNo = shopCode+"0000"+count;
+                }else if(count < 100){
+                    memberNo = shopCode+"000"+count;
+                }else if(count < 1000){
+                    memberNo = shopCode+"00"+count;
+                }else if(count < 10000){
+                    memberNo = shopCode+"0"+count;
+                }else{
+                    memberNo = shopCode+""+count;
+                }
                 service.insertMember(shopId,memberNo,birthYearMonth,memberCardType,memberName,telVal,contact,province,city,town,address,workStatus,motherEducation,fatherEducation,deliveryMode,
                     deliveryWeeks,deliveryHospital,parentTraining,secondChildExperience,secondChildExperienceRemark,wifeBreastfeedTime,
                     husbandBreastfeedTime,breastfeedReason,childName,childSex,childHeight,childWeight,childBirthday,understandJinQuanChannelVal,

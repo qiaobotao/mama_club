@@ -65,7 +65,7 @@ module.exports.updateServiceMeet = function(id,memberId,name,tel,meetTime,specia
  * @param currentPage
  * @param cb
  */
-module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,currentPage,cb) {
+module.exports.fetchAllServiceMeet = function(availableSopIds,shopId,tel,name,meetTime,status,currentPage,cb) {
 
     var myDate = new Date();
     var parm = "where sm.tel like '%" + tel + "%' and sm.name like '%" + name+ "%'" +
@@ -74,6 +74,11 @@ module.exports.fetchAllServiceMeet = function(shopId,tel,name,meetTime,status,cu
     {
         parm+=" and sm.shopId = " + shopId ;
     }
+    if(availableSopIds!="")
+    {
+        parm += " and serverShopId in ("+availableSopIds+")";
+    }
+
     if(status!="")
     {
         if(status.indexOf(",")> -1 ){

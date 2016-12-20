@@ -39,7 +39,11 @@
         }
         function preEdit (id,childBirthday) {
             if(childBirthday == ''){
-                parent.layer.msg('请先更新会员信息，再维护护理信息。');
+                //parent.layer.msg('请先更新会员信息，再维护护理信息。');
+                if(confirm('用户信息不完整，是否继续修改？')){
+                    window.location.href = '/jinquan/nurs_service_preEdit?id='+id;
+                }
+
             }else{
                 window.location.href = '/jinquan/nurs_service_preEdit?id='+id;
             }

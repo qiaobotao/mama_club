@@ -326,6 +326,21 @@ module.exports.getMemberByNameTel =function (tel ,shopId, cb) {
     });
 }
 
+/**
+ * 根据门店id，获取该门店下一个会员编号的值
+ * @param shopId
+ * @param cb
+ */
+module.exports.createMemberNoByShopId= function (shopId,cb) {
+    var memberCountSql = 'select count(*)  as count , (select s.`code` from shop s where s.id = t.shopId) as shopCode from `member` t  where t.shopId = ? ';
+    db.query(memberCountSql, [shopId], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
 
 /**
  * 查找本年、本月第几个会员

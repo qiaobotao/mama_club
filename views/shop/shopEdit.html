@@ -58,13 +58,167 @@
             }
             document.getElementById("myform").submit();
         }
+
+
+        /**
+         * 对Date的扩展，将 Date 转化为指定格式的String
+         * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q) 可以用 1-2 个占位符
+         * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+         * eg:
+         * (new Date()).pattern("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+         * (new Date()).pattern("yyyy-MM-dd E HH:mm:ss") ==> 2009-03-10 二 20:09:04
+         * (new Date()).pattern("yyyy-MM-dd EE hh:mm:ss") ==> 2009-03-10 周二 08:09:04
+         * (new Date()).pattern("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
+         * (new Date()).pattern("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
+         */
+        Date.prototype.pattern=function(fmt) {
+            var o = {
+                "M+" : this.getMonth()+1, //月份
+                "d+" : this.getDate(), //日
+                "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+                "H+" : this.getHours(), //小时
+                "m+" : this.getMinutes(), //分
+                "s+" : this.getSeconds(), //秒
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                "S" : this.getMilliseconds() //毫秒
+            };
+            var week = {
+                "0" : "/u65e5",
+                "1" : "/u4e00",
+                "2" : "/u4e8c",
+                "3" : "/u4e09",
+                "4" : "/u56db",
+                "5" : "/u4e94",
+                "6" : "/u516d"
+            };
+            if(/(y+)/.test(fmt)){
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            }
+            if(/(E+)/.test(fmt)){
+                fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);
+            }
+            for(var k in o){
+                if(new RegExp("("+ k +")").test(fmt)){
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                }
+            }
+            return fmt;
+        }
+
+        /**
+         * 当变更条件后，
+         */
+        function changeAttendance(spanId){
+            var workType = $("#WorkTypeId"+spanId).val();
+            if(workType == 1){
+                //早班
+                $("#WorkHourSpanId"+spanId).html('9:00~17:00');
+                $("#startWorkingHours"+spanId).val("9:00");
+                $("#endWorkingHours"+spanId).val("17:00");
+            }else if(workType == 2){
+                //中班
+                $("#WorkHourSpanId"+spanId).html('8:30~16:30');
+                $("#startWorkingHours"+spanId).val("8:30");
+                $("#endWorkingHours"+spanId).val("16:30");
+            }else if(workType == 3){
+                //晚班
+                $("#WorkHourSpanId"+spanId).html('10:00-18:00');
+                $("#startWorkingHours"+spanId).val("10:00");
+                $("#endWorkingHours"+spanId).val("18:00");
+            }else if(workType == 4){
+                //半天
+                $("#startWorkingHours"+spanId).val("");
+                $("#endWorkingHours"+spanId).val("");
+                var starSele='<select id="startWork'+spanId+'" onchange="changeStartWork(1,'+spanId+')"><option value="">请选择</option>';
+                var endSele='<select id="endWork'+spanId+'" onchange="changeStartWork(2,'+spanId+')"><option value="">请选择</option>';
+
+
+                for(var c = 0 ; c < courseDate.length ; c++){
+                    starSele += '<option value="'+courseDate[c]+'">'+courseDate[c]+'</option>';
+                    endSele += '<option value="'+courseDate[c]+'">'+courseDate[c]+'</option>';
+                }
+                starSele += '</select>';
+                endSele += '</select>';
+                $("#WorkHourSpanId"+spanId).html(starSele+endSele);
+            }
+            $("#buttonSpanId"+spanId).show();
+        }
+
+        /**
+         * 改变下拉框中开始时间值，变更hidden的startWork值
+         */
+        function changeStartWork(tempIndex,spanId){
+            if(tempIndex == '1'){//处理开始时间
+                $("#startWorkingHours"+spanId).val($("#startWork"+spanId).val());
+            }else{//处理截止时间
+                $("#endWorkingHours"+spanId).val($("#endWork"+spanId).val());
+            }
+
+        }
+
+        //检查提交的早晚班时间是否正确
+        function checkWorkHour(spanId){
+            //先验证开始时间是否小于截止时间
+            var startWork = $("#startWorkingHours"+spanId).val();
+            var endWork = $("#endWorkingHours"+spanId).val();
+            if(startWork == ""){
+                parent.layer.alert('工作开始时间不能为空。',{icon: 2});
+                return false;
+            }else if(endWork == ""){
+                parent.layer.alert('工作截止时间不能为空。',{icon: 2});
+                return false;
+            }
+            var startWorkDate = stringToDate("2016-09-24 "+startWork+":00");
+            var endWorkDate = stringToDate("2016-09-24 "+endWork+":00");
+            if(startWorkDate > endWorkDate){
+                parent.layer.alert('开始时间应小于截止时间。',{icon: 2});
+                return false;
+            }
+
+
+            var attendanceDetailId = $("#attendanceDetailId"+spanId).val();//主键
+            var workTypeId = $("#WorkTypeId"+spanId).val();//工作类型：早班、中班、晚班、半天
+            var startWorkingHours = $("#startWorkingHours"+spanId).val();//开始时间
+            var endWorkingHours = $("#endWorkingHours"+spanId).val();//截止时间
+            var attendanceStaffId = $("#attendanceStaffId"+spanId).val();//员工id
+            var attendanceDate = $("#attendanceDate"+spanId).val();//工作日期
+
+//            alert(attendanceStaffId+"==attendanceStaffId");
+            $.ajax({
+                url: '/jinquan/shop_update4AttendanceDetail',
+                type: 'post',
+                data: {
+                    'attendanceDetailId':attendanceDetailId,
+                    'workTypeId':workTypeId,
+                    'startWorkingHours':startWorkingHours,
+                    'endWorkingHours':endWorkingHours,
+                    'attendanceStaffId':attendanceStaffId,
+                    'attendanceDate':attendanceDate
+                },
+                dataType: 'json',
+                async: false,
+                cache: false,
+                timeout: 5000,
+                success: function(data){//处理成功
+                    //修改单元格背景色，隐藏掉“更新”按钮
+                    $("#tableTd"+spanId).css("background-color", "#adffa0");
+                    $("#buttonSpanId"+spanId).hide();
+                },
+                error: function(jqXHR, textStatus, errorThrown){
+                    parent.layer.alert("系统错误请系统管理员！",{icon: 2});
+                }
+            });
+
+            return false;
+            //在Ajax异步判断该时间内是否有其他用户进行了预约
+        }
     </script>
 </head>
 
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：添加门店
+        当前位置：编辑门店信息
     </div>
 </div>
 <div class="center_con">
@@ -114,8 +268,125 @@
 
         </table>
     </form>
+    <span style="float: left; font-weight:bold;width: 100px;margin-left:50px;">考勤周期信息</span>
+    <table width="100%" class="reg_table" border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td class="regTd_l"></td>
+            <%
+            for(var s = 0 ; s < staffArr.length ; s ++){
+                %><td class="regTd"><%=staffArr[s].name%></td><%
+            }
+            %>
+        </tr>
+        <%
+            var thisDate = new Date();
+            thisDate.setDate(thisDate.getDate() - thisDate.getDay());
+            for(var i = 0 ; i < 14 ; i ++){
+                thisDate.setDate(thisDate.getDate() + 1);
+                var thisYear = thisDate.getYear();
+                thisYear = "20"+(thisYear+"").substr(1,3);
+                var thisMonth = thisDate.getMonth() + 1;
+                //thisMonth = thisMonth < 10 ? "0"+thisMonth : thisMonth;
+                var today = thisDate.getDate();
+                var formatDate = thisYear+"-"+thisMonth+"-"+today;
+                var thisWeek = thisDate.getDay();
+                if(thisWeek == 1){
+                    thisWeek = "一";
+                }else if(thisWeek == 2){
+                    thisWeek = "二";
+                }else if(thisWeek == 3){
+                    thisWeek = "三";
+                }else if(thisWeek == 4){
+                    thisWeek = "四";
+                }else if(thisWeek == 5){
+                    thisWeek = "五";
+                }else if(thisWeek == 6){
+                    thisWeek = "六";
+                }else if(thisWeek == 0){
+                    thisWeek = "日";
+                }
+        %>
+                    <tr>
+                        <td class="regTd"><%=formatDate%>(周<%=thisWeek%>)</td>
+                        <%
+                        var isAttendance = false;
+                        var aa = "";
+                        for(var s = 0 ; s < staffArr.length ; s ++){
+                            isAttendance = false;
+                            aa = "";
+                            %>
+                            <%
+                            for(var a = 0 ; a < attendanceDetailDatas.length ; a ++){
+                                aa = attendanceDetailDatas[a].attendanceDate;
+                                if(attendanceDetailDatas[a].staffId == staffArr[s].id && formatDate == attendanceDetailDatas[a].attendanceDate){
+                                    %>
+                                    <td id="tableTd<%=i%><%=s%>" class="regTd" bgcolor="#adffa0">
+                                        <form method="post" action="/jinquan/shop_update4AttendanceDetail" onsubmit="return checkWorkHour('<%=i%><%=s%>')" >
+                                            <input type="hidden" id="attendanceDetailId<%=i%><%=s%>" name="attendanceDetailId" value="<%=attendanceDetailDatas[a].id%>"/>
+                                            <input type="hidden" id="attendanceStaffId<%=i%><%=s%>" name="attendanceStaffId" value="<%=attendanceDetailDatas[a].staffId%>"/>
+                                            <select id="WorkTypeId<%=i%><%=s%>" name="WorkTypeId" onchange="changeAttendance('<%=i%><%=s%>')">
+                                                <option value="">请选择</option>
+                                                <option value="1" <%if(attendanceDetailDatas[a].workType == 1){%>selected<%}%>>早班</option>
+                                                <option value="2" <%if(attendanceDetailDatas[a].workType == 2){%>selected<%}%>>中班</option>
+                                                <option value="3" <%if(attendanceDetailDatas[a].workType == 3){%>selected<%}%>>晚班</option>
+                                                <option value="4" <%if(attendanceDetailDatas[a].workType == 4){%>selected<%}%>>半天</option>
+                                            </select>
+                                            <span id="buttonSpanId<%=i%><%=s%>" style="display: none">
+                                                <button>更新</button>
+                                            </span>
+                                            <br>
+                                            <span id="WorkHourSpanId<%=i%><%=s%>">
+                                                <%=attendanceDetailDatas[a].startWorkingHours%>~<%=attendanceDetailDatas[a].endWorkingHours%>
+                                            </span>
+                                            <input id="startWorkingHours<%=i%><%=s%>" name="startWorkingHours" value="<%=attendanceDetailDatas[a].startWorkingHours%>" type="hidden"/>
+                                            <input id="endWorkingHours<%=i%><%=s%>" name="endWorkingHours" value="<%=attendanceDetailDatas[a].endWorkingHours%>" type="hidden"/>
+                                    <%
+                                    isAttendance = true;
+                                    break;
+                                }
+                            }
+                            if(!isAttendance){
+                                %>
+                        <td id="tableTd<%=i%><%=s%>" class="regTd" bgcolor="#ffa07f">
+                            <form method="post" action="/jinquan/shop_update4AttendanceDetail" onsubmit="return checkWorkHour('<%=i%><%=s%>')" >
+                                <input type="hidden" id="attendanceDetailId<%=i%><%=s%>" value=""/>
+                                <input type="hidden" id="attendanceStaffId<%=i%><%=s%>"  value="<%=staffArr[s].id%>"/>
+                                    <select id="WorkTypeId<%=i%><%=s%>" name="WorkTypeId" onchange="changeAttendance('<%=i%><%=s%>')">
+                                        <option>请选择</option>
+                                        <option value="1">早班</option>
+                                        <option value="2">中班</option>
+                                        <option value="3">晚班</option>
+                                        <option value="4">半天</option>
+                                    </select>
+                                <span id="buttonSpanId<%=i%><%=s%>" style="display: none">
+                                    <button>更新</button>
+                                </span>
+                                <br>
+                                <span id="WorkHourSpanId<%=i%><%=s%>">
+                                    无
+                                </span>
+                                <input id="startWorkingHours<%=i%><%=s%>" name="startWorkingHours" value="" type="hidden"/>
+                                <input id="endWorkingHours<%=i%><%=s%>" name="endWorkingHours" value="" type="hidden"/>
+                                <%
+                            }
+                                %>
+                                <input type="hidden" id="attendanceDate<%=i%><%=s%>" name="attendanceDate" value="<%=formatDate%>"/>
+                            </form>
+                            </td>
+                            <%
+                        }
+                        %>
+                    </tr>
+                <%
+            }
+        %>
+    </table>
     <div class="reg_but">
-        <div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div>
+        <%
+        if(show == ''){
+        %><div class="rb_l"><a href="javascript:;" onclick="submitForm()" class="reset"></a></div><%
+        }
+        %>
         <div class="rb_l"><a href="/jinquan/shop_list" class="close"></a></div>
     </div>
 

@@ -46,7 +46,9 @@
         }
         //2、选择某会员后，调动本页面方法，查询该会员预约、服务、投诉情况
         function getMemberByMemberId(memberId){
-
+            if(memberId == ''){
+                return;
+            }
             $.ajax({
                 data: {"memberId":memberId},
                 url: '/jinquan/getMemberByMemberId',
@@ -672,7 +674,7 @@
                     %><br><%
                     }
                     }%>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;</td>
 
                 <td class="regTd_l">服务需求：</td>
                 <td class="regTd_r">
@@ -692,7 +694,7 @@
                     }%>
 
 
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;</td>
             </tr>
             <tr>
                 <td class="regTd_l">当前状态：</td>

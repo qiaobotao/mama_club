@@ -25,6 +25,8 @@ var commonUtil = require('../../model/utils/common');
 module.exports.list = function (req, res,next) {
     // 从session 中获取门店id
     var shopId = req.session.user.shopId;
+    //从session 中获取用户关联的门店列表
+    var availableSopIds = req.session.user.availableSopIds;
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
     var meetTime = req.query.meetTime ? req.query.meetTime : '';
@@ -39,7 +41,7 @@ module.exports.list = function (req, res,next) {
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;
     var resourcesData = req.session.user.resourcesData;
-    service.fetchAllServiceMeet(shopId,tel,name,meetTime,status,currentPage, function (err, results) {
+    service.fetchAllServiceMeet(availableSopIds,shopId,tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;
@@ -156,27 +158,45 @@ module.exports.doEdit = function (req, res,next) {
     }
 }
 
-
+/**
+ * 进入编辑页面（新增、修改、查看）
+ * @param req
+ * @param res
+ * @param next
+ */
 module.exports.preEdit = function(req, res, next) {
     var shopId = req.session.user.shopId;
     var id = req.query.id ? req.query.id : '';
     var show = req.query.show ? req.query.show : '';
     var userId = req.session.user.id;//用户id
-
+    //查找预约单信息、门店列表、做过何种处理、服务需求列表
     service.fetchSingleServiceMeet(userId,id, function(err, results) {
         if (!err) {
             var service_meet = results.serviceMeetService.length == 0 ? {} : results.serviceMeetService[0];
-            var memberName =service_meet.name;
             var tel =service_meet.tel;
             var treatmentMethodArr = results.treatmentMethodArr;
             var serverDemandArr = results.serverDemandArr;
             var shopArr = results.shopsByUserIdData;
             var result={};
-            memberService.getMemberByNameTel(tel ,shopId ,function(err, results) {
+
+            res.render('serviceMeet/serviceMeetEdit', {
+                service_meet : service_meet,
+                show:show,
+                datas:{},
+                treatmentMethodArr:treatmentMethodArr,
+                serverDemandArr:serverDemandArr,
+                shopArr:shopArr});
+            if(id == ''){//如果预约单id为空，为新增，直接跳转页面
+            }else{//预约单id不为空，查询用户信息
+
+            }
+            /**
+
+
+             memberService.getMemberByNameTel(tel ,shopId ,function(err, results) {
                 if (!err) {
                     var member = results.length == 0 ? null : results[0];
                    member == null ? {} : member;
-                    if(1==1){
                         res.render('serviceMeet/serviceMeetEdit', {
                             service_meet : service_meet,
                             show:show,
@@ -184,40 +204,12 @@ module.exports.preEdit = function(req, res, next) {
                             treatmentMethodArr:treatmentMethodArr,
                             serverDemandArr:serverDemandArr,
                             shopArr:shopArr});
-                    }else{
-
-                        result.member=member;
-                        //预约服务单
-                        servicemeet.getTop3ServiceMeet(member.id,function(err, services) {
-                            result.serviceMeets=services;
-
-                            var serviceMeetIds="";
-                            for(var i=0;i<services.length;i++)
-                            {
-                                serviceMeetIds+="'"+services[i].id+"',";
-                            }
-                            serviceMeetIds= serviceMeetIds.substr(0,serviceMeetIds.length-1);
-                            //护理服务
-                            nursservice.getTop3NursService(serviceMeetIds,function(err, nursServices) {
-                                result.nursServices=nursServices;
-                                complain.getTop3Complain(serviceMeetIds,function(err, complains) {
-                                    result.complains=complains;
-                                    var datas = JSON.stringify(result);
-                                    res.render('serviceMeet/serviceMeetEdit', {
-                                        service_meet : service_meet,
-                                        show:show,
-                                        datas:datas,
-                                        treatmentMethodArr:treatmentMethodArr,
-                                        serverDemandArr:serverDemandArr,
-                                        shopArr:shopArr});
-                                });
-                            })
-                        });
-                    }
                 }else{
                     next();
                 }
                 })
+
+             */
         } else {
             next();
         }
@@ -243,6 +235,8 @@ module.exports.del = function (req, res, next) {
  * @param res
  */
 module.exports.select = function (req, res,next) {
+    //从session 中获取用户关联的门店列表
+    var availableSopIds = req.session.user.availableSopIds;
     var shopId = req.session.user.shopId;
     var tel = req.query.phone ? req.query.phone : '';
     var name = req.query.name ? req.query.name : '';
@@ -253,7 +247,7 @@ module.exports.select = function (req, res,next) {
     var url = '/jinquan'+req.url;
 
     //根据条件查询所有预约单信息，其中状态必须是预约成功的状态：1：已预约；2：上门预约
-    service.fetchAllServiceMeet(shopId,tel,name,meetTime,status,currentPage, function (err, results) {
+    service.fetchAllServiceMeet(availableSopIds,shopId,tel,name,meetTime,status,currentPage, function (err, results) {
         if (!err) {
             results.phone = tel;
             results.name = name;

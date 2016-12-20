@@ -154,19 +154,88 @@ module.exports.updateShop = function(id, serialNumber,name,address, principal, t
 
 /**
  * 获取门店详情
+ * 以及门店内员工工作情况详情
  * @param id
  * @param cb
  */
 module.exports.fetchSingleShop =function (id, cb) {
 
-    var sql = 'SELECT * FROM shop WHERE id = ?';
-    db.query(sql, [id],  function(cbData, err, rows, fields) {
+    var shopDetailsSql = 'SELECT * FROM shop WHERE id = ?';
+    var attendanceDetailSql = "SELECT a.id,a.staffId,a.workType,date_format(a.attendanceDate,'%Y-%c-%d') as attendanceDate,a.workingStartHours as startWorkingHours,a.workingEndHours as endWorkingHours FROM attendanceDetails a,staff s WHERE a.staffId = s.id and s.shopId = ?";
+    //var attendanceDetailSql = "SELECT a.id,a.staffId,a.workType,date_format(a.attendanceDate,'%Y-%c-%d') as attendanceDate,date_format(a.workingStartHours,'%h:%i') as startWorkingHours,date_format(a.workingEndHours,'%h:%i') as endWorkingHours FROM attendanceDetails a,staff s WHERE a.staffId = s.id and s.shopId = ?";
+    async.series({
+        shopData : function(callback){
+            db.query(shopDetailsSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        },
+        attendanceDetailData : function(callback){
+            db.query(attendanceDetailSql, [id], function (cbData, err, rows, fields) {
+                if (!err) {
+                    callback(null,rows);
+                } else {
+                    callback(err);
+                }
+            });
+        }
+    },function(err, results) {
+
+        if (!err) {
+            cb (null, results);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
+ * 修改attendanceDetail表记录
+ * @param attendanceDetailId
+ * @param workTypeId
+ * @param startWorkingHours
+ * @param endWorkingHours
+ * @param cb
+ */
+module.exports.updateShop4AttendanceDetail = function (attendanceDetailId, workTypeId, startWorkingHours, endWorkingHours, cb) {
+
+    var sql = 'UPDATE attendanceDetails  SET workType = ?,workingStartHours=?,workingEndHours=? WHERE id = ?';
+    db.query(sql, [workTypeId, startWorkingHours, endWorkingHours,attendanceDetailId], function(cbData, err, rows, filelds) {
 
         if (!err) {
             cb(null, rows);
         } else {
             cb(err);
         }
+
+    });
+}
+
+/**
+ * 新增attendanceDetail表记录
+ * @param attendanceDetailId
+ * @param workTypeId
+ * @param startWorkingHours
+ * @param endWorkingHours
+ * @param cb
+ */
+module.exports.insetShop4AttendanceDetail = function (attendanceDetailId, workTypeId, startWorkingHours,endWorkingHours,attendanceStaffId,attendanceDate, cb) {
+
+    var attendanceDetailSql = "SELECT a.id,a.staffId,a.workType,date_format(a.attendanceDate,'%Y-%c-%d') as attendanceDate,a.workingStartHours as startWorkingHours,a.workingEndHours as endWorkingHours FROM attendanceDetails a,staff s WHERE a.staffId = s.id and s.shopId = ?";
+
+    var sql = 'INSERT INTO attendanceDetails (staffId,attendanceDate,workType,workingStartHours,workingEndHours,dateline) ' +
+        '   VALUES (?,?,?,?,?,?)';
+    db.query(sql, [ attendanceStaffId,attendanceDate,workTypeId, startWorkingHours,endWorkingHours,new Date().getTime()], function(cbData, err, rows, filelds) {
+
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+
     });
 }
 

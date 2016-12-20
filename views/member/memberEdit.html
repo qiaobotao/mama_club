@@ -22,10 +22,10 @@
                 parent.layer.alert('姓名不能为空',{icon: 2});
                 return;
             }
-            if($("#birthYearMonth").val() == ''){
-                parent.layer.alert('出生年月不能为空',{icon: 2});
-                return;
-            }
+//            if($("#birthYearMonth").val() == ''){
+//                parent.layer.alert('出生年月不能为空',{icon: 2});
+//                return;
+//            }
 
             //获取三个手机号，分别判断是否为空，是否是正常手机号
             var telStr = "";
@@ -39,174 +39,174 @@
                     telStr += $(this).val();
                 }
             });
-            if(telStr == ""){
-                parent.layer.alert('至少填写一个联系电话。',{icon: 2});
-                return;
-            }
 
             if(telErrorStr != ""){
                 parent.layer.alert(telErrorStr,{icon: 2});
                 return ;
             }
-
-
-            var workStatus = document.getElementById("workStatus").value;
-            if (!workStatus || workStatus.length == 0) {
-                parent.layer.alert('工作状态不能为空',{icon: 2});
+            if(telStr == ""){
+                parent.layer.alert('至少填写一个联系电话。',{icon: 2});
                 return;
             }
+
+
+//            var workStatus = document.getElementById("workStatus").value;
+//            if (!workStatus || workStatus.length == 0) {
+//                parent.layer.alert('工作状态不能为空',{icon: 2});
+//                return;
+//            }
 
             //居住地址
-            if($("#s1").val() == "省份"){
-                parent.layer.alert('请选择省份。',{icon: 2});
-                return;
-            }
-            if($("#s2").val() == "地级市"){
-                parent.layer.alert('请选择市。',{icon: 2});
-                return;
-            }
-            if($("#s3").val() == "市、县级市、县"){
-                parent.layer.alert('请选择乡镇。',{icon: 2});
-                return;
-            }
-            if($("#address").val() == ""){
-                parent.layer.alert('请填写小区信息。',{icon: 2});
-                return;
-            }
+//            if($("#s1").val() == "省份"){
+//                parent.layer.alert('请选择省份。',{icon: 2});
+//                return;
+//            }
+//            if($("#s2").val() == "地级市"){
+//                parent.layer.alert('请选择市。',{icon: 2});
+//                return;
+//            }
+//            if($("#s3").val() == "市、县级市、县"){
+//                parent.layer.alert('请选择乡镇。',{icon: 2});
+//                return;
+//            }
+//            if($("#address").val() == ""){
+//                parent.layer.alert('请填写小区信息。',{icon: 2});
+//                return;
+//            }
 
 
 
-            var motherEducation = document.getElementById("motherEducation").value;
-            if (!motherEducation || motherEducation.length == 0) {
-                parent.layer.alert('妈妈学历不能为空',{icon: 2});
-                return;
-            }
-            var fatherEducation = document.getElementById("fatherEducation").value;
-            if (!fatherEducation || fatherEducation.length == 0) {
-                parent.layer.alert('爸爸学历不能为空',{icon: 2});
-                return;
-            }
-            var address = document.getElementById("address").value;
-            if (!address || address.length == 0) {
-                parent.layer.alert('居住地址不能为空',{icon: 2});
-                return;
-            }
-            var deliveryMode = document.getElementById("deliveryMode").value;
-            if (!deliveryMode || deliveryMode.length == 0) {
-                parent.layer.alert('分娩方式不能为空',{icon: 2});
-                return;
-            }
-            var deliveryWeeks = document.getElementById("deliveryWeeks").value;
-            if (!deliveryWeeks || deliveryWeeks.length == 0) {
-                parent.layer.alert('分娩时孕周不能为空',{icon: 2});
-                return;
-            }
-            var deliveryHospital = document.getElementById("deliveryHospital").value;
-            if (!deliveryHospital || deliveryHospital.length == 0) {
-                parent.layer.alert('分娩医院不能为空',{icon: 2});
-                return;
-            }
-
-            var parentTrainingStr = "";
-            $("input[name='parentTraining']").each(function(){
-                if($(this).attr("checked") == 'checked'){
-                    parentTrainingStr +=$(this).val() + ",";
-                }
-            });
-            if(parentTrainingStr == ''){
-                parent.layer.alert('请选择参与育儿情况',{icon: 2});
-                return;
-            }
-
-            var secondChildExperience = document.getElementById("secondChildExperience").value;
-            if (!secondChildExperience || secondChildExperience.length == 0) {
-                parent.layer.alert('二胎经验不能为空',{icon: 2});
-                return;
-            }
-
-
-            if(!$("#secondChildExperienceRemarkSpanId").is(":hidden")) {//挤奶次数
-                if ($("#secondChildExperienceRemark").val() == '') {
-                    parent.layer.alert('二胎经验备注不能为空',{icon: 2});
-                    return;
-                }
-            }
-
-            var wifeBreastfeedTime = document.getElementById("wifeBreastfeedTime").value;
-            if (!wifeBreastfeedTime || wifeBreastfeedTime.length == 0) {
-                parent.layer.alert('妻子儿时母乳多久不能为空',{icon: 2});
-                return;
-            }
-            var husbandBreastfeedTime = document.getElementById("husbandBreastfeedTime").value;
-            if (!husbandBreastfeedTime || husbandBreastfeedTime.length == 0) {
-                parent.layer.alert('丈夫儿时母乳多久不能为空',{icon: 2});
-                return;
-            }
-            var breastfeedReason = document.getElementById("breastfeedReason").value;
-            if (!breastfeedReason || breastfeedReason.length == 0) {
-                parent.layer.alert('母乳喂养理由不能为空',{icon: 2});
-                return;
-            }
-            var childSex = document.getElementById("childSex").value;
-            if (!childSex || childSex.length == 0) {
-                parent.layer.alert('宝宝性别不能为空',{icon: 2});
-                return;
-            }
-            var childWeight = document.getElementById("childWeight").value;
-            if (!childWeight || childWeight.length == 0) {
-                parent.layer.alert('出生体重不能为空',{icon: 2});
-                return;
-            }
-            var childBirthday = document.getElementById("childBirthday").value;
-            if (!childBirthday || childBirthday.length == 0) {
-                parent.layer.alert('出生日期不能为空',{icon: 2});
-                return;
-            }
-
-            var understandJinQuanChannelStr = "";
-            $("input[name='understandJinQuanChannel']").each(function(){
-                if($(this).attr("checked") == 'checked'){
-                    understandJinQuanChannelStr +=$(this).val() + ",";
-                }
-            });
-            if(understandJinQuanChannelStr == ''){
-                parent.layer.alert('如何知道金泉不能为空',{icon: 2});
-                return;
-            }
+//            var motherEducation = document.getElementById("motherEducation").value;
+//            if (!motherEducation || motherEducation.length == 0) {
+//                parent.layer.alert('妈妈学历不能为空',{icon: 2});
+//                return;
+//            }
+//            var fatherEducation = document.getElementById("fatherEducation").value;
+//            if (!fatherEducation || fatherEducation.length == 0) {
+//                parent.layer.alert('爸爸学历不能为空',{icon: 2});
+//                return;
+//            }
+//            var address = document.getElementById("address").value;
+//            if (!address || address.length == 0) {
+//                parent.layer.alert('居住地址不能为空',{icon: 2});
+//                return;
+//            }
+//            var deliveryMode = document.getElementById("deliveryMode").value;
+//            if (!deliveryMode || deliveryMode.length == 0) {
+//                parent.layer.alert('分娩方式不能为空',{icon: 2});
+//                return;
+//            }
+//            var deliveryWeeks = document.getElementById("deliveryWeeks").value;
+//            if (!deliveryWeeks || deliveryWeeks.length == 0) {
+//                parent.layer.alert('分娩时孕周不能为空',{icon: 2});
+//                return;
+//            }
+//            var deliveryHospital = document.getElementById("deliveryHospital").value;
+//            if (!deliveryHospital || deliveryHospital.length == 0) {
+//                parent.layer.alert('分娩医院不能为空',{icon: 2});
+//                return;
+//            }
+//
+//            var parentTrainingStr = "";
+//            $("input[name='parentTraining']").each(function(){
+//                if($(this).attr("checked") == 'checked'){
+//                    parentTrainingStr +=$(this).val() + ",";
+//                }
+//            });
+//            if(parentTrainingStr == ''){
+//                parent.layer.alert('请选择参与育儿情况',{icon: 2});
+//                return;
+//            }
+//
+//            var secondChildExperience = document.getElementById("secondChildExperience").value;
+//            if (!secondChildExperience || secondChildExperience.length == 0) {
+//                parent.layer.alert('二胎经验不能为空',{icon: 2});
+//                return;
+//            }
+//
+//
+//            if(!$("#secondChildExperienceRemarkSpanId").is(":hidden")) {//挤奶次数
+//                if ($("#secondChildExperienceRemark").val() == '') {
+//                    parent.layer.alert('二胎经验备注不能为空',{icon: 2});
+//                    return;
+//                }
+//            }
+//
+//            var wifeBreastfeedTime = document.getElementById("wifeBreastfeedTime").value;
+//            if (!wifeBreastfeedTime || wifeBreastfeedTime.length == 0) {
+//                parent.layer.alert('妻子儿时母乳多久不能为空',{icon: 2});
+//                return;
+//            }
+//            var husbandBreastfeedTime = document.getElementById("husbandBreastfeedTime").value;
+//            if (!husbandBreastfeedTime || husbandBreastfeedTime.length == 0) {
+//                parent.layer.alert('丈夫儿时母乳多久不能为空',{icon: 2});
+//                return;
+//            }
+//            var breastfeedReason = document.getElementById("breastfeedReason").value;
+//            if (!breastfeedReason || breastfeedReason.length == 0) {
+//                parent.layer.alert('母乳喂养理由不能为空',{icon: 2});
+//                return;
+//            }
+//            var childSex = document.getElementById("childSex").value;
+//            if (!childSex || childSex.length == 0) {
+//                parent.layer.alert('宝宝性别不能为空',{icon: 2});
+//                return;
+//            }
+//            var childWeight = document.getElementById("childWeight").value;
+//            if (!childWeight || childWeight.length == 0) {
+//                parent.layer.alert('出生体重不能为空',{icon: 2});
+//                return;
+//            }
+//            var childBirthday = document.getElementById("childBirthday").value;
+//            if (!childBirthday || childBirthday.length == 0) {
+//                parent.layer.alert('出生日期不能为空',{icon: 2});
+//                return;
+//            }
+//
+//            var understandJinQuanChannelStr = "";
+//            $("input[name='understandJinQuanChannel']").each(function(){
+//                if($(this).attr("checked") == 'checked'){
+//                    understandJinQuanChannelStr +=$(this).val() + ",";
+//                }
+//            });
+//            if(understandJinQuanChannelStr == ''){
+//                parent.layer.alert('如何知道金泉不能为空',{icon: 2});
+//                return;
+//            }
 
 
             //处理医院添加 start
-            var hospitalizationArr = $("input[name='hospitalizationArr']:checked");
-            var hospitalizationStr = "";
-            for(var i = 0 ; i < hospitalizationArr.length ; i ++){
-                if(i != 0){
-                    hospitalizationStr +=","
-                }
-                hospitalizationStr += hospitalizationArr[i].value;
-            }
-            $("#hospitalization").val(hospitalizationStr);
+//            var hospitalizationArr = $("input[name='hospitalizationArr']:checked");
+//            var hospitalizationStr = "";
+//            for(var i = 0 ; i < hospitalizationArr.length ; i ++){
+//                if(i != 0){
+//                    hospitalizationStr +=","
+//                }
+//                hospitalizationStr += hospitalizationArr[i].value;
+//            }
+//            $("#hospitalization").val(hospitalizationStr);
             //处理医院添加 end
             //辅助工具添加 start
-            var assistantToolArr = $("input[name='assistantToolArr']:checked");
-            var assistantToolStr = "";
-            for(var i = 0 ; i < assistantToolArr.length ; i ++){
-                if(i != 0){
-                    assistantToolStr +=","
-                }
-                assistantToolStr += assistantToolArr[i].value;
-            }
-            $("#assistantTool").val(assistantToolStr);
+//            var assistantToolArr = $("input[name='assistantToolArr']:checked");
+//            var assistantToolStr = "";
+//            for(var i = 0 ; i < assistantToolArr.length ; i ++){
+//                if(i != 0){
+//                    assistantToolStr +=","
+//                }
+//                assistantToolStr += assistantToolArr[i].value;
+//            }
+//            $("#assistantTool").val(assistantToolStr);
             //辅助工具添加 end
             //特殊说明添加 start
-            var specialInstructionsArr = $("input[name='specialInstructionsArr']:checked");
-            var specialInstructionsStr = "";
-            for(var i = 0 ; i < specialInstructionsArr.length ; i ++){
-                if(i != 0){
-                    specialInstructionsStr +=","
-                }
-                specialInstructionsStr += specialInstructionsArr[i].value;
-            }
-            $("#specialInstructions").val(specialInstructionsStr);
+//            var specialInstructionsArr = $("input[name='specialInstructionsArr']:checked");
+//            var specialInstructionsStr = "";
+//            for(var i = 0 ; i < specialInstructionsArr.length ; i ++){
+//                if(i != 0){
+//                    specialInstructionsStr +=","
+//                }
+//                specialInstructionsStr += specialInstructionsArr[i].value;
+//            }
+//            $("#specialInstructions").val(specialInstructionsStr);
             //特殊说明添加 end
             document.getElementById("myform").submit();
         }
@@ -268,11 +268,13 @@
          * 变更二胎经验时触发事件
          */
         function changeSecondChildExperience(){
-            if(document.getElementById("secondChildExperience").selectedIndex == 1){
-                $("#secondChildExperienceRemarkSpanId").hide();
-            }else{
-                $("#secondChildExperienceRemarkSpanId").show();
-            }
+            //只有姓名、电话必填，其他均选填
+            return ;
+//            if(document.getElementById("secondChildExperience").selectedIndex == 1){
+//                $("#secondChildExperienceRemarkSpanId").hide();
+//            }else{
+//                $("#secondChildExperienceRemarkSpanId").show();
+//            }
         }
 
     </script>
@@ -292,14 +294,15 @@
             </tr>
             <tr>
                 <input id="id" type="hidden" name="id" value="<%=member.id%>"/>
-                <td class="regTd_l">会员卡信息：</td>
+                <td class="regTd_l">会员卡号：</td>
                 <td class="regTd_r"><input id="memberCardType" name="memberCardType" type="text" class="input5" readonly="ture" value="<%=member.serialNumber%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">
                     姓名：<br/>
                     原始卡号：
                 </td>
                 <td class="regTd_r">
-                    <input id="memberName" name="memberName" type="text" class="input5" value="<%=member.memberName%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                    <input id="memberName" name="memberName" type="text" class="input5" value="<%=member.memberName%>"/>&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
                     <br/>
                     <input id="memberNo" name="memberNo" type="text" class="input5" value="<%=member.memberNo%>" readonly/>&nbsp;&nbsp;
                 </td>
@@ -312,18 +315,21 @@
                     var telArr = tels.split(";");
                     for(var i = 0 ; i < 3; i ++){
                         if(telArr.length > i){
-                        %><input name="tel" type="text" class="input5" value="<%=telArr[i]%>"/>&nbsp;<%
+                            %><input name="tel" type="text" class="input5" value="<%=telArr[i]%>"/><%
                         }else{
-                        %><input name="tel" type="text" class="input5" value=""/>&nbsp;<%
+                            %><input name="tel" type="text" class="input5" value="" /> <%
                         }
                         if(i<2){
-                        %><br><%
+                            %><br><%
                         }
                     }
                     %>
                     &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
                 <td  class="regTd_l">出生年月：</td>
-                <td class="regTd_r"><input id="birthYearMonth" name="birthYearMonth" type="text" class="input5" value="<%=member.birthYearMonth%>" readonly onclick="laydate({istime: true, format: 'YYYY-MM'})"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="birthYearMonth" name="birthYearMonth" type="text" class="input5" value="<%=member.birthYearMonth%>" readonly onclick="laydate({istime: true, format: 'YYYY-MM'})"/>&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">工作状态：</td>
@@ -336,7 +342,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
 
                 <td class="regTd_l">居住地址：</td>
                 <td class="regTd_r" colspan="3">
@@ -351,7 +358,8 @@
                     </select>
 
                     <input id="address" name="address" type="text" class="input5"   value="<%=member.address%>"/>&nbsp;&nbsp;
-                    <span style="color:#FF0000;">*</span></td>
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈学历：</td>
@@ -364,7 +372,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">爸爸学历：</td>
                 <td class="regTd_r">
                     <select id="fatherEducation" name="fatherEducation">
@@ -375,7 +384,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <!-- 孕产信息 -->
             <tr>
@@ -392,7 +402,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">分娩时孕周：</td>
                 <td class="regTd_r">
                     <input id="deliveryWeeks" name="deliveryWeeks" type="text" class="input5" value="<%=member.deliveryWeeks%>"/>
@@ -406,11 +417,14 @@
                         %>
                     </select>
                     -->
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">分娩医院：</td>
-                <td class="regTd_r"><input id="deliveryHospital" name="deliveryHospital" type="text" class="input5" value="<%=member.deliveryHospital%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="deliveryHospital" name="deliveryHospital" type="text" class="input5" value="<%=member.deliveryHospital%>"/>&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>--></td>
                 <td class="regTd_l">参与育儿：</td>
                 <td class="regTd_r">
                     <%
@@ -422,7 +436,8 @@
                     %>
 
 
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">二胎经验：</td>
@@ -435,11 +450,13 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">二胎经验备注：</td>
                 <td class="regTd_r">
                     <input id="secondChildExperienceRemark" name="secondChildExperienceRemark" type="text" class="input5" value="<%=member.secondChildExperienceRemark%>"/>&nbsp;&nbsp;
-                    <span id="secondChildExperienceRemarkSpanId" style="color:#FF0000;">*</span></td>
+                    <!--<span id="secondChildExperienceRemarkSpanId" style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">妻子儿时母乳多久：</td>
@@ -452,7 +469,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">丈夫儿时母乳多久：</td>
                 <td class="regTd_r">
                     <select id="husbandBreastfeedTime" name="husbandBreastfeedTime">
@@ -463,7 +481,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">母乳喂养理由：</td>
@@ -476,7 +495,8 @@
                         }
                         %>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
 
             <!-- 宝宝信息 -->
@@ -500,11 +520,17 @@
                 <td class="regTd_r">
                     <input id="childHeight" name="childHeight" type="text" class="input5" value="<%=member.childHeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>cm&nbsp;&nbsp;</td>
                 <td class="regTd_l">出生体重：</td>
-                <td class="regTd_r"><input id="childWeight" name="childWeight" type="text" class="input5" value="<%=member.childWeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>Kg&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="childWeight" name="childWeight" type="text" class="input5" value="<%=member.childWeight%>" style="width: 85px;" onchange="isOnlyNum(this)"/>Kg&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">出生日期：</td>
-                <td class="regTd_r"><input id="childBirthday" name="childBirthday" type="text" class="input5" value="<%=member.childBirthday%>" readonly onclick="laydate()"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="childBirthday" name="childBirthday" type="text" class="input5" value="<%=member.childBirthday%>" readonly onclick="laydate()"/>&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">如何知道金泉：</td>
                 <td class="regTd_r">
                     <input id="friendsIntroduce" name="understandJinQuanChannel" type="checkbox" value="friendsIntroduce" <%if(member.understandJinQuanChannel == 'friendsIntroduce'){%>checked<%}%>>朋友介绍
@@ -513,7 +539,7 @@
                     <input id="forum" name="understandJinQuanChannel" type="checkbox"  value="forum" <%if(member.understandJinQuanChannel == 'forum'){%>checked<%}%>>论坛/社区
                     <input id="QQ" name="understandJinQuanChannel" type="checkbox"  value="QQ" <%if(member.understandJinQuanChannel == 'QQ'){%>checked<%}%>>Q群
                     <input name="understandJinQuanChannelDes" type="text"  />
-                    <span style="color:#FF0000;">*</span>
+                    <!--<span style="color:#FF0000;">*</span>-->
                 </td>
             </tr>
             <tr>

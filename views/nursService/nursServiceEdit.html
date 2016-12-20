@@ -19,62 +19,62 @@
                 return ;
             }
             //大便次数
-            if(!$("#bowelFrequencSpanId").is(":hidden")){//大便次数必填
-                if($("#bowelFrequenc").val() == ''){
-                    parent.layer.alert('大便次数不能为空。',{icon: 2});
-                    return ;
-                }
-            }
+//            if(!$("#bowelFrequencSpanId").is(":hidden")){//大便次数必填
+//                if($("#bowelFrequenc").val() == ''){
+//                    parent.layer.alert('大便次数不能为空。',{icon: 2});
+//                    return ;
+//                }
+//            }
             //性状
-            if(!$("#shapeSpanId").is(":hidden")){//大便次数必填
-                if($("#shape").val() == ''){
-                    parent.layer.alert('请选择性状。',{icon: 2});
-                    return ;
-                }
-            }
+//            if(!$("#shapeSpanId").is(":hidden")){//大便次数必填
+//                if($("#shape").val() == ''){
+//                    parent.layer.alert('请选择性状。',{icon: 2});
+//                    return ;
+//                }
+//            }
             //喂养情况
-            if($("#feedSituation").val() == ''){
-                parent.layer.alert('请选择喂养情况。',{icon: 2});
-                return ;
-            }
+//            if($("#feedSituation").val() == ''){
+//                parent.layer.alert('请选择喂养情况。',{icon: 2});
+//                return ;
+//            }
             //尿量
-            if(!$("#urinationSpanId").is(":hidden")){//大便次数必填
-                if($("#urination").val() == ''){
-                    parent.layer.alert('请选择尿量。',{icon: 2});
-                    return ;
-                }
-            }
+//            if(!$("#urinationSpanId").is(":hidden")){//大便次数必填
+//                if($("#urination").val() == ''){
+//                    parent.layer.alert('请选择尿量。',{icon: 2});
+//                    return ;
+//                }
+//            }
             //目前体重
-            if(!$("#childCurrentWeightSpanId").is(":hidden")){//目前体重
-                if($("#childCurrentWeight").val() == ''){
-                    parent.layer.alert('请填写目前体重。',{icon: 2});
-                    return ;
-                }
-            }
+//            if(!$("#childCurrentWeightSpanId").is(":hidden")){//目前体重
+//                if($("#childCurrentWeight").val() == ''){
+//                    parent.layer.alert('请填写目前体重。',{icon: 2});
+//                    return ;
+//                }
+//            }
             //喂养备注
-            if(!$("#feedRemarkSpanId").is(":hidden")){//大便次数必填
-                if($("#feedRemark").val() == ''){
-                    parent.layer.alert('请填写喂养备注。',{icon: 2});
-                    return ;
-                }
-            }
+//            if(!$("#feedRemarkSpanId").is(":hidden")){//大便次数必填
+//                if($("#feedRemark").val() == ''){
+//                    parent.layer.alert('请填写喂养备注。',{icon: 2});
+//                    return ;
+//                }
+//            }
             //挤奶情况
-            if($("#milkSituation").val() == ''){
-                parent.layer.alert('请选择挤奶情况。',{icon: 2});
-                return ;
-            }
+//            if($("#milkSituation").val() == ''){
+//                parent.layer.alert('请选择挤奶情况。',{icon: 2});
+//                return ;
+//            }
             //宝宝目前月龄
-            if($("#childCurrentMonths").val() == ''){
-                parent.layer.alert('请填写宝宝目前月龄。',{icon: 2});
-                return ;
-            }
+//            if($("#childCurrentMonths").val() == ''){
+//                parent.layer.alert('请填写宝宝目前月龄。',{icon: 2});
+//                return ;
+//            }
             //挤奶次数
-            if(!$("#milkNumberSpanId").is(":hidden")) {//挤奶次数
-                if ($("#milkNumber").val() == '') {
-                    parent.layer.alert('请选择挤奶次数。', {icon: 2});
-                    return;
-                }
-            }
+//            if(!$("#milkNumberSpanId").is(":hidden")) {//挤奶次数
+//                if ($("#milkNumber").val() == '') {
+//                    parent.layer.alert('请选择挤奶次数。', {icon: 2});
+//                    return;
+//                }
+//            }
             //目前身高
             //不是必填项
 //            if($("#childCurrentHeight").val() == ''){
@@ -82,12 +82,12 @@
 //                return ;
 //            }
             //挤奶总量
-            if(!$("#milkAmountSpanId").is(":hidden")) {//挤奶次数
-                if ($("#milkAmount").val() == '') {
-                    parent.layer.alert('请填写挤奶总量。', {icon: 2});
-                    return;
-                }
-            }
+//            if(!$("#milkAmountSpanId").is(":hidden")) {//挤奶次数
+//                if ($("#milkAmount").val() == '') {
+//                    parent.layer.alert('请填写挤奶总量。', {icon: 2});
+//                    return;
+//                }
+//            }
             //目前体重
             //不是必填项
 //            if($("#childCurrentWeight").val() == ''){
@@ -107,10 +107,10 @@
 //                return ;
 //            }
             //是否观察哺乳
-            if($("#isCarefulNurse").val() == ''){
+//            if($("#isCarefulNurse").val() == ''){
 //                parent.layer.alert('请选择观察哺乳，。',{icon: 2});
-                return ;
-            }
+//                return ;
+//            }
             //转诊建议
             //不是必填项
 //            if($("#referralAdvise").val() == ''){
@@ -119,16 +119,16 @@
 //            }
 
             //诊断结果
-            var diagnosisStr = "";
-            $("[name='diagnosis']").each(function(){
-                if($(this).attr("checked")){
-                    diagnosisStr = "....";//代表选中的记录
-                }
-            });
-            if(diagnosisStr == ''){
-                parent.layer.alert('请选中诊断结果。',{icon: 2});
-                return ;
-            }
+//            var diagnosisStr = "";
+//            $("[name='diagnosis']").each(function(){
+//                if($(this).attr("checked")){
+//                    diagnosisStr = "....";//代表选中的记录
+//                }
+//            });
+//            if(diagnosisStr == ''){
+//                parent.layer.alert('请选中诊断结果。',{icon: 2});
+//                return ;
+//            }
             //特殊说明
             //不是必填项
 //            if($("#specialInstructions").val() == ''){
@@ -136,32 +136,32 @@
 //                return ;
 //            }
             //宝宝原因
-            var childReasonStr = "";
-            $("[name='childReason']").each(function(){
-                if($(this).attr("checked")){
-                    childReasonStr = "....";//代表选中的记录
-                }
-            });
-            if(childReasonStr == ''){
-                parent.layer.alert('请选中宝宝原因。',{icon: 2});
-                return ;
-            }
+//            var childReasonStr = "";
+//            $("[name='childReason']").each(function(){
+//                if($(this).attr("checked")){
+//                    childReasonStr = "....";//代表选中的记录
+//                }
+//            });
+//            if(childReasonStr == ''){
+//                parent.layer.alert('请选中宝宝原因。',{icon: 2});
+//                return ;
+//            }
             //乳房示意图说明
-            if($("#breastExplainId").attr('src') == '/images/noImage.png'){
-                parent.layer.alert('请上传乳房示意图说明。',{icon: 2});
-                return ;
-            }
+//            if($("#breastExplainId").attr('src') == '/images/noImage.png'){
+//                parent.layer.alert('请上传乳房示意图说明。',{icon: 2});
+//                return ;
+//            }
             //妈妈原因
-            var motherReasonStr = "";
-            $("[name='motherReason']").each(function(){
-                if($(this).attr("checked")){
-                    motherReasonStr = "....";//代表选中的记录
-                }
-            });
-            if(motherReasonStr == ''){
-                parent.layer.alert('请选择妈妈原因。',{icon: 2});
-                return ;
-            }
+//            var motherReasonStr = "";
+//            $("[name='motherReason']").each(function(){
+//                if($(this).attr("checked")){
+//                    motherReasonStr = "....";//代表选中的记录
+//                }
+//            });
+//            if(motherReasonStr == ''){
+//                parent.layer.alert('请选择妈妈原因。',{icon: 2});
+//                return ;
+//            }
             //其他原因
             /*
             var otherReasonStr = "";
@@ -176,10 +176,10 @@
             }
             */
             //离店建议
-            if($("#leaveAdvise").val() == ''){
-                parent.layer.alert('请填写离店建议。',{icon: 2});
-                return ;
-            }
+//            if($("#leaveAdvise").val() == ''){
+//                parent.layer.alert('请填写离店建议。',{icon: 2});
+//                return ;
+//            }
             //是否预约二次
             //不是必填项
 //            if($("#whetherAppointmentAgain").val() == ''){
@@ -196,20 +196,20 @@
 
             //为孩子月龄赋值
             var childMonths ='<%=nursService.childMonths%>';
-            if($("#childCurrentMonths").val() == ''){
+            if($("#childCurrentMonths").val() == '' && childMonths != ''){
                 $("#childCurrentMonths").val(childMonths+"个月");
             }
             if(childMonths > 6){//超过6个月，大便次数、性状、尿量都不是必填项
-                $("#bowelFrequencSpanId").hide();//大便次数
-                $("#shapeSpanId").hide();//性状
-                $("#urinationSpanId").hide();//尿量
-                $("#childCurrentWeightSpanId").hide();//目前体重
+//                $("#bowelFrequencSpanId").hide();//大便次数
+//                $("#shapeSpanId").hide();//性状
+//                $("#urinationSpanId").hide();//尿量
+//                $("#childCurrentWeightSpanId").hide();//目前体重
             }
             //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
-            if(document.getElementById("milkSituation").selectedIndex == 1){
-                $("#milkNumberSpanId").hide();//挤奶次数
-                $("#milkAmountSpanId").hide();//挤奶总量
-            }
+//            if(document.getElementById("milkSituation").selectedIndex == 1){
+//                $("#milkNumberSpanId").hide();//挤奶次数
+//                $("#milkAmountSpanId").hide();//挤奶总量
+//            }
             closeWindow();
             changeFeedSituation();
         });
@@ -220,23 +220,26 @@
         }
         //挤奶情况变更
         function milkSituationChange(){
+            //除基础属性外，其他属性均为选填项
+            return;
             //如果挤奶情况第一个被选中（选择无），挤奶情况如果选“无”，挤奶次数、挤奶总量都不是必填项
-
-            if(document.getElementById("milkSituation").selectedIndex == 1){
-                $("#milkNumberSpanId").hide();//挤奶次数
-                $("#milkAmountSpanId").hide();//挤奶总量
-            }else{
-                $("#milkAmountSpanId").show();//挤奶总量
-                $("#milkNumberSpanId").show();//挤奶次数
-            }
+//            if(document.getElementById("milkSituation").selectedIndex == 1){
+//                $("#milkNumberSpanId").hide();//挤奶次数
+//                $("#milkAmountSpanId").hide();//挤奶总量
+//            }else{
+//                $("#milkAmountSpanId").show();//挤奶总量
+//                $("#milkNumberSpanId").show();//挤奶次数
+//            }
         }
         //喂养情况如果不是第一个（添加配方奶），喂养备注不是必填项
         function changeFeedSituation(){
-            if(document.getElementById("feedSituation").selectedIndex == 1){
-                $("#feedRemarkSpanId").show();
-            }else{
-                $("#feedRemarkSpanId").hide();
-            }
+            //所有属性均不是必填项
+            return;
+//            if(document.getElementById("feedSituation").selectedIndex == 1){
+//                $("#feedRemarkSpanId").show();
+//            }else{
+//                $("#feedRemarkSpanId").hide();
+//            }
         }
         //弹出上传“乳房示意图说明”图片界面
         function uploadBreastExplain(){
@@ -338,7 +341,11 @@
 
 
 
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;
+                    <!--
+                    <span style="color:#FF0000;">*</span>
+                    -->
+                </td>
                 <td class="regTd_l">服务需求：</td>
                 <td class="regTd_r">
                     <!--
@@ -365,13 +372,20 @@
                     }%>
 
 
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;
+                    <!--
+                    <span style="color:#FF0000;">*</span>
+                    -->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">大便次数：</td>
                 <td class="regTd_r">
                     <input id="bowelFrequenc" name="bowelFrequenc" type="text" class="input5"  value="<%=nursService.bowelFrequenc%>"/>&nbsp;&nbsp;
-                    <span id="bowelFrequencSpanId" style="color:#FF0000;">*</span></td>
+                    <!--
+                    <span id="bowelFrequencSpanId" style="color:#FF0000;">*</span>
+                    -->
+                </td>
                 <td class="regTd_l">性状：</td>
                 <td class="regTd_r">
                     <select id="shape" name="shape">
@@ -381,7 +395,10 @@
                         %><option value="<%=dictData.shapeArr[i].id%>" <%if(nursService.shape ==dictData.shapeArr[i].id ){%>selected<%}%>><%=dictData.shapeArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span id="shapeSpanId" style="color:#FF0000;">*</span></td>
+                    <!--
+                    &nbsp;&nbsp;<span id="shapeSpanId" style="color:#FF0000;">*</span>
+                    -->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">喂养情况：</td>
@@ -393,7 +410,9 @@
                         %><option value="<%=dictData.feedingConditionArr[i].id%>" <%if(nursService.feedSituation ==dictData.feedingConditionArr[i].id ){%>selected<%}%>><%=dictData.feedingConditionArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">尿量：</td>
                 <td class="regTd_r">
                     <select id="urination" name="urination">
@@ -403,7 +422,8 @@
                         %><option value="<%=dictData.urineVolumeArr[i].id%>" <%if(nursService.urination ==dictData.urineVolumeArr[i].id ){%>selected<%}%>><%=dictData.urineVolumeArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span id="urinationSpanId" style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span id="urinationSpanId" style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">喂养备注：</td>
@@ -419,11 +439,15 @@
                         %><option value="<%=dictData.milkSituationArr[i].id%>" <%if(nursService.milkSituation ==dictData.milkSituationArr[i].id ){%>selected<%}%>><%=dictData.milkSituationArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">宝宝目前月龄：</td>
-                <td class="regTd_r"><input id="childCurrentMonths" name="childCurrentMonths" type="text" class="input5"  value="<%=nursService.childCurrentMonths%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="childCurrentMonths" name="childCurrentMonths" type="text" class="input5"  value="<%=nursService.childCurrentMonths%>"/>&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">挤奶次数：</td>
                 <td class="regTd_r">
                     <!--
@@ -436,7 +460,8 @@
                     </select>
                     -->
                     <input type="text" id="milkNumber" name="milkNumber" value="<%=nursService.milkNumber%>"/>
-                    &nbsp;&nbsp;<span id="milkNumberSpanId" style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span id="milkNumberSpanId" style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">目前身高：</td>
@@ -454,13 +479,16 @@
                     </select>
                     -->
                     <input type="text" id="milkAmount" name="milkAmount" value="<%=nursService.milkAmount%>"/>
-                    &nbsp;&nbsp;<span id="milkAmountSpanId" style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span id="milkAmountSpanId" style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">目前体重：</td>
                 <td class="regTd_r">
                     <input id="childCurrentWeight" name="childCurrentWeight" type="text" class="input5"  value="<%=nursService.childCurrentWeight%>"/>&nbsp;&nbsp;
-                    &nbsp;&nbsp;<span id="childCurrentWeightSpanId" style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;
+                    <!--<span id="childCurrentWeightSpanId" style="color:#FF0000;">*</span>-->
+                </td>
                 </td>
                 <td class="regTd_l">吸奶器品牌：</td>
                 <td class="regTd_r">
@@ -493,7 +521,8 @@
                         %><option value="<%=dictData.isViewLactationArr[i].id%>" <%if(nursService.isCarefulNurse ==dictData.isViewLactationArr[i].id ){%>selected<%}%>><%=dictData.isViewLactationArr[i].name%></option><%
                         }%>
                     </select>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;<!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">转诊建议：</td>
                 <td class="regTd_r">
                     <input id="referralAdvise" name="referralAdvise" type="text" class="input5"  value="<%=nursService.referralAdvise%>"/>&nbsp;&nbsp;</td>
@@ -512,7 +541,8 @@
                     %><br><%
                     }
                     }%>
-                    <span style="color:#FF0000;">*</span></td>
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">特殊说明：</td>
                 <td class="regTd_r">
                     <input id="specialInstructions" name="specialInstructions" type="text" class="input5"  value="<%=nursService.specialInstructions%>"/>&nbsp;&nbsp;
@@ -532,7 +562,8 @@
                     %><br><%
                     }
                     }%>
-                    <span style="color:#FF0000;">*</span></td>
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">乳房示意图说明：</td>
                 <td class="regTd_r">
                     <!--
@@ -553,7 +584,9 @@
                     </a>
 
                     <input type="button" value="点击上传" onclick="uploadBreastExplain()"/>
-                    &nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                    &nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">妈妈原因：</td>
@@ -569,9 +602,13 @@
                     %><br><%
                     }
                     }%>
-                    <span style="color:#FF0000;">*</span></td>
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
                 <td class="regTd_l">离店建议：</td>
-                <td class="regTd_r"><input id="leaveAdvise" name="leaveAdvise" type="text" class="input5"  value="<%=nursService.leaveAdvise%>"/>&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
+                <td class="regTd_r">
+                    <input id="leaveAdvise" name="leaveAdvise" type="text" class="input5"  value="<%=nursService.leaveAdvise%>"/>&nbsp;&nbsp;
+                    <!--<span style="color:#FF0000;">*</span>-->
+                </td>
             </tr>
             <tr>
                 <td class="regTd_l">其他原因：</td>

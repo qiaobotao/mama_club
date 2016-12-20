@@ -66,6 +66,24 @@ module.exports.fetchStaffs = function(pages, count, cb) {
 }
 
 /**
+ * 根据门店id获取该门店所有在职员工（status = 1）
+ * @param pages
+ * @param count
+ * @param cb
+ */
+module.exports.getStaffByShopId = function(shopId, cb) {
+
+    var sql = 'SELECT * FROM staff where shopId = ? ORDER BY dateline DESC ';
+    db.query(sql, [shopId], function (cbData, err, rows, fields) {
+        if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+}
+
+/**
  * 获取所有员工
  * @param cb
  */

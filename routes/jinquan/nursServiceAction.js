@@ -246,10 +246,6 @@ module.exports.doEdit = function (req, res,next) {
 
 }
 
-/**
- * 删除 show方法 ，查看时进入编辑界面
- */
-
 
 /**
  * 进入编辑页面

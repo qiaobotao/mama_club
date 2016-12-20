@@ -4,6 +4,7 @@
  */
 var laypage = require('laypage');
 var service = require('../../model/service/shop');
+var staffService = require('../../model/service/staff');
 var myUtils = require('../../common/utils');
 //公用数据
 var consts = require('../../model/utils/consts');
@@ -140,13 +141,24 @@ module.exports.setStatus = function(req, res, next) {
 module.exports.preEdit = function(req, res, next) {
 
     var id = req.query.id ? req.query.id : '';
+    var show = req.query.show ? req.query.show : '';
 
     service.fetchSingleShop(id, function(err, results) {
         if (!err) {
-            var shop = results.length == 0 ? null : results[0];
-            res.render('shop/shopEdit', {shop : shop,
-                areaNames:consts.AREA_NAMES,
-                areaCodes:consts.AREA_CODES});
+            var shop = results.shopData.length == 0 ? null : results.shopData[0];
+            var attendanceDetailData = results.attendanceDetailData;
+            //获取该门店所属员工
+            staffService.getStaffByShopId(id, function(err, staffResults) {
+                if (!err) {
+                    res.render('shop/shopEdit', {shop : shop,staffArr:staffResults,attendanceDetailDatas:attendanceDetailData,
+                        show:show,
+                        areaNames:consts.AREA_NAMES,
+                        areaCodes:consts.AREA_CODES});
+                } else {
+                    myUtils.printSystemLog('编辑门店'+err)
+                    next();
+                }
+            });
         } else {
             myUtils.printSystemLog('编辑门店'+err)
             next();
@@ -178,21 +190,41 @@ module.exports.update = function(req, res,next) {
         }
     })
 }
+/**
+ * 修改门店内员工工作时间
+ * @param req
+ * @param res
+ */
+module.exports.update4AttendanceDetail = function(req, res,next) {
 
-module.exports.browse = function (req, res, next) {
+    var attendanceDetailId = req.body.attendanceDetailId ? req.body.attendanceDetailId : '';//主键
+    var workTypeId = req.body.workTypeId ? req.body.workTypeId : '';//工作类型：早班、中班、晚班、半天
+    var startWorkingHours = req.body.startWorkingHours ? req.body.startWorkingHours : '';//开始时间
+    var endWorkingHours = req.body.endWorkingHours ? req.body.endWorkingHours : '';//截止时间
+    var attendanceStaffId = req.body.attendanceStaffId ? req.body.attendanceStaffId : '';//员工id
+    var attendanceDate = req.body.attendanceDate ? req.body.attendanceDate : '';//工作日期
 
-    var id = req.query.id ? req.query.id : '';
-    service.fetchSingleShop(id, function (err, results) {
-        if (!err && results.length != 0) {
-             var data = results[0];
-            res.render('shop/shopBrowse', {data : data});
-        } else {
-            myUtils.printSystemLog('浏览门店'+err)
-             next();
-        }
-    })
+
+    if(attendanceDetailId == ""){//新增记录
+        service.insetShop4AttendanceDetail(attendanceDetailId, workTypeId, startWorkingHours,endWorkingHours,attendanceStaffId,attendanceDate, function(err, results) {
+            if (!err) {
+                res.json(JSON.stringify(results));
+            } else {
+                next();
+            }
+        })
+    }else{//修改记录
+        service.updateShop4AttendanceDetail(attendanceDetailId, workTypeId, startWorkingHours,endWorkingHours, function(err, results) {
+            if (!err) {
+                res.json(JSON.stringify(results));
+            } else {
+                next();
+            }
+        })
+    }
+
+
 }
-
 
 module.exports.checkSeril = function (req, res, next) {
 
