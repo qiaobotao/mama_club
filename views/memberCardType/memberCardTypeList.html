@@ -51,7 +51,7 @@
 <body>
 <div class="r_top">
     <div class="weizhi">
-        当前位置：充值卡类型列表<%=resourcesData["/to_member_card_type_add"]%>--
+        当前位置：充值卡类型列表
     </div>
 </div>
 <div class="center_con">
@@ -61,7 +61,7 @@
                 <tr>
                 <td>卡种<%=resourcesData["/to_member_card_type_add"]%>：<input id="page" name="page" type="hidden" class="input5" value="<%=data.currentPage%>"/>
                     <input ID="memberCardType" name="memberCardType" type="text" class="input5" VALUE="<%=data.memberCardType%>"/></td>
-                <td> &nbsp;卡面额度：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
+                <td> &nbsp;充值金额：<input ID="memberCardAmount" name="memberCardAmount" type="text" VALUE="<%=data.memberCardAmount%>" class="input5" /></td>
                 <td> &nbsp;为0后折扣：<input ID="zeroDiscounts" name="zeroDiscounts" type="text" VALUE="<%=data.zeroDiscounts%>" class="input5" /></td>
                 <td><a href="javascript:search()" class="chaxun"></a></td>
             </tr>
@@ -77,8 +77,8 @@
         <table width="100%" class="table3" cellpadding="0"  cellspacing="0">
             <tr>
                 <th  width="20%">卡种</th>
-                <th  width="20%">卡面额度</th>
-                <th  width="20%">实际消费额度</th>
+                <th  width="20%">充值金额</th>
+                <th  width="20%">可用金额</th>
                 <th  width="20%">为0后折扣</th>
                 <th  width="20%">操作</th>
             </tr>

@@ -29,6 +29,10 @@ module.exports.list = function (req, res,next) {
     var memberName = req.query.memberName ? req.query.memberName : '';
     var tel = req.query.tel ? req.query.tel : '';
     var currentPage = req.query.page ? req.query.page : 1;
+
+    if (req.query.page instanceof Array) {
+        currentPage = req.query.page[req.query.page.length-1];
+    }
  // 接收操作参数
     var replytype = req.query.replytype ? req.query.replytype : '';
     var url = '/jinquan'+req.url;

@@ -92,6 +92,7 @@
 //            alert(typeof(mainFrameUrl));
             mainFrameUrl = mainFrameUrl.toString().toLowerCase();
 //            mainFrameUrl = "abcedit";
+//            alert(url);
             if(mainFrameUrl.indexOf("edit") > 0 || mainFrameUrl.indexOf("add") > 0){//询问框
                 if(confirm("是否放弃对本页面进行编辑?") == true){     //如果用户单击了确定按钮
                     parent.mainFrame.location=url;
