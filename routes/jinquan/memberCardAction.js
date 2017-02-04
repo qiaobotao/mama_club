@@ -143,11 +143,18 @@ module.exports.goAdd = function(req, res,next) {
     var shopId = req.session.user.shopId;
     var status=  req.query.status ? req.query.status : '1';
     var type=  req.query.type ? req.query.type : '1';
+    var isAddHistory=  req.query.isAddHistory ? req.query.isAddHistory : '';//是否录入历史数据
 
     service1.fetchMembercardtypeByStatus(shopId,status, function (err, results) {
         if (!err) {
             results.type = type;
-            res.render('memberCard/memberCardAdd' , {data : results,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
+            res.render('memberCard/memberCardAdd' ,
+                {
+                    data : results,
+                    "discountNames":consts.DISCOUNT_NAMES,
+                    "discountValues":consts.DISCOUNT_VALUES,
+                    isAddHistory:isAddHistory
+                });
         } else {
             console.log(err.message);
             next();
@@ -168,9 +175,9 @@ module.exports.goEdit = function(req, res,next) {
     var status=  req.query.status ? req.query.status : '1';
     service.fetchSingleMembercard(id,type, function(err, results) {
         if (!err) {
+            var memberCard = results.length == 0 ? null : results[0];
             service1.fetchMembercardtypeByStatus(shopId,status, function (err, datas) {
                 if (!err && datas.length != 0) {
-                    var memberCard = results.length == 0 ? null : results[0];
                     res.render('memberCard/memberCardEdit', {memberCard: memberCard, data: datas,"discountNames":consts.DISCOUNT_NAMES,"discountValues":consts.DISCOUNT_VALUES});
                 }
                 else {
@@ -196,7 +203,8 @@ module.exports.addOrEdit = function (req, res,next) {
     var id = req.body.id ? req.body.id : '';
     var serialNumber = req.body.memberCardNumber ? req.body.memberCardNumber : '';
     var type= req.body.type ? req.body.type : '';
-    var  memberId = req.body.memberId ? req.body.memberId : '';
+    var type= req.body.type ? req.body.type : '';
+    //var memberId = req.body.memberId ? req.body.memberId : '';//会员id
     var parameter1= '';
     var parameter2=  '';
     var parameter3=   '';
@@ -238,18 +246,34 @@ module.exports.addOrEdit = function (req, res,next) {
     {
         var createDate= new Date().getTime();
         var dateline= new Date().getTime();
-        service.insertMemberCard( shopId,serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
-            if (!err) {
-                res.redirect('/jinquan/member_card_list?replytype=add');
-            } else {
-                next();
-            }
-        });
+        //如果serialNumber为空
+        if(serialNumber == ''){
+            //非历史补录数据，需计算出编号、赋值、在保存
+            service.createMemberCardSerialNumber(shopId , type,function (err, results) {
+                //历史补录数据，编号存在，直接保存
+                service.insertMemberCard( shopId,results[0]  ,createDate  ,dateline   ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
+                    if (!err) {
+                        res.redirect('/jinquan/member_card_list?replytype=add');
+                    } else {
+                        next();
+                    }
+                });
+            });
+        }else{
+            //历史补录数据，编号存在，直接保存
+            service.insertMemberCard( shopId,serialNumber  ,createDate  ,dateline   ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,function (err, results) {
+                if (!err) {
+                    res.redirect('/jinquan/member_card_list?replytype=add');
+                } else {
+                    next();
+                }
+            });
+        }
     }
     else
     {
         var dateline= new Date().getTime();
-        service.updateMemberCard(id,serialNumber ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, function (err, results) {
+        service.updateMemberCard(id,serialNumber ,dateline ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, function (err, results) {
             if (!err) {
                 res.redirect('/jinquan/member_card_list?replytype=update');
             } else {

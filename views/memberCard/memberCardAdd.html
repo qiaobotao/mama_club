@@ -29,13 +29,49 @@
             });
         }
         function submitForm(){
-            var type= document.getElementById("type").value;
-            var  memberId = document.getElementById("memberId").value;
-            memberId=  document.getElementById("memberId").value;
-            if (!memberId || memberId.length == 0) {
-                parent.layer.alert('请选择会员',{icon: 2});
-                return;
+            var isAddHistory = '<%=isAddHistory%>';
+            if(isAddHistory == 'Y'){//如果补录历史数据进行验证
+                var memberCardNumber = $("#memberCardNumber").val();
+                if (memberCardNumber == '') {
+                    parent.layer.alert('请输入会员编号！',{icon: 2});
+                    return;
+                }
+                var type = $("#type").val();
+                if (type == '') {
+                    parent.layer.alert('请联系管理员，系统出异常！',{icon: 2});
+                    return;
+                }
+
+                $.ajax({
+                    type: "post",
+                    url: "/jinquan/member_card_check",
+                    data: {'memberCardNumber':$("#memberCardNumber").val(),'type':$("#type").val() },
+                    success: function (result) {
+                        if(result.flag){
+                            parent.layer.alert('此类型的会员卡号已经存在，请重新输入！',{icon: 2});
+                            $("#memberCardNumber").val('');
+                        }else{
+                            checkFrom();
+                        }
+                    }
+                });
+            }else{
+                checkFrom();
             }
+        }
+        /**
+         * 检查表单数据准确性
+         **/
+        function checkFrom(){
+
+            /*
+             var  memberId = document.getElementById("memberId").value;
+             memberId=  document.getElementById("memberId").value;
+             if (!memberId || memberId.length == 0) {
+             parent.layer.alert('请选择会员',{icon: 2});
+             return;
+             }
+             */
             var type = document.getElementById("type").value;
             var parameter1= '';
             var parameter2=  '';
@@ -170,6 +206,7 @@
                 success: function (result) {
                     if(result.flag){
                         parent.layer.alert('此类型的会员卡号已经存在，请重新输入！',{icon: 2});
+                        $("#memberCardNumber").val('');
                     }
                 }
             });
@@ -220,13 +257,26 @@
             <td class="regTd_l">
 
                 <form method="post" id="myform" action="/jinquan/member_card_addOrEdit">
-                    <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td class="regTd_l">卡号：</td>
-                            <td class="regTd_r">
-                                <input id="type" name="type" type="hidden" value="1"/>
-                                <input id="memberCardNumber" onblur="checkCardNumber()" name="memberCardNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span></td>
-                        </tr>
+                        <table width="100%" class="reg_table"border="0" cellspacing="0" cellpadding="0">
+                                <%
+                                if(isAddHistory == 'N'){//不是历史数据
+                                    %>
+                                        <input id="type" name="type" type="hidden" value="1"/>
+                                        <input id="memberCardNumber" name="memberCardNumber" type="hidden"/>
+                                    <%
+                                }else{//录入历史数据
+                                    %>
+                                    <tr>
+                                        <td class="regTd_l">卡号：</td>
+                                        <td class="regTd_r">
+                                            <input id="type" name="type" type="hidden" value="1"/>
+                                            <input id="memberCardNumber" onblur="checkCardNumber()" name="memberCardNumber" type="text" class="input5" />&nbsp;&nbsp;<span style="color:#FF0000;">*</span>
+                                        </td>
+                                    </tr>
+                                    <%
+                                }
+                            %>
+                        <!--
                         <tr>
                             <td class="regTd_l">
                                  会员信息:
@@ -236,6 +286,7 @@
                                 <input id="memberId" name="memberId" type="hidden" />
                             </td>
                         </tr>
+                        -->
                         <tr>
                             <td colspan="2">
                                 <table  id="type1" name="type1" width="100%" class="reg_table" border="0" cellspacing="0" cellpadding="0">

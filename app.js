@@ -101,6 +101,10 @@ app.use(function(req, res, next){
            next();
        } else {
            if (req.session.user) {//验证是否有用户信息，如果没有跳转到登陆页面
+               var pp = path;
+               if(1==1){//如果url中有两个page参数，则保留后边那个
+
+               }
                 next();
            } else {
                res.redirect("/");

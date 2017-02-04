@@ -22,11 +22,59 @@ var consts = require('../../model/utils/consts');
  * @param cb
  * 添加会员卡时，启用状态，默认为未启用状态（在交费处修改）
  */
-module.exports.insertMemberCard = function(shopId,serialNumber  ,createDate  ,dateline  , memberId ,type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,cb) {
+module.exports.insertMemberCard = function(shopId,serialNumber  ,createDate  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5, parameter6 , parameter7 , parameter8, parameter9,cb) {
 
-    var sql = 'INSERT INTO memberCard (shopId,serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,isActivation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    db.query(sql, [shopId,serialNumber ,createDate  ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,consts.STATE_DISABLE], function(cbData, err, rows, fields) {
+    var sql = 'INSERT INTO memberCard (shopId,serialNumber ,createDate  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,isActivation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    db.query(sql, [shopId,serialNumber ,createDate  ,dateline  ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,consts.STATE_DISABLE], function(cbData, err, rows, fields) {
         if (!err) {
+            cb(null, rows);
+        } else {
+            cb(err);
+        }
+    });
+};
+/**
+ * 根据各卡种生成下一个卡号
+ * @param shopId
+ * @param type
+ * @param cb
+ * 添加会员卡时，启用状态，默认为未启用状态（在交费处修改）
+ */
+module.exports.createMemberCardSerialNumber = function(shopId , type ,cb) {
+    var sql = "select CAST(substring(serialNumber,3) AS SIGNED) as maxSerialNumber " +
+        "   from memberCard t " +
+        "   where t.serialNumber like '0"+type+"%' " +
+        "   and t.shopId = '"+shopId+"' " +
+        "   order by CAST(substring(serialNumber,3) AS SIGNED) desc  ";
+    db.query(sql, [shopId], function(cbData, err, rows, fields) {
+        if (!err) {
+            //生成卡号
+            var codeIndex = "";
+            if(rows.length == 0){
+                //没有自动生成单号时生成规则
+                if(type == '1'){//充值卡
+                    codeIndex = '0'+type+'00800';
+                }else if (type == '2'){//服务次卡
+                    codeIndex = '0'+type+'00100';
+                }else if (type == '3'){//折扣卡
+                    codeIndex = '0'+type+'00800';
+                }
+            }else{
+                //找到最大值+1
+                var nextNum = rows[0].maxSerialNumber +1;
+                if(nextNum < 10 ){
+                    codeIndex = '0'+type+'0000'+nextNum;
+                }else if(nextNum < 100 ){
+                    codeIndex = '0'+type+'000'+nextNum;
+                }else if(nextNum < 1000 ){
+                    codeIndex = '0'+type+'00'+nextNum;
+                }else if(nextNum < 10000 ){
+                    codeIndex = '0'+type+'0'+nextNum;
+                }else{
+                    codeIndex = '0'+type+nextNum;
+                }
+            }
+            rows[0] = codeIndex;
             cb(null, rows);
         } else {
             cb(err);
@@ -223,10 +271,10 @@ module.exports.updateMemberCardByActivation = function(id,isActivation,cb) {
 
  * @param cb
  */
-module.exports.updateMemberCard = function(id,serialNumber ,dateline  ,memberId ,  type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,cb) {
+module.exports.updateMemberCard = function(id,serialNumber ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9,cb) {
 
-    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,memberId  = ?,   dateline  = ?,    type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?';
-    var par = [serialNumber  ,memberId  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, id];
+    var sql = 'UPDATE  memberCard  SET serialNumber  = ?,  dateline  = ?,    type  = ?,   parameter1  = ?,parameter2  = ?,   parameter3  = ?,parameter4  = ?,parameter5  =? , parameter6  = ?,parameter7  = ?,parameter8  =?,parameter9  =? WHERE  id  = ?';
+    var par = [serialNumber  ,dateline  , type , parameter1 , parameter2 , parameter3 , parameter4 , parameter5,parameter6 , parameter7 , parameter8,parameter9, id];
 
     db.query(sql, par, function (cbData, err, rows, fields) {
         if (!err) {
@@ -246,10 +294,14 @@ module.exports.updateMemberCard = function(id,serialNumber ,dateline  ,memberId 
 module.exports.fetchSingleMembercard =function (id ,type, cb) {
 
 
-    var sql = 'SELECT a.*, c.`memberName` FROM memberCard a left join member c  on a.`memberId`=c.`id` where   a.id = ?';
+    var sql = 'SELECT a.* ,a.id as memberCardId, a.memberCardType memberCardName, c.* FROM memberCard a left join member c  on a.`memberId`=c.`id` where   a.id = ?';
     if(type=='1')
     {
-        sql='select   a.* , c.`memberName`,c.`id` AS memberId from (SELECT a.*,  b.`memberCardType`, b.`memberCardAmount`,b.`consumerLimit`,b.`zeroDiscounts`,b.`isManyPeopleUsed`,b.`status`  FROM memberCard a, memberCardType b  WHERE  a.id = ? AND a.parameter1=b.id ) as a left join member c on c.id=a.memberId ';
+        //sql='select   a.* , c.`memberName`,c.`id` AS memberId ' +
+        sql='select   a.* ,a.id as memberCardId,a.memberCardType memberCardName ' +
+            '   from (SELECT a.*,  b.`memberCardType`, b.`memberCardAmount`,b.`consumerLimit`,b.`zeroDiscounts`,b.`isManyPeopleUsed`,b.`status`  FROM memberCard a, memberCardType b  WHERE  a.id = ? AND a.parameter1=b.id ) as a ' +
+            '   left join member c on ' +
+            '   c.id=a.memberId ';
     }
     db.query(sql, [id],  function(cbData, err, rows, fields) {
 
